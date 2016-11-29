@@ -1,6 +1,9 @@
 #!/usr/bin/python
 
-# formatting a fasta format into phylip format for using with PAML
+## AUTHOR: Eric Fontanillas
+## LAST VERSION: 20/08/14 by Julie BAFFARD
+
+## DESCRIPTION: formatting a fasta format into phylip format for using with PAML
 
 import string, os, sys
 
@@ -29,11 +32,9 @@ def format(File_IN):
         if not next :
             break
         
-        S1 = string.split(next, "\t")
+        S1 = string.split(next, " ")
         fasta_name = S1[0]
-        #print fasta_name
         fasta_seq = S1[1][:-1]
-        #print fasta_seq
         fichier = fichier + ">" + fasta_name + "\n" + fasta_seq + "\n"
         
     return (fichier,c)
@@ -51,5 +52,3 @@ F2.write(fichier_txt)
 
 F1.close()
 F2.close()
-
-

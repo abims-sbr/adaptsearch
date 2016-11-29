@@ -1,0 +1,394 @@
+<?xml version="1.0"?>
+
+<tool name="BlastAlign" id="blastalign" version="1.0">
+
+	<description>
+		Align the nucleic acid sequences
+	</description>
+  	<command>
+		#if $files.type == "one" :
+			/w/galaxy/galaxy4kevin/galaxy-dist/tools/julie/oasearch/alignment/BlastAlign -i ${files.one_file} -o out
+			#if $files.options.option == "yes" :
+				#if $files.options.options_m.m == True :
+					-m ${files.options.options_m.proportion}
+				#else :
+					-m 95
+				#end if
+				#if $files.options.options_r.r == True :
+					-r ${files.options.options_r.reference}
+				#end if
+				#if $files.options.options_x.x == True :
+					-x ${files.options.options_x.exclusion}
+				#end if
+				#if $files.options.options_n == True :
+					-n T
+				#else :
+					-n F
+				#end if
+				#if $files.options.options_s.s == True :
+					-s ${files.options.options_s.initialisation}
+				#end if
+			#elif $files.options.option == "no" :
+				-m 95 -n F
+			#end if
+			>${outfile};
+			#if $fasta_out.value == True :
+				python /w/galaxy/galaxy4kevin/galaxy-dist/tools/julie/oasearch/alignment/phylip2fasta.py out.phy out.fasta >>${outfile};
+			#end if			
+		#end if
+			
+		#if $files.type == "many" :
+			python /w/galaxy/galaxy4kevin/galaxy-dist/tools/julie/oasearch/alignment/24_prepare_BlastAlignRuns.py ${files.many_files} 
+			#if $fasta_out.value == True :
+				oui
+			#else :
+				non
+			#end if
+			#if $files.options.option == "yes" :
+				#if $files.options.options_m.m == True :
+					${files.options.options_m.proportion}
+				#else :
+					95
+				#end if
+				#if $files.options.options_n == True :
+					T
+				#else :
+					F
+				#end if
+			#elif $files.options.option == "no" :
+				95 F
+			#end if
+			>${outfile};
+		#end if
+  	</command>
+ 	<inputs>
+		<conditional name="files">
+			<param name="type" type="select" label="How many files do you want to align ? ">
+				<option value="one">Only one file</option>
+				<option value="many">Many files in zip format</option>
+			</param>
+
+			<when value="one">
+				<param name="one_file" type="data" format="fasta" label="Choose your file" help="Only a fasta file with nucleotides sequences" />
+
+				<conditional name="options">
+					<param name="option" type="select" label="Blast advanced options ">
+						<option value="no">No</option>
+						<option value="yes">Yes</option>
+					</param>
+					<when value="yes">
+						<conditional name="options_m">
+							<param name="m" type="boolean" checked="False" label="Proportion of gaps allowed in any one sequence in the final alignement " />
+							<when value="true">
+								<param name="proportion" type="integer" value="50" min="0" max="100" label="Maximum proportion " help="By default it's 95%" />
+							</when>
+						</conditional>
+
+						<conditional name="options_r">
+							<param name="r" type="boolean" label="Choose the reference sequence " />
+							<when value="true" >
+								<param name="reference" type="text" area="True" size="1x20" label="Name " />
+							</when>
+						</conditional>
+
+						<conditional name="options_x">
+							<param name="x" type="boolean" label="Choose the sequences to be excluded from this analysis " />
+							<when value="true">
+								<param name="exclusion" type="text" area="True" size="5x25" label="name of comma-separated sequences " />
+							</when>
+						</conditional>
+
+						<param name="options_n" type="boolean" label="retain original names in output files "/>
+
+						<conditional name="options_s">
+							<param name="s" type="boolean" label="Choose the number of sequences to be used in initial search for reference sequence " />
+							<when value="true">
+								<param name="initialisation" type="integer" value="10" min="0" label="Number of sequences "/>
+							</when>
+						</conditional>
+					</when>
+				</conditional>
+			</when>
+
+			<when value="many">
+				<param name="many_files" type="data" format="no_unzip.zip" label="Choose your ZIP file" help="Only a zip file containing fasta file with nucleotides sequences" />
+
+				<conditional name="options">
+					<param name="option" type="select" label="Blast advanced options ">
+						<option value="no">No</option>
+						<option value="yes">Yes</option>
+					</param>
+					<when value="yes">
+						<conditional name="options_m">
+							<param name="m" type="boolean" label="Proportion of gaps allowed in any one sequence in the final alignement " />
+							<when value="true">
+								<param name="proportion" type="integer" value="50" min="0" max="100" label="Maximum proportion " help="By default it's 95%" />
+							</when>
+						</conditional>
+
+						<param name="options_n" type="boolean" label="retain original names in output files "/>
+					</when>
+				</conditional>
+			</when>
+		</conditional>
+
+		<param name="fasta_out" type="boolean" checked="True" label="Do you want to convert the output phylip in fasta format ? " />
+		<param name="files_failed" type="boolean" label="Do you want to have a file containing a list of files failed with BlastAlign ? " />
+	</inputs>
+	<outputs>
+		<data format="txt" name="outfile" label="Alignment" />
+		<data format="phy" name="phy" from_work_dir="out.phy" label="Alignment_${files.one_file.name}_phylip">
+			<filter>files['type'] == "one"</filter>
+		</data>
+		<data format="nxs" name="nxs" from_work_dir="out.nxs" label="Alignment_${files.one_file.name}_nexus">
+			<filter>files['type'] == "one"</filter>
+		</data>
+		<data format="fasta" name="fasta" from_work_dir="out.fasta" label="Alignment_${files.one_file.name}_fasta">
+			<filter>((files['type'] == "one" and fasta_out == True))</filter>
+		</data>
+		<data format="no_unzip.zip" name="phy_zip" from_work_dir="Alignment_locus_phy.zip" label="Alignment_locus_phylip">
+			<filter>files['type'] == "many"</filter>
+		</data>
+		<data format="no_unzip.zip" name="nxs_zip" from_work_dir="Alignment_locus_nxs.zip" label="Alignment_locus_nexus">
+			<filter>files['type'] == "many"</filter>
+		</data>
+		<data format="no_unzip.zip" name="fasta_zip" from_work_dir="Alignment_locus_fasta.zip" label="Alignment_locus_fasta">
+			<filter>((files['type'] == "many" and fasta_out == True))</filter>
+		</data>
+
+		<data format="txt" name="out_failed" from_work_dir="list_files_failed.txt" label="Alignment_files_failed">
+			<filter>files_failed == True</filter>
+		</data>
+	</outputs>
+
+    	<stdio>
+        	<exit_code range="26:" level="fatal" />
+    	</stdio>
+	<help>
+============
+What it does
+============
+
+| This tool takes **nucleic sequences in fasta format** or **zip file containing fasta files** and returns a multiple alignement (in Nexus and Phylip formats) using BLAST+
+| 
+| The script in perl was written by **Robert Belshaw** and **Aris Katzourakis**.
+| The script in python was written by **Eric Fontanillas**.
+| The wrapper was written by **Julie Baffard**.
+
+--------
+
+==========
+Parameters
+==========
+
+The choice of several parameters for the blast is possible.
+
+**-m [maximum proportion of gaps allowed in any one sequence in the final alignement]**
+	| integer (between 0 and 100)
+	| By default : 95%, i.e. only removes sequences with extremely short matches.
+	| We find 50 the most useful.
+	|
+
+**-r [name of reference sequence]**
+	| text
+	| Default is searching for best candidate.
+	| If entered, the sequence will be extracted, written to a separate file, and blasted against the original input file.
+	| 
+
+**-x [name of comma-separated sequences to be excluded from this analysis]**
+	| text
+	| 
+
+**-n**
+	| If it's checked : retain original names in output files.
+	| If isn't checked : to output the 15 character name abbreviations (stripped of potentially problematic characters) that is used in the tool.
+	|
+
+**-s [number of sequences to be used in initial search for reference sequence]**
+	| integer (between 0 and total number of sequences)
+	| Default is finding the reference sequence by blasting all sequences against all sequences, only randomly subsampling when it thinks the blast output file might be too large.
+
+.. class:: infomark
+
+m and n are the only parameters which can used for the 2 options (one file and many files).
+
+--------
+
+=======
+Outputs
+=======
+
+This tool, produces the following files :
+
+**Alignment**
+	| is the output with important informations.
+	| when the alignment failed with BlastAlign, the name of the file is writting down this output.
+	| 
+
+**Alignement_file_failed**
+	| is the output containing the files failed during the run of BlastAlign.
+	| 
+
+**Alignment_{inputfile}_phylip**
+	| is the output with the aligned sequences in Phylip format when you choose "one file" option.
+	| 
+
+**Alignment_{inputfile}_nexus**
+	| is the output with the aligned sequences in Nexus format when you choose "one file" option.
+	| 
+
+**Alignment_{input_file}_fasta**
+	| is the output with the aligned sequences in Fasta format when you choose "one file" and "fasta forme" options
+	| 
+
+**Alignment_locus_phylip**
+	| is the output with the aligned sequences in Phylip format when you choose "many files" option.
+	| 
+
+**Alignment_locus_nexus**
+	| is the output with the aligned sequences in Nexus format when you choose "many files" option.
+	| 
+
+**Alignment_locus_fasta**
+	| is the output with the aligned sequences in Fasta forme when you choose "many file" and "fasta forme" options 
+
+.. class:: warningmark
+
+The zip outputs have to be downloaded (and extracts the files with a file archiver software), you cannot visualize them with the "eye icon" through the interface.
+
+--------
+
+===============
+Working Example
+===============
+
+------------------------------
+The input file and its options
+------------------------------
+
+**Input file**
+
+| >Pf210_1/1_1.000_920
+| CCGGTGGCCATTTTCTGCACCTCGTGGGTTATTGAGCTGAAAGTGGTTCAGCTCACTGTCTGTTAACAGCCGTGTCGGTCTGAGGGTATCACAGTTAATATAATGAATCAAGAGAAGTTGAAGCAGCTCCAGGCCCAAGTCCGCATCGGAGGAAAGGG
+| CACAGCAAGAAGAAAGAAGAAGGTGATTCACAGAACAGCAACAACAGATGACAAGAAACTGCAAAGTACACTGAAGAAATTGGCAGTAAATAATATTCCGGGTATAGAAGAGGTTAACATGATAAAGGATGACGGGCAAGTAATACATTTTACCAATCCGA
+| AGGTGCAGGCTTCTCTTCAGTCAAACACATTTGCCATTAATGGCCAAGCCGAAACGAAACAAATCACTGACTTGCTACCCGGTATATTAAATCAGCTGGGGGCTGAAAGTTTAACAAACTTGAAGAAGCTGGCTAAATCTGTGACTGCTGGAGTTGATTC
+| TGATAACAAGCAGGATGCAGCAGATATTGATGAAGATGATGATGATGTCCCAGAACTGGTTGAAAACTTTGACGAAGCATCGAAGAATGAGGGGACGTAATTCTTCTCCCACTTTATGCCATGGTAGCATCAATCGTTTTGCTGATGATGGCGTGTTTATAC
+| CTACCACCCAGTGTAGATTTGTCCAGACCTGGCTTGTTTGACATTGCTTGTTGGATTTTGCAACAATATCATGATTAGACTGCCTGGCTTTGTGGCCTAAATACTGTATTAAAGTGTCTGTAAAAGGGAAGCAATTTTTCTATTAAGAAGTTATCCACTAGCAT
+| ATTGACAGTTTTGCATGTTTGATTTTGTTCCTCGTGCAGGTCAGAACACTGATTGTACAGTGGCTGATTACAGAAAAATTGTATTCAGAGTTAAATAAACACATTATTATCCAAA
+| >Pp_17_1/1_1.000_930
+| CCGGTGGCCATTTTCTGCACCTCGTGGGTATCTTGGGTTCGATTTGTATCAGCTCCCTATGTAAAATTAAACAAACTTATAACATAGATTGCAGCTGACAATACAATGAACCAAGAAAAATTAAAACAACTCCAAGCCCAGGTGCGCATTGGAGGCAAGGG
+| TACAGCAAGAAGAAAGAAGAAGGTCATTCATAGAACAGCAACAACAGATGATAAAAAACTGCAGAGTACATTAAAAAAACTAGCAGTAAATAATATTCCAGGTATAGAAGAGGTTAATATGATAAAAGATGATGGACAGGTAATACATTTTACCAATCCAAAA
+| GTACAGGCTTCTCTACAGTCAAACACATTTGCTATTAATGGGCAAGCTGAGACAAAACAAATCACCGAATTGTTGCCTGGTATATTAAATCAGCTGGGAGCAGAAAGTTTAACAAATCTGAAGAAACTGGCTACATCCGTGACTGGTGGAGTTGATTCTGAT
+| AACAAGCCAGAAACAGCAGAAATTGATGAAGACGATGATGATGTTCCAGATTTGGTTGAAAACTTTGACGAGGCATCCAAGAATGAAGGAACGTAATTTGTCATTGGTAGATCCTCCCATAGCCTGATTCTTGTGGCTGGCGACAGCTTGTTTATATTTTAC
+
+CCAGTGTAGATTTGTTCAAGAAGGTGTGCTGGCGTTGTTTGAATTTTGTAATAGTACCATGATTTAAATACCCGGTTAACGGCCTACCTGTTATGTAGAAATTGTAGAGAAAAAATTAAATCAATTTTGTATGAACTATAAGCAGCAGCTAATATATTTGCAGTTT
+TACATGTTTATCTGTTCATCAGCATGGGTCAGAGAATGACCGTACTTTGCTGGTGATAGAATGCTTGTATTCAAAGTTTAATAAATGGTTGTAAGCCATTTAAAAAAAAAAAAAAA
+
+**Parameters**
+
+| option : one file. It's the same for the option "many files" except that the output files are in zip format (inside : 1 file corresponding to one output of BlastAlign)
+| no option for the run Blast. So, by default it's -m 95 -n F
+
+----------------
+The output files
+----------------
+
+**BlastAlign**
+
+************************  BlastAlign  ************************
+
+| 
+| This program takes nucleotide sequences in fasta format and returns a multiple alignment (in Nexus and Phylip formats) using BLASTN
+| 
+| Input file locus_2_sp_8.fasta has 2 sequences and is 1894 bytes
+| (maximum number of sequences that will be used to search for the reference sequence is 770)
+| 
+| 
+| BlastAlign finished: it has produced a multiple alignment of 2 sequences and length 720 by aligning to sequence Pf2101/11000920 (proportion of gaps in each sequence is less than 0.95)
+| 
+
+.. class:: infomark
+
+| if you choose the option "many files"
+| there will be as template output that number of file in the input zip.
+| 
+| 
+
+**Alignment_{inputfile}_phylip**
+
+| 2 720 S
+| Pf2101/1100 ccggtggccattttctgcacctcgtgggttattgagctgaaagtggttcagctcactgtctgttaacagccgtgtcggtctgagggtatcacagttaatataatgaatcaagagaagttgaagcagctccaggcccaagtccgcatcggaggaaagggcacagcaagaagaaagaagaaggtgattcacagaacagcaacaacagat
+
+gacaagaaactgcaaagtacactgaagaaattggcagtaaataatattccgggtatagaagaggttaacatgataaaggatgacgggcaagtaatacattttaccaatccgaaggtgcaggcttctcttcagtcaaacacatttgccattaatggccaagccgaaacgaaacaaatcactgacttgctacccggtatattaaatcagctgggggctgaaag
+tttaacaaacttgaagaagctggctaaatctgtgactgctggagttgattctgataacaagcaggatgcagcagatattgatgaagatgatgatgatgtcccagaactggttgaaaactttgacgaagcatcgaagaatgaggggacgtaattcttctcccactttatgccatggtagcatcaatcgttttgctgatgatggcgtgtttatacctaccacccagtgtaga
+tttgtccagacctggcttgtttgacattgcttgttggattttgcaacaatatcatgattaga
+
+| Pp171/11000 ccggtggccattttctgcacctcgtgggt-------------------------------------------------------------------aatacaatgaaccaagaaaaattaaaacaactccaagcccaggtgcgcattggaggcaagggtacagcaagaagaaagaagaaggtcattcatagaacagcaacaacagatgataaaaaactgcagag
+| tacattaaaaaaactagcagtaaataatattccaggtatagaagaggttaatatgataaaagatgatggacaggtaatacattttaccaatccaaaagtacaggcttctctacagtcaaacacatttgctattaatgggcaagctgagacaaaacaaatcaccgaattgttgcctggtatattaaatcagctgggagcagaaagtttaacaaatctgaagaaact
+| ggctacatccgtgactggtggagttgattctgataacaagccagaaacagcagaaattgatgaagacgatgatgatgttccagatttggttgaaaactttgacgaggcatccaagaatgaaggaacgtaatt-----------------------------------------------------------------acccagtgtagatttgt----------------------------------------------
+| -------------
+| 
+
+.. class:: infomark
+
+| If you choose the option "many file"
+| Save as *Galaxy{number}-[Alignment_locus_phy].zip*
+| If you unzip the file, a number of files are extracted (depends on the number of locus) : {name_of_file}.phy
+| 
+| 
+
+**Alignment_{inputfile}_nexus**
+
+| #NEXUS
+
+[Aligned to seq Pf2101/1100  by BlastAlign. We have excluded sequences with more than 0.95 gaps]
+
+BEGIN DATA;
+
+| dimensions ntax=2 nchar=720;
+| format gap=- datatype=DNA;
+| matrix
+
+Pf2101/1100 ccggtggccattttctgcacctcgtgggttattgagctgaaagtggttcagctcactgtctgttaacagccgtgtcggtctgagggtatcacagttaatataatgaatcaagagaagttgaagcagctccaggcccaagtccgcatcggaggaaagggcacagcaagaagaaagaagaaggtgattcacagaacagcaacaacagat
+gacaagaaactgcaaagtacactgaagaaattggcagtaaataatattccgggtatagaagaggttaacatgataaaggatgacgggcaagtaatacattttaccaatccgaaggtgcaggcttctcttcagtcaaacacatttgccattaatggccaagccgaaacgaaacaaatcactgacttgctacccggtatattaaatcagctgggggctgaaag
+tttaacaaacttgaagaagctggctaaatctgtgactgctggagttgattctgataacaagcaggatgcagcagatattgatgaagatgatgatgatgtcccagaactggttgaaaactttgacgaagcatcgaagaatgaggggacgtaattcttctcccactttatgccatggtagcatcaatcgttttgctgatgatggcgtgtttatacctaccacccagtgtaga
+tttgtccagacctggcttgtttgacattgcttgttggattttgcaacaatatcatgattaga
+
+| Pp171/11000 ccggtggccattttctgcacctcgtgggt-------------------------------------------------------------------aatacaatgaaccaagaaaaattaaaacaactccaagcccaggtgcgcattggaggcaagggtacagcaagaagaaagaagaaggtcattcatagaacagcaacaacagatgataaaaaactgcagag
+| tacattaaaaaaactagcagtaaataatattccaggtatagaagaggttaatatgataaaagatgatggacaggtaatacattttaccaatccaaaagtacaggcttctctacagtcaaacacatttgctattaatgggcaagctgagacaaaacaaatcaccgaattgttgcctggtatattaaatcagctgggagcagaaagtttaacaaatctgaagaaac
+| tggctacatccgtgactggtggagttgattctgataacaagccagaaacagcagaaattgatgaagacgatgatgatgttccagatttggttgaaaactttgacgaggcatccaagaatgaaggaacgtaatt-----------------------------------------------------------------acccagtgtagatttgt--------------------------------------------
+| -------------
+| ;
+| end;
+| 
+
+.. class:: infomark
+
+| If you choose the option "many file"
+| Save as *Galaxy{number}-[Alignment_locus_nxs].zip*
+| If you unzip the file, a number of files are extracted (depends on the number of locus) : {name_of_file}.nxs
+| 
+| 
+
+**Alignment_{inputfile}_fasta**
+
+| >Pf2101/11000920
+
+ccggtggccattttctgcacctcgtgggttattgagctgaaagtggttcagctcactgtctgttaacagccgtgtcggtctgagggtatcacagttaatataatgaatcaagagaagttgaagcagctccaggcccaagtccgcatcggaggaaagggcacagcaagaagaaagaagaaggtgattcacagaacagcaacaacagatgacaagaaactg
+caaagtacactgaagaaattggcagtaaataatattccgggtatagaagaggttaacatgataaaggatgacgggcaagtaatacattttaccaatccgaaggtgcaggcttctcttcagtcaaacacatttgccattaatggccaagccgaaacgaaacaaatcactgacttgctacccggtatattaaatcagctgggggctgaaagtttaacaaacttgaa
+gaagctggctaaatctgtgactgctggagttgattctgataacaagcaggatgcagcagatattgatgaagatgatgatgatgtcccagaactggttgaaaactttgacgaagcatcgaagaatgaggggacgtaattcttctcccactttatgccatggtagcatcaatcgttttgctgatgatggcgtgtttatacctaccacccagtgtagatttgtccagacctggc
+ttgtttgacattgcttgttggattttgcaacaatatcatgattaga
+
+| >Pp171/11000930
+
+ccggtggccattttctgcacctcgtgggt-------------------------------------------------------------------aatacaatgaaccaagaaaaattaaaacaactccaagcccaggtgcgcattggaggcaagggtacagcaagaagaaagaagaaggtcattcatagaacagcaacaacagatgataaaaaactgcagagtacattaaaaaa
+actagcagtaaataatattccaggtatagaagaggttaatatgataaaagatgatggacaggtaatacattttaccaatccaaaagtacaggcttctctacagtcaaacacatttgctattaatgggcaagctgagacaaaacaaatcaccgaattgttgcctggtatattaaatcagctgggagcagaaagtttaacaaatctgaagaaactggctacatccg
+tgactggtggagttgattctgataacaagccagaaacagcagaaattgatgaagacgatgatgatgttccagatttggttgaaaactttgacgaggcatccaagaatgaaggaacgtaatt-----------------------------------------------------------------acccagtgtagatttgt---------------------------------------------------------
+
+.. class:: infomark
+
+| If you choose the option "many file"
+| Save as *Galaxy{number}-[Alignment_locus_fasta].zip*
+| If you unzip the file, a number of files are extracted (depends on the number of locus) : {name_of_file}.fasta
+	</help>
+</tool>

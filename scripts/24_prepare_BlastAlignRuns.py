@@ -1,90 +1,111 @@
 #!/usr/bin/python
 
 ## AUTHOR: Eric Fontanillas
-
-## LAST VERSION: 09.08.2010
+## LAST VERSION: 20/08/14 by Julie BAFFARD
 
 ## DESCRIPTION: Prepare to run multialign on assemblages on several cluster nodes
 
+###############################################
+### DEF 1 : Split a list in several sublist ###
+###############################################
+def chunks(list, n):
+    """ Yield successive n-sized chunks from l.
+    """
+    for i in xrange(0, len(list), n):
+        yield list[i:i+n]
+######################################
 
-##################################
-### DEF 1. Clean output folder ###
-##################################
-def clean_folder(path_folderOUT):
-    print "Cleaning of output folder in progress ..."
-    
-    
-    L_test_path_empty = os.listdir(path_folderOUT)
 
-    if L_test_path_empty != []:
-        os.system("rm -fr %s/*" %path_folderOUT)
-    print "Cleaning done!"
+##########################################
+### DEF 2 : Prepare run for blastalign ###
+##########################################
+def prepare_BLASTALIGN_runs(list_file):
 
-#########################################
-### DEF 2. Prepare run for blastalign ###
-#########################################
-def prepare_BLASTALIGN_runs(path_folderIN, path_folderOUT, path_BLASTALIGN_BINARIES):
-
-    L_IN = os.listdir(path_folderIN)
-
-    ln = len(L_IN)
-
-    script_sh = open("26_general_script_runs_blastAlign.sh", "w")
-    
+    ln = len(list_file)
     i = 0
-    for fasta_file in L_IN:
-        i = i + 1
-        print "%d/%d" %(i,ln)
-        S1 = string.split(fasta_file, "_")
-        fasta_name = S1[0]
+    list_of_sublist = list(chunks(list_file, 5000))           ### DEF2 ###
 
-        path_fileIN = "%s/%s" %(path_folderIN, fasta_file)
-        path_subFolderOUT = "%s/%s" %(path_folderOUT, fasta_name)
+    list_files_failed = []
 
-        path_fileOUT = "%s/%s.fasta" %(path_subFolderOUT, fasta_name)
+    k=0
+    for sublist in list_of_sublist:
+        for fasta_file in sublist:
+            i = i + 1
+            S1 = string.split(fasta_file, ".")
+            fasta_name = S1[0]
 
-        ## 1 ## create subfolder
-        os.mkdir(path_subFolderOUT)
+	    # filter the "N"
+	    f = open("./%s.fasta" %fasta_name, "r")
+	    nextline=f.readlines()
+	    f.close()
 
-        ## 2 ## copy fasta file (unaligned trio) in the subfolder
-        os.system("cp %s %s" %(path_fileIN,  path_fileOUT))
+	    j = 0
+	    while j<len(nextline) :
+		if not nextline[j].startswith(">") :
+		    nextline[j] = nextline[j].upper()
+		    nombre = nextline[j].rfind("N")
+		    if nombre != -1 :
+			nextline[j] = nextline[j].replace("N", "")
+		j+=1
+	    nextline = "".join(nextline)
 
-        ## 3 ## copy BLASTALIGN binaries in the subfolder
-        os.system("cp %s/* %s/" %(path_BLASTALIGN_BINARIES, path_subFolderOUT))
+	    files = open("./%s.fasta" %fasta_name, "w")
+	    files.write(nextline)
+	    files.close()
 
-        ## 4 ## write individual script
+            ## run individual script
+	    os.system("/w/galaxy/galaxy4kevin/galaxy-dist/tools/julie/oasearch/alignment/BlastAlign -m %s -n %s -i ./%s.fasta\n" %(sys.argv[3],sys.argv[4],fasta_name))
 
-        script = open("%s/script_eric.sh" %path_subFolderOUT, "w")
-        script.write("BlastAlign -i %s.fasta\n" %fasta_name)
-        script.write("phylip2fasta.py %s.fasta.phy %s.fasta.fasta\n" %(fasta_name,fasta_name))
-        os.system("chmod 755 %s/script_eric.sh" %path_subFolderOUT)
-        script.close()
+	    try:
+        	phylip_file = open("./%s.fasta.phy" %fasta_name, "r")       
+    	    except IOError:
+		list_files_failed.append(fasta_file)
 
-        ## 5 ## write general script
-        script_sh.write("cd %s\n" %path_subFolderOUT)
-        script_sh.write("./script_eric.sh\n")
-        script_sh.write("cd ../../\n")
-
-    script_sh.close()
-    return()
+	    if sys.argv[2] == "oui" :
+                os.system("python /w/galaxy/galaxy4kevin/galaxy-dist/tools/julie/oasearch/alignment/phylip2fasta.py ./%s.fasta.phy ./%s.fasta.fasta\n" %(fasta_name, fasta_name))
+		os.system("rm -f ./%s.fasta\n" %fasta_name)
+		os.system("mv ./%s.fasta.fasta ./%s.fasta\n" %(fasta_name, fasta_name))
+  
+    return(list_files_failed)
             
 ######################################
 
-
-
-######################################
+###################
 ### RUN RUN RUN ###
 ###################
 
-import string, os, time, re, sys
+import string, os, time, re, sys, zipfile, re
 
-path_folderIN = "21_TRIO_UNALIGNED"
-path_folderOUT = "25_run_BLASTALIGN"
-path_BLASTALIGN_BINARIES = "23_BlastAlign_binary"
+## 1 ## INPUT/OUTPUT
+list_file = []
+zfile = zipfile.ZipFile(sys.argv[1])
+for name in zfile.namelist() :
+    list_file.append(name)
+    zfile.extract(name, "./")
 
-## 1 ## Clean folder from previous runs
-clean_folder(path_folderOUT)    ### DEF1 ###
+## 2 ## RUN
+list_files_failed = prepare_BLASTALIGN_runs(list_file)   ### DEF2 ###
+f_failed = open("./list_files_failed.txt", "w")
+f_failed.write("Number of files failed with BlastAlign : %d\n" %len(list_files_failed))
+for files in list_files_failed :
+    f_failed.write("\t%s \n" %files)
 
-## 2 ## Prepare run for blastalign
-prepare_BLASTALIGN_runs(path_folderIN, path_folderOUT, path_BLASTALIGN_BINARIES)   ### DEF2 ###
 
+#Convertion in zip format
+f_phylip = zipfile.ZipFile("Alignment_locus_phy.zip", "w")
+f_nexus = zipfile.ZipFile("Alignment_locus_nxs.zip", "w")
+f_fasta = zipfile.ZipFile("Alignment_locus_fasta.zip", "w")
+
+phylip = "^.*fasta.phy$"
+nexus = "^.*fasta.nxs$"
+fasta = "^.*fasta$"
+
+folder = os.listdir("./")
+
+for files in folder :
+    if re.match(phylip, files) :
+	f_phylip.write("./%s" %files)
+    if re.match(nexus, files) :
+	f_nexus.write("./%s" %files)
+    if re.match(fasta, files) :
+	f_fasta.write("./%s" %files)
