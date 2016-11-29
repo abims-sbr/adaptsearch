@@ -1,6 +1,9 @@
 #!/usr/bin/python
+## AUTHOR: Eric Fontanillas
+## LAST VERSION: 14/08/14 by Julie BAFFARD
 
 #MINIMUM_LENGTH = 100
+
 
 ############################
 ##### DEF1 : Get Pairs #####
@@ -19,7 +22,6 @@ def get_pairs(fasta_file_path):
             next3 = F2.readline()
             fasta_seq_query = next3[:-1]
             next3 = F2.readline()    ## jump one empty line (if any after the sequence)
-            #next3 = F2.readline()
             fasta_name_match = next3[:-1]
             Sn = string.split(fasta_name_match, "||")
             fasta_name_match = Sn[0]
@@ -27,83 +29,58 @@ def get_pairs(fasta_file_path):
             next3 = F2.readline()
             fasta_seq_match = next3[:-1]
 
-
-
             pairwise = [fasta_name_query,fasta_seq_query,fasta_name_match,fasta_seq_match]
-            
-            ## ADD pairwise with condition
             list_pairwises.append(pairwise)
+
     F2.close()
-    #print list_pairwises
     return(list_pairwises)
 ##############################################
-
-#################################
-##### DEF2 : Extract length #####
-#################################
-def extract_length(length_string):   # format length string = 57...902
-    l3 = string.split(length_string, "...")
-    n1 = string.atoi(l3[0])
-    n2 = string.atoi(l3[1])
-    length = n2-n1
-    return(length)
-
-##############################################
-
 
 
 #######################
 ##### RUN RUN RUN #####
 #######################
-import string, os, time, re, sys, pickle
+import string, os, time, re, sys, pickle, zipfile #modif julie : ajout de zipfile
 
+## 1 ## INPUT/OUTPUT
+#extraction du fichier zip contenant les sorties
+zfile = zipfile.ZipFile(sys.argv[1])
+for name in zfile.namelist() :
+	zfile.extract(name)
 
-PATH_IN = "../../tmp/02_ParwiseRBH_tblastx/"
+PATH = "./"
+L1 = os.listdir(PATH)
 
-L1 = os.listdir(PATH_IN)
-
-print L1
-
-PATH_OUT = "04_LOCUS"
-
-
-## 1 ## Get list locus
+## 2 ## RUN
+##Get list locus
 list_LOCUS=[]
 for subfolder in L1:
-    print subfolder
-    fileIN = "%s/%s/19_ReciprocalBestHits.fasta" %(PATH_IN, subfolder)
-    
-    list_pairwises = get_pairs(fileIN) ### DEF1 ###
+    if subfolder.startswith("19_") : 
+    	fileIN = subfolder
+	list_pairwises = get_pairs(fileIN)          ### DEF1 ###
 
-    print "\t%s" %(list_pairwises[0][0])
-    print "\t%s" %(list_pairwises[0][2])
+    	jj=0
+    	for pair in list_pairwises:
+            name1 = pair[0]
+            name2 = pair[2]         
+            m=0
 
-    jj=0
-    for pair in list_pairwises:
-        name1 = pair[0]
-        name2 = pair[2]
-       
-        m=0
+            ## If one of the 2 names yet present ==> complete the locus
+            for locus in list_LOCUS:
+            	if name1 in locus or name2 in locus:
+                    locus.append(name1)
+                    locus.append(name2)
+                    m=1
 
-        ## If one of the 2 names yet present ==> complete the locus
-        for locus in list_LOCUS:
-            if name1 in locus or name2 in locus:
-                locus.append(name1)
-                locus.append(name2)
-                m=1
+            ## If no names was yet present in locus ==> create the locus
+            if m==0:
+                new_locus = [name1, name2]
+            	list_LOCUS.append(new_locus)
 
-        ## If no names was yet present in locus ==> create the locus
-        if m==0:
-            new_locus = [name1, name2]
-            list_LOCUS.append(new_locus)
+            ## Compteur
+            jj = jj+1
 
-        ## Compteur
-        jj = jj+1
-        if jj%1000 == 0:
-            print "\t%d" %jj
-
-
-## 2 ## Remove redondancy in list_LOCUS : Several locus in the list_locus, should be the same (but not in the same order), depending in which order they were created, we should remove them
+## Remove redondancy in list_LOCUS : Several locus in the list_locus, should be the same (but not in the same order), depending in which order they were created, we should remove them
 
 list_short_LOCUS = []
 for locus in list_LOCUS:
@@ -125,16 +102,12 @@ for locus in list_LOCUS:
     
 list_LOCUS = list_short_LOCUS
 
-## 3 ## Control list locus length
+## Control list locus length
 ln = len(list_LOCUS)
 print "\nNumber of locus = %d\n" %ln
 
-
-## 4 ## Backup list locus with PICKLE
+## Backup list locus with PICKLE
 backup_list_LOCUS = open("02_backup_list_LOCUS", "w")
 pickle.dump(list_LOCUS, backup_list_LOCUS) 
 
 backup_list_LOCUS.close()
-
-
-print "\n\nLIST LOCI = %s" %list_LOCUS

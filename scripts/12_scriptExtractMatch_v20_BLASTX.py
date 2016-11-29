@@ -1,4 +1,6 @@
 #!/usr/bin/python
+## AUTHOR: Eric Fontanillas
+## LAST VERSION: 14/08/14 by Julie BAFFARD
 
 ### TBLASTX formatting
 
@@ -27,15 +29,9 @@ SUBMATCH = 0    # SUBMATCH NOT WANTED (ONLY 1rst HIT)
 
 
 ########################################
-########################################
 ### DEF 1. Split each "BLASTN" event ###
 ########################################
-########################################
-
-#def split_file(file_in, file_out, keyword):
-
 def split_file(path_in, keyword):
-    print path_in
 
     file_in = open(path_in, "r")
     
@@ -45,36 +41,23 @@ def split_file(path_in, keyword):
     while 1:
         nextline = file_in.readline()
 
-        #if not nextline:
-        #    break
-
-        ##################################
         ##################################
         ###  [A] FORMATTING QUERY NAME ###
-        ##################################
-        ##################################
-        
-        ### Get query name ### 
+
+        # Get query name
         if nextline[0:6]=='Query=':
-            print "[%s]" %nextline[:-1]
             L1 = string.split(nextline, "||")
             L2 = string.split(L1[0], " ")
             query = L2[1]
             if query[-1] == "\n":
                 query = query[:-1]
-            print "[%s]" %query
 
-        ######################################
-        ######################################
         ###  [A] END FORMATTING QUERY NAME ###
         ######################################
-        ######################################
-        
         
 
         ### split the file with keyword ###
         if keyword in nextline:
-        #if nextline[:6] == keyword:   # start of a "RUN" block // Treatment of lines starting with the keyword ("BLASTN") only
             # Two cases here:
             #1# If it is the first "RUN" in the block (i.e. the first occurence of "BLASTN" in the file), we have just to add the new lines in the "RUN" list ... 2nd , we have also to detect the 'key' of bash1, which is the "query" name ... and third we will have to save this "RUN" in the bash1, once we will have detected a new "RUN" (i.e. a new line beginning with "BLASTN".
             #2# If it isn't the first run, we have the save the previous "RUN" in the "bash1", before to re-initialize the RUN list (RUN =[]), before to append lines to the new "RUN"
@@ -90,32 +73,28 @@ def split_file(path_in, keyword):
         else:                          # Treatment of the subsequent lines of the one starting with the keyword ("BLASTN")  (which is not treated here but previously)
             RUN = RUN + nextline
             
-            
-
 
         if not nextline:                                   # when no more line, we should record the last "RUN" in the bash1
-            #print "END = %s" %query
             BASH1[query] = RUN                       # add the last "RUN"
             break
     
     
     file_in.close()
-    #file_out.close()
-    #print "BASH1.keys() = %s" %BASH1.keys()
     return(BASH1)
 #########################################################
 
-#########################################################
-### 2. Parse blast output for each query
-#########################################################
+
+###############################################
+### DEF2 : Parse blast output for each query###
+###############################################
 
 ### 2.1. detect matches (i.e. 'Sequences producing significant alignments:' ###
 def detect_Matches(query, MATCH, WORK_DIR):
-    F5 = open("%s/tmp/blastRun2.tmp" %WORK_DIR, 'w')
+    F5 = open("%s/blastRun2.tmp" %WORK_DIR, 'w')
     F5.write(bash1[query])
     F5.close()
 
-    F6 = open("%s/tmp/blastRun2.tmp" %WORK_DIR, 'r')
+    F6 = open("%s/blastRun2.tmp" %WORK_DIR, 'r')
     list1 =[]
     list2 =[]
 
@@ -126,13 +105,10 @@ def detect_Matches(query, MATCH, WORK_DIR):
 
         if "***** No hits found ******" in nexteu :
             hit = 0
-            #print "NO HITS FOUND"
             break
         
         if 'Sequences producing significant alignments:' in nexteu:
             hit = 1
-            #print "HITS FOUND!!!!!!!!!!"
-            
             F6.readline() # jump a line
 
             while 1:
@@ -141,10 +117,8 @@ def detect_Matches(query, MATCH, WORK_DIR):
                 if nexteu2[0]==">": break
 
                 ######################################
-                ######################################
                 ### [B] FORMAT MATCH NAME 1st STEP ###
-                ######################################
-                ######################################                
+               
                 if nexteu2 != '\n':
                     LL1 = string.split(nexteu2, " ") # specific NORTH database names !!!!!!!
                     match = LL1[0]                     #### SOUTH databank // NORTH will have "|" separators
@@ -157,40 +131,21 @@ def detect_Matches(query, MATCH, WORK_DIR):
                         break                
                     else:                 ## Read the other lines (i.e. All the Matches)
                         continue
-                ##########################################
-                ##########################################
+
                 ### [B] END FORMAT MATCH NAME 1st STEP ###
-                ##########################################
                 ##########################################     
-                    
-            
+      
             break
-        
-    ##############################################
-    ## [OPTION 1st HIT] ONLY KEEP THE FIRST ENTRY FOR EACH QUERY
-    #if list1 != []:       # when no match, this list is empty
-    #    hit1 = list1[0]
-    #    list1 = [hit1]
-    #if list2 != []:     # when no match this list is empty
-    #    hit2 = list2[0]
-    #    list2 = [hit2]
-    ## [/OPTION 1st HIT] 
-    ##############################################
-    
-    #print "LIST1 = %s" %list1
-    #print "LIST2 = %s" %list2
     
     F6.close()
     return(list1, list2, hit)    # list1 = short name // list2 = more complete name
+######################################
 
 
-
-
-############################################
-### 2.2. Get Information on matches ###
+#########################################
+### DEF3 : Get Information on matches ###
+#########################################
 ### Function used in the next function (2.3.)
-#############################################
-
 def get_information_on_matches(list_of_line):
     
     for line in list_of_line:
@@ -275,25 +230,21 @@ def get_information_on_matches(list_of_line):
     list_informations=[length_matched, Expect, Score, identities, hits, identity_percent, divergence_percent,gaps_number, real_divergence_percent, frame, length_matched]
 
     return(list_informations)
-
-###############################################
-###############################################
-### 2.3. get sequences ###
-### [+ get informations from the function 2.2.]
-###############################################
-###############################################
+##################################
 
 
+############################
+### DEF4 : get sequences ###
+############################
+### [+ get informations from the DEF3.]
 def get_sequences(query, list2, SUBMATCHEU, WORK_DIR):
-    #print "\t[get_sequence BEGIN]"
     list_Pairwise = []
 
-    F7 = open("%s/tmp/blastRun3.tmp" %WORK_DIR, 'w')
+    F7 = open("%s/blastRun3.tmp" %WORK_DIR, 'w') 
     F7.write(bash1[query])    # bash1[query]  ==> blast output for each query
     F7.close()
-    F8 = open("%s/tmp/blastRun3.tmp" %WORK_DIR, 'r')
-
-    
+    F8 = open("%s/blastRun3.tmp" %WORK_DIR, 'r')
+  
     text1 = F8.readlines()
     
     miniList = []
@@ -307,11 +258,8 @@ def get_sequences(query, list2, SUBMATCHEU, WORK_DIR):
                 miniList.append(i)   # content positions in the list "text1", of all begining of match (e.g. >gnl|UG|Apo#S51012099 [...])
 
     miniList.reverse()
-
-     
-    
+  
     if miniList != []:
-
         length = len(miniList)
 
         ii = 0
@@ -324,19 +272,15 @@ def get_sequences(query, list2, SUBMATCHEU, WORK_DIR):
             ii = ii+1                # Listing1 is a table of table!!
         
         Listing1.append(text1) # "text1" = the first lines (begin with "BLASTN 2.2.1 ...]"
-
         Listing1.reverse()
 
         Listing2 = Listing1[1:]   # remove the first thing ("BLASTN ...") and keep only table beginning with a line with ">"
-
         SEK = len(Listing2)
         
         NB_SEK = 0
         
-        for e1 in Listing2:   # "Listing2" contents all the entries begining with ">"
-            
+        for e1 in Listing2:   # "Listing2" contents all the entries begining with ">"            
             NB_SEK = NB_SEK + 1
-
             list51 = []
 
             l = -1
@@ -357,10 +301,7 @@ def get_sequences(query, list2, SUBMATCHEU, WORK_DIR):
 
 
             ######################################
-            ######################################
             ### [C] FORMAT MATCH NAME 2nd STEP ###
-            ######################################
-            ######################################
             
             BigFastaName = e1      ### LIST OF LINES <=> What is remaining after removing all the hit with "Score =", so all the text comprise between ">" and the first "Score =" ==> Include Match name & "Length & empty lines
             
@@ -372,14 +313,10 @@ def get_sequences(query, list2, SUBMATCHEU, WORK_DIR):
             S1 = string.split(SmallFastaName, "||")
             S2 = string.split(S1[0], " ")
 
-            
-            
+     
             PutInFastaName1 = S2[0]
-            
-            ##########################################
-            ##########################################
+           
             ### [C] END FORMAT MATCH NAME 2nd STEP ###
-            ##########################################
             ##########################################
 
             SUBSEK = len(Listing3)   
@@ -391,7 +328,6 @@ def get_sequences(query, list2, SUBMATCHEU, WORK_DIR):
                 Listing4.append(Listing3[-1])   # Remove this line if submatch wanted!!!
             elif SUBMATCHEU == 1:
                 Listing4 = Listing3
-
                 
             
             for l in Listing4:   ## "listing3" contents
@@ -402,7 +338,6 @@ def get_sequences(query, list2, SUBMATCHEU, WORK_DIR):
                 ll2 = string.replace(l[1], " ", "")
                 ll3 = string.replace(l[2], " ", "")
                 PutInFastaName2 = ll1[:-1] + "||" + ll2[:-1] + "||" + ll3[:-1] # match information
-                #print PutInFastaName2
 
                 seq_query = ""
                 pos_query = []
@@ -454,18 +389,12 @@ def get_sequences(query, list2, SUBMATCHEU, WORK_DIR):
                 PutInFastaName3 = "%d...%d" %(pos_query_start, pos_query_end)
 
 
-
-
-                ######################################
                 ######################################
                 ### [D] FORMAT QUERY NAME 2nd STEP ###
-                ######################################
-                ######################################
+
                 FINAL_fasta_Name_Query = ">" + query + "||"+ PutInFastaName3 + "||[[%d/%d]][[%d/%d]]" %(NB_SEK, SEK, NB_SUBSEK,SUBSEK)
-                ##########################################
-                ##########################################
+
                 ### [D] END FORMAT QUERY NAME 2nd STEP ###
-                ##########################################
                 ##########################################
                                
 
@@ -475,60 +404,42 @@ def get_sequences(query, list2, SUBMATCHEU, WORK_DIR):
                 PutInFastaName4 = "%d...%d" %(pos_match_start, pos_match_end)
 
 
-
-
-                ######################################
                 ######################################
                 ### [E] FORMAT MATCH NAME 3rd STEP ###
-                ######################################
-                ######################################                
+              
                 FINAL_fasta_Name_Match = ">" + PutInFastaName1 + "||" + PutInFastaName4 + "||[[%d/%d]][[%d/%d]]" %(NB_SEK, SEK, NB_SUBSEK,SUBSEK)
-                #FINAL_fasta_Name_Match = ">" + PutInFastaName1 + "||" + PutInFastaName4 + "||" + PutInFastaName2+ "||[[%d/%d]][[%d/%d]]" %(NB_SEK, SEK, NB_SUBSEK,SUBSEK)
-                ##########################################
-                ##########################################
+
                 ### [E] END FORMAT MATCH NAME 3rd STEP ###
-                ##########################################
                 ##########################################
 
 
 
                 Pairwise = [FINAL_fasta_Name_Query , seq_query , FINAL_fasta_Name_Match , seq_match]  # list with 4 members
-
                 list_Pairwise.append(Pairwise)
 
-
                 ### Get informations about matches
-                list_info = get_information_on_matches(l)    ### DEF 2.2. ###
-
-                #divergence = list_info[6]
+                list_info = get_information_on_matches(l)    ### DEF3 ###
                 
                      
     F8.close()
-    #print "\t[get_sequence CLOSE]"
-    #print list_Pairwise
     return(list_Pairwise, list_info)
 #########################################
 
 
-
-######################
-### 2. RUN RUN RUN ###
-######################
-
+###################
+### RUN RUN RUN ###
+###################
 import string, os, time, re, sys
 
-WORK_DIR = sys.argv[1]
+## 1 ## INPUT/OUTPUT
+SHORT_FILE = sys.argv[1] ## short-name-query_short-name-db
 
-path_in = "%s/11_outputBlast.txt" %WORK_DIR
-file_out = open("%s/13_PairwiseMatch.fasta" %WORK_DIR,"w")
-file_out3 = open("%s/13_PairwiseNames.csv" %WORK_DIR, "w")
-file_out4 = open("%s/13_PairwiseNames_long_names.csv" %WORK_DIR, "w")
-file_log = open("%s/13_ParseBLASToutput_ALL.log" %WORK_DIR, "w")
+path_in = "%s/11_outputBlast_%s.txt" %(SHORT_FILE, SHORT_FILE) 
+file_out = open("%s/13_PairwiseMatch_%s.fasta" %(SHORT_FILE, SHORT_FILE),"w")
 
-
+## 2 ## RUN
 ## create Bash1 ##
-bash1 = split_file(path_in, "TBLASTX")    ### FUNCTION ###
-print bash1.keys()
+bash1 = split_file(path_in, "TBLASTX")    ### DEF1 ###
 
 ## detect and save match ##
 list_hits =[]
@@ -538,19 +449,9 @@ k = 0
 lene = len(bash1.keys())
 for query in bash1.keys():
     j  = j+1
-    print "\n\n***************** Nb: %d/%d *********************" %(j,lene)
-
-    print query
-
-    #print bash1[query]
     
     ## 2.1. detect matches ##
-    #print "\n#######"
-    print "QUERY = <%s>"%query
-    list_match, list_match2, hit=detect_Matches(query, MATCH, WORK_DIR)    ### FUNCTION ###
-    #print "TEST"
-    #print "%s" %list_match
-    #print "OK"
+    list_match, list_match2, hit=detect_Matches(query, MATCH, SHORT_FILE)    ### DEF2 ###
     
     if hit == 1:   # match(es)
         list_hits.append(query)
@@ -559,29 +460,19 @@ for query in bash1.keys():
     
     ## 2.2. get sequences ##
     if hit ==1:
-        
-        #print ""
-        list_pairwiseMatch, list_info = get_sequences(query, list_match2, SUBMATCH, WORK_DIR)       ### FUNCTION ###
+        list_pairwiseMatch, list_info = get_sequences(query, list_match2, SUBMATCH, SHORT_FILE)       ### DEF4 ###
 
         # divergencve
         divergence = list_info[6]
-        #print "Divergence = %s" %divergence
-
         # gap number
-        gap_number = list_info[7]
-        #print "Gap number = %s" %gap_number       
-
+        gap_number = list_info[7]      
         # real divergence (divergence without accounting INDELs)
         real_divergence = list_info[8]
-        #print "Real Divergence = %s" %real_divergence
-
         # length matched
         length_matched = list_info[10]
-        #print "Length mathced = %s" %length_matched
 
         ### WRITE PAIRWISE ALIGNMENT IN OUTPUT FILES
         for pairwise in list_pairwiseMatch:
-            
             k = k+1
 
             query_name = pairwise[0]
@@ -592,70 +483,17 @@ for query in bash1.keys():
             len_query_seq = len(query_seq)
 
 
-#             Lis1 = string.split(query_name, "||")
-#             List11 = string.split(Lis1[0], " ")
-#             short_query_name = List11[0]
-            
-#             Lis2 = string.split(match_name, "||")
-#             List22 = string.split(Lis2[0], " ")
-#             short_match_name = List22[0]
-            
-                
-
             # If NO CONTROL FOR LENGTH, USE THE FOLLOWING LINES INSTEAD:
             
             file_out.write("%s||%s||%s||%s||%s" %(query_name,divergence,gap_number,real_divergence,length_matched))
             file_out.write("\n")
             file_out.write("%s" %query_seq)
             file_out.write("\n")
-            #file_out.write("\n")
 
             file_out.write("%s||%s||%s||%s||%s" %(match_name,divergence,gap_number,real_divergence,length_matched))
             file_out.write("\n")
             file_out.write("%s" %match_seq)
             file_out.write("\n")
-            #file_out.write("\n")
-            
-            #file_out2.write(match_name)
-            #file_out2.write("\n")
-            #file_out2.write(match_seq)
-            #file_out2.write("\n")
-            #file_out2.write("\n")
 
-            file_out3.write("%s,%s,%s,%s,%s,%s\n" %(query_name[1:], match_name[1:], divergence,gap_number,real_divergence,length_matched))
-            file_out4.write("%s,%s,%s,%s,%s,%s\n" %(query_name[1:], match_name[1:], divergence,gap_number,real_divergence,length_matched))
-      
-            # [/CONTROL FOR LENGHT]
-            
-            #file_out.write("")
-    #print "\n#######\n"
-    
-
-### Write Summary ###
-    
-file_log.write("\n\n************************************************\n")
-file_log.write("******************* SUMMARY ********************\n")
-file_log.write("************************************************\n\n")
-
-file_log.write("\nNumber of sequences matching something = %d\n" % len(list_hits))
-for hiti in list_hits:
-    file_log.write(hiti)
-    file_log.write("\n")
-    
-file_log.write("\nNumber of sequences matching nothing = %d\n" % len(list_no_hits))
-for no_hiti in list_no_hits:
-    file_log.write(no_hiti)
-    file_log.write("\n")
-
-file_log.write("\n\n************************************************\n\n")
-
-nb_pairwiseMatches = k
-file_log.write("Total number of pairwise matches = %d\n" %nb_pairwiseMatches)
 
 file_out.close()
-#file_out2.close()
-#file_out3.close()
-file_log.close()
-#file_out4.close()
-os.system("rm %s/tmp/*" %WORK_DIR)
-

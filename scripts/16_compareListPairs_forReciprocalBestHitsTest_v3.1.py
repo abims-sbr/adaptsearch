@@ -1,4 +1,6 @@
 #!/usr/bin/python
+## AUTHOR: Eric Fontanillas
+## LAST VERSION: 14/08/14 by Julie BAFFARD
 
 
 ## Blast Run 1 : 01_SOUTH_final_batchs_1-9_15858seq.assembly VS. 02_NORTH_gscope_24770seqAfterAssemblage_cap3.fas
@@ -10,76 +12,8 @@
 
 MIN_LENGTH = 1
 
-
-#####################################
-#####################################
-### DEF 1. Generate list of pairs ###
-#####################################
-#####################################
-
-#def split_file(file_in, file_out, keyword):
-
-def get_paired_Names(path_in):
-
-    file_in = open(path_in, "r")
-
-    list_of_paired_names = []
-    while 1:
-        nextline = file_in.readline()
-
-        if not nextline:
-            break
-        #print nextline
-        L1 = string.split(nextline, ",")
-        L2 = L1[0]
-        L3 = string.split(L2, "||")
-        Name1 = L3[0]
-        if " " in Name1:
-            N1 = string.split(Name1, " ")
-            Name1 = N1[0]
-            
-        L4 = L1[1]
-        L5 = string.split(L4, "||")
-        Name2 = L5[0]
-        if " " in Name2:
-            N1 = string.split(Name2, " ")
-            Name2 = N1[0]       
-        
-        pair = [Name1, Name2]
-        
-        list_of_paired_names.append(pair)
-        
-    file_in.close()
-
-    
-
-    return(list_of_paired_names)
-###############################################
-
-
-##########################################################
-##########################################################
-### DEF 2. Get overlapping pairs (between the 2 lists) ###
-##########################################################
-##########################################################
-def overlap_pairs(list1, list2):
-
-    list3 = []
-
-    for pair in list1:
-        name1 = pair[0]
-        name2 = pair[1]
-
-        for pair2 in list2:
-            if name1 in pair2 and name2 in pair2:
-                pair3 = [name1, name2]
-                list3.append(pair3)
-
-    return(list3)
-###########################################################
-
 ############################
-##### DEF3 : Get Pairs #####
+##### DEF1 : Get Pairs #####
 ############################
 def get_pairs(fasta_file_path):
     F2 = open(fasta_file_path, "r")
@@ -93,7 +27,6 @@ def get_pairs(fasta_file_path):
             next3 = F2.readline()
             fasta_seq_query = next3[:-1]
             next3 = F2.readline()    ## jump one empty line (if any after the sequence)
-            #next3 = F2.readline()
             fasta_name_match = next3[1:-1]
             next3 = F2.readline()
             fasta_seq_match = next3[:-1]
@@ -102,101 +35,12 @@ def get_pairs(fasta_file_path):
             ## ADD pairwise with condition
             list_pairwises.append(pairwise)
     F2.close()
-    #print list_pairwises
     return(list_pairwises)
 #########################################################
 
-##########################################################################
-##### DEF4 : Get overlapped pairs (i.e. reciprocical best hit pairs) #####
-##########################################################################
-def get_reciprocal(list_paired_name, list_pairwise_sequences, FILE_OUT_PATH):
-
-    FILE_OUT = open(FILE_OUT_PATH, "w")
-    
-    for pair in list_pairwise_sequences:
-        fasta_name_query = pair[0]
-        S1 = string.split(fasta_name_query, "||")
-        short_fasta_name_query = S1[0]
-        print "\t\tSHORT = %s" %short_fasta_name_query
-        
-        fasta_seq_query = pair[1]
-        
-        fasta_name_match = pair[2]
-        S2 = string.split(fasta_name_match, "||")
-        short_fasta_name_match = S2[0]
-        print "\t\tSHORT = %s" %short_fasta_name_match
-        
-        fasta_seq_match = pair[3]
-
-        for pair_of_names in list_paired_name:
-            #print "\t\t%s" %pair_of_names
-            if short_fasta_name_query in pair_of_names and short_fasta_name_match in pair_of_names:
-                #print "\tHIT"
-                #print pair_of_names
-                FILE_OUT.write(">%s\n" %fasta_name_query)
-                FILE_OUT.write("%s\n" %fasta_seq_query)
-                FILE_OUT.write(">%s\n" %fasta_name_match)
-                FILE_OUT.write("%s\n" %fasta_seq_match)
-    FILE_OUT.close()
-############################################################################
-##########################################################################
-##### DEF4 : Get overlapped pairs (i.e. reciprocical best hit pairs) #####
-##########################################################################
-def get_reciprocal2(list_paired_name, list_pairwise_sequences, FILE_OUT_PATH):
-
-    FILE_OUT = open(FILE_OUT_PATH, "w")
-    
-    for pair in list_pairwise_sequences:
-        fasta_name_query = pair[0]
-        S1 = string.split(fasta_name_query, "||")
-        short_fasta_name_query = S1[0]
-        print "\t\tSHORT = %s" %short_fasta_name_query
-        
-        fasta_seq_query = pair[1]
-        
-        fasta_name_match = pair[2]
-        S2 = string.split(fasta_name_match, "||")
-        short_fasta_name_match = S2[0]
-        print "\t\tSHORT = %s" %short_fasta_name_match
-        
-        fasta_seq_match = pair[3]
-
-        for pair_of_names in list_paired_name:
-            #print "\t\t%s" %pair_of_names
-            if short_fasta_name_query in pair_of_names and short_fasta_name_match in pair_of_names:
-                #print "\tHIT"
-                #print pair_of_names
-                FILE_OUT.write(">%s\n" %fasta_name_query)
-                FILE_OUT.write("%s\n" %fasta_seq_query)
-                FILE_OUT.write(">%s\n" %fasta_name_match)
-                FILE_OUT.write("%s\n" %fasta_seq_match)
-    FILE_OUT.close()
-############################################################################
-
-###########################################################################################
-##### DEF5 : Check redondancy of matche hits (i.e. several query match the same match #####
-###########################################################################################
-def get_redondantMatches(list):
-
-    bash_RedondantMatch = {}
-    
-    for sublist in list:
-        match = sublist[1]
-        #print "{MATCH = %s}" %match
-
-        n = 0
-        for sublist in list:
-            if sublist[1] == match:
-                n = n + 1
-        
-        bash_RedondantMatch[match] = n
-
-    return(bash_RedondantMatch)
-############################################################################################
-
 
 #################################
-##### DEF6 : Get Short Name #####
+##### DEF2 : Get Short Name ##### 
 #################################
 def get_short_name(long_name):
 
@@ -207,7 +51,8 @@ def get_short_name(long_name):
     
     
     return(short_name)
-############################################################################################
+##########################################################
+
 
 ###################
 ### RUN RUN RUN ###
@@ -215,37 +60,32 @@ def get_short_name(long_name):
 
 import string, os, sys
 
-### 1 ### Path Input and Output
-WORK_DIR = sys.argv[1]
-path_out = "%s/17_ReciprocalHits.fasta" %WORK_DIR
+### 1 ### INPUT/OUTPUT
+SHORT_FILE = sys.argv[1] ## short-name-query_short-name-db
+
+path_out = "%s/17_ReciprocalHits_%s.fasta" %(SHORT_FILE, SHORT_FILE) 
 file_out = open(path_out, "w")
 
-fasta_file_path1 = "%s/09_PairwiseMatch_filtered.fasta" %WORK_DIR
-fasta_file_path2 = "%s/15_PairwiseMatch_filtered.fasta" %WORK_DIR
+fasta_file_path1 = "%s/09_PairwiseMatch_filtered_%s.fasta" %(SHORT_FILE, SHORT_FILE) 
+fasta_file_path2 = "%s/15_PairwiseMatch_filtered_%s.fasta" %(SHORT_FILE, SHORT_FILE) 
 
-
-LOG_redondancy = open("%s/17_Redondant_Reciprocal_Matches" %WORK_DIR, "w")
-
-
-### 4 ### Get pair of sequences (ALL PAIRS AVAILABLE BEFORE FILTERING FOR Best Reciprocal Hits)
-print "[3/5] Get pairs of sequences ..."
-list_pairwises1 = get_pairs(fasta_file_path1)     ### DEF3 ###
-list_pairwises2 = get_pairs(fasta_file_path2)     ### DEF3 ###
+## 2 ## RUN
+##Get pair of sequences (ALL PAIRS AVAILABLE BEFORE FILTERING FOR Best Reciprocal Hits)
+list_pairwises1 = get_pairs(fasta_file_path1)     ### DEF1 ###
+list_pairwises2 = get_pairs(fasta_file_path2)     ### DEF1 ###
 
 ln1 = len(list_pairwises1)
 ln2 = len(list_pairwises2)
-
 
 ### Detect reciprocal best hits (pairs)
 list_overlapping_pairwises = []               ### Will content pair reciprocally found as Best Blastx HIT
 i = 1
 for pair in list_pairwises1:
-    print "%d/%d" %(i,ln1)
     long_name_query1 = pair[0]
-    short_name_query1 =  get_short_name(long_name_query1)        ### DEF6 ###
+    short_name_query1 =  get_short_name(long_name_query1)        ### DEF2 ###
 
     long_name_match1 = pair[2]
-    short_name_match1 =  get_short_name(long_name_match1)        ### DEF6 ###
+    short_name_match1 =  get_short_name(long_name_match1)        ### DEF2 ###
 
     j = 0
     for pair2 in list_pairwises2:
@@ -260,20 +100,9 @@ for pair in list_pairwises1:
         if short_name_query1 in LLLL and short_name_match1 in LLLL:
             j = j+1
 
-    if j == 0:
-        print "NO OVERLAP"
-    elif j == 1:
-        list_overlapping_pairwises.append(pair)
-        print "1 RECIPROCAL MATCH"
-    else:
-        LOG_redondancy.write("%s,%s" %(short_name_query1,short_name_match1))
-        print "SEVERAL RECIPROCAL"
-            
-        
+    if j == 1:
+        list_overlapping_pairwises.append(pair)      
     i = i+1   
-    
-LOG_redondancy.close()
-
 
 ### Print the output
 for pair3 in list_overlapping_pairwises:

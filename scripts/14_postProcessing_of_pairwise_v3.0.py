@@ -1,8 +1,8 @@
 #!/usr/bin/python
-
+## AUTHOR: Eric Fontanillas
+## LAST VERSION: 14/08/14 by Julie BAFFARD
 
 MINIMUM_LENGTH = 1
-
 
 ############################
 ##### DEF1 : Get Pairs #####
@@ -19,7 +19,6 @@ def get_pairs(fasta_file_path):
             next3 = F2.readline()
             fasta_seq_query = next3[:-1]
             next3 = F2.readline()    ## jump one empty line (if any after the sequence)
-            #next3 = F2.readline()
             fasta_name_match = next3[:-1]
             next3 = F2.readline()
             fasta_seq_match = next3[:-1]
@@ -28,9 +27,9 @@ def get_pairs(fasta_file_path):
             ## ADD pairwise with condition
             list_pairwises.append(pairwise)
     F2.close()
-    #print list_pairwises
     return(list_pairwises)
 ##############################################
+
 
 #################################
 ##### DEF2 : Extract length #####
@@ -41,8 +40,8 @@ def extract_length(length_string):   # format length string = 57...902
     n2 = string.atoi(l3[1])
     length = n2-n1
     return(length)
-
 ##############################################
+
 
 ####################################
 ##### DEF3 : Remove Redondancy #####
@@ -54,7 +53,6 @@ def filter_redondancy(list_paireu, MIN_LENGTH):
     
     for pair in list_paireu:
          query_name = pair[0]
-         #print query_name
          query_seq = pair[1]
          match_name = pair[2]
          match_seq = pair[3]
@@ -65,8 +63,6 @@ def filter_redondancy(list_paireu, MIN_LENGTH):
          l2 = string.split(match_name, "||")
          short_match_name = l2[0][1:]
          binom = "%s_%s" %(short_query_name, short_match_name)
-
-         #print binom
          
          if binom not in bash1.keys():
              bash1[binom] = [query_name, query_seq, match_name, match_seq, length_matched]
@@ -74,66 +70,35 @@ def filter_redondancy(list_paireu, MIN_LENGTH):
              old_length = bash1[binom][-1]
              if length_matched > old_length:
                  bash1[binom] = [query_name, query_seq, match_name, match_seq, length_matched]
-             #else:
-             #    print "shorter!"
 
     
     for bino in bash1.keys():
-        print bino
         length = bash1[bino][-1]
-        #print length
         if length > MIN_LENGTH:
-            print "\t %d bp" %(length)
             list_pairout.append(bash1[bino])
-        else:
-            print "\t%s have been removed due to length (%d bp)" %(bino, length)
 
-
-    #print bash1.keys()
 
     return(list_pairout)
-
 ##############################################
 
-
-################################
-###### DEF3: filter lengh ######
-################################
-# def filter_length(list_pairs, MIN_LENGTH):
-#     list_pairs2 = []
-#     for pair in list_pairs:
-#         #print pair[0]
-#         seq = pair[1]
-#         #print seq
-#         ln = len(seq)
-#         #print ln
-#         if ln > MIN_LENGTH:
-#             list_pairs2.append(pair)
-#     print list_pairs2
-#     return(list_pairs2)
-##############################################
 
 #######################
 ##### RUN RUN RUN #####
 #######################
 import string, os, time, re, sys
 
-#MINIMUM_LENGTH = string.atoi(sys.argv[1])
-WORK_DIR = sys.argv[1]
+## 1 ## INPUT/OUTPUT
+SHORT_FILE = sys.argv[1] ## short-name-query_short-name-db
 
-F_IN = "%s/13_PairwiseMatch.fasta" %WORK_DIR
-F_OUT = "%s/15_PairwiseMatch_filtered.fasta" %WORK_DIR
+F_IN = "%s/13_PairwiseMatch_%s.fasta" %(SHORT_FILE, SHORT_FILE)
+ 
+F_OUT = "%s/15_PairwiseMatch_filtered_%s.fasta" %(SHORT_FILE, SHORT_FILE) 
 File_OUT = open(F_OUT, "w")
-F_OUT2 = "%s/15_onlyMatch_filtered.fasta" %WORK_DIR
-File_OUT2 = open(F_OUT2, "w")
-F_OUT3 = "%s/15_PairwiseNames_longName_filtered.csv" %WORK_DIR
-File_OUT3 = open(F_OUT3, "w")
 
-list_pairwises = get_pairs(F_IN)                                                           ### DEF1 ###
-#for paireu in list_pairwises:
-#    print paireu[0]
+## 2 ## RUN
+list_pairwises = get_pairs(F_IN)          ### DEF1 ###
 
-list_pairwises_filtered1 = filter_redondancy(list_pairwises, MINIMUM_LENGTH)                               ### DEF3 ###
+list_pairwises_filtered1 = filter_redondancy(list_pairwises, MINIMUM_LENGTH)      ### DEF3 ###
 
 
 i = 0
@@ -145,19 +110,5 @@ for pair in list_pairwises_filtered1:
      File_OUT.write("%s\n" %pair[1])
      File_OUT.write("%s\n" %pair[2])
      File_OUT.write("%s\n" %pair[3])
-
-     ## Write only "matches" [AND UNGAP THEM: needed before the 2nd run of blast]
-     File_OUT2.write("%s\n" %pair[2])
-     seq_match = pair[3]
-     seq_match_ungapped = string.replace(seq_match, "-", "")
-     File_OUT2.write("%s\n" %seq_match_ungapped)
-
-     ## Write the name of the pair [required to test for reciprocal best hit]
-     File_OUT3.write("%s,%s\n" %(pair[0][1:],pair[2][1:]))
-
-     
+ 
 File_OUT.close()
-File_OUT2.close()
-File_OUT3.close()
-##############################################
-
