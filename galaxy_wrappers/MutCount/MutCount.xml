@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+
+<tool name="MutCount" id="mutcount" version="1.0">
+	<description>
+		DESCRIPTION
+	</description>
+  	<command>
+		
+		#if str($method.method_run) == "concat" :
+
+			python /w/galaxy/galaxy4misharl/galaxy-dist/tools/abims/julie/oasearch/mutcount/mutcount_pairs.py $method.num_sampled $method.num_iter $method.list_species &amp;&amp;
+			python /w/galaxy/galaxy4misharl/galaxy-dist/tools/abims/julie/oasearch/mutcount/codoncountingv3.py ${method.zip_nuc} 
+		#end if
+
+		#if str($method.method_run) == "separated" :
+
+			#if str($method.format.format_run)== "nucleic" :
+				python /w/galaxy/galaxy4misharl/galaxy-dist/tools/abims/julie/oasearch/mutcount/Study_seq_composition_NUC_v3.1.py ${method.format.zip_nuc}  ${method.format.concat_nuc} 
+				&amp;&amp; zip -r multigenes_nucleic.zip OUT/
+			#end if
+			#if str($method.format.format_run)== "proteic" :
+				cp /w/galaxy/galaxy4misharl/galaxy-dist/tools/abims/julie/oasearch/mutcount/01_AminoAcid_Properties2.csv . &amp;&amp;
+                        	python /w/galaxy/galaxy4misharl/galaxy-dist/tools/abims/julie/oasearch/mutcount/Study_seq_composition_AA_v4.1.py ${method.format.zip_aa} ${method.format.concat_prot}
+				&amp;&amp; zip -r multigenes_proteic.zip OUT/
+			#end if
+		#end if
+
+	</command>
+
+<inputs>
+
+
+	
+	<conditional name="method">
+		<param name="method_run" type="select" label="Which method do you want to use for this tool? ">
+			<option value="concat">Concatenated genes in DNA (concatenation from RAxML run)</option>
+			<option value="separated">Set of separated genes (from ORF_Search output "output zip containing files with CDS without indel")</option>
+		</param>
+
+		<when value="concat">
+			<param name="zip_nuc" type="data" format="fasta" label="Choose your fasta file in nucleic format" help="It must contain the concatenated file in NUCLEIC format from Phylogeny tool" />
+			<param name="num_sampled" type="integer" value="100" min="0" label="Number of iterations"/>
+			<param name="num_iter" type="integer" value="100" min="0" label="Number of sampled codons"/>
+			<param name="list_species" type="text" size="100" label="List of species" help="List the species separated with a comma (for e.g Ap,As,Ct,Gt,Yu)" />		
+		</when>
+		<when value="separated">
+			
+
+			<conditional name="format"> 
+
+				<param name="format_run" type="select" label="Which format do you want to use for this tool (concatenation and RAxML run) ? ">
+					<option value="nucleic">Nucleic format</option>
+					<option value="proteic">Proteic format</option>
+				</param>
+
+				
+
+				<when value="nucleic">
+		
+					<param name="zip_nuc" type="data" format="fasta,no_unzip.zip" label="Choose your ZIP file" help="It must contain the concatenated file in NUCLEIC format from ORF_search tool" />
+					<param name="concat_nuc" type="data" format="fasta" label="Concatenated file from Phylogeny step" help="This file is used to retrieve the species names" />	
+
+		
+				</when>
+
+				<when value="proteic">
+
+
+					<param name="zip_aa" type="data" format="fasta,no_unzip.zip" label="Choose your ZIP file" help="It must contain the concatenated file in PROTEIC format from ORF_search tool" />
+					<param name="concat_prot" type="data" format="fasta" label="concatenated file from Phylogeny step" help="This file is used to retrieve the species names" />	
+
+
+				</when>	
+
+			</conditional>
+
+		</when>
+	
+	</conditional>
+
+</inputs>
+
+	<outputs>
+		<data format="txt" name="output1" label="concatenated_results.txt" from_work_dir="codoncounting_results.txt" >
+			<filter>(method['method_run']=='concat')</filter>
+		</data>
+		<data format="no_unzip.zip" name="output2" label="multigenes_nucleic.zip" from_work_dir="multigenes_nucleic.zip" >
+			<filter>(method['method_run']=='separated' and method['format']['format_run']== 'nucleic')</filter>
+		</data>
+		<data format="no_unzip.zip" name="output3" label="multigenes_proteic.zip" from_work_dir="multigenes_proteic.zip"  >
+			<filter>(method['method_run']=='separated' and method['format']['format_run']== 'proteic')</filter>
+		</data>
+		
+	</outputs>
+	<help>
+
+.. class:: infomark
+
+**Authors**  Eric Fontanillas and Pierre-Guillaume Brun creates the scripts of this pipeline.
+
+.. class:: infomark
+
+**Galaxy integration** Julie Baffard and ABIMS TEAM
+
+ | Contact support.abims@sb-roscoff.fr for any questions or concerns about the Galaxy implementation of this tool.
+
+---------------------------------------------------
+
+
+========
+Mutcount
+========
+
+-----------
+Description
+-----------
+
+
+This script
+
+
+
+.. class:: infomark
+
+
+**Important part of this tool (the inputs format)**
+
+--------
+
+
+
+============
+Input format
+============
+
+example.
+
+	</help>
+</tool>

@@ -34,9 +34,10 @@ def dico_filtering_redundancy(path_in):
             #new_fasta_name = L[0] + "_" + L[1] + "_" + L[2]
             
             ## 1.2. ## Extract length
-            lgt = L[-2]
-            list_lgt = string.split(lgt, ":")
-            length = string.atoi(list_lgt[1])
+            # Length extraction from the name not necessary
+            #lgt = L[-2]
+            #list_lgt = string.split(lgt, ":")
+            #length = string.atoi(list_lgt[1])
             #print "\tLength in fasta name = %.5f" %length
             
             ## Used later for [CRITERIA 1] (see below)
@@ -53,7 +54,7 @@ def dico_filtering_redundancy(path_in):
         k = k+1
         if k%1000 == 0:
             print k
-        f_in.close()
+    f_in.close()
 
     for key in bash.keys():
         #print "%s = %d" %(key,len(bash[key]))
@@ -107,12 +108,12 @@ import string, os, sys, re
 path_IN = sys.argv[1]
 path_OUT = sys.argv[2]
 file_OUT = open(path_OUT, "w")
-
+#length_seq_max=sys.argv[3]
 dico = dico_filtering_redundancy(path_IN)   ### DEF1 ###
 
 #print dico.keys()
 
-print len(dico.keys())
+#print len(dico.keys())
 
 KB = dico.keys()
 #print "dis donc %s" %KB
@@ -120,11 +121,11 @@ KB = dico.keys()
 ## Sort the fasta_name depending their number XX : ApXX
 BASH_KB = {}
 for name in KB:
-    print name
+    #print name
     L = string.split(name, "_")
-    nb = L[0][4:]
+    nb = L[0][2:]
     nb = string.atoi(nb)
-    print nb
+    #print nb
     BASH_KB[nb] = name
 
 KKB = BASH_KB.keys()
@@ -134,6 +135,7 @@ for nb in KKB:
     fasta_name = BASH_KB[nb]
     #print fasta_name
     seq = dico[fasta_name]
+    #if int(len(seq)) > int(length_seq_max):
     file_OUT.write(">%s\n" %fasta_name)
     file_OUT.write("%s\n" %seq)
 
