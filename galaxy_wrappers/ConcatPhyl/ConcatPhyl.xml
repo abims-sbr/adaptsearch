@@ -1,0 +1,532 @@
+*<?xml version="1.0"?>
+
+<tool name="ConcatPhyl" id="concatphyl" version="1.0">
+	<description>
+		Concatenation and phylogeny
+	</description>
+  	<command>
+		python /w/galaxy/galaxy4misharl/galaxy-dist/tools/abims/julie/oasearch/phylogeny/01_concatenate_v3.0.py ${zip}
+
+		#if $format.format_run == "nucleic" :
+			nucleic ${zip_nuc} > ${output};
+			raxmlHPC-1500
+			-n "galaxy_run"
+			##-q "./05_partitions_gene_NUC"
+			 -s "./03_Concatenation_nuc.phy"
+			## (-m)
+			-m $format.base_model
+		#elif $format.format_run == "proteic" :
+			proteic ${zip_aa} > ${output};
+			raxmlHPC-1500
+			-n "galaxy_run"
+			##-q "./06_partitions_gene_AA"
+ 			-s "./02_Concatenation_aa.phy"
+			## (-m)
+			-m $format.base_model$format.aa_search_matrix
+		#end if
+
+## Optional parameters
+
+##if $raxml_options.options == "yes" :
+
+		## (-p)
+    		#if $random_seed:
+        		-p $random_seed
+    		#else
+        		-p 1234567890
+    		#end if
+		## (-N/#)
+   	 	#if $number_of_runs:
+        		-N $number_of_runs
+   		#end if
+    		#if $number_of_runs_bootstop:
+        		-# $number_of_runs_bootstop
+    		#end if
+		## (-f)
+		#if $search_algorithm:
+			-f $search_algorithm
+		#end if
+		## (-x)
+		#if $rapid_bootstrap_random_seed:
+		-x $rapid_bootstrap_random_seed
+		#end if
+##else :
+
+ 	##-N 100 -f a -x 12345
+
+##end if				
+		>> ${output};
+  	</command>
+ 	<inputs>
+
+		<param name="zip" type="data" format="no_unzip.zip" label="Choose your ZIP file" help="Contains the files filter after the tool oase" />
+		<conditional name="format">
+			<param name="format_run" type="select" label="Which format do you want to use for this tool (concatenation and RAxML run) ? ">
+				<option value="nucleic">Nucleic format</option>
+				<option value="proteic">Proteic format</option>
+			</param>
+
+			<when value="nucleic">
+				<param name="zip_nuc" type="data" format="no_unzip.zip" label="Choose your ZIP file" help="It must contain the aligned files without indels in NUCLEIC format" />
+				## Nucleotide substitution models
+		    		<param name="base_model" type="select" label="Substitution Model">
+		        		<option value="GTRCAT">GTRCAT</option> 
+		        		<option value="GTRCATI">GTRCATI</option> 
+		        		<option value="GTRGAMMA" select="true">GTRGAMMA</option>
+		        		<option value="GTRGAMMAI">GTRGAMMAI</option>
+		   		</param>
+			</when>
+
+			<when value="proteic">
+				<param name="zip_aa" type="data" format="no_unzip.zip" label="Choose your ZIP file" help="It must contain the aligned files without indels in PROTEIC format" />
+				## Aminoacid substitution models
+				<!--<param name="aa_model_empirical_base_frequencies" type="boolean" checked="no" truevalue="F" falsevalue="X" display="checkboxes" label="Use empirical base frequencies in AA models." /> -->
+		    		<param name="base_model" type="select" label="Substitution Model (-m)">
+					<option value="PROTCAT" select="true">PROTCAT</option>
+					<option value="PROTCATI">PROTCATI</option>
+					<option value="PROTGAMMA">PROTGAMMA</option>
+			       		<option value="PROTGAMMAI">PROTGAMMAI</option>
+		    		</param>
+		    		<param name="aa_search_matrix" type="select" label="Matrix">
+					<option value="DAYHOFF" select="true">DAYHOFF</option>
+					<option value="JTT">JTT</option>
+					<option value="WAG">WAG</option>
+					<option value="BLOSUM62">BLOSUM62</option>
+			    	</param>	
+			</when>
+		</conditional>
+
+<!-- <conditional name="raxml_options"> -->
+
+<!--
+<param name="options" type="select" label="Raxml advanced options">
+				<option value="yes">Yes</option>
+				<option value="no" select="true">No</option>
+</param>
+
+-->
+
+<!-- <when value="yes"> -->
+
+	<param name="random_seed" type="integer" value="1234567890" size="12" label="Random
+        seed used for the parsimony inferences" />
+		## (-N/#)
+		<param name="number_of_runs" type="integer" size="8" value="100"
+                label="Number of runs" help="Specify the number of
+                alternative runs (-N|#) on distinct starting trees In combination
+                with the '-b' option will invoke a multiple boostrap analysis.
+                You can add the bootstopping criteria by choosing the autoMR,
+                autoMRE, autoMRE_IGN, or autoFC value in a menu below instead of
+                providing a number here. Bootstopping will only work in
+                combination with '-x' or '-b'."
+                optional="True" />
+		<param name="number_of_runs_bootstop" type="select" label="Use bootstopping criteria for number of runs" optional="True">
+		        <option value="" selected="yes"></option>
+		        <option value="autoMR">autoMR</option>
+		        <option value="autoMRE">autoMRE</option>
+		        <option value="autoMRE_IGN">autoMRE_IGN</option>
+		        <option value="autoFC">autoFC</option>
+		</param>
+
+		## (-f)
+            <param name="search_algorithm" type="select" label="Algorithm to execute" optional="True">
+                <option value="a">Rapid bootstrap and best ML tree search (a)</option>
+                <option value="A">Compute marginal ancestral states (A)</option>
+                <option value="b">Draw bipartition information (b)</option>
+                <option value="c">Check if the alignment can be read (c)</option>
+                <option value="d" selected="true">Hill-climbing ML Search (d) (default)</option>
+                <option value="e">Optimize GAMMA/GAMMAI model/branches (e)</option>
+                <option value="g">Compute per-site log likelihoods for -z trees (g)</option>
+                <option value="h">Compute log likelihood test for -t / -z trees (h)</option>
+                <option value="j">Generate bootstrapped alignment files (j)</option>
+                <option value="J">Compute SH-like support values for the -t tree (J)</option>
+                <option value="m">Compare bipartitions between -t and -z trees (m)</option>
+                <option value="n">Compute log likelihood score for -z trees (n)</option>
+                <option value="o">Use old slower search algorithm (o)</option>
+                <option value="p">Stepwise MP addition of new sequences (p)</option>
+                <option value="q">Fast quartet calculator (q)</option>
+                <option value="r">Compute pairwise RF distances in -z trees (r)</option>
+                <option value="s">Split a multi-gene alignment (s)</option>
+                <option value="S">Compute site-specific placement bias (S)</option>
+                <option value="t">Randomized tree searches on a fixed starting tree (t)</option>
+                <option value="T">Final optimization of a ML tree from a bootstrap (T)</option>
+                <option value="u">Morphological weight calibration using ML on a -t tree (u)</option>
+                <option value="v">Classify environmental sequences (v)</option>
+                <option value="w">Compute ELW-test on -z trees (w)</option>
+                <option value="x">Compute GAMMA model pair-wise ML distances on a tree (x)</option>
+                <option value="y">Classify environmental sequences into a reference tree (y)</option>
+            </param>
+            ## (-q)
+	  <param name="multiple_model" format="txt" type="data" label="Multiple model assignment to alignment partitions" optional="True" help="Specify the file name which contains the assignment of models to alignment partitions for multiple models of substitution. For the syntax of this file please consult the manual." />
+
+	 ## (-x)
+         <param name="rapid_bootstrap_random_seed" type="integer" value='1234567890' size="7" label="Rapid bootstrapping random seed" optional="True" help="Specify a random seed and turn on rapid bootstrapping. CAUTION: unlike in version 7.0.4 RAxML will conduct rapid BS replicates under the model of rate heterogeneity you specified via '-m' and not by default under CAT." />
+
+
+<!-- </when> -->
+
+
+<!-- </conditional> -->
+
+
+
+		<param name="out" type="select" label="What format of file do you want for your output (concatenation of the sequences) ? ">
+			<option value="nothing">No output</option>
+			<option value="fasta">Fasta format</option>
+			<option value="phylip">Phylip format</option> 
+			<option value="nexus">Nexus format</option>
+		</param>
+          <!-- -m GTRGAMMA -N 100 -f a -x 12345 -->
+		
+		<param name="raxml1" type="boolean" label="Do you want the output of RAxML : best tree ? " />
+		<param name="raxml3" type="boolean" label="Do you want the output of RAxML : bi-partition ? " />
+		<param name="raxml4" type="boolean" label="Do you want the output of RAxML : bootstrap ? " help="Only if the option 'rapid bootsptrap' is chosen. When you don't want to choose your options, this output is accessible"/>
+
+	</inputs>
+	<outputs>
+		<data name="output" format="txt" label="Phylogeny"/>
+
+		<data name="out_fasta_aa" format="fasta" label="Phylogeny_concatenation_fasta_aa" from_work_dir="02_Concatenation_aa.fas">
+			<filter>format['format_run'] == "proteic" and out == "fasta"</filter>
+		</data>
+		<data name="out_phylip_aa" format="phylip" label="Phylogeny_concatenation_phylip_aa" from_work_dir="02_Concatenation_aa.phy">
+			<filter>format['format_run'] == "proteic" and out == "phylip"</filter>
+		</data>
+		<data name="out_nexus_aa" format="nexus" label="Phylogeny_concatenation_nexus_aa" from_work_dir="02_Concatenation_aa.nex">
+			<filter>format['format_run'] == "proteic" and out == "nexus"</filter>
+		</data>
+		<data name="out_fasta_nuc" format="fasta" label="Phylogeny_concatenation_fasta_nuc" from_work_dir="03_Concatenation_nuc.fas">
+			<filter>format['format_run'] == "nucleic" and out == "fasta"</filter>
+		</data>
+		<data name="out_phylip_nuc" format="phylip" label="Phylogeny_concatenation_phylip_nuc" from_work_dir="03_Concatenation_nuc.phy">
+			<filter>format['format_run'] == "nucleic" and out == "phylip"</filter>
+		</data>
+		<data name="out_nexus_nuc" format="nexus" label="Phylogeny_concatenation_nexus_nuc" from_work_dir="03_Concatenation_nuc.nex">
+			<filter>format['format_run'] == "nucleic" and out == "nexus"</filter>
+		</data>
+		<data name="out_raxml1" format="txt" label="Phylogeny_RAxML_BestTree" from_work_dir="RAxML_bestTree.galaxy_run">
+			<filter>raxml1 == True</filter>
+		</data>
+	
+		<data name="out_raxml3" format="txt" label="Phylogeny_RAxML_BiPartition" from_work_dir="RAxML_bipartitions.galaxy_run">
+			<filter>raxml3 == True</filter>
+		</data>
+		<data name="out_raxml4" format="txt" label="Phylogeny_RAxML_BootStrap" from_work_dir="RAxML_bootstrap.galaxy_run">
+			<filter>raxml4 == True</filter>
+		</data>
+	</outputs>
+	<help>
+
+============
+What it does
+============
+
+| This tool takes a zip file containing nucleic fasta sequence files and searches different homologous genes from pairwise comparisons. 
+| 
+|
+| The run RAxML was written by **Alexandros Stamatakis**.
+| The script was written by **Eric Fontanillas**.
+| The wrapper was written by **Julie Baffard**.
+
+--------
+
+==========
+Parameters
+==========
+
+| The choice of the format sequences is possible : **proteic** or **nucleic**
+| 
+
+The choice of parameters for the RAxML run is possible : 
+
+**-m** :
+	| is the option for the choice of the substitution model. 
+	| By default it's GTRGAMMA.
+	| 
+
+**-N** :
+	| is the option for the choice of the number of run
+	| by default it's 100
+	| 
+
+**rapid bootstrapping** :
+	| is the option to have, in addition to the best tree search, the rapid bootstrapping
+	| this translates by : -x 12345 -f a
+	| by default, this option is choosen
+	| 
+
+--------
+
+======
+Inputs
+======
+
+option **Select a zip file containing the input files** :
+
+| the input zip file must have the extension .ort.zip
+| At the beginning, when you upload your input, you have to change the extension .zip to .ort.zip
+
+
+--------
+
+=======
+Outputs
+=======
+
+This tool, produces the following files :
+
+**Phylogeny** :
+	| is the general output. It gives the information about the concatenation (statistics) and the RAxML run.
+	| 
+
+**Phylogeny_concatenation_fasta_aa** :
+	| is the output which contains the sequences concatenated in fasta format when you choose the option proteic
+	| 
+
+**Phylogeny_concatenation_phylip_aa** :
+	| is the output which contains the sequences concatenated in phylip format when you choose the option proteic
+	| 
+
+**Phylogeny_concatenation_nexus_aa** :
+	| is the output which contains the sequences concatenated in nexus format when you choose the option proteic
+	| 
+
+**Phylogeny_concatenation_fasta_nuc** :
+	| is the output which contains the sequences concatenated in fasta format when you choose the option nucleic
+	| 
+
+**Phylogeny_concatenation_phylip_nuc** :
+	| is the output which contains the sequences concatenated in phylip format when you choose the option nucleic
+	| it's this output which is used for the RAxML run
+	| 
+
+**Phylogeny_concatenation_nexus_nuc** :
+	| is the output which contains the sequences concatenated in nexus format when you choose the option nucleic
+	| 
+
+**Phylogeny_RAxML_BestTree** :
+	| is the output of RAxML run which contains the Best Tree found
+	| 
+
+**Phylogeny_RAxML_BiPartitionBranchLabel** :
+	| is the output of RAxML run which contains the Best Tree found with supported values as branch labels
+	| 
+
+**Phylogeny_RAxML_BiPartition** :
+	| is the output of RAxML run which contains the Best Tree found with supported values
+	| 
+
+**Phylogeny_RAxML_BootStrap** :
+	| is the output of RAxML run which contains all the boostrapped trees
+	| the number of boostraped trees depending of the option -N (number of run)
+	| 
+
+--------
+
+===============
+Working Example
+===============
+
+---------------------------
+The input files and options
+---------------------------
+
+**Input files**
+	| 6 files with 200 nucleic sequences each
+	| a zip file containing 2 locus aligned without indel (in nucleic format)
+	| 
+**Parameters**
+	| option : nucleic
+	| no option for the RAxML run, so by default it's : -m GTRGAMMA -N 100 -f a -x 12345
+	| 
+
+----------------
+The output files
+----------------
+
+**Phylogeny** :
+
+| ******************** CONCATENATION ********************
+| 
+| Process nucleotides concatenation:
+| Number of taxa aligned = 6
+| Number of loci concatenated = 2
+| 
+| Total length of the concatenated sequences [All codon positions] = 504
+| Total length of the concatenated sequences [Codon positions 1 and 2] = 336
+| Total length of the concatenated sequences [Codon position 3] = 168
+| 
+| 
+| 
+| ******************** RAxML RUN ********************
+| 
+
+the informations of the RAxML run
+
+| 
+ 
+**Phylogeny_concatenation_fasta_nuc** :
+
+| >Ps
+
+cgcagttcctcggtgaggcgttgtagttcggcgttcagacggtcagctctctcctcggctgccctgcgagcattcagtgcctcatccatgtcagcttgcatggcggcaatgtctccctccatacggcgcttatctccagtcaaagtggtcacggtgatgttcagctcgttaacacgggatacagcatcgtgcagttcgttttcggcattcttacgagctctctcagatgtctcca
+gaagagatcgaacgtcctccagctccgtttgtagagcgatcctcttcctctcgagtacggtaaccgccgaacgggcttcctcagcactacggcgctcctcctcaatggcaatctccagctccttgaccttggcactgagtcccttgttggccttagatagttcgttgtttgccctcaatgtctcgaccataatccttaacaacaacacactacagccaacaaccttccttgctt
+taccctctttgtctatcttgcataatccagcccat
+
+| Ac
+
+cgcagttcctcggtgacgcggtgcagctcggcggcgaggcggtctgccctctcctcggccgccctgcgggcgttcagggcctcgtccagatcggcctgcatggcggcgatgtcgccctccatgcggcgcttgtcgccagtcagcgtcgtcaccgtgatgttcagctcgttgacgcgagccgtggcgtcgtgcaactcgttctcggcattcttacgagctcgttcggc
+ggtctccagtagagatctaacatcctccagctctgtttgcaatgcaatcctcttcctctcgagtacagttacagcggaacgggcttcctcagcactgcggtgctcctcctcaatggcaatttccagctccttgaccttggcactaagtcccttgttggccttggacagctcgttgttggctctaagtgtctccacc---------------------------------------------------------
+------------------------
+
+| >Pp
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| ------------------------------------------------------------------------------------------------ataatccttgacgaccacacactgcatccaacaacttttctggccttgccttccttgtctattttacacaaaccagcccat
+
+| >Ap
+
+cgcagctcctcggtgacgcggtgcagctcggcggcgaggcgatcggctctctcctcggctgccctgcgggcgttcagggcctcatcaaggtcggcctgcatggcggcgatgtcgccctccatgcggcgcttgtcgccggtcagagtcgtcaccgtgatgttcagctcgttgacgcgagccgtggcgtcgtgtagctcgttctcggcattcttacgagctcgttcggc
+ggtctccagtagggatctaacatcctccagctccgtttgcaatgcaatcctcttcctctcgagtacagttacagcggaacgggcttcctcagcactgcggcgctcctcctcaatggcaatttccagctccttgaccttcgcactaagtcccttgttggccttggacagttcgttgttggctctaagtgtctccactataatccttaacaacaacacactgcaaccaacaacctt
+ccgggccttgccttccttgtctatcttgcaaagaccagcccat
+
+| >Pf
+
+ctgagctcctcggtgaggcgctggagctcggagttcaggcggtcggctcgttcctcggcggcgcggcgagcgttcagcgcctcgtccatgtcggcctgcatggcggcgatgtccgcttccatgcggcgcttgtcgcccgtcagagtggtgaccgtgatgttcagctcgttgacacgggccacggcgtcgtgcagctcgttctcggcgttcttgcgagctctctccga
+cgtctccagaagagatcggacgtcctcgagttccgtctgcagggcgatcctcttcctctcgagcacggtaacagcagaacgggcttcctcggcgctacggcgctcttcctcgatggcgatctccagttccttgacctttgcactgagtcccttgttggccttggatagttcgttgttagccctcagtgtctccaccataatccttaacaacaacacactacagccgacaac
+cttccttgctttcccttctttgtcaatcttgcataatccggcccat
+
+| >Pg
+
+cgcagctcctcggtgagacgctgcagttcggaattcaggcggtccgccctctcttcggcagccctgcgggcgttcagcgcctcgtccatgtcggcctgcatggcggcgatgtcgccctccatgcggcgcttgtcgccggtcagcgtggtcacggtgatgttcagctcgttgacgcgagaaacggcgtcgtgcatctcgttttcggcattcttgcgagctctctccgacg
+tctcaagaagggatcgtacatcctcgagttctgtctggagggcgatcctctttctctcaagcatggtaaccgcggagcgggcttcctcgccactgcggcgttcttcctcgatggtgatctccagttccttaaccttagtactcagtcccttgttggctttggacagttcgttgttcgctcttagtgtctccactataatccttaaccacaacacactacaaccaacaacctttcttgc
+cttgccttccttgtctatcttacacaagccagcccat
+
+.. class:: infomark
+
+| If you choose the option proteic : you obtain a file with proteic sequences
+| 
+| 
+
+
+**Phylogeny_concatenation_phylip_nuc** :
+
+|    6 504
+| Ps
+
+cgcagttcctcggtgaggcgttgtagttcggcgttcagacggtcagctctctcctcggctgccctgcgagcattcagtgcctcatccatgtcagcttgcatggcggcaatgtctccctccatacggcgcttatctccagtcaaagtggtcacggtgatgttcagctcgttaacacgggatacagcatcgtgcagttcgttttcggcattcttacgagctctctcagatgtctcca
+gaagagatcgaacgtcctccagctccgtttgtagagcgatcctcttcctctcgagtacggtaaccgccgaacgggcttcctcagcactacggcgctcctcctcaatggcaatctccagctccttgaccttggcactgagtcccttgttggccttagatagttcgttgtttgccctcaatgtctcgaccataatccttaacaacaacacactacagccaacaaccttccttgctt
+taccctctttgtctatcttgcataatccagcccat
+
+| Ac
+
+cgcagttcctcggtgacgcggtgcagctcggcggcgaggcggtctgccctctcctcggccgccctgcgggcgttcagggcctcgtccagatcggcctgcatggcggcgatgtcgccctccatgcggcgcttgtcgccagtcagcgtcgtcaccgtgatgttcagctcgttgacgcgagccgtggcgtcgtgcaactcgttctcggcattcttacgagctcgttcggc
+ggtctccagtagagatctaacatcctccagctctgtttgcaatgcaatcctcttcctctcgagtacagttacagcggaacgggcttcctcagcactgcggtgctcctcctcaatggcaatttccagctccttgaccttggcactaagtcccttgttggccttggacagctcgttgttggctctaagtgtctccacc---------------------------------------------------------
+------------------------
+
+| Pp
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| ------------------------------------------------------------------------------------------------ataatccttgacgaccacacactgcatccaacaacttttctggccttgccttccttgtctattttacacaaaccagcccat
+| 
+| Ap
+
+cgcagctcctcggtgacgcggtgcagctcggcggcgaggcgatcggctctctcctcggctgccctgcgggcgttcagggcctcatcaaggtcggcctgcatggcggcgatgtcgccctccatgcggcgcttgtcgccggtcagagtcgtcaccgtgatgttcagctcgttgacgcgagccgtggcgtcgtgtagctcgttctcggcattcttacgagctcgttcggc
+ggtctccagtagggatctaacatcctccagctccgtttgcaatgcaatcctcttcctctcgagtacagttacagcggaacgggcttcctcagcactgcggcgctcctcctcaatggcaatttccagctccttgaccttcgcactaagtcccttgttggccttggacagttcgttgttggctctaagtgtctccactataatccttaacaacaacacactgcaaccaacaacctt
+ccgggccttgccttccttgtctatcttgcaaagaccagcccat
+
+Pf
+ctgagctcctcggtgaggcgctggagctcggagttcaggcggtcggctcgttcctcggcggcgcggcgagcgttcagcgcctcgtccatgtcggcctgcatggcggcgatgtccgcttccatgcggcgcttgtcgcccgtcagagtggtgaccgtgatgttcagctcgttgacacgggccacggcgtcgtgcagctcgttctcggcgttcttgcgagctctctccga
+cgtctccagaagagatcggacgtcctcgagttccgtctgcagggcgatcctcttcctctcgagcacggtaacagcagaacgggcttcctcggcgctacggcgctcttcctcgatggcgatctccagttccttgacctttgcactgagtcccttgttggccttggatagttcgttgttagccctcagtgtctccaccataatccttaacaacaacacactacagccgacaac
+cttccttgctttcccttctttgtcaatcttgcataatccggcccat
+
+Pg
+cgcagctcctcggtgagacgctgcagttcggaattcaggcggtccgccctctcttcggcagccctgcgggcgttcagcgcctcgtccatgtcggcctgcatggcggcgatgtcgccctccatgcggcgcttgtcgccggtcagcgtggtcacggtgatgttcagctcgttgacgcgagaaacggcgtcgtgcatctcgttttcggcattcttgcgagctctctccgacg
+tctcaagaagggatcgtacatcctcgagttctgtctggagggcgatcctctttctctcaagcatggtaaccgcggagcgggcttcctcgccactgcggcgttcttcctcgatggtgatctccagttccttaaccttagtactcagtcccttgttggctttggacagttcgttgttcgctcttagtgtctccactataatccttaaccacaacacactacaaccaacaacctttcttgc
+cttgccttccttgtctatcttacacaagccagcccat
+
+.. class:: infomark
+
+| If you choose the option proteic : you obtain a file with proteic sequences
+| 
+| 
+
+**Phylogeny_concatenation_nexus_nuc** :
+
+#NEXUS
+
+| Begin data;
+| Dimensions ntax=6 nchar=504;
+| Format datatype=dna gap=-;
+
+Matrix
+
+Ps      cgcagttcctcggtgaggcgttgtagttcggcgttcagacggtcagctctctcctcggctgccctgcgagcattcagtgcctcatccatgtcagcttgcatggcggcaatgtctccctccatacggcgcttatctccagtcaaagtggtcacggtgatgttcagctcgttaacacgggatacagcatcgtgcagttcgttttcggcattcttacgagctctctcagatgtct
+ccagaagagatcgaacgtcctccagctccgtttgtagagcgatcctcttcctctcgagtacggtaaccgccgaacgggcttcctcagcactacggcgctcctcctcaatggcaatctccagctccttgaccttggcactgagtcccttgttggccttagatagttcgttgtttgccctcaatgtctcgaccataatccttaacaacaacacactacagccaacaaccttcct
+tgctttaccctctttgtctatcttgcataatccagcccat
+
+Ac      cgcagttcctcggtgacgcggtgcagctcggcggcgaggcggtctgccctctcctcggccgccctgcgggcgttcagggcctcgtccagatcggcctgcatggcggcgatgtcgccctccatgcggcgcttgtcgccagtcagcgtcgtcaccgtgatgttcagctcgttgacgcgagccgtggcgtcgtgcaactcgttctcggcattcttacgagctcgttc
+ggcggtctccagtagagatctaacatcctccagctctgtttgcaatgcaatcctcttcctctcgagtacagttacagcggaacgggcttcctcagcactgcggtgctcctcctcaatggcaatttccagctccttgaccttggcactaagtcccttgttggccttggacagctcgttgttggctctaagtgtctccacc---------------------------------------------------
+------------------------------
+
+Pp      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------ataatccttgacgaccacacactgcatccaacaacttttctggccttgccttccttgtctattttacacaaaccagcccat
+
+Ap      cgcagctcctcggtgacgcggtgcagctcggcggcgaggcgatcggctctctcctcggctgccctgcgggcgttcagggcctcatcaaggtcggcctgcatggcggcgatgtcgccctccatgcggcgcttgtcgccggtcagagtcgtcaccgtgatgttcagctcgttgacgcgagccgtggcgtcgtgtagctcgttctcggcattcttacgagctcgttc
+ggcggtctccagtagggatctaacatcctccagctccgtttgcaatgcaatcctcttcctctcgagtacagttacagcggaacgggcttcctcagcactgcggcgctcctcctcaatggcaatttccagctccttgaccttcgcactaagtcccttgttggccttggacagttcgttgttggctctaagtgtctccactataatccttaacaacaacacactgcaaccaacaa
+ccttccgggccttgccttccttgtctatcttgcaaagaccagcccat
+
+Pf      ctgagctcctcggtgaggcgctggagctcggagttcaggcggtcggctcgttcctcggcggcgcggcgagcgttcagcgcctcgtccatgtcggcctgcatggcggcgatgtccgcttccatgcggcgcttgtcgcccgtcagagtggtgaccgtgatgttcagctcgttgacacgggccacggcgtcgtgcagctcgttctcggcgttcttgcgagctctctcc
+gacgtctccagaagagatcggacgtcctcgagttccgtctgcagggcgatcctcttcctctcgagcacggtaacagcagaacgggcttcctcggcgctacggcgctcttcctcgatggcgatctccagttccttgacctttgcactgagtcccttgttggccttggatagttcgttgttagccctcagtgtctccaccataatccttaacaacaacacactacagccgaca
+accttccttgctttcccttctttgtcaatcttgcataatccggcccat
+
+Pg      cgcagctcctcggtgagacgctgcagttcggaattcaggcggtccgccctctcttcggcagccctgcgggcgttcagcgcctcgtccatgtcggcctgcatggcggcgatgtcgccctccatgcggcgcttgtcgccggtcagcgtggtcacggtgatgttcagctcgttgacgcgagaaacggcgtcgtgcatctcgttttcggcattcttgcgagctctctccg
+acgtctcaagaagggatcgtacatcctcgagttctgtctggagggcgatcctctttctctcaagcatggtaaccgcggagcgggcttcctcgccactgcggcgttcttcctcgatggtgatctccagttccttaaccttagtactcagtcccttgttggctttggacagttcgttgttcgctcttagtgtctccactataatccttaaccacaacacactacaaccaacaacctttc
+ttgccttgccttccttgtctatcttacacaagccagcccat
+
+| 	;
+| End;
+| 
+
+.. class:: infomark
+
+| If you choose the option proteic : you obtain a file with proteic sequences
+| 
+| 
+
+**Phylogeny_RAxML_BestTree** :
+
+| ((Ac:0.02889451913999640381,Ap:0.01674414484251282934):0.17730049470177636217,
+| ((Pp:0.23405795780876006984,Pg:0.02012322210145659623):0.14429203507314311561,Pf:0.09977363663005259231):0.04320803212100913365,Ps:0.08351583721596630983):0.0;
+| 
+| 
+
+
+**Phylogeny_RAxML_BiPartitionBranchLabel** :
+
+| (Pg:0.02012322210145659623,(Pf:0.09977363663005259231,(Ps:0.08351583721596630983,
+| (Ac:0.02889451913999640381,Ap:0.01674414484251282934):0.17730049470177636217[89]):0.04320803212100913365[42]):0.14429203507314311561[70],Pp:0.23405795780876006984);
+| 
+| 
+
+
+**Phylogeny_RAxML_BiPartition** :
+
+(Pg:0.02012322210145659623,(Pf:0.09977363663005259231,(Ps:0.08351583721596630983,
+(Ac:0.02889451913999640381,Ap:0.01674414484251282934)89:0.17730049470177636217)42:0.04320803212100913365)70:0.14429203507314311561,Pp:0.23405795780876006984);
+
+| 
+| 
+
+**Phylogeny_RAxML_BootStrap** :
+
+| ((Ap,Ac),((Pp,Pg),Pf),Ps);
+| ((Ap,Ac),((Pp,Pg),Pf),Ps);
+| (Pf,((Ap,Ac),(Pp,Pg)),Ps);
+| ((Ap,Ac),((Pp,Pg),Pf),Ps);
+| ((Ap,Ac),((Pp,Pg),Pf),Ps);
+| ((Ap,Ac),((Pp,Pg),Pf),Ps);
+| ((Pp,Pg),(Pf,(Ap,Ac)),Ps);
+
+...
+
+	</help>
+</tool>
