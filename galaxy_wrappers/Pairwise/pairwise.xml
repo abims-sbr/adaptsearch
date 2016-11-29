@@ -5,8 +5,10 @@
 		Run reciproque tblastx pairwise
 	</description>
   	<command>
-		python /w/galaxy/galaxy4misharl/galaxy-dist/tools/abims/julie/oasearch/pairwise/03_organize_RBH.py 8 ${e_value} ${zip}
+        	<![CDATA[
+		python $__tool_directory__/03_organize_RBH_Julie.py 8 ${e_value} ${zip}
 		> ${output};
+		]]>
   	</command>
  	<inputs>
 		<param name="zip" type="data" format="no_unzip.zip" label="Choose your ZIP file" help="Contains the output of the filter tool" />

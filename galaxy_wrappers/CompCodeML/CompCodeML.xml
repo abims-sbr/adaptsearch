@@ -4,8 +4,8 @@
 	<description>
 		CompCodeML
 	</description>
-  	<command interpreter="python">
-		CompCodeML.py
+  	<command>
+		python $__tool_directory__/CompCodeML.py
 		$best_tree $model $concat_nuc > $log
 		&amp;&amp; cp output.zip $output
   	</command>

@@ -3,6 +3,8 @@
 ## Author: Eric FONTANILLAS
 ## Date: 21.12.10
 ## Object: Test for compositional bias in genome and proteome as marker of thermal adaptation (comparison between 2 "hot" species: Ap and Ps and two "cold" species: Pg, Pp)
+import sys, os
+script_path = os.path.dirname(sys.argv[0])
 
 #############
 ### DEF 0 ###
@@ -454,7 +456,7 @@ print LT
 
 
 ## 2 ## PathIN
-fileIN_properties = open("/w/galaxy/galaxy4misharl/galaxy-dist/tools/abims/julie/oasearch/mutcount/01_AminoAcid_Properties2.csv", "r")
+fileIN_properties = open("%s/01_AminoAcid_Properties2.csv"%(script_path), "r")
 Path_IN_loci_AA = "./IN_AA"
 #Path_IN_loci_AA = "02_CDS_No_Missing_Data_aa_CDS_withM"
 Lloci_AA = os.listdir(Path_IN_loci_AA)

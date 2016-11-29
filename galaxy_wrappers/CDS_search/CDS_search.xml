@@ -5,7 +5,7 @@
 		ORF and CDS search
 	</description>
   	<command>
-		python /w/galaxy/galaxy4kevin/galaxy-dist/tools/julie/oasearch/ORF_search/03_findORF_onMultipleAlignment_v2.py ${input_file} ${code_file}
+		python $__tool_directory__/03_findORF_onMultipleAlignment_v2.py ${input_file}  $__tool_directory__/02_input_code_universel_modified.txt
 		#if $lenght.lenght_CDS == "yes" :
 			${lenght.min_lenght_seq}
 		#else :
@@ -13,7 +13,7 @@
 		#end if
 		>${output};
 
-		python /w/galaxy/galaxy4kevin/galaxy-dist/tools/julie/oasearch/ORF_search/01_RemoveTooShort_bit_or_whole_sequence_v1.0.py ${nb_species_keep}
+		python $__tool_directory__/01_RemoveTooShort_bit_or_whole_sequence_v1.0.py ${nb_species_keep}
 		#if $methionine.value == "yes" :
 			oui
 		#else :
@@ -26,7 +26,7 @@
 		#end if
 		>>${output};
 
-		python /w/galaxy/galaxy4kevin/galaxy-dist/tools/julie/oasearch/ORF_search/07_removeSiteWithNotEnoughSpeciesRepresented_v2.0.py ${nb_species_keep}
+		python $__tool_directory__/07_removeSiteWithNotEnoughSpeciesRepresented_v2.0.py ${nb_species_keep}
 		#if $lenght.lenght_CDS == "yes" :
 			${lenght.min_lenght_nuc}
 		#else :
@@ -36,7 +36,7 @@
   	</command>
  	<inputs>
 		<param name="input_file" type="data" format="no_unzip.zip" label="Choose your file" help="Only a fasta file with nucleic align sequences" />
-		<param name="code_file" type="data" format="txt" label="Choose your file containing the universal code (codons and their amino acids)" />
+		<!-- <param name="code_file" type="data" format="txt" label="Choose your file containing the universal code (codons and their amino acids)" /> -->
 
 		<param name="nb_species_keep" type="integer" value="10" min="2" label="Minimal number of species in each locus" help="If you want to remove all the indels the maximum number of species is required" />
 

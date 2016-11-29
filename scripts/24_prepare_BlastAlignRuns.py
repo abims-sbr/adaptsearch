@@ -5,6 +5,8 @@
 
 ## DESCRIPTION: Prepare to run multialign on assemblages on several cluster nodes
 
+import os,sys
+script_path = os.path.dirname(sys.argv[0])
 ###############################################
 ### DEF 1 : Split a list in several sublist ###
 ###############################################
@@ -54,7 +56,7 @@ def prepare_BLASTALIGN_runs(list_file):
 	    files.close()
 
             ## run individual script
-	    os.system("/w/galaxy/galaxy4kevin/galaxy-dist/tools/julie/oasearch/alignment/BlastAlign -m %s -n %s -i ./%s.fasta\n" %(sys.argv[3],sys.argv[4],fasta_name))
+	    os.system("%s/BlastAlign -m %s -n %s -i ./%s.fasta\n" %(script_path,sys.argv[3],sys.argv[4],fasta_name))
 
 	    try:
         	phylip_file = open("./%s.fasta.phy" %fasta_name, "r")       
@@ -62,7 +64,7 @@ def prepare_BLASTALIGN_runs(list_file):
 		list_files_failed.append(fasta_file)
 
 	    if sys.argv[2] == "oui" :
-                os.system("python /w/galaxy/galaxy4kevin/galaxy-dist/tools/julie/oasearch/alignment/phylip2fasta.py ./%s.fasta.phy ./%s.fasta.fasta\n" %(fasta_name, fasta_name))
+                os.system("python %s/phylip2fasta.py ./%s.fasta.phy ./%s.fasta.fasta\n" %(script_path,fasta_name, fasta_name))
 		os.system("rm -f ./%s.fasta\n" %fasta_name)
 		os.system("mv ./%s.fasta.fasta ./%s.fasta\n" %(fasta_name, fasta_name))
   

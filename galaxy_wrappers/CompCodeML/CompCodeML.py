@@ -3,6 +3,7 @@
 #Written by mmonsoor ABIMS
 
 import string, os, sys,shutil
+script_path = os.path.dirname(sys.argv[0])
 
 tree_file=sys.argv[1]
 model=sys.argv[2]
@@ -10,7 +11,6 @@ concat_nuc_file=sys.argv[3]
 model_list=["0","1","2","all"]
 #Build the directories for codeml
 if model in model_list:
-
 	if model=="0":
 		print("Creating directories for model 0")
 		root_model0="model0"
@@ -28,8 +28,10 @@ if model in model_list:
 				print(path_concat)
 				#shutil.copy2(sys.argv[3],os.path.join(root_model0,folder))
 				shutil.copy2(sys.argv[3],path_concat)
+
 		#Creates the ctl files for the codeml script
-		os.system("bash /w/galaxy/galaxy4misharl/galaxy-dist/tools/abims/julie/oasearch/CompCodeML/correctcodeml.shell.sh %s/" %( os.path.abspath(root_model0)   ))
+		os.system("bash %s/correctcodeml.shell.sh %s/" %(script_path,os.path.abspath(root_model0)))
+		print (script_path)
 		#Executes codeml
 		for folder in folders_model0:		
 			if folder!="ns2":
@@ -46,7 +48,7 @@ if model in model_list:
 			#Copy the concat_nuc fasta file in each directory
 			shutil.copy2(sys.argv[3],os.path.join(root_model1,folder))
 		#Creates the ctl files for the codeml script
-		os.system("bash /w/galaxy/galaxy4misharl/galaxy-dist/tools/abims/julie/oasearch/CompCodeML/correctcodeml.shell.sh %s/" %(root_model1))
+		os.system("bash %s/correctcodeml.shell.sh %s/" %(script_path,root_model1))
 		
 	elif model=="2":
 		print("Creating directories for model 2")
@@ -80,7 +82,7 @@ if model in model_list:
 				#shutil.copy2(sys.argv[3],os.path.join(root_model0,folder))
 				shutil.copy2(sys.argv[3],path_concat)
 		#Creates the ctl files for the codeml script
-		os.system("bash /w/galaxy/galaxy4misharl/galaxy-dist/tools/abims/julie/oasearch/CompCodeML/correctcodeml.shell.sh %s/" %( os.path.abspath(root_model0)   ))
+		os.system("bash %s/correctcodeml.shell.sh %s/" %(script_path,os.path.abspath(root_model0)   ))
 		#Executes codeml
 		for folder in folders_model0:		
 			if folder!="ns2":
@@ -99,7 +101,7 @@ if model in model_list:
 			path_concat="%s/concat.fasta"%(os.path.join(root_model1,folder))
 			shutil.copy2(sys.argv[3],path_concat)
 		#Creates the ctl files for the codeml script
-		os.system("bash /w/galaxy/galaxy4misharl/galaxy-dist/tools/abims/julie/oasearch/CompCodeML/correctcodeml.shell.sh %s/" %( os.path.abspath(root_model1)   ))
+		os.system("bash %s/correctcodeml.shell.sh %s/" %( script_path,os.path.abspath(root_model1)   ))
 		#Executes codeml
 		for folder in folders_model1:		
 			print("codeml %s/codeml.ctl"%( os.path.abspath(os.path.join(root_model1,folder)))    )
