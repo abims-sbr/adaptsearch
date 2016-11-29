@@ -7,6 +7,7 @@
 ## DESCRIPTION: Remove redondant transcripts (i.e. transcript from the same locus) from Oases output on the basis of two recursive criterias (see in DEF1):  
             ## 1. [CRITERIA 1] Keep in priority seq with BEST "confidence_oases_criteria" present in the fasta name
             ## 2. [CRITERIA 2] Second choice (if same coverage) : choose the longuest sequence (once any "N" have been removed => effective_length = length - N number
+## => criticize of this approach: the transcripts may come from a same locus but may be not redundant (non-overlapping) ==> SEE "DEF2" for an alternative
 
 ###################
 ###### DEF 1 ######
@@ -25,24 +26,22 @@ def dico_filtering_redundancy(path_in):
         if element != "":
             S2 = string.split(element, "\n")
             fasta_name = S2[0]
-            fasta_seq = S2[1:-1]
+	    fasta_seq = S2[1:-1]
 	    fasta_seq = "".join(fasta_seq)
-	    
-
             L = string.split(fasta_name, "_")
-            short_fasta_name = L[0]
-            length = L[-1]
+            short_fasta_name = L[0] + L[1]
+            
+            
             #####################################################
             ## Used later for [CRITERIA 1] (see below)
-            confidence_oases_criteria = L[-2]
+            confidence_oases_criteria = L[-3]
 
             ## Used later for [CRITERIA 1] (see below)
             countN = string.count(fasta_seq, "N")
             length = len(fasta_seq)
             effective_length = length - countN
             #####################################################
-
-            if short_fasta_name not in bash.keys():
+            if short_fasta_name not in bash.keys(): 
                 bash[short_fasta_name] = [[fasta_name, fasta_seq, confidence_oases_criteria, effective_length]]
             else:
                 bash[short_fasta_name].append([fasta_name, fasta_seq, confidence_oases_criteria, effective_length])
@@ -89,8 +88,6 @@ def dico_filtering_redundancy(path_in):
             ## Sort keys() for MAX_CONFIDENCE bash 
             KC = MAX_CONFIDENCE.keys()
             KC.sort()
-            # KL = MAX_LENGTH.keys()
-            # KL.sort()
             
             ## Select the best entry
             MAX_CONFIDENCE_KEY = KC[-1]  ## [CRITERIA 1]
@@ -117,9 +114,11 @@ import string, os, sys, re
 
 path_IN = sys.argv[1]
 path_OUT = sys.argv[2]
+#length_seq_max=sys.argv[3]
 file_OUT = open(path_OUT, "w")
 
 dico = dico_filtering_redundancy(path_IN)   ### DEF1 ###
+
 
 KB = dico.keys()
 
@@ -127,8 +126,7 @@ KB = dico.keys()
 BASH_KB = {}
 for name in KB:
     L = string.split(name, "_")
-    debut = L[0]
-    nb = string.atoi(debut[2:])
+    nb = string.atoi(L[1])
     BASH_KB[nb] = name
 NEW_KB = []    
 KKB = BASH_KB.keys()
@@ -137,6 +135,7 @@ KKB.sort()
 for nb in KKB:
     fasta_name = BASH_KB[nb]
     seq = dico[fasta_name]
+    #if int(len(seq)) > int(length_seq_max):
     file_OUT.write(">%s\n" %fasta_name)
     file_OUT.write("%s\n" %seq)
 

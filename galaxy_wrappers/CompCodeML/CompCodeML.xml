@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+
+<tool name="CompCodeML" id="compcodeml" version="1.0">
+	<description>
+		CompCodeML
+	</description>
+  	<command interpreter="python">
+		CompCodeML.py
+		$best_tree $model $concat_nuc > $log
+		&amp;&amp; cp output.zip $output
+  	</command>
+ 	<inputs>
+	
+		<param name="model" type="select" label="CodeML model type">
+			<!-- <option value="model0_vs_model1">Model 0 vs Model 1</option> -->
+			<option value="all">Branch-models Mo M1 site-models M1A M2A</option>
+		</param>
+
+		<param name="concat_nuc"  type="data" format="fasta"  label="Nucleic Fasta concatenation file" help="Your Fasta codon (nucleic) concatenation file from the Phylogeny tool" />
+		<param name="best_tree" type="data" format="txt"  label="BestTree file" help="Your BestTree file from the Phylogeny tool (Nucleic or proteic)" />
+	</inputs>
+	<outputs>
+		<data format="no_unzip.zip" name="output" label="CompCodeML_output_zip"/>
+		<data format="txt" name="log" label="CompCodeML_output_log"/> 
+			
+	</outputs>
+	<help>
+
+.. class:: infomark
+
+**Authors**  Eric Fontanillas creates the scripts of this pipeline.
+
+.. class:: infomark
+
+**Galaxy integration** Julie Baffard and ABIMS TEAM
+
+ | Contact support.abims@sb-roscoff.fr for any questions or concerns about the Galaxy implementation of this tool.
+
+---------------------------------------------------
+
+
+==========
+CompCodeML
+==========
+
+-----------
+Description
+-----------
+
+
+description...
+
+	</help>
+</tool>
