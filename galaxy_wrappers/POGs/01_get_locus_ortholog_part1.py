@@ -1,0 +1,1 @@
+../../scripts/01_get_locus_ortholog_part1.py
