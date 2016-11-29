@@ -1,11 +1,11 @@
-*<?xml version="1.0"?>
+<?xml version="1.0"?>
 
 <tool name="ConcatPhyl" id="concatphyl" version="1.0">
 	<description>
 		Concatenation and phylogeny
 	</description>
   	<command>
-		python /w/galaxy/galaxy4misharl/galaxy-dist/tools/abims/julie/oasearch/phylogeny/01_concatenate_v3.0.py ${zip}
+		python $__tool_directory__/01_concatenate_v3.0.py ${zip}
 
 		#if $format.format_run == "nucleic" :
 			nucleic ${zip_nuc} > ${output};

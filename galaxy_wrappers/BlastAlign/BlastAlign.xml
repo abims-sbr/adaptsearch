@@ -6,8 +6,9 @@
 		Align the nucleic acid sequences
 	</description>
   	<command>
+	<![CDATA[
 		#if $files.type == "one" :
-			/w/galaxy/galaxy4kevin/galaxy-dist/tools/julie/oasearch/alignment/BlastAlign -i ${files.one_file} -o out
+			$__tool_directory__/BlastAlign -i ${files.one_file} -o out
 			#if $files.options.option == "yes" :
 				#if $files.options.options_m.m == True :
 					-m ${files.options.options_m.proportion}
@@ -33,12 +34,12 @@
 			#end if
 			>${outfile};
 			#if $fasta_out.value == True :
-				python /w/galaxy/galaxy4kevin/galaxy-dist/tools/julie/oasearch/alignment/phylip2fasta.py out.phy out.fasta >>${outfile};
+				python $__tool_directory__/phylip2fasta.py out.phy out.fasta >>${outfile};
 			#end if			
 		#end if
 			
 		#if $files.type == "many" :
-			python /w/galaxy/galaxy4kevin/galaxy-dist/tools/julie/oasearch/alignment/24_prepare_BlastAlignRuns.py ${files.many_files} 
+			python $__tool_directory__/24_BlastAlign_Julie.py ${files.many_files} 
 			#if $fasta_out.value == True :
 				oui
 			#else :
@@ -60,6 +61,7 @@
 			#end if
 			>${outfile};
 		#end if
+	]]>
   	</command>
  	<inputs>
 		<conditional name="files">

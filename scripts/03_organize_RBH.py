@@ -43,15 +43,15 @@ for pairwise in list_pairwise :
 
     os.mkdir("./%s" %RBH_folder)
 
-    os.system("cp -fr /w/galaxy/galaxy4kevin/galaxy-dist/tools/julie/oasearch/pairwise/03_run_BLAST_with.K.filter.sh ./%s/" %(RBH_folder))
-    os.system("cp -fr /w/galaxy/galaxy4kevin/galaxy-dist/tools/julie/oasearch/pairwise/10_run_BLAST2_with.K.filter.sh ./%s/" %(RBH_folder)) 
+    os.system("cp -fr /w/galaxy/galaxy4kevin/galaxy-dist/tools/julie/oasearch/pairwise/03_run_BLAST_with.K.filter_Julie.sh ./%s/" %(RBH_folder))
+    os.system("cp -fr /w/galaxy/galaxy4kevin/galaxy-dist/tools/julie/oasearch/pairwise/10_run_BLAST2_with.K.filter_Julie.sh ./%s/" %(RBH_folder)) 
 
     if L2 != [] :
 	    os.system("cp -fr %s ./%s/%s" %(DIR1, RBH_folder, DIR1))   
     os.system("cp -fr %s ./%s/%s" %(DIR2, RBH_folder, DIR2))
 
     pipeline_script = open("./%s/XXX_pipeline_%s.sh" %(RBH_folder,RBH_folder), "w")
-    pipeline_patron = open("/w/galaxy/galaxy4kevin/galaxy-dist/tools/julie/oasearch/pairwise/XXX_patronPipeline.sh", "r")
+    pipeline_patron = open("/w/galaxy/galaxy4kevin/galaxy-dist/tools/julie/oasearch/pairwise/XXX_patronPipeline_Julie.sh", "r")
 
     F1 = pipeline_patron.read()
     F1 = string.replace(F1, "XX1", "./%s/%s" %(RBH_folder,DIR1))

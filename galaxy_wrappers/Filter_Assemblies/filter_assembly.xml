@@ -4,9 +4,9 @@
 	<description>
 		Filter the outputs of Velvet or Trinity assemblies
 	</description>
-  	<command interpreter="python">
+  	<command>
 	<![CDATA[
-		script_to_choose.py
+		python $__tool_directory__/script_to_choose.py
 
 		#if $input.input_type_choice == "velvet"
 			velvet ${input.zip_velvet} 
@@ -63,7 +63,7 @@ Description
 -----------
 
 
-This script reformats Velvet Oases or Trinity assemblies for the orthologous_search galaxy suite and selects only one variant per gene according to its length and quality check.
+This script reformats Velvet Oases or Trinity assemblies for the AdaptSearch galaxy suite and selects only one variant per gene according to its length and quality check.
 
 
 
