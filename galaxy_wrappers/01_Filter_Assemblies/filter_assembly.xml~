@@ -1,0 +1,172 @@
+<?xml version="1.0"?>
+
+<tool name="Filter assemblies" id="filter_assemblies" version="1.0">	
+
+	<description>
+		Filter the outputs of Velvet or Trinity assemblies
+	</description>
+
+	<macros>
+		<import>macros.xml</import>
+	</macros>
+
+	<requirements>
+		<expand macro="python_required" />
+		<requirement type="package">fastx_toolkit</requirement>
+		<requirement type="package">cap3</requirement>
+	</requirements>
+
+  	<command>
+	<![CDATA[
+		python $__tool_directory__/script_to_choose.py
+
+		#if $input.input_type_choice == "velvet"
+			velvet ${input.zip_velvet} 
+		#else
+			trinity ${input.zip_trinity} 
+		#end if
+		$length_seq_max $percent_identity $overlap_length
+		> ${output} && echo "done"
+	]]>
+  	</command>
+
+ 	<inputs>
+		<conditional name="input">
+			<param name="input_type_choice" type="select" label="What is the type of your inputs? ">
+				<option value="velvet">Velvet Oases</option>
+				<option value="trinity">Trinity</option>
+			</param>
+			<when value="velvet">
+				<param name="zip_velvet" type="data" format="no_unzip.zip,zip" label="Choose your ZIP file" help="A zip file containing all your files" />
+			</when>
+			<when value="trinity">
+				<param name="zip_trinity" type="data" format="no_unzip.zip,zip" label="Choose your ZIP file" help="A zip file containing all your files" />
+			</when>
+		</conditional>
+		<param name="percent_identity" type="integer" value="100" label="Maximum sequence length" help="Cap3 parameter -p  N  specify overlap percent identity cutoff N &gt; 65 " />
+		<param name="overlap_length" type="integer" value="60" label="Maximum sequence length" help="Cap3 parameter -o  N  specify overlap length cutoff &gt; 15 " />
+		<param name="length_seq_max" type="integer" value="100" label="Minimum sequence length" help="Keep sequences which length is higher than the minimum sequence length  " />
+	</inputs>
+
+	<outputs>
+		<data format="no_unzip.zip" name="output" label="Filter_oase_zip" from_work_dir="sequences_filtered.zip" />
+	</outputs>
+
+	<tests>
+		<test>
+			<param name="input_type_choice" value="trinity" />
+			<param name="input|zip_trinity" ftype="zip" value="test_01_input_Trinity_filter_oase.zip" />
+			<param name="percent_identity" value="100" />
+			<param name="overlap_length" value="60" />
+			<param name="length_seq_max" value="100" />		
+			<output name="output" value="test_01_output_filter_oase.zip">
+				<assert_contents>
+					<has_n_elements_with_path n="4" path="test-data/test_01_output_filter_oase.zip"/>
+					<has_text text="AcAcaud_trinity.fasta" />
+					<has_text text="AmAmphi_trinity.fasta" />
+					<has_text text="ApApomp_trinity.fasta" />
+					<has_text text="PfPfiji_trinity.fasta" />
+				</assert_contents>
+			</output>				
+		</test>
+		<test>
+			<param name="input_type_choice" value="trinity" />
+			<param name="input|zip_trinity" ftype="zip" value="test_01_input_Trinity_filter_oase.zip" />
+			<param name="percent_identity" value="100" />
+			<param name="overlap_length" value="60" />
+			<param name="length_seq_max" value="100" />		
+			<output name="output" value="test_01_output_filter_oase.zip">
+				<assert_contents>
+					<has_n_elements_with_path n="4" path="test-data/test_01_output_filter_oase.zip"/>
+					<has_text text="AcAcaud_trinity.fasta" />
+					<has_text text="AmAmphi_trinity.fasta" />
+					<has_text text="ApApomp_trinity.fasta" />
+					<has_text text="PfPfiji_trinity.fasta" />
+				</assert_contents>
+			</output>				
+		</test>
+	</tests>	
+
+	<help>
+
+.. class:: infomark
+
+**Authors**  Eric Fontanillas creates the scripts of this pipeline.
+
+.. class:: infomark
+
+**Galaxy integration** Julie Baffard and ABIMS TEAM
+
+ | Contact support.abims@sb-roscoff.fr for any questions or concerns about the Galaxy implementation of this tool.
+
+---------------------------------------------------
+
+===========
+Filter Oase
+===========
+
+-----------
+Description
+-----------
+
+
+This script reformats Velvet Oases or Trinity assemblies for the AdaptSearch galaxy suite and selects only one variant per gene according to its length and quality check.
+
+
+
+.. class:: infomark
+
+
+**Important part of this tool (the inputs format)**
+
+--------
+
+
+
+============
+Input format
+============
+
+
+---------------------------------
+For Velvet Oases assemblies input
+---------------------------------
+
+Because of putative changes in the sequence names of the assemblies associated with the upgrade of the Velvet/Oases software, the script will only work if:
+
+(1)sequences are in the sequential format:
+	| e.g.
+	| &gt;seqname
+	| AAAGAGAGAVCACATGTCAGTAGC
+	| &gt;seqname
+	| AAAGAGAGAVCACATGTCAGTAGC
+		
+(2)The name of each transcript must start by a species abbreviation of two letters, unique for each assembly. The file name of the assembly file must also begin with these same two letters.
+
+(3)The syntax of the sequence name must be constructed as: &gt;fh1_2/3_4_5 where are the two chosen letters the number of the locus, the transcript variant among all versions of the transcript,the confidence value and the length of the transcript. In this case, the file name should thus begin with fs.
+
+-----------------------------
+For Trinity assemblies inputs
+-----------------------------
+
+Because of putative changes in the sequence names of the assemblies associated with the upgrade of the Trinity software, the script will only work if:
+
+(1)Sequences are in the sequential format:
+	| e.g.
+	| &gt;seqname
+	| AAAGAGAGAVCACATGTCAGTAGC
+	| &gt;seqname
+	| AAAGAGAGAVCACATGTCAGTAGC
+		
+(2)The name of each transcript must start by &gt;comp, e.g. &gt;comp10020 instead of &gt;c10020 or &gt;transcript, etc...
+
+(3)The syntax of the sequence name should avoid spaces and must contain _len:, e.g. &gt;comp1_g1_it1_len:1000_path=[.....]
+
+(4)A suffix of two letters abbreviating the species name must be chosen, e.g. Homo sapiens -&gt; Hs. The file name of the assembly file must begin with this suffix. Each suffix should be unique among the n analyzed transcriptomes.
+e.g. if the file name is Hs_trinity_22000_transcripts.fasta with sequences, the suffix abbreviation must be Hs and all sequences must be : &gt;Hs.
+Alternatively if the name is: Homosapiens_trinity_22000_transcripts.fasta, the suffix must be thus Ho.
+	</help>		
+
+    <expand macro="citations" />
+
+</tool>
