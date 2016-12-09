@@ -1,0 +1,1 @@
+../../scripts/24_PROT2DNA_v2.2.py
