@@ -1,0 +1,16 @@
+<macros>
+
+	<xml name="python_required">		
+			<requirement type="package" version="2.7">python</requirement>		
+	</xml>
+
+	<xml name="citations">
+		<citations>
+			<citation type="bibtex">Credits : ABIMS team, Roscoff Marine Station</citation>
+			<citation type="bibtex">Contact support.abims@sb-roscoff.fr for any questions or concerns about the Galaxy implementation of this tool.</citation>
+			<citation type="bibtex">Version 1 : Scripts by Eric Fontanillas -- Galaxy integration by Julie Baffard</citation>
+			<citation type="bibtex">Version 2 : improvments by Victor Mataigne, Gildas le Corguillé, Misharl Monsoor</citation>
+		</citations>
+	</xml>
+
+</macros>

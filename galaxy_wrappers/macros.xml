@@ -1,7 +1,7 @@
 <macros>
 
 	<xml name="python_required">		
-			<requirement type="package" version="2.7.3">python</requirement>		
+			<requirement type="package" version="2.7">python</requirement>		
 	</xml>
 
 	<xml name="citations">

@@ -52,7 +52,7 @@ file_OUT = open(path_OUT, "w")
 dico = dico_format_fasta_name(path_IN, suffix)   ### DEF1 ###
 
 
-print len(dico.keys())
+print (len(dico.keys()))
 
 KB = dico.keys()
 

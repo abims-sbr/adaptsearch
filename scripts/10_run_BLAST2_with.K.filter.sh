@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/env bash
 
 SHORT_FILE=$1 #short-name-query_short-name-db
 

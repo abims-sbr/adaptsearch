@@ -6,10 +6,24 @@
 		Align the nucleic acid sequences
 	</description>
 
+	<macros>
+		<import>macros.xml</import>
+	</macros>
+
+	<requirements>
+		<expand macro="python_required" />cd		
+		<requirement type="package" version="1.4">blastalign</requirement>
+		<requirement type="package" version="5.20.3">perl</requirement>
+		<requirement type="package" >blast-legacy</requirement>
+	</requirements>
+
+	<!--WARNING: There is currently a bug in Galaxy when are used both <stdio> and the option of <outputs><data> from_work_dir=
+	
 	<stdio>
         <exit_code range="26:" level="fatal" />
     </stdio>
 
+	-->
   	<command>
 	<![CDATA[
 		#if $files.type == "one" :
@@ -128,7 +142,7 @@
 			</when>
 
 			<when value="many">
-				<param name="many_files" type="data" format="no_unzip.zip" label="Choose your ZIP file" help="Only a zip file containing fasta file with nucleotides sequences" />
+				<param name="many_files" type="data" format="no_unzip.zip,zip" label="Choose your ZIP file" help="Only a zip file containing fasta file with nucleotides sequences" />
 
 				<conditional name="options">
 					<param name="option" type="select" label="Blast advanced options ">
@@ -184,9 +198,9 @@
 	</outputs>
 
 	<tests>
-		<test>
-			<param name="type" value="test_4_output_POGS_input_BlastAlign.zip" />
-			<param name="type" value="one"/>
+		<test>			
+			<param name="type" value="many"/>
+			<param name="many_files" ftype="zip" value="test_4_output_POGS_input_BlastAlign.zip" />
 			<param name="option" value="no" />
 			<param name="fasta_out" value="True" />
 			<param name="files_failed" value="False" />
@@ -298,14 +312,14 @@ The input file and its options
 
 **Input file**
 
-| >Pf210_1/1_1.000_920
+| &gt;Pf210_1/1_1.000_920
 | CCGGTGGCCATTTTCTGCACCTCGTGGGTTATTGAGCTGAAAGTGGTTCAGCTCACTGTCTGTTAACAGCCGTGTCGGTCTGAGGGTATCACAGTTAATATAATGAATCAAGAGAAGTTGAAGCAGCTCCAGGCCCAAGTCCGCATCGGAGGAAAGGG
 | CACAGCAAGAAGAAAGAAGAAGGTGATTCACAGAACAGCAACAACAGATGACAAGAAACTGCAAAGTACACTGAAGAAATTGGCAGTAAATAATATTCCGGGTATAGAAGAGGTTAACATGATAAAGGATGACGGGCAAGTAATACATTTTACCAATCCGA
 | AGGTGCAGGCTTCTCTTCAGTCAAACACATTTGCCATTAATGGCCAAGCCGAAACGAAACAAATCACTGACTTGCTACCCGGTATATTAAATCAGCTGGGGGCTGAAAGTTTAACAAACTTGAAGAAGCTGGCTAAATCTGTGACTGCTGGAGTTGATTC
 | TGATAACAAGCAGGATGCAGCAGATATTGATGAAGATGATGATGATGTCCCAGAACTGGTTGAAAACTTTGACGAAGCATCGAAGAATGAGGGGACGTAATTCTTCTCCCACTTTATGCCATGGTAGCATCAATCGTTTTGCTGATGATGGCGTGTTTATAC
 | CTACCACCCAGTGTAGATTTGTCCAGACCTGGCTTGTTTGACATTGCTTGTTGGATTTTGCAACAATATCATGATTAGACTGCCTGGCTTTGTGGCCTAAATACTGTATTAAAGTGTCTGTAAAAGGGAAGCAATTTTTCTATTAAGAAGTTATCCACTAGCAT
 | ATTGACAGTTTTGCATGTTTGATTTTGTTCCTCGTGCAGGTCAGAACACTGATTGTACAGTGGCTGATTACAGAAAAATTGTATTCAGAGTTAAATAAACACATTATTATCCAAA
-| >Pp_17_1/1_1.000_930
+| &gt;Pp_17_1/1_1.000_930
 | CCGGTGGCCATTTTCTGCACCTCGTGGGTATCTTGGGTTCGATTTGTATCAGCTCCCTATGTAAAATTAAACAAACTTATAACATAGATTGCAGCTGACAATACAATGAACCAAGAAAAATTAAAACAACTCCAAGCCCAGGTGCGCATTGGAGGCAAGGG
 | TACAGCAAGAAGAAAGAAGAAGGTCATTCATAGAACAGCAACAACAGATGATAAAAAACTGCAGAGTACATTAAAAAAACTAGCAGTAAATAATATTCCAGGTATAGAAGAGGTTAATATGATAAAAGATGATGGACAGGTAATACATTTTACCAATCCAAAA
 | GTACAGGCTTCTCTACAGTCAAACACATTTGCTATTAATGGGCAAGCTGAGACAAAACAAATCACCGAATTGTTGCCTGGTATATTAAATCAGCTGGGAGCAGAAAGTTTAACAAATCTGAAGAAACTGGCTACATCCGTGACTGGTGGAGTTGATTCTGAT
@@ -402,14 +416,14 @@ tttgtccagacctggcttgtttgacattgcttgttggattttgcaacaatatcatgattaga
 
 **Alignment_{inputfile}_fasta**
 
-| >Pf2101/11000920
+| &gt;Pf2101/11000920
 
 ccggtggccattttctgcacctcgtgggttattgagctgaaagtggttcagctcactgtctgttaacagccgtgtcggtctgagggtatcacagttaatataatgaatcaagagaagttgaagcagctccaggcccaagtccgcatcggaggaaagggcacagcaagaagaaagaagaaggtgattcacagaacagcaacaacagatgacaagaaactg
 caaagtacactgaagaaattggcagtaaataatattccgggtatagaagaggttaacatgataaaggatgacgggcaagtaatacattttaccaatccgaaggtgcaggcttctcttcagtcaaacacatttgccattaatggccaagccgaaacgaaacaaatcactgacttgctacccggtatattaaatcagctgggggctgaaagtttaacaaacttgaa
 gaagctggctaaatctgtgactgctggagttgattctgataacaagcaggatgcagcagatattgatgaagatgatgatgatgtcccagaactggttgaaaactttgacgaagcatcgaagaatgaggggacgtaattcttctcccactttatgccatggtagcatcaatcgttttgctgatgatggcgtgtttatacctaccacccagtgtagatttgtccagacctggc
 ttgtttgacattgcttgttggattttgcaacaatatcatgattaga
 
-| >Pp171/11000930
+| &gt;Pp171/11000930
 
 ccggtggccattttctgcacctcgtgggt-------------------------------------------------------------------aatacaatgaaccaagaaaaattaaaacaactccaagcccaggtgcgcattggaggcaagggtacagcaagaagaaagaagaaggtcattcatagaacagcaacaacagatgataaaaaactgcagagtacattaaaaaa
 actagcagtaaataatattccaggtatagaagaggttaatatgataaaagatgatggacaggtaatacattttaccaatccaaaagtacaggcttctctacagtcaaacacatttgctattaatgggcaagctgagacaaaacaaatcaccgaattgttgcctggtatattaaatcagctgggagcagaaagtttaacaaatctgaagaaactggctacatccg
@@ -422,9 +436,6 @@ tgactggtggagttgattctgataacaagccagaaacagcagaaattgatgaagacgatgatgatgttccagatttggtt
 | If you unzip the file, a number of files are extracted (depends on the number of locus) : {name_of_file}.fasta
 	</help>
 
-	<citations>
-		<citation type="bibtex">{blastalign script written by **Robert Belshaw** and **Aris Katzourakis**: }</citation>
-	    <citation type="bibtex">{credits : ABIMS team, Roscoff Marine Station}</citation>
-    </citations>
+	<expand macro="citations" />
 
 </tool>

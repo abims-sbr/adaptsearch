@@ -11,8 +11,8 @@
 	</macros>
 
 	<requirements>
-		<expand macro="python_required" />
-		<requirement type="package" version="2.5.0">blast</requirement>
+		<expand macro="python_required" />		
+		<requirement type="package" version="2.2.22">blast-legacy</requirement>	
 		<requirement type="package" version="1.3.1">samtools</requirement>
 	</requirements>
 

@@ -3,13 +3,17 @@
 ## AUTHOR: Eric Fontanillas
 ## LAST VERSION: 03/09/14 by Julie BAFFARD
 
+import sys, string, os, itertools, re, zipfile
+from multiprocessing import Pool
+
+#---- Modif Victor ----
+fileBlast1 = os.path.realpath(03_run_BLAST_with.K.filter.sh)
+fileBlast2 = os.path.realpath(10_run_BLAST2_with.K.filter.sh)
+fileXXX = os.path.realpath(XXX_patronPipeline.sh)
+#---- Fin Modif ----
 
 def launching (RBH_folder) :
     os.system("bash %s/XXX_pipeline_%s.sh %s" %(RBH_folder,RBH_folder,RBH_folder))
-
-
-import sys, string, os, itertools, re, zipfile
-from multiprocessing import Pool
 
 L2 = [] #list on input file
 list_RBH = []
@@ -41,21 +45,17 @@ for pairwise in list_pairwise :
     RBH_folder = shortDIR1 + "_" + shortDIR2
     list_RBH.append(RBH_folder)
 
-    os.mkdir("./%s" %RBH_folder)
-
-    os.system("cp -fr /w/galaxy/galaxy4kevin/galaxy-dist/tools/julie/oasearch/pairwise/03_run_BLAST_with.K.filter_Julie.sh ./%s/" %(RBH_folder))
-    os.system("cp -fr /w/galaxy/galaxy4kevin/galaxy-dist/tools/julie/oasearch/pairwise/10_run_BLAST2_with.K.filter_Julie.sh ./%s/" %(RBH_folder))
+    os.mkdir("./%s" %RBH_folder)    
     
-    #os.system("cp -fr 03_run_BLAST_with.K.filter.sh ./%s/" %(RBH_folder))
-    #os.system("cp -fr 10_run_BLAST2_with.K.filter.sh ./%s/" %(RBH_folder)) 
+    os.system("cp -fr 03_run_BLAST_with.K.filter.sh ./%s/" %(RBH_folder))
+    os.system("cp -fr 10_run_BLAST2_with.K.filter.sh ./%s/" %(RBH_folder)) 
 
     if L2 != [] :
 	    os.system("cp -fr %s ./%s/%s" %(DIR1, RBH_folder, DIR1))   
     os.system("cp -fr %s ./%s/%s" %(DIR2, RBH_folder, DIR2))
 
     pipeline_script = open("./%s/XXX_pipeline_%s.sh" %(RBH_folder,RBH_folder), "w")
-    pipeline_patron = open("/w/galaxy/galaxy4kevin/galaxy-dist/tools/julie/oasearch/pairwise/XXX_patronPipeline_Julie.sh", "r")
-    #pipeline_patron = open("XXX_patronPipeline.sh", "r")
+    pipeline_patron = open("XXX_patronPipeline.sh", "r")
 
     F1 = pipeline_patron.read()
     F1 = string.replace(F1, "XX1", "./%s/%s" %(RBH_folder,DIR1))

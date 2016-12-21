@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 ## AUTHOR: Eric Fontanillas
 ## LAST VERSION: 14/08/14 by Julie BAFFARD
 

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/env bash
 
 SHORT_FILE=$1 #short-name-query_short-name-db
 
@@ -18,7 +18,6 @@ LOG="./$SHORT_FILE/04_$SHORT_FILE.log"
 # -i : Database to format
 # -p : input type : T: proteins // F: nucleotides
 # -o : Parses deflines and indexes seqIDs
-
 
 formatdb -i $INPUT_DB -p F -o T
 
