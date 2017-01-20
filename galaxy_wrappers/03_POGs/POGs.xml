@@ -16,7 +16,7 @@
   	<command>
 	<![CDATA[
 		python $__tool_directory__/01_get_locus_ortholog_part1.py ${zip_file}
-		> ${output};
+		> ${output} &&
 
 		python $__tool_directory__/03_get_locus_ortholog_part2.py ${zip}
 		>> ${output};
