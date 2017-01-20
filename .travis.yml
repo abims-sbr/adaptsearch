@@ -12,7 +12,7 @@ before_install:
  - planemo conda_init
 
 install:
- - planemo conda_install ${TRAVIS_BUILD_DIR}/galaxy_wrappers
+ - planemo conda_install ${TRAVIS_BUILD_DIR}/galaxy_wrappers/03_POGs
 
 script:
- - planemo test --install_galaxy --no_cache_galaxy --conda_dependency_resolution ${TRAVIS_BUILD_DIR}/galaxy_wrappers
+ - planemo test --install_galaxy --no_cache_galaxy --conda_dependency_resolution ${TRAVIS_BUILD_DIR}/galaxy_wrappers/03_POGs
