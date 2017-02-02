@@ -132,19 +132,14 @@
 
 	<tests>
 		<test>
-			<param name="input_file" ftype="zip" value="test_05_input_CDS_Search.zip" />
+			<param name="input_file" ftype="zip" value="test_05_input_CDS_Search.no_unzip.zip" />
 			<param name="nb_species_keep" value="2" />
 			<param name="methionine" value="yes" />
 			<param name="lenght_CDS" value="no" />
 			<param name="out_BESTORF" value="no" />
 			<param name="out_CDS" value="no" />
 			<param name="out_CDS_filter" value="nuc" />
-			<output name="output_filter_nuc" value="test_05_output_CDS_Search_input_ConcatPhyl.zip" >
-				<assert_contents>
-					<has_n_elements_with_path n="178" path="test-data/test_05_output_CDS_Search_input_ConcatPhyl.zip"/>
-					<has_text text="locus" />
-				</assert_contents>
-			</output>
+			<output name="output" value="test_08.out" />	<!-- test_08.out ? -->		
 		</test>
 	</tests>
 
