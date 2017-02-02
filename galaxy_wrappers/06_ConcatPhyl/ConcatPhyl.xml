@@ -1,5 +1,3 @@
-<?xml version="1.0"?>
-
 <tool name="ConcatPhyl" id="concatphyl" version="1.0">
 
 	<description>
@@ -12,24 +10,28 @@
 
 	<requirements>
 		<expand macro="python_required" />
-		<requirement type="package" version="1.3.1">samtools</requirement>
+		<!-- <requirement type="package" version="1.3.1">samtools</requirement> -->
+		<!-- <requirement type="package" version="">raxml</requirement> -->
 	</requirements>
 
-  	<command>
-  	<![CDATA[
+  	<command><![CDATA[
 		python $__tool_directory__/01_concatenate_v3.0.py ${zip}
 
 		#if $format.format_run == "nucleic" :
-			nucleic ${zip_nuc} > ${output};
-			raxmlHPC-1500
+			nucleic $format.zip_nuc
+		#elif $format.format_run == "proteic" :
+			proteic $format.zip_aa
+		#end if
+		> ${output};
+
+		raxmlHPC-1500
+		#if $format.format_run == "nucleic" :			
 			-n "galaxy_run"
 			##-q "./05_partitions_gene_NUC"
-			 -s "./03_Concatenation_nuc.phy"
+			-s "./03_Concatenation_nuc.phy"
 			## (-m)
 			-m $format.base_model
 		#elif $format.format_run == "proteic" :
-			proteic ${zip_aa} > ${output};
-			raxmlHPC-1500
 			-n "galaxy_run"
 			##-q "./06_partitions_gene_AA"
  			-s "./02_Concatenation_aa.phy"
@@ -37,39 +39,39 @@
 			-m $format.base_model$format.aa_search_matrix
 		#end if
 
-## Optional parameters
+		## --- Optional parameters ---
 
-##if $raxml_options.options == "yes" :
+		##if $raxml_options.options == "yes" :
 
-		## (-p)
-    		#if $random_seed:
-        		-p $random_seed
-    		#else
-        		-p 1234567890
-    		#end if
+			## (-p)
+			#if $random_seed:
+	    		-p $random_seed
+			#else
+	    		-p 1234567890
+			#end if
 
-		## (-N/#)
-   	 	#if $number_of_runs:
-        		-N $number_of_runs
-   		#end if
-    		#if $number_of_runs_bootstop:
-        		-# $number_of_runs_bootstop
-    		#end if
+			## (-N/#)
+	   	 	#if $number_of_runs:
+	        		-N $number_of_runs
+	   		#end if
+			#if $number_of_runs_bootstop:
+	    		-# $number_of_runs_bootstop
+			#end if
 
-		## (-f)
-		#if $search_algorithm:
-			-f $search_algorithm
-		#end if
+			## (-f)
+			#if $search_algorithm:
+				-f $search_algorithm
+			#end if
 
-		## (-x)
-		#if $rapid_bootstrap_random_seed:
-		-x $rapid_bootstrap_random_seed
-		#end if
-##else :
+			## (-x)
+			#if $rapid_bootstrap_random_seed:
+			-x $rapid_bootstrap_random_seed
+			#end if
+		##else :
 
- 	##-N 100 -f a -x 12345
+	 	##-N 100 -f a -x 12345
 
-##end if				
+		##end if				
 		>> ${output};
 	]]>
   	</command>
@@ -84,7 +86,7 @@
 			</param>
 
 			<when value="nucleic">
-				<param name="zip_nuc" type="data" format="no_unzip.zip" label="Choose your ZIP file" help="It must contain the aligned files without indels in NUCLEIC format" />
+				<param name="zip_nuc" type="data" format="no_unzip.zip,zip" label="Choose your ZIP file" help="It must contain the aligned files without indels in NUCLEIC format" />
 				<!-- ## Nucleotide substitution models -->
 		    	<param name="base_model" type="select" label="Substitution Model">
 		        	<option value="GTRCAT">GTRCAT</option> 
@@ -95,7 +97,7 @@
 			</when>
 
 			<when value="proteic">
-				<param name="zip_aa" type="data" format="no_unzip.zip" label="Choose your ZIP file" help="It must contain the aligned files without indels in PROTEIC format" />
+				<param name="zip_aa" type="data" format="no_unzip.zip,zip" label="Choose your ZIP file" help="It must contain the aligned files without indels in PROTEIC format" />
 				<!-- ## Aminoacid substitution models -->
 				<!--<param name="aa_model_empirical_base_frequencies" type="boolean" checked="no" truevalue="F" falsevalue="X" display="checkboxes" label="Use empirical base frequencies in AA models." /> -->
 		    	<param name="base_model" type="select" label="Substitution Model (-m)">
@@ -241,19 +243,30 @@
 	<tests>
 		<test>
 			<param name="zip" ftype="zip" value="from_filter_oase.zip" />
+			<param name="format|format_run" value="nucleic" /> <!-- rajout -->
 			<param name="format|zip_nuc" ftype="zip" value="test_05_output_CDS_Search_input_ConcatPhyl.zip" />
+			<param name="format|base_model" value="GTRGAMMA" /> <!-- rajout -->
 			<param name="random_seed" value="1234567890" />
 			<param name="number_of_runs" value="100" />
 			<param name="number_of_runs_bootstop" value="" />
 			<param name="search_algorithm" value="d" />
-			<param name="multiple_model" value="" />
-			<param name="rapid_bootstrap_random_seed" value="fasta" />
-			<param name="out" value='1234567890' />
-			<param name="raxml1" value="False" />
-			<param name="raxml3" value="False" />
-			<param name="raxml4" value="True" />
-			<output name="out_fasta_nuc" value="Phylogeny_concatenation_fasta_nuc.fasta" />
-			<output name="out_raxml4" value="Phylogeny_RAxML_BootStrap.txt" />
+			<param name="multiple_model" value="" /> <!-- -->
+			<param name="rapid_bootstrap_random_seed" value="123456789" />
+			<param name="out" value="nothing" />
+			<param name="raxml1" value="True" />
+			<param name="raxml3" value="True" />
+			<param name="raxml4" value="True" />			
+			<output name="output" value="test_15.out" />
+			<!--
+			<output name="out_raxml4">
+				<assert_contents>
+					<has_text text="(Ap,(((Pf,((Pu,Te),(Am,Th))),Ph),Pg),Ac);"/>
+					<has_text text="(Ap,(((Pf,Ph),Pg),((Pu,Te),(Am,Th))),Ac);"/>
+					<has_text text="(Ap,(Ph,(Pg,((Pf,(Pu,Te)),(Am,Th)))),Ac);"/>
+					<has_text text="(Ap,(((Pu,Te),(Am,Th)),((Pf,Ph),Pg)),Ac);"/>
+				</assert_contents>
+			</output>		
+			-->
 		</test>
 	</tests>
 
