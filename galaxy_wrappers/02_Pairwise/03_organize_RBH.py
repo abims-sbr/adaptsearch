@@ -1,1 +1,1 @@
-/home/umr7144/abice/vmataigne/Documents/AdaptSearch/adaptsearch-master/scripts/03_organize_RBH.py
+../../scripts/03_organize_RBH.py

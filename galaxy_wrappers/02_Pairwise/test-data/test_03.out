@@ -1,0 +1,120 @@
+Pair of species:
+('PfPfiji_Trinity.fasta', 'ApApomp_Trinity.fasta')
+Pair of species:
+('PfPfiji_Trinity.fasta', 'AmAmphi_Trinity.fasta')
+Pair of species:
+('PfPfiji_Trinity.fasta', 'AcAcaud_Trinity.fasta')
+Pair of species:
+('ApApomp_Trinity.fasta', 'AmAmphi_Trinity.fasta')
+Pair of species:
+('ApApomp_Trinity.fasta', 'AcAcaud_Trinity.fasta')
+Pair of species:
+('AmAmphi_Trinity.fasta', 'AcAcaud_Trinity.fasta')
+-------------------- Pairwise PfPfiji_AmAmphi --------------------
+
+database : PfPfiji_Trinity.fasta
+query file : AmAmphi_Trinity.fasta
+
+***** RUN FIRST BLAST *****
+
+
+database : AmAmphi_Trinity.fasta
+query file : only the sequences of PfPfiji_Trinity.fasta which matched during the last BLAST
+
+***** RUN SECOND BLAST *****
+
+
+Number of pairwises parsed = 2 
+
+
+
+-------------------- Pairwise AmAmphi_AcAcaud --------------------
+
+database : AmAmphi_Trinity.fasta
+query file : AcAcaud_Trinity.fasta
+
+***** RUN FIRST BLAST *****
+
+
+database : AcAcaud_Trinity.fasta
+query file : only the sequences of AmAmphi_Trinity.fasta which matched during the last BLAST
+
+***** RUN SECOND BLAST *****
+
+
+Number of pairwises parsed = 3 
+
+
+
+-------------------- Pairwise ApApomp_AmAmphi --------------------
+
+database : ApApomp_Trinity.fasta
+query file : AmAmphi_Trinity.fasta
+
+***** RUN FIRST BLAST *****
+
+
+database : AmAmphi_Trinity.fasta
+query file : only the sequences of ApApomp_Trinity.fasta which matched during the last BLAST
+
+***** RUN SECOND BLAST *****
+
+
+Number of pairwises parsed = 0 
+
+
+
+-------------------- Pairwise PfPfiji_ApApomp --------------------
+
+database : PfPfiji_Trinity.fasta
+query file : ApApomp_Trinity.fasta
+
+***** RUN FIRST BLAST *****
+
+
+database : ApApomp_Trinity.fasta
+query file : only the sequences of PfPfiji_Trinity.fasta which matched during the last BLAST
+
+***** RUN SECOND BLAST *****
+
+
+Number of pairwises parsed = 5 
+
+
+
+-------------------- Pairwise PfPfiji_AcAcaud --------------------
+
+database : PfPfiji_Trinity.fasta
+query file : AcAcaud_Trinity.fasta
+
+***** RUN FIRST BLAST *****
+
+
+database : AcAcaud_Trinity.fasta
+query file : only the sequences of PfPfiji_Trinity.fasta which matched during the last BLAST
+
+***** RUN SECOND BLAST *****
+
+
+Number of pairwises parsed = 2 
+
+
+
+-------------------- Pairwise ApApomp_AcAcaud --------------------
+
+database : ApApomp_Trinity.fasta
+query file : AcAcaud_Trinity.fasta
+
+***** RUN FIRST BLAST *****
+
+
+database : AcAcaud_Trinity.fasta
+query file : only the sequences of ApApomp_Trinity.fasta which matched during the last BLAST
+
+***** RUN SECOND BLAST *****
+
+
+Number of pairwises parsed = 1 
+
+
+
