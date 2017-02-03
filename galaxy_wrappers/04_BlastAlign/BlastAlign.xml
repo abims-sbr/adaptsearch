@@ -12,7 +12,7 @@
 
 	<requirements>
 		<expand macro="python_required" />cd		
-		<requirement type="package" version="1.4">blastalign</requirement>
+		<!-- <requirement type="package" version="1.4">blastalign</requirement> -->
 		<requirement type="package" version="5.20.3">perl</requirement>
 		<requirement type="package" >blast-legacy</requirement>
 	</requirements>
@@ -199,12 +199,12 @@
 
 	<tests>
 		<test>			
-			<param name="type" value="many"/>
-			<param name="many_files" ftype="zip" value="test_4_output_POGS_input_BlastAlign.zip" />
-			<param name="option" value="no" />
+			<param name="files|type" value="many"/>
+			<param name="files|many_files" ftype="zip" value="test_4_output_POGS_input_BlastAlign.zip" />
+			<param name="options|option" value="no" />
 			<param name="fasta_out" value="True" />
 			<param name="files_failed" value="False" />
-			<output name="fasta_zip" value="test_05_output_BlastAlign.zip" />
+			<output name="outfile" value="test_06.out" />
 		</test>
 	</tests>    
 
