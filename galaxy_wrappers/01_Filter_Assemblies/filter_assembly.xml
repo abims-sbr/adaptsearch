@@ -59,15 +59,7 @@
 			<param name="percent_identity" value="100" />
 			<param name="overlap_length" value="60" />
 			<param name="length_seq_max" value="100" />		
-			<output name="output" value="test_01_output_(trinity)filter_oase.zip">
-				<assert_contents>
-					<has_n_elements_with_path n="4" path="test-data/test_01_output_(trinity)filter_oase.zip"/>
-					<has_text text="AcAcaud_trinity.fasta" />
-					<has_text text="AmAmphi_trinity.fasta" />
-					<has_text text="ApApomp_trinity.fasta" />
-					<has_text text="PfPfiji_trinity.fasta" />
-				</assert_contents>
-			</output>				
+			<output name="output" value="test_01_output_(trinity)filter_oase.zip" />				
 		</test>
 		<test>
 			<param name="input_type_choice" value="Velvet" />
@@ -75,15 +67,7 @@
 			<param name="percent_identity" value="100" />
 			<param name="overlap_length" value="60" />
 			<param name="length_seq_max" value="100" />		
-			<output name="output" value="test_01_output_(velvet)filter_oase.zip">
-				<assert_contents>
-					<has_n_elements_with_path n="4" path="test-data/test_01_output_(velvet)filter_oase.zip"/>
-					<has_text text="AcAcaud_trinity.fasta" />
-					<has_text text="AmAmphi_trinity.fasta" />
-					<has_text text="ApApomp_trinity.fasta" />
-					<has_text text="PfPfiji_trinity.fasta" />
-				</assert_contents>
-			</output>				
+			<output name="output" value="test_01_output_(velvet)filter_oase.zip" />				
 		</test>
 	</tests>	
 
