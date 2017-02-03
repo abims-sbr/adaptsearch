@@ -36,7 +36,7 @@
 			trinity ${input.zip_trinity} 
 		#end if
 		$length_seq_max $percent_identity $overlap_length
-		> ${output} && echo "done"
+		> ${output}
 	]]>
   	</command>
 
@@ -59,7 +59,8 @@
 	</inputs>
 
 	<outputs>
-		<data format="no_unzip.zip" name="output" label="Filter_oase_zip" from_work_dir="sequences_filtered.zip" />
+		<data format="no_unzip.zip" name="output_zip" label="Filter_oase_zip" from_work_dir="sequences_filtered.zip" />
+		<data format="txt", name="output" label="Filter_Assemblies_Summary"/>
 	</outputs>
 
 	<tests>
@@ -69,7 +70,7 @@
 			<param name="percent_identity" value="100" />
 			<param name="overlap_length" value="60" />
 			<param name="length_seq_max" value="100" />		
-			<!-- <output name="output" value="test_01_output_(trinity)filter_oase.zip" /> -->
+			<!-- <output name="output_zip" value="test_01_output_(trinity)filter_oase.zip" /> -->
 			<output name="output" value="test_06.out" />		
 		</test>
 		
