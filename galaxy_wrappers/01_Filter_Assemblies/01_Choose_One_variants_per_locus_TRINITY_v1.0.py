@@ -1,0 +1,1 @@
+/home/umr7144/abice/vmataigne/Documents/AdaptSearch/adaptsearch-master/scripts/01_Choose_One_variants_per_locus_TRINITY_v1.0.py

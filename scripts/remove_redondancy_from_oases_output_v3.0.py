@@ -27,7 +27,7 @@ def dico_filtering_redundancy(path_in):
             S2 = string.split(element, "\n")
             fasta_name = S2[0]
 	    fasta_seq = S2[1:-1]
-	    fasta_seq = "".join(fasta_seq)
+        fasta_seq = "".join(fasta_seq)
             L = string.split(fasta_name, "_")
             short_fasta_name = L[0] + L[1]
             

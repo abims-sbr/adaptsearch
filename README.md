@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Mataivic/adaptsearch.svg?branch=master)](https://travis-ci.org/Mataivic/adaptsearch)
+
 # AdaptSearch
 
 ## A pipeline for the search of adaptive mutations and positively selected genes from RNASeq orthologs

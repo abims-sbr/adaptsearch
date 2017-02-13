@@ -58,7 +58,7 @@
 		#end if
 			
 		#if $files.type == "many" :
-			python $__tool_directory__/24_BlastAlign_Julie.py ${files.many_files} 
+			python $__tool_directory__/24_prepare_BlastAlignRuns.py ${files.many_files} 
 			#if $fasta_out.value == True :
 				oui
 			#else :

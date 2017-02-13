@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import zipfile, os, re
 
 f_25 = "^25_.*$"

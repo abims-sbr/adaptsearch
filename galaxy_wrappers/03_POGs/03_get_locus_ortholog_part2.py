@@ -1,1 +1,1 @@
-/home/umr7144/abice/vmataigne/Documents/AdaptSearch/adaptsearch-master/scripts/03_get_locus_ortholog_part2.py
+../../scripts/03_get_locus_ortholog_part2.py

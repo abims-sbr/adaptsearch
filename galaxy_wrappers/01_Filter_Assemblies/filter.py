@@ -10,16 +10,16 @@ file_OUT = open(sys.argv[3], "w")
 f_in = open(path_IN, "r")
 inc=1
 while 1:
-  line=f_in.readline()
-  if not line:
-    break
-  line=f_in.readline()
-  name=">"+path_IN[:2]+str(inc)+"_1/1_1.000_"
-  if len(line)-1>threshold-1:
-    inc+=1
-    file_OUT.write("%s" %name)
-    file_OUT.write(str(len(line)-1)+"\n")
-    file_OUT.write("%s" %line)
+    line=f_in.readline()
+    if not line:
+        break
+    line=f_in.readline()
+    name=">"+path_IN[:2]+str(inc)+"_1/1_1.000_"
+    if len(line)-1>threshold-1:
+        inc+=1
+        file_OUT.write("%s" %name)
+        file_OUT.write(str(len(line)-1)+"\n")
+        file_OUT.write("%s" %line)
 f_in.close()
 file_OUT.close()
     

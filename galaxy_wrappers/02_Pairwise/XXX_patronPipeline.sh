@@ -1,1 +1,1 @@
-../../scripts/XXX_patronPipeline.sh
+/home/umr7144/abice/vmataigne/Documents/AdaptSearch/adaptsearch-master/scripts/XXX_patronPipeline.sh
