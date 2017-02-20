@@ -24,7 +24,7 @@
 		#end if
 		> ${output};
 
-		raxmlHPC-1500
+		raxmlHPC 
 		#if $format.format_run == "nucleic" :			
 			-n "galaxy_run"
 			##-q "./05_partitions_gene_NUC"
@@ -243,31 +243,29 @@
 	<tests>
 		<test>
 			<param name="zip" ftype="zip" value="from_filter_oase.zip" />
-			<param name="format|format_run" value="nucleic" /> <!-- rajout -->
-			<param name="format|zip_nuc" ftype="zip" value="test_05_output_CDS_Search_input_ConcatPhyl.zip" />
-			<param name="format|base_model" value="GTRGAMMA" /> <!-- rajout -->
+			<conditional name="format">
+				<param name="format_run" value="nucleic" />
+				<param name="zip_nuc" ftype="zip" value="test_05_output_CDS_Search_input_ConcatPhyl.zip" />
+				<param name="base_model" value="GTRGAMMA" />
+			</conditional>
 			<param name="random_seed" value="1234567890" />
 			<param name="number_of_runs" value="100" />
 			<param name="number_of_runs_bootstop" value="" />
 			<param name="search_algorithm" value="d" />
-			<param name="multiple_model" value="" /> <!-- -->
-			<param name="rapid_bootstrap_random_seed" value="123456789" />
-			<param name="out" value="nothing" />
+			<!-- <param name="multiple_model" value="" /> -->
+			<param name="rapid_bootstrap_random_seed" value="123456789" />	
+			<param name="out" value="nothing" />			
 			<param name="raxml1" value="True" />
 			<param name="raxml3" value="True" />
 			<param name="raxml4" value="True" />			
-			<!-- <output name="output" value="test_15.out" /> -->
-			<output name="out_raxml4", value="Phylogeny_RAxML_BootStrap.txt"/>
-			<!--
 			<output name="out_raxml4">
-				<assert_contents>
-					<has_text text="(Ap,(((Pf,((Pu,Te),(Am,Th))),Ph),Pg),Ac);"/>
+				<assert_contents>					
 					<has_text text="(Ap,(((Pf,Ph),Pg),((Pu,Te),(Am,Th))),Ac);"/>
 					<has_text text="(Ap,(Ph,(Pg,((Pf,(Pu,Te)),(Am,Th)))),Ac);"/>
 					<has_text text="(Ap,(((Pu,Te),(Am,Th)),((Pf,Ph),Pg)),Ac);"/>
 				</assert_contents>
-			</output>		
-			-->
+			</output>				
+			
 		</test>
 	</tests>
 
