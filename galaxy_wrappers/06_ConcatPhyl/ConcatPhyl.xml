@@ -11,7 +11,7 @@
 	<requirements>
 		<expand macro="python_required" />
 		<!-- <requirement type="package" version="1.3.1">samtools</requirement> -->
-		<!-- <requirement type="package" version="">raxml</requirement> -->
+		<requirement type="package" version="8.2.9">raxml</requirement>
 	</requirements>
 
   	<command><![CDATA[
@@ -256,7 +256,8 @@
 			<param name="raxml1" value="True" />
 			<param name="raxml3" value="True" />
 			<param name="raxml4" value="True" />			
-			<output name="output" value="test_15.out" />
+			<!-- <output name="output" value="test_15.out" /> -->
+			<output name="out_raxml4", value="Phylogeny_RAxML_BootStrap.txt"/>
 			<!--
 			<output name="out_raxml4">
 				<assert_contents>
