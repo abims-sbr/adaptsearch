@@ -29,6 +29,8 @@
 		&&
 		ln -s $_tool_directory__/phylip2fasta.py .
 		&&
+		ln -s $_tol_directory__/BlastALign .
+		&&
 		#if $files.type == "one" :
 			$__tool_directory__/BlastAlign -i ${files.one_file} -o out
 			#if $files.options.option == "yes" :
