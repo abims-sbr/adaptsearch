@@ -1,1 +1,1 @@
-/home/umr7144/abice/vmataigne/Documents/ForkAdaptSearch/adaptsearch/scripts/03_run_BLAST_with.K.filter.sh
+../../scripts/03_run_BLAST_with.K.filter.sh
