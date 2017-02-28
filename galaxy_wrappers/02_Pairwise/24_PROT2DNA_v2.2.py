@@ -1,1 +1,1 @@
-/home/umr7144/abice/vmataigne/Documents/ForkAdaptSearch/adaptsearch/scripts/24_PROT2DNA_v2.2.py
+../../scripts/24_PROT2DNA_v2.2.py
