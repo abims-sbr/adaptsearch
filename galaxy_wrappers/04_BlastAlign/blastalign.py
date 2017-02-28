@@ -1,1 +1,0 @@
-../../scripts/blastalign.py

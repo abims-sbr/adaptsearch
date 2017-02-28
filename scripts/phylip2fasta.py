@@ -32,9 +32,9 @@ def format(File_IN):
         if not next :
             break
         
-        S1 = string.split(next, " ")
-        fasta_name = S1[0]
-        fasta_seq = S1[1][:-1]
+        S1 = string.split(next, "\t")    # list : [name, sequence] --- BUG CORRECTED : "\t" instead of " "
+        fasta_name = S1[0]    # get sequence name
+        fasta_seq = S1[1][:-1]    # get sequence without the terminal '\n'
         fichier = fichier + ">" + fasta_name + "\n" + fasta_seq + "\n"
         
     return (fichier,c)

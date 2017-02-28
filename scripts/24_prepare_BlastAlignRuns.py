@@ -64,10 +64,16 @@ def prepare_BLASTALIGN_runs(list_file):
 		list_files_failed.append(fasta_file)
 
 	    if sys.argv[2] == "oui" :
-                os.system("python %s/phylip2fasta.py ./%s.fasta.phy ./%s.fasta.fasta\n" %(script_path,fasta_name, fasta_name))
+	    	try: # in the case BlastAlign failed (there is no .fasta.phy in that case)
+	    		with open("%s.fasta.phy" %fasta_name): os.system("python %s/phylip2fasta.py ./%s.fasta.phy ./%s.fasta.fasta\n" %(script_path,fasta_name, fasta_name))
+                except IOError:
+                	pass
+		
 		os.system("rm -f ./%s.fasta\n" %fasta_name)
-		os.system("mv ./%s.fasta.fasta ./%s.fasta\n" %(fasta_name, fasta_name))
-  
+
+		if os.path.isfile("%s.fasta.fasta" %fasta_name): # in the case BlastAlign failed (there is no .fasta.fasta in that case)
+		    os.system("mv ./%s.fasta.fasta ./%s.fasta\n" %(fasta_name, fasta_name))		    
+
     return(list_files_failed)
             
 ######################################

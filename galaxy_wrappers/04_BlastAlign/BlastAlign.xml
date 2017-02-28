@@ -12,7 +12,6 @@
 
 	<requirements>
 		<expand macro="python_required" />cd		
-		<requirement type="package" version="1.4">blastalign</requirement>
 		<requirement type="package" version="5.20.3">perl</requirement>
 		<requirement type="package" >blast-legacy</requirement>
 	</requirements>
@@ -26,6 +25,10 @@
 	-->
   	<command>
 	<![CDATA[
+		ln -s $_tool_directory__/BlastAlign.py .
+		&&
+		ln -s $_tool_directory__/phylip2fasta.py .
+		&&
 		#if $files.type == "one" :
 			$__tool_directory__/BlastAlign -i ${files.one_file} -o out
 			#if $files.options.option == "yes" :
@@ -203,8 +206,8 @@
 			<param name="many_files" ftype="zip" value="test_4_output_POGS_input_BlastAlign.zip" />
 			<param name="option" value="no" />
 			<param name="fasta_out" value="True" />
-			<param name="files_failed" value="False" />
-			<output name="fasta_zip" value="test_05_output_BlastAlign.zip" />
+			<param name="files_failed" value="True" />
+			<output name="outfile" value="test_05.out" />
 		</test>
 	</tests>    
 
