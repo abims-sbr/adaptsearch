@@ -18,6 +18,30 @@
 
   	<command>
         	<![CDATA[
+        ln -s $__tool_directory__/03_run_BLAST_with.K.filter.sh .
+        &&        
+        ln -s $__tool_directory__/05_scriptExtractMatch_v20_BLASTX.py .
+        &&
+        ln -s $__tool_directory__/08_1_postProcessing_of_pairwise_v3.0.py .
+        &&
+        ln -s $__tool_directory__/08_2_formatMatch_getBackNucleotides_v2.py .
+        &&
+        ln -s $__tool_directory__/10_run_BLAST2_with.K.filter.sh .        
+        && 
+        ln -s $__tool_directory__/12_scriptExtractMatch_v20_BLASTX.py .
+        &&
+        ln -s $__tool_directory__/14_postProcessing_of_pairwise_v3.0.py .
+        &&
+        ln -s $__tool_directory__/16_compareListPairs_forReciprocalBestHitsTest_v3.1.py .
+        &&
+        ln -s $__tool_directory__/18_postProcessing_of_pairwise_v4.0.py .
+        &&
+        ln -s $__tool_directory__/24_PROT2DNA_v2.2.py .
+        &&
+        ln -s $__tool_directory__/XXX_patronPipeline.sh .
+        &&
+        ln -s $__tool_directory__/zip.py .
+        &&
 		python $__tool_directory__/03_organize_RBH.py 8 ${e_value} ${zip}
 		> ${output};
 		]]>
@@ -38,10 +62,21 @@
 		<test>
 			<param name="zip" ftype="zip" value="test_02_input_pairwise.zip" />
 			<param name="e-value" value="1e-5" />
-			<output name="output_zip_DNA" value="test_03_output_Pairwise_PROT_inputPOGS.zip" >
+			<output name="output" >
 				<assert_contents>
-					<has_n_elements_with_path n="6" path="test-data/test_03_output_Pairwise_PROT_inputPOGS.zip"/>
-					<has_text text="19_ReciprocalBestHits_" />
+					<has_line line="('PfPfiji_Trinity.fasta', 'ApApomp_Trinity.fasta')"/>
+					<has_line line="('PfPfiji_Trinity.fasta', 'AmAmphi_Trinity.fasta')"/>
+					<has_line line="('PfPfiji_Trinity.fasta', 'AcAcaud_Trinity.fasta')"/>
+					<has_line line="('ApApomp_Trinity.fasta', 'AmAmphi_Trinity.fasta')"/>
+					<has_line line="('ApApomp_Trinity.fasta', 'AcAcaud_Trinity.fasta')"/>
+					<has_line line="('AmAmphi_Trinity.fasta', 'AcAcaud_Trinity.fasta')"/>
+					
+					<has_text text="Number of pairwises parsed = 2" />
+					<has_text text="Number of pairwises parsed = 3" />
+					<has_text text="Number of pairwises parsed = 0" />
+					<has_text text="Number of pairwises parsed = 5" />					
+					<has_text text="Number of pairwises parsed = 1" />
+					
 				</assert_contents>
 			</output>
 		</test>
