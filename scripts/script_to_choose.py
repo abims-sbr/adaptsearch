@@ -23,7 +23,7 @@ if sys.argv[1]=="velvet" :
         name6="%s" %(suffix)
         name7="%s%s"%(suffix,name)
     #Fasta sequences on one line
-        os.system("zcat -f < '%s' | fasta_formatter -w 0 -o '%s'" % (name,name2)) # ajout ./ devant fasta_formatter pour test en local
+        os.system("zcat -f < '%s' | fasta_formatter -w 0 -o '%s'" % (name,name2))
         
         #Format the name of the sequences with good name
         suffix=name[:2]
@@ -37,10 +37,10 @@ if sys.argv[1]=="velvet" :
         os.system("python %s/find_orf.py %s %s" %(script_path,name4,name5))
 
 	#Apply cap3
-        os.system("cap3  %s -p %s -o %s"%(name5,sys.argv[4],sys.argv[5])) # ajout ./ devant cap3 pour test en local
+        os.system("cap3  %s -p %s -o %s"%(name5,sys.argv[4],sys.argv[5]))
         #Fasta sequences on one line
         #Il faudrait faire un merge des singlets et contigs! TODO
-        os.system("zcat -f < '%s.cap.singlets' | fasta_formatter -w 0 -o '%s'" % (name5,name6)) # ajout ./ devant fasta_formatter pour test en local
+        os.system("zcat -f < '%s.cap.singlets' | fasta_formatter -w 0 -o '%s'" % (name5,name6))
         #Apply pgbrun script filter script TODO length parameter
         os.system("python %s/filter.py %s %s %s" %(script_path,name6,sys.argv[3],name7))  
         L1.append(name7)
@@ -62,7 +62,7 @@ else:
         name7="%s"%(suffix)
         name8="%s%s"%(suffix,name)
         #Fasta sequences on one line
-        os.system("zcat -f < '%s' | fasta_formatter -w 0 -o '%s'" % (name,name2)) # ajout ./ devant fasta_formatter
+        os.system("zcat -f < '%s' | fasta_formatter -w 0 -o '%s'" % (name,name2))
         #replace white space by "_" 
         os.system("sed -e 's/ /_/g' %s > %s " % (name2,name3))
         #Format the name of the sequences with good name
@@ -72,10 +72,10 @@ else:
     #Pierre guillaume find_orf script for keeping the longuest ORF
         os.system("python %s/find_orf.py %s %s" %(script_path,name5,name6))
         #Apply cap3
-        os.system("cap3  %s -p %s -o %s"%(name6,sys.argv[4],sys.argv[5])) # ajout ./ devant cap3 pour test en local
+        os.system("cap3  %s -p %s -o %s"%(name6,sys.argv[4],sys.argv[5]))
         #Fasta sequences on one line
         #Il faudrait faire un merge des singlets et contigs! TODO
-        os.system("zcat -f < '%s.cap.singlets' | fasta_formatter -w 0 -o '%s'" % (name6,name7)) # ajout ./ devant fasta_formatter pour test en local
+        os.system("zcat -f < '%s.cap.singlets' | fasta_formatter -w 0 -o '%s'" % (name6,name7))
         #Apply pgbrun script filter script TODO length parameter
         os.system("python %s/filter.py %s %s %s" %(script_path,name7,sys.argv[3],name8)) 
         L1.append(name8)
