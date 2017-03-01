@@ -16,13 +16,10 @@
 		<requirement type="package" >blast-legacy</requirement>
 	</requirements>
 
-	<!--WARNING: There is currently a bug in Galaxy when are used both <stdio> and the option of <outputs><data> from_work_dir=
-	
 	<stdio>
-        <exit_code range="26:" level="fatal" />
+        <exit_code range="1:" level="fatal" />
     </stdio>
-
-	-->
+    
   	<command>
 	<![CDATA[
 		ln -s $__tool_directory__/BlastAlign.py .

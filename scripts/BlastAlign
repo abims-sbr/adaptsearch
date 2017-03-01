@@ -503,14 +503,9 @@ sub get_length {
 		}
 		$last_length = $length;
 		$counter++;
-	}
+	}	
 	
-	if ($length == 0) {
-	    print "Sub-routine get_length has not worked\n";
-	    exit;
-		#die "Sub-routine get_length has not worked\n"; # MODIFIED
-	}
-	return ($length); # Arbitrary choice of last sequence to get length (should be same for all seqs)
+	return ($length) or die print "Sub-routine get_length has not worked\n"; # Arbitrary choice of last sequence to get length (should be same for all seqs)
 }
 
 sub use_old_names {

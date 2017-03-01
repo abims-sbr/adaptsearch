@@ -107,7 +107,6 @@ Will exclude sequences where gaps make up more than 95% of the sequence in the f
 Input file ./locus8_sp2.fasta has 2 sequences and is 590 bytes
 (maximum number of sequences that will be used to search for the reference sequence is 1380)
 
-Sub-routine get_length has not worked
 
 ************************  BlastAlign  ************************
 
