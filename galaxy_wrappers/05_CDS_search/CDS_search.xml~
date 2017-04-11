@@ -16,7 +16,7 @@
 
   	<command>
   	<![CDATA[
-		python $__tool_directory__/03_findORF_onMultipleAlignment_v2.py ${input_file}  $__tool_directory__/02_input_code_universel_modified.txt
+		python $__tool_directory__/T5S01a_find_orf_on_multiple_alignment_v2.py ${input_file}  $__tool_directory__/T5S01b_input_code_universel_modified.txt
 		#if $lenght.lenght_CDS == "yes" :
 			${lenght.min_lenght_seq}
 		#else :
@@ -24,7 +24,7 @@
 		#end if
 		>${output};
 
-		python $__tool_directory__/01_RemoveTooShort_bit_or_whole_sequence_v1.0.py ${nb_species_keep}
+		python $__tool_directory__/T5S02_remove_too_short_bit_or_whole_sequence_v1.0.py ${nb_species_keep}
 		#if $methionine.value == "yes" :
 			oui
 		#else :
@@ -37,7 +37,7 @@
 		#end if
 		>>${output};
 
-		python $__tool_directory__/07_removeSiteWithNotEnoughSpeciesRepresented_v2.0.py ${nb_species_keep}
+		python $__tool_directory__/T5S03_remove_site_with_not_enough_species_represented_v2.0.py ${nb_species_keep}
 		#if $lenght.lenght_CDS == "yes" :
 			${lenght.min_lenght_nuc}
 		#else :
@@ -132,14 +132,14 @@
 
 	<tests>
 		<test>
-			<param name="input_file" ftype="zip" value="test_05_input_CDS_Search.zip" />
+			<param name="input_file" ftype="zip" value="test_05_input_CDS_Search.no_unzip.zip" />
 			<param name="nb_species_keep" value="2" />
 			<param name="methionine" value="yes" />
 			<param name="lenght_CDS" value="no" />
 			<param name="out_BESTORF" value="no" />
 			<param name="out_CDS" value="no" />
 			<param name="out_CDS_filter" value="nuc" />
-			<output name="output" value="test_05.out" />	<!-- test_08.out ? -->		
+			<output name="output" value="test_08.out" />
 		</test>
 	</tests>
 

@@ -1,1 +1,0 @@
-../../scripts/02_input_code_universel_modified.txt

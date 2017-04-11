@@ -16,7 +16,7 @@
 
   	<command>
   	<![CDATA[
-		python $__tool_directory__/03_findORF_onMultipleAlignment_v2.py ${input_file}  $__tool_directory__/02_input_code_universel_modified.txt
+		python $__tool_directory__/scripts/S01_find_orf_on_multiple_alignment.py ${input_file}  $__tool_directory__/scripts/code_universel_modified.txt
 		#if $lenght.lenght_CDS == "yes" :
 			${lenght.min_lenght_seq}
 		#else :
@@ -24,7 +24,7 @@
 		#end if
 		>${output};
 
-		python $__tool_directory__/01_RemoveTooShort_bit_or_whole_sequence_v1.0.py ${nb_species_keep}
+		python $__tool_directory__/scripts/S02_remove_too_short_bit_or_whole_sequence.py ${nb_species_keep}
 		#if $methionine.value == "yes" :
 			oui
 		#else :
@@ -37,7 +37,7 @@
 		#end if
 		>>${output};
 
-		python $__tool_directory__/07_removeSiteWithNotEnoughSpeciesRepresented_v2.0.py ${nb_species_keep}
+		python $__tool_directory__/scripts/S03_remove_site_with_not_enough_species_represented.py ${nb_species_keep}
 		#if $lenght.lenght_CDS == "yes" :
 			${lenght.min_lenght_nuc}
 		#else :
@@ -139,7 +139,7 @@
 			<param name="out_BESTORF" value="no" />
 			<param name="out_CDS" value="no" />
 			<param name="out_CDS_filter" value="nuc" />
-			<output name="output" value="test_08.out" />	<!-- test_08.out ? -->		
+			<output name="output" value="test_08.out" />
 		</test>
 	</tests>
 

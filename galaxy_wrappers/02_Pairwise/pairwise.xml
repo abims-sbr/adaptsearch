@@ -18,31 +18,31 @@
 
   	<command>
         	<![CDATA[
-        ln -s $__tool_directory__/03_run_BLAST_with.K.filter.sh .
+        ln -s $__tool_directory__/scripts/S02_xxx_patron_pipeline.sh .
         &&        
-        ln -s $__tool_directory__/05_scriptExtractMatch_v20_BLASTX.py .
+        ln -s $__tool_directory__/scripts/S03_run_blast_with_k_filter.sh .
         &&
-        ln -s $__tool_directory__/08_1_postProcessing_of_pairwise_v3.0.py .
+        ln -s $__tool_directory__/scripts/S04_run_blast2_with_k_filter.sh .
         &&
-        ln -s $__tool_directory__/08_2_formatMatch_getBackNucleotides_v2.py .
+        ln -s $__tool_directory__/scripts/S05_script_extract_match_v20_blastx.py .
         &&
-        ln -s $__tool_directory__/10_run_BLAST2_with.K.filter.sh .        
+        ln -s $__tool_directory__/scripts/S06_post_processing_of_pairwise.py .        
         && 
-        ln -s $__tool_directory__/12_scriptExtractMatch_v20_BLASTX.py .
+        ln -s $__tool_directory__/scripts/S07_format_match_get_back_nucleotides.py .
         &&
-        ln -s $__tool_directory__/14_postProcessing_of_pairwise_v3.0.py .
+        ln -s $__tool_directory__/scripts/S08_script_extract_match_v20_blastx.py .
         &&
-        ln -s $__tool_directory__/16_compareListPairs_forReciprocalBestHitsTest_v3.1.py .
+        ln -s $__tool_directory__/scripts/S09_post_processing_of_pairwise.py .
         &&
-        ln -s $__tool_directory__/18_postProcessing_of_pairwise_v4.0.py .
+        ln -s $__tool_directory__/scripts/S10_compare_list_pairs_for_reciprocal_best_hits_test.py .
         &&
-        ln -s $__tool_directory__/24_PROT2DNA_v2.2.py .
+        ln -s $__tool_directory__/scripts/S11_post_processing_of_pairwise.py .
         &&
-        ln -s $__tool_directory__/XXX_patronPipeline.sh .
+        ln -s $__tool_directory__/scripts/S12_prot2dna.py .
         &&
-        ln -s $__tool_directory__/zip.py .
+        ln -s $__tool_directory__/scripts/S13_zip.py .
         &&
-		python $__tool_directory__/03_organize_RBH.py 8 ${e_value} ${zip}
+		python $__tool_directory__/scripts/S01_organize_rbh.py 8 ${e_value} ${zip}
 		> ${output};
 		]]>
   	</command>

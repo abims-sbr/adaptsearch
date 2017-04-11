@@ -1,1 +1,0 @@
-../../scripts/12_scriptExtractMatch_v20_BLASTX.py

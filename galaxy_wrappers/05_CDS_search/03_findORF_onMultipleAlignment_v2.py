@@ -1,1 +1,0 @@
-../../scripts/03_findORF_onMultipleAlignment_v2.py
