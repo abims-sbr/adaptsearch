@@ -41,8 +41,8 @@ for pairwise in list_pairwise :
 
     os.mkdir("./%s" %RBH_folder)    
     
-    os.system("cp -fr T2S03_run_blast_with_k_filter.sh %s/" %(RBH_folder))
-    os.system("cp -fr T2S04_run_blast2_with_k_filter.sh %s/" %(RBH_folder)) 
+    os.system("cp -fr S03_run_blast_with_k_filter.sh %s/" %(RBH_folder))
+    os.system("cp -fr S04_run_blast2_with_k_filter.sh %s/" %(RBH_folder)) 
 
     if L2 != [] :
         os.system("cp -fr %s ./%s/%s" %(DIR1, RBH_folder, DIR1))   
@@ -50,7 +50,7 @@ for pairwise in list_pairwise :
 
     pipeline_script = open("./%s/XXX_pipeline_%s.sh" %(RBH_folder,RBH_folder), "w")
     #pipeline_patron = open("%s/XXX_patronPipeline.sh" %(SCRIPTPATH), "r")
-    pipeline_patron = open("T2S02_xxx_patron_pipeline.sh", "r")
+    pipeline_patron = open("S02_xxx_patron_pipeline.sh", "r")
 
     #pipeline_patron = open("/home/umr7144/abice/vmataigne/Documents/AdaptSearch/adaptsearch-master/scripts/XXX_patronPipeline.sh", "r")    
 

@@ -29,12 +29,12 @@ if sys.argv[1]=="velvet" :
         suffix=name[:2]
         #if re.match(fas, name) :
     #os.system("python /w/galaxy/galaxy4misharl/galaxy-dist/tools/abims/julie/oasearch/filter_assembly/remove_redondancy_from_oases_output_v3.1.py %s %s" %(name2, name3))
-        os.system("python %s/T1S02a_remove_redondancy_from_velvet_oases_v3.1.py %s %s" %(script_path,name2, name3))
+        os.system("python %s/S02a_remove_redondancy_from_velvet_oases.py %s %s" %(script_path,name2, name3))
         #elif re.match(fasta, name) :
         os.system("sed -e 's/Locus_/%s/g' -e 's/_Confidence_/_/g' -e 's/_Transcript_/_/g' -e 's/_Length_/_/g' %s > %s" % (suffix,name3,name4))
         #os.system("python /w/galaxy/galaxy4misharl/galaxy-dist/tools/abims/julie/oasearch/filter_assembly/remove_redondancy_from_oases_output_v3.0.py %s %s" %(name, name2))
         #Pierre guillaume find_orf script for keeping the longuest ORF
-        os.system("python %s/T1S04_find_orf.py %s %s" %(script_path,name4,name5))
+        os.system("python %s/S04_find_orf.py %s %s" %(script_path,name4,name5))
 
 	#Apply cap3
         os.system("cap3  %s -p %s -o %s"%(name5,sys.argv[4],sys.argv[5]))
@@ -42,7 +42,7 @@ if sys.argv[1]=="velvet" :
         #Il faudrait faire un merge des singlets et contigs! TODO
         os.system("zcat -f < '%s.cap.singlets' | fasta_formatter -w 0 -o '%s'" % (name5,name6))
         #Apply pgbrun script filter script TODO length parameter
-        os.system("python %s/T1S05_filter.py %s %s %s" %(script_path,name6,sys.argv[3],name7))  
+        os.system("python %s/S05_filter.py %s %s %s" %(script_path,name6,sys.argv[3],name7))  
         L1.append(name7)
     f = zipfile.ZipFile("sequences_filtered.zip", "w")
     for files in L1 :
@@ -66,18 +66,18 @@ else:
         #replace white space by "_" 
         os.system("sed -e 's/ /_/g' %s > %s " % (name2,name3))
         #Format the name of the sequences with good name
-        os.system("python %s/T1S02b_format_fasta_name_trinity.py %s %s %s" %(script_path,name3, name4,suffix))
+        os.system("python %s/S02b_format_fasta_name_trinity.py %s %s %s" %(script_path,name3, name4,suffix))
         #Apply first script to avoid reductant sequences
-        os.system("python %s/T1S03_choose_one_variants_per_locus_trinity_v1.0.py %s %s" %(script_path,name4, name5))
+        os.system("python %s/S03_choose_one_variants_per_locus_trinity.py %s %s" %(script_path,name4, name5))
     #Pierre guillaume find_orf script for keeping the longuest ORF
-        os.system("python %s/T1S04_find_orf.py %s %s" %(script_path,name5,name6))
+        os.system("python %s/S04_find_orf.py %s %s" %(script_path,name5,name6))
         #Apply cap3
         os.system("cap3  %s -p %s -o %s"%(name6,sys.argv[4],sys.argv[5]))
         #Fasta sequences on one line
         #Il faudrait faire un merge des singlets et contigs! TODO
         os.system("zcat -f < '%s.cap.singlets' | fasta_formatter -w 0 -o '%s'" % (name6,name7))
         #Apply pgbrun script filter script TODO length parameter
-        os.system("python %s/T1S05_filter.py %s %s %s" %(script_path,name7,sys.argv[3],name8)) 
+        os.system("python %s/S05_filter.py %s %s %s" %(script_path,name7,sys.argv[3],name8)) 
         L1.append(name8)
     f = zipfile.ZipFile("sequences_filtered.zip", "w")
     for files in L1 :
