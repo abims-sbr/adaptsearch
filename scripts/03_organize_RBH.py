@@ -1,5 +1,4 @@
-#!/usr/local/public/python-2.6.5/bin/python2.6
-#/usr/bin/python
+#!/usr/bin/env python
 ## AUTHOR: Eric Fontanillas
 ## LAST VERSION: 03/09/14 by Julie BAFFARD
 
@@ -9,17 +8,17 @@ from multiprocessing import Pool
 #---- Rajout Victor ----
 #SCRIPTPATH = os.path.realpath("03_organize-RBH.py")
 #SCRIPTPATH = SCRIPTPATH.replace("/03_organize-RBH.py", "")
-SCRIPTPATH = os.path.dirname(os.path.realpath("__file__"))
+#SCRIPTPATH = os.path.dirname(os.path.realpath("__file__"))
 #---- Fin rajout ----
 
-def launching (RBH_folder) :
+def launching(RBH_folder):
     os.system("bash %s/XXX_pipeline_%s.sh %s" %(RBH_folder,RBH_folder,RBH_folder))
 
 L2 = [] #list on input file
 list_RBH = []
 m=1
 
-zfile = zipfile.ZipFile(sys.argv[3])
+zfile = zipfile.ZipFile(sys.argv[3]) # 3 ? 2 ?
 for name in zfile.namelist() :
     zfile.extract(name)
     L2.append(name)
@@ -48,12 +47,12 @@ for pairwise in list_pairwise :
 
     os.mkdir("./%s" %RBH_folder)    
     
-    #os.system("cp -fr 03_run_BLAST_with.K.filter.sh ./%s/" %(RBH_folder))
-    #os.system("cp -fr 10_run_BLAST2_with.K.filter.sh ./%s/" %(RBH_folder))
+    os.system("cp -fr 03_run_BLAST_with.K.filter.sh %s/" %(RBH_folder))
+    os.system("cp -fr 10_run_BLAST2_with.K.filter.sh %s/" %(RBH_folder))
 
     #---- Rajout Victor ----    
-    os.system("cp -fr %s/03_run_BLAST_with.K.filter.sh ./%s/" %(SCRIPTPATH, RBH_folder))
-    os.system("cp -fr %s/10_run_BLAST2_with.K.filter.sh ./%s/" %(SCRIPTPATH, RBH_folder))
+    #os.system("cp -fr %s/03_run_BLAST_with.K.filter.sh ./%s/" %(SCRIPTPATH, RBH_folder))
+    #os.system("cp -fr %s/10_run_BLAST2_with.K.filter.sh ./%s/" %(SCRIPTPATH, RBH_folder))
     #---- Fin rajout ----  
 
     if L2 != [] :
@@ -62,8 +61,9 @@ for pairwise in list_pairwise :
 
     pipeline_script = open("./%s/XXX_pipeline_%s.sh" %(RBH_folder,RBH_folder), "w")
     #pipeline_patron = open("%s/XXX_patronPipeline.sh" %(SCRIPTPATH), "r")
+    pipeline_patron = open("XXX_patronPipeline.sh", "r")
 
-    pipeline_patron = open("/home/umr7144/abice/vmataigne/Documents/AdaptSearch/adaptsearch-master/scripts/XXX_patronPipeline.sh", "r")
+    #pipeline_patron = open("/home/umr7144/abice/vmataigne/Documents/AdaptSearch/adaptsearch-master/scripts/XXX_patronPipeline.sh", "r")    
 
     # Setting parameters in XXX_Patron_Pipeline
     F1 = pipeline_patron.read()
@@ -82,3 +82,7 @@ for pairwise in list_pairwise :
 ## Multithreading
 pool = Pool(processes=int(sys.argv[1]))
 result = pool.map(launching, list_RBH)
+
+os.system("rm 25_DNA*")
+os.system("rm 19_Reci*")
+os.system("rm *.fasta")

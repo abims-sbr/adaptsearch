@@ -12,12 +12,22 @@
 
 	<requirements>
 		<expand macro="python_required" />
-		<requirement type="package">fastx_toolkit</requirement>
+		<requirement type="package" version="0.0.14">fastx_toolkit</requirement>
 		<requirement type="package">cap3</requirement>
 	</requirements>
 
   	<command>
 	<![CDATA[
+		ln -s $__tool_directory__/01_Choose_One_variants_per_locus_TRINITY_v1.0.py .
+		&&
+		ln -s $__tool_directory__/02_format_fasta_name_TRINITY.py .
+		&&
+		ln -s $__tool_directory__/filter.py .
+		&&
+		ln -s $__tool_directory__/find_orf.py .
+		&&
+		ln -s $__tool_directory__/remove_redondancy_from_oases_output_v3.1.py .
+		&&
 		python $__tool_directory__/script_to_choose.py
 
 		#if $input.input_type_choice == "velvet"
@@ -26,7 +36,7 @@
 			trinity ${input.zip_trinity} 
 		#end if
 		$length_seq_max $percent_identity $overlap_length
-		> ${output} && echo "done"
+		> ${output}
 	]]>
   	</command>
 
@@ -49,7 +59,8 @@
 	</inputs>
 
 	<outputs>
-		<data format="no_unzip.zip" name="output" label="Filter_oase_zip" from_work_dir="sequences_filtered.zip" />
+		<data format="no_unzip.zip" name="output_zip" label="Filter_oase_zip" from_work_dir="sequences_filtered.zip" />
+		<data format="txt" name="output" label="Filter_Assemblies_Summary"/>
 	</outputs>
 
 	<tests>
@@ -58,33 +69,18 @@
 			<param name="input|zip_trinity" ftype="zip" value="test_01_input_Trinity_filter_oase.zip" />
 			<param name="percent_identity" value="100" />
 			<param name="overlap_length" value="60" />
-			<param name="length_seq_max" value="100" />		
-			<output name="output" value="test_01_output_(trinity)filter_oase.zip">
-				<assert_contents>
-					<has_n_elements_with_path n="4" path="test-data/test_01_output_(trinity)filter_oase.zip"/>
-					<has_text text="AcAcaud_trinity.fasta" />
-					<has_text text="AmAmphi_trinity.fasta" />
-					<has_text text="ApApomp_trinity.fasta" />
-					<has_text text="PfPfiji_trinity.fasta" />
-				</assert_contents>
-			</output>				
+			<param name="length_seq_max" value="100" />
+			<output name="output" value="test_06.out" />
 		</test>
 		<test>
-			<param name="input_type_choice" value="Velvet" />
+			<param name="input_type_choice" value="velvet" />
 			<param name="input|zip_velvet" ftype="zip" value="test_01_input_Velvet_filter_oase.zip" />
 			<param name="percent_identity" value="100" />
 			<param name="overlap_length" value="60" />
-			<param name="length_seq_max" value="100" />		
-			<output name="output" value="test_01_output_(velvet)filter_oase.zip">
-				<assert_contents>
-					<has_n_elements_with_path n="4" path="test-data/test_01_output_(velvet)filter_oase.zip"/>
-					<has_text text="AcAcaud_trinity.fasta" />
-					<has_text text="AmAmphi_trinity.fasta" />
-					<has_text text="ApApomp_trinity.fasta" />
-					<has_text text="PfPfiji_trinity.fasta" />
-				</assert_contents>
-			</output>				
+			<param name="length_seq_max" value="100" />
+			<output name="output" value="test_06bis.out" />
 		</test>
+		
 	</tests>	
 
 	<help>
