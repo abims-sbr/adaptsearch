@@ -56,7 +56,7 @@ def prepare_BLASTALIGN_runs(list_file):
 	    files.close()
 
             ## run individual script
-	    os.system("%s/BlastAlign -m %s -n %s -i ./%s.fasta\n" %(script_path,sys.argv[3],sys.argv[4],fasta_name))
+	    os.system("BlastAlign -m %s -n %s -i ./%s.fasta\n" %(sys.argv[3],sys.argv[4],fasta_name))
 
 	    try:
         	phylip_file = open("./%s.fasta.phy" %fasta_name, "r")       

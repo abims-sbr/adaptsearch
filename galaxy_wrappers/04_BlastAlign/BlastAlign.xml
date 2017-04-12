@@ -10,10 +10,11 @@
 		<import>macros.xml</import>
 	</macros>
 
-	<requirements>
+	<requirements>		
 		<expand macro="python_required" />
-		<requirement type="package" version="5.20.3">perl</requirement>
+		<requirement type="package" version="5.22.0">perl</requirement>
 		<requirement type="package" >blast-legacy</requirement>
+		<requirement type="package" version="1.4">blastalign</requirement>
 	</requirements>
 
 	<stdio>
@@ -21,15 +22,11 @@
     </stdio>
     
   	<command>
-	<![CDATA[
-		ln -s $__tool_directory__/scripts/BlastAlign.py .
-		&&
-		ln -s $__tool_directory__/scripts/S02_phylip2fasta.py .
-		&&
-		ln -s $__tool_directory__/scripts/BlastAlign .
+	<![CDATA[		
+		ln -s $__tool_directory__/scripts/S02_phylip2fasta.py .		
 		&&
 		#if $files.type == "one" :
-			$__tool_directory__/scripts/BlastAlign -i ${files.one_file} -o out
+			BlastAlign -i ${files.one_file} -o out
 			#if $files.options.option == "yes" :
 				#if $files.options.options_m.m == True :
 					-m ${files.options.options_m.proportion}
