@@ -10,10 +10,10 @@
 		<import>macros.xml</import>
 	</macros>
 
-	<requirements>		
-		<expand macro="python_required" />
+	<requirements>
+	    <expand macro="python_required" />
 		<requirement type="package" version="5.22.0">perl</requirement>
-		<requirement type="package" >blast-legacy</requirement>
+		<requirement type="package" >blast-legacy</requirement>		
 		<requirement type="package" version="1.4">blastalign</requirement>
 	</requirements>
 
