@@ -1,0 +1,4 @@
+categories: [Phylogenetics,RNA,Transcriptomics]
+description: A pipeline for the search of adaptive mutations and positively selected genes from RNASeq orthologs
+name: suite_adaptsearch
+owner: abims-sbr
