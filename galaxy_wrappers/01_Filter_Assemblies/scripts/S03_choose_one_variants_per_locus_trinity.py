@@ -1,0 +1,1 @@
+../../../scripts/01_Filter_Assemblies/S03_choose_one_variants_per_locus_trinity.py

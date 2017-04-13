@@ -1,0 +1,1 @@
+../../../scripts/02_Pairwise/S12_prot2dna.py
