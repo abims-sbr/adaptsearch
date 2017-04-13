@@ -1,0 +1,8 @@
+categories: [Phylogenetics,RNA,Transcriptomics]
+description: Homologous genes search from pairwise comparisons
+long_description: This tool takes a zip archive containing nucleic fasta sequence
+  files obtained with the tool filter_assemblies and searches different homologous
+  genes from pairwise comparisons.
+name: pairwise
+owner: abims-sbr
+remote_repository_url: https://github.com/abims-sbr/adaptsearch

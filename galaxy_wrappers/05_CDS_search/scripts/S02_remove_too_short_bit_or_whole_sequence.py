@@ -1,0 +1,1 @@
+../../../scripts/05_CDS_search/S02_remove_too_short_bit_or_whole_sequence.py

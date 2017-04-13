@@ -1,0 +1,9 @@
+categories: [Phylogenetics,RNA,Transcriptomics]
+description: Formats Velvet Oase and Trinity assemblies for the orthologous_search
+  galaxy suite
+long_description: This tool formats Velvet Oase and Trinity assemblies for the orthologous_search
+  galaxy suite and selects only one variant per gene according to its length and quality
+  check.
+name: filter_assemblies
+owner: abims-sbr
+remote_repository_url: https://github.com/abims-sbr/adaptsearch
