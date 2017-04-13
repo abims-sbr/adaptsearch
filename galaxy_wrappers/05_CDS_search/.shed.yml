@@ -1,0 +1,8 @@
+categories: [Phylogenetics,RNA,Transcriptomics]
+description: CDS search and indels deletion
+long_description: This tool works with the outputs of the tool blastalign and proceeds
+  to look for coding sequences on each sequence of the alignment and to remove all
+  the indels. Outputs can be either nucleic or proteic sequences.
+name: cds_search
+owner: abims-sbr
+remote_repository_url: https://github.com/abims-sbr/adaptsearch

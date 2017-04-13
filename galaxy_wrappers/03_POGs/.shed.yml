@@ -1,0 +1,8 @@
+categories: [Phylogenetics,RNA,Transcriptomics]
+description: Searches for orthogroups in a list of RBH
+long_description: Searches for orthogroups in a list of RBH obtained by reciprocal
+  tblastx during the tool pairwise. Proteic format. Proceeds to remove orthogroups
+  with paralogous.
+name: pogs
+owner: abims-sbr
+remote_repository_url: https://github.com/abims-sbr/adaptsearch

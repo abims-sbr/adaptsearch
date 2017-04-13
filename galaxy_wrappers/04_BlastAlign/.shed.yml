@@ -1,0 +1,8 @@
+categories: [Phylogenetics,RNA,Transcriptomics]
+description: Multiple alignment of loci within an orthogroup
+long_description: This tool uses the tool blastalign (Belshaw & Katzourakis 2005)
+  to produce a multiple alignment of all the orthologous genes within an orthogroup.
+  It takes as input the output of the tool pogs
+name: blastalign
+owner: abims-sbr
+remote_repository_url: https://github.com/abims-sbr/adaptsearch
