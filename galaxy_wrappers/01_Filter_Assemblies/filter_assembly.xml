@@ -18,17 +18,17 @@
 
   	<command>
 	<![CDATA[
-		ln -s $__tool_directory__/01_Choose_One_variants_per_locus_TRINITY_v1.0.py .
+		ln -s $__tool_directory__/scripts/S02a_remove_redondancy_from_velvet_oases.py .
 		&&
-		ln -s $__tool_directory__/02_format_fasta_name_TRINITY.py .
+		ln -s $__tool_directory__/scripts/S02b_format_fasta_name_trinity.py .
 		&&
-		ln -s $__tool_directory__/filter.py .
+		ln -s $__tool_directory__/scripts/S03_choose_one_variants_per_locus_trinity.py .
 		&&
-		ln -s $__tool_directory__/find_orf.py .
+		ln -s $__tool_directory__/scripts/S04_find_orf.py .
 		&&
-		ln -s $__tool_directory__/remove_redondancy_from_oases_output_v3.1.py .
+		ln -s $__tool_directory__/scripts/S05_filter.py .
 		&&
-		python $__tool_directory__/script_to_choose.py
+		python $__tool_directory__/scripts/S01_script_to_choose.py
 
 		#if $input.input_type_choice == "velvet"
 			velvet ${input.zip_velvet} 

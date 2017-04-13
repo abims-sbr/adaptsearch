@@ -15,7 +15,7 @@
 	</requirements>
 
   	<command><![CDATA[
-		python $__tool_directory__/01_concatenate_v3.0.py ${zip}
+		python $__tool_directory__/scripts/S01_concatenate.py ${zip}
 
 		#if $format.format_run == "nucleic" :
 			nucleic $format.zip_nuc

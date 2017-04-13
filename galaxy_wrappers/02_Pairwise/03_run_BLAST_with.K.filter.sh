@@ -1,1 +1,0 @@
-../../scripts/03_run_BLAST_with.K.filter.sh

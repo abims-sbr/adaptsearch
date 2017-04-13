@@ -5,12 +5,6 @@
 import sys, string, os, itertools, re, zipfile
 from multiprocessing import Pool
 
-#---- Rajout Victor ----
-#SCRIPTPATH = os.path.realpath("03_organize-RBH.py")
-#SCRIPTPATH = SCRIPTPATH.replace("/03_organize-RBH.py", "")
-#SCRIPTPATH = os.path.dirname(os.path.realpath("__file__"))
-#---- Fin rajout ----
-
 def launching(RBH_folder):
     os.system("bash %s/XXX_pipeline_%s.sh %s" %(RBH_folder,RBH_folder,RBH_folder))
 
@@ -47,13 +41,8 @@ for pairwise in list_pairwise :
 
     os.mkdir("./%s" %RBH_folder)    
     
-    os.system("cp -fr 03_run_BLAST_with.K.filter.sh %s/" %(RBH_folder))
-    os.system("cp -fr 10_run_BLAST2_with.K.filter.sh %s/" %(RBH_folder))
-
-    #---- Rajout Victor ----    
-    #os.system("cp -fr %s/03_run_BLAST_with.K.filter.sh ./%s/" %(SCRIPTPATH, RBH_folder))
-    #os.system("cp -fr %s/10_run_BLAST2_with.K.filter.sh ./%s/" %(SCRIPTPATH, RBH_folder))
-    #---- Fin rajout ----  
+    os.system("cp -fr S03_run_blast_with_k_filter.sh %s/" %(RBH_folder))
+    os.system("cp -fr S04_run_blast2_with_k_filter.sh %s/" %(RBH_folder)) 
 
     if L2 != [] :
         os.system("cp -fr %s ./%s/%s" %(DIR1, RBH_folder, DIR1))   
@@ -61,7 +50,7 @@ for pairwise in list_pairwise :
 
     pipeline_script = open("./%s/XXX_pipeline_%s.sh" %(RBH_folder,RBH_folder), "w")
     #pipeline_patron = open("%s/XXX_patronPipeline.sh" %(SCRIPTPATH), "r")
-    pipeline_patron = open("XXX_patronPipeline.sh", "r")
+    pipeline_patron = open("S02_xxx_patron_pipeline.sh", "r")
 
     #pipeline_patron = open("/home/umr7144/abice/vmataigne/Documents/AdaptSearch/adaptsearch-master/scripts/XXX_patronPipeline.sh", "r")    
 

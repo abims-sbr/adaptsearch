@@ -1,1 +1,0 @@
-../../scripts/find_orf.py

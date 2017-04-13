@@ -56,7 +56,7 @@ def prepare_BLASTALIGN_runs(list_file):
 	    files.close()
 
             ## run individual script
-	    os.system("%s/BlastAlign -m %s -n %s -i ./%s.fasta\n" %(script_path,sys.argv[3],sys.argv[4],fasta_name))
+	    os.system("BlastAlign -m %s -n %s -i ./%s.fasta\n" %(sys.argv[3],sys.argv[4],fasta_name))
 
 	    try:
         	phylip_file = open("./%s.fasta.phy" %fasta_name, "r")       
@@ -65,7 +65,7 @@ def prepare_BLASTALIGN_runs(list_file):
 
 	    if sys.argv[2] == "oui" :
 	    	try: # in the case BlastAlign failed (there is no .fasta.phy in that case)
-	    		with open("%s.fasta.phy" %fasta_name): os.system("python %s/phylip2fasta.py ./%s.fasta.phy ./%s.fasta.fasta\n" %(script_path,fasta_name, fasta_name))
+	    		with open("%s.fasta.phy" %fasta_name): os.system("python %s/S02_phylip2fasta.py ./%s.fasta.phy ./%s.fasta.fasta\n" %(script_path,fasta_name, fasta_name))
                 except IOError:
                 	pass
 		
