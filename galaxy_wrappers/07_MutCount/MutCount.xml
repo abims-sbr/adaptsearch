@@ -16,8 +16,8 @@
   	<command>
 	<![CDATA[
 		#if str($method.method_run) == "concat" :
-
-			python $__tool_directory__/scripts/S01a_mutcount_pairs.py $method.num_sampled $method.num_iter $method.list_species &amp;&amp;
+			python $__tool_directory__/scripts/S01a_mutcount_pairs.py $method.num_sampled $method.num_iter $method.list_species
+			&&
 			python $__tool_directory__/scripts/S02a_codon_counting.py ${method.zip_nuc} 
 		#end if
 
@@ -25,12 +25,16 @@
 
 			#if str($method.format.format_run)== "nucleic" :
 				python $__tool_directory__/scripts/S01b_study_seq_composition_nuc.py ${method.format.zip_nuc}  ${method.format.concat_nuc} 
-				&amp;&amp; zip -r multigenes_nucleic.zip OUT/
+				&&
+				zip -r multigenes_nucleic.zip OUT/
 			#end if
+			
 			#if str($method.format.format_run)== "proteic" :
-				cp $__tool_directory__/scripts/amino_acid_properties.csv . &amp;&amp;
-                        	python $__tool_directory__/scripts/S02b_study_seq_composition_aa.py ${method.format.zip_aa} ${method.format.concat_prot}
-				&amp;&amp; zip -r multigenes_proteic.zip OUT/
+				cp $__tool_directory__/scripts/amino_acid_properties.csv .
+				&&
+                python $__tool_directory__/scripts/S02b_study_seq_composition_aa.py ${method.format.zip_aa} ${method.format.concat_prot}
+				&& 
+				zip -r multigenes_proteic.zip OUT/
 			#end if
 		#end if
     ]]>

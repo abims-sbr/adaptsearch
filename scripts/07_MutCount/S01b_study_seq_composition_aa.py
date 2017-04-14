@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: ascii -*-
 ## Author: Eric FONTANILLAS
 ## Date: 21.12.10
