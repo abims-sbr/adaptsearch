@@ -1,0 +1,188 @@
+<?xml version="1.0"?>
+
+<tool name="MutCount" id="mutcount" version="1.0">
+	<description>
+		This tool proceeds to count codons, amino acids on each species of a set of species, and then proceeds to permutation tests.
+	</description>
+	
+	<macros>
+		<import>macros.xml</import>
+	</macros>
+	
+	<requirements>
+		<expand macro="python_required" />		
+	</requirements>
+	
+  	<command>
+	<![CDATA[
+		#if str($method.method_run) == "concat" :
+			python $__tool_directory__/scripts/S01a_mutcount_pairs.py $method.num_sampled $method.num_iter $method.list_species
+			&&
+			python $__tool_directory__/scripts/S02a_codon_counting.py ${method.zip_nuc} 
+		#end if
+
+		#if str($method.method_run) == "separated" :
+
+			#if str($method.format.format_run)== "nucleic" :
+				python $__tool_directory__/scripts/S01b_study_seq_composition_nuc.py ${method.format.zip_nuc}  ${method.format.concat_nuc} 
+				&&
+				zip -r multigenes_nucleic.zip OUT/
+			#end if
+			
+			#if str($method.format.format_run)== "proteic" :
+				cp $__tool_directory__/scripts/amino_acid_properties.csv .
+				&&
+                python $__tool_directory__/scripts/S02b_study_seq_composition_aa.py ${method.format.zip_aa} ${method.format.concat_prot}
+				&& 
+				zip -r multigenes_proteic.zip OUT/
+			#end if
+		#end if
+    ]]>
+	</command>
+
+    <inputs>	
+	    <conditional name="method">
+		    <param name="method_run" type="select" label="Which method do you want to use for this tool? ">
+			    <option value="concat">Concatenated genes in DNA (concatenation from RAxML run)</option>
+			    <option value="separated">Set of separated genes (from ORF_Search output "output zip containing files with CDS without indel")</option>
+		    </param>
+		    
+		    <when value="concat">
+			    <param name="zip_nuc" type="data" format="fasta" label="Choose your fasta file in nucleic format" help="It must contain the concatenated file in NUCLEIC format from Phylogeny tool" />
+			    <param name="num_sampled" type="integer" value="100" min="0" label="Number of iterations"/>
+			    <param name="num_iter" type="integer" value="100" min="0" label="Number of sampled codons"/>
+			    <param name="list_species" type="text" size="100" label="List of species" help="List the species separated with a comma (for e.g Ap,As,Ct,Gt,Yu)" />		
+		    </when>
+		    		
+		    <when value="separated">
+			    <conditional name="format"> 
+				    <param name="format_run" type="select" label="Which format do you want to use for this tool (concatenation and RAxML run) ? ">
+					    <option value="nucleic">Nucleic format</option>
+					    <option value="proteic">Proteic format</option>
+				    </param>
+				    
+				    <when value="nucleic">		
+					    <param name="zip_nuc" type="data" format="fasta,no_unzip.zip" label="Choose your ZIP file" help="It must contain the concatenated file in NUCLEIC format from ORF_search tool" />
+					    <param name="concat_nuc" type="data" format="fasta" label="Concatenated file from Phylogeny step" help="This file is used to retrieve the species names" />	
+				    </when>
+				    
+				    <when value="proteic">
+					    <param name="zip_aa" type="data" format="fasta,no_unzip.zip" label="Choose your ZIP file" help="It must contain the concatenated file in PROTEIC format from ORF_search tool" />
+					    <param name="concat_prot" type="data" format="fasta" label="concatenated file from Phylogeny step" help="This file is used to retrieve the species names" />	
+				    </when>	
+			    </conditional>
+		    </when>	
+		    
+	    </conditional>
+    </inputs>
+
+	<outputs>
+		<data format="txt" name="output1" label="concatenated_results.txt" from_work_dir="codoncounting_results.txt" >
+			<filter>(method['method_run']=='concat')</filter>
+		</data>
+		<data format="no_unzip.zip" name="output2" label="multigenes_nucleic.zip" from_work_dir="multigenes_nucleic.zip" >
+			<filter>(method['method_run']=='separated' and method['format']['format_run']== 'nucleic')</filter>
+		</data>
+		<data format="no_unzip.zip" name="output3" label="multigenes_proteic.zip" from_work_dir="multigenes_proteic.zip"  >
+			<filter>(method['method_run']=='separated' and method['format']['format_run']== 'proteic')</filter>
+		</data>		
+	</outputs>
+	
+	<tests>
+	    <test>
+	        <conditional name="method" >
+	            <param name="method_run" value="concat" />
+	            <param name="zip_nuc" ftype="fasta" value="test_07_output_phylogeny_concatenation.fasta" />
+	            <param name="num_sampled" value="100" />
+	            <param name="num_iter" value="100" />
+	            <param name="list_species" ftype="text" value="Ac,Pu,Am,Ap,Pf,Pg,Th,Ph,Te" />
+	        </conditional>
+            <output name="output1">
+                <assert_contents>
+                    <has_text text="counting of Ac"/>
+                    <has_text text="counting of Pu"/>
+                    <has_text text="counting of Am"/>
+                    <has_text text="counting of Ap"/>
+                    <has_text text="counting of Pf"/>
+                    <has_text text="counting of Pg"/>
+                    <has_text text="counting of Th"/>
+                    <has_text text="counting of Ph"/>
+                </assert_contents>
+            </output>
+        </test>	   
+	</tests>
+	
+	<help>
+
+.. class:: infomark
+
+**Authors**  Eric Fontanillas and Pierre-Guillaume Brun creates the scripts of this pipeline.
+
+.. class:: infomark
+
+**Galaxy integration** Julie Baffard and ABIMS TEAM
+
+ | Contact support.abims@sb-roscoff.fr for any questions or concerns about the Galaxy implementation of this tool.
+
+---------------------------------------------------
+
+
+========
+Mutcount
+========
+
+-----------
+Description (temproray - need to be to re-writed)
+-----------
+
+
+This script counts the number of codons, amino acids, and types of amino acids in sequences, as well as the mutation bias from one item to another between 2 sequences
+counting is then compared to empirical p-values, obtained from bootstrapped sequences obtained from a subset of sequences
+     
+In the output files, the pvalues indicate the position of the observed data in a distribution of empirical countings obtained from a resample of the data. Values above 0.95 indicate a significantly higher counting, values under 0.05 a significantly lower counting
+
+the script automatically reads the sequences to compare from a file that must be called pairs.txt and located with the .fasta file
+in the pairs.txt file, sequences (let's assume X, Y, Z, U, V) pairs must be written as 'X Y\nU V\nZ V'
+in this case, codoncounting will count the occurence of codons, amino acids, and types of amino acids in X, U, Z, and count the mutation bias from Y to X, V to U and V to Z
+you can add comments in the pairs.txt file inbetween lines, beginning with '#'. E.G. 'X Y\n#This is my comment\nU V\nZ V'
+X, Y, Z, U, V must be character strings contained in the sequences names in the .fasta file (and be specific to each of them)
+     in pairs.txt, you must write how should be built the bootstrapped resampling of sequences. This must be formated as:'X Y\nbackground: length iterration plusminus listofspecies\nU V\nZ V', explanation below
+     backgrounds must be excplicitely written in the pairs.txt file (the script still integers default parameters). This implies that the first line of pairs.txt should be a background line
+     by default, once the background has been determined, it will be applied to each subsequent analysis until another background is written
+     e.g. 'background: length1 iterration1 plusminus1 listofspecies1\nU V\nZ V\nbackground: length2 iterration2 plusminus2 listofspecies2\nX Y' the first background is applied to U V and Z V and the 2nd background to X Y
+
+
+#the script resamples random pairs of aligned codon to determine what countings can be expected under the hypothesis of an homogenous dataset
+#countings are performed on each generated random alignement, thousands of alignments allow to draw a gaussian distribution of the countings
+#then the script simply checks whether the observed data are within the 5% lowest or 5% highest values of the distribution
+     in background: length iterration plusminus listofspecies
+     -&gt; length is the number of pairs of codons in each generated alignments (effect on the robustness on the countings performed on this alignement)
+     -&gt; iterration is the number of alignments that will be generated (effect on the resolution of the gaussian distribution)
+     -&gt; plusminus can be either '+' or '-', '+' indicates that the following species only must be resampled, '-' that the following species must be excluded from the resampling
+     -&gt; listofspecies is the list of species (names contained in the sequences names from the fasta file) that must be included or excluded from the sampling. You can also write 'all' to include every species (in this case, plusminus parameter is ignored)
+     #full example: background 5000 10000 + melanogaster elegans sapiens
+iterration shouldn't be lower that 1000 to have a relatively smooth gaussian distribution, length shouldn't be lower as 1000 to detect codons with relatively low occurence (&lt;1%)
+for the list of species, you can try to form subgroups depending on the studied parameter (e.g. comparing a terrestrial species with a background composed of marine species)
+
+
+
+.. class:: infomark
+
+
+**Important part of this tool (the inputs format)**
+
+--------
+
+============
+Input format
+============
+
+The script takes as input the DNA alignment (fasta format): python codoncounting.py file_path.fasta
+
+example.
+
+	</help>
+	
+	<expand macro="citations" />
+	
+</tool>
