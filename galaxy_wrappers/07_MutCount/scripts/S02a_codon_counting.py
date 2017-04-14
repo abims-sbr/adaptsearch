@@ -1,0 +1,1 @@
+../../../scripts/07_MutCount/S02a_codon_counting.py
