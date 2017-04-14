@@ -1,0 +1,8 @@
+categories: [Phylogenetics, RNA, Transcriptomics]
+description: countings codons and amino acids - permutation tests
+long_description: this tool works either with the outputs of the tools concatphyl
+  or csd_search? it proceeds to count codons, amino acids withi a set of fasta sequences,
+  takes into account amino acid properties and do some permutations tests
+name: mutcount
+owner: abims-sbr
+remote_repository_url: htpps://github.com/abims-sbr/adaptearch
