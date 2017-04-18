@@ -35,7 +35,7 @@ def get_seq_per_locus(list_locus, bash_seq, path_OUT,prefix_name):
     for locus in list_locus:
         i = i+1
         OUT = open("%s/locus%d_%s.fasta" %(path_OUT, i, prefix_name), "w")
-        
+
         for seq_name in locus:
             sequence = bash_seq[seq_name]
             OUT.write("%s\n" %seq_name)
@@ -53,15 +53,13 @@ import string, os, sys, pickle, zipfile, re
 ## 1 ## LOAD "PICKLE" LIST OF ALL POTENTIAL LOCUS (orthologuous and paraloguous)
 ################################################################################
 file_LOCUS = open("02_backup_list_LOCUS")
-list_LOCUS = pickle.load(file_LOCUS) 
+list_LOCUS = pickle.load(file_LOCUS)
 file_LOCUS.close()
 
 # L2 : list of input file
-L2 = []
-zfile = zipfile.ZipFile(sys.argv[1])
-for name in zfile.namelist() :
-	zfile.extract(name)
-	L2.append(name)
+infiles = sys.argv[1]
+
+L2 = str.split(infiles,",")
 
 nb=1
 os.mkdir("04_LOCUS_ORTHOLOGS_UNALIGNED_perCLASS")
@@ -91,18 +89,18 @@ for locus in list_LOCUS:
         initials = name[1:3]
 
         if initials not in list_initials:
-            list_initials.append(initials)            
+            list_initials.append(initials)
         else:  # DUPLICATION DETECTED
             D=1
 
     if D==0:  # means no duplication detected
         LOCUS_without_DUPLI.append(l)
 
-print "\nNUMBER OF REMAINING LOCUS AFTER 1RST TREATMENT [INTRA LOCUS] = %d" %len(LOCUS_without_DUPLI) 
+print "\nNUMBER OF REMAINING LOCUS AFTER 1RST TREATMENT [INTRA LOCUS] = %d" %len(LOCUS_without_DUPLI)
 
 
-## 3 ## [2nd treatment INTER LOCUS]In fact there are still some duplication in "LOCUS_without_DUPLI" 
-## ==> no duplication in each loci ... OK, but several loci sharing a same sequence is still possible, 
+## 3 ## [2nd treatment INTER LOCUS]In fact there are still some duplication in "LOCUS_without_DUPLI"
+## ==> no duplication in each loci ... OK, but several loci sharing a same sequence is still possible,
 ## I will exclude this case now
 #########################################################################################################
 list_name_seq = []
@@ -152,7 +150,7 @@ for key in dico_LOCUS_sp.keys() :
 
 list_key.sort()
 list_key.reverse()
-for number in list_key :    
+for number in list_key :
     value = dico_LOCUS_sp[number]
     if value != [] :
         number = number.split("_")
@@ -173,9 +171,9 @@ for subfile in L2:
 
 sp = 1
 while sp<len(L2) :
-    sp+=1 
+    sp+=1
     get_seq_per_locus(dico_LOCUS_sp['%i_sp' %sp], BASH, "04_LOCUS_ORTHOLOGS_UNALIGNED_perCLASS/LOCUS_%i_sp" %sp, "sp%i" %sp)      ## DEF2 ##
-    get_seq_per_locus(dico_LOCUS_sp['%i_sp' %sp], BASH, ".", "sp%i" %sp)        ## DEF2 ##     
+    get_seq_per_locus(dico_LOCUS_sp['%i_sp' %sp], BASH, ".", "sp%i" %sp)        ## DEF2 ##
 
 
 ## 5 ## OUTPUT CONVERSION TO ZIP FORMAT
