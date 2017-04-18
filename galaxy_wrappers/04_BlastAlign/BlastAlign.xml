@@ -11,19 +11,17 @@
 	</macros>
 
 	<requirements>
-	    <expand macro="python_required" />
-		<requirement type="package" version="5.22.0">perl</requirement>
-		<requirement type="package" >blast-legacy</requirement>		
+	    <expand macro="python_required" />	
 		<requirement type="package" version="1.4">blastalign</requirement>
 	</requirements>
 
 	<stdio>
         <exit_code range="1:" level="fatal" />
     </stdio>
-    
+
   	<command>
-	<![CDATA[		
-		ln -s $__tool_directory__/scripts/S02_phylip2fasta.py .		
+	<![CDATA[
+		ln -s $__tool_directory__/scripts/S02_phylip2fasta.py .
 		&&
 		#if $files.type == "one" :
 			BlastAlign -i ${files.one_file} -o out
@@ -53,11 +51,11 @@
 			>${outfile};
 			#if $fasta_out.value == True :
 				python $__tool_directory__/scripts/S02_phylip2fasta.py out.phy out.fasta >>${outfile};
-			#end if			
+			#end if
 		#end if
-			
+
 		#if $files.type == "many" :
-			python $__tool_directory__/scripts/S01_prepare_BlastAlign_runs.py ${files.many_files} 
+			python $__tool_directory__/scripts/S01_prepare_BlastAlign_runs.py ${files.many_files}
 			#if $fasta_out.value == True :
 				oui
 			#else :
@@ -197,15 +195,15 @@
 	</outputs>
 
 	<tests>
-		<test>				
+		<test>
 			<param name="type" value="many"/>
 			<param name="many_files" ftype="zip" value="test_4_output_POGS_input_BlastAlign.zip" />
 			<param name="option" value="no" />
 			<param name="fasta_out" value="True" />
 			<param name="files_failed" value="True" />
-			<output name="outfile" value="test_05.out" />		
+			<output name="outfile" value="test_05.out" />
 		</test>
-	</tests>    
+	</tests>
 
 	<help>
 ============
@@ -213,7 +211,7 @@ What it does
 ============
 
 | This tool takes **nucleic sequences in fasta format** or **zip file containing fasta files** and returns a multiple alignement (in Nexus and Phylip formats) using BLAST+
-| 
+|
 | The script in perl was written by **Robert Belshaw** and **Aris Katzourakis**.
 | The script in python was written by **Eric Fontanillas**.
 | The wrapper was written by **Julie Baffard**.
@@ -236,11 +234,11 @@ The choice of several parameters for the blast is possible.
 	| text
 	| Default is searching for best candidate.
 	| If entered, the sequence will be extracted, written to a separate file, and blasted against the original input file.
-	| 
+	|
 
 **-x [name of comma-separated sequences to be excluded from this analysis]**
 	| text
-	| 
+	|
 
 **-n**
 	| If it's checked : retain original names in output files.
@@ -266,34 +264,34 @@ This tool, produces the following files :
 **Alignment**
 	| is the output with important informations.
 	| when the alignment failed with BlastAlign, the name of the file is writting down this output.
-	| 
+	|
 
 **Alignement_file_failed**
 	| is the output containing the files failed during the run of BlastAlign.
-	| 
+	|
 
 **Alignment_{inputfile}_phylip**
 	| is the output with the aligned sequences in Phylip format when you choose "one file" option.
-	| 
+	|
 
 **Alignment_{inputfile}_nexus**
 	| is the output with the aligned sequences in Nexus format when you choose "one file" option.
-	| 
+	|
 
 **Alignment_{input_file}_fasta**
 	| is the output with the aligned sequences in Fasta format when you choose "one file" and "fasta forme" options
-	| 
+	|
 
 **Alignment_locus_phylip**
 	| is the output with the aligned sequences in Phylip format when you choose "many files" option.
-	| 
+	|
 
 **Alignment_locus_nexus**
 	| is the output with the aligned sequences in Nexus format when you choose "many files" option.
-	| 
+	|
 
 **Alignment_locus_fasta**
-	| is the output with the aligned sequences in Fasta forme when you choose "many file" and "fasta forme" options 
+	| is the output with the aligned sequences in Fasta forme when you choose "many file" and "fasta forme" options
 
 .. class:: warningmark
 
@@ -340,13 +338,13 @@ The output files
 
 ************************  BlastAlign  ************************
 
-| 
+|
 | This program takes nucleotide sequences in fasta format and returns a multiple alignment (in Nexus and Phylip formats) using BLASTN
-| 
+|
 | Input file locus_2_sp_8.fasta has 2 sequences and is 1894 bytes
 | (maximum number of sequences that will be used to search for the reference sequence is 770)
-| 
-| 
+|
+|
 | BlastAlign finished: it has produced a multiple alignment of 2 sequences and length 720 by aligning to sequence Pf2101/11000920 (proportion of gaps in each sequence is less than 0.95)
 | 
 
@@ -354,8 +352,8 @@ The output files
 
 | if you choose the option "many files"
 | there will be as template output that number of file in the input zip.
-| 
-| 
+|
+|
 
 **Alignment_{inputfile}_phylip**
 
@@ -370,14 +368,14 @@ tttgtccagacctggcttgtttgacattgcttgttggattttgcaacaatatcatgattaga
 | tacattaaaaaaactagcagtaaataatattccaggtatagaagaggttaatatgataaaagatgatggacaggtaatacattttaccaatccaaaagtacaggcttctctacagtcaaacacatttgctattaatgggcaagctgagacaaaacaaatcaccgaattgttgcctggtatattaaatcagctgggagcagaaagtttaacaaatctgaagaaact
 | ggctacatccgtgactggtggagttgattctgataacaagccagaaacagcagaaattgatgaagacgatgatgatgttccagatttggttgaaaactttgacgaggcatccaagaatgaaggaacgtaatt-----------------------------------------------------------------acccagtgtagatttgt----------------------------------------------
 | -------------
-| 
+|
 
 .. class:: infomark
 
 | If you choose the option "many file"
 | Save as *Galaxy{number}-[Alignment_locus_phy].zip*
 | If you unzip the file, a number of files are extracted (depends on the number of locus) : {name_of_file}.phy
-| 
+|
 | 
 
 **Alignment_{inputfile}_nexus**
@@ -403,15 +401,15 @@ tttgtccagacctggcttgtttgacattgcttgttggattttgcaacaatatcatgattaga
 | -------------
 | ;
 | end;
-| 
+|
 
 .. class:: infomark
 
 | If you choose the option "many file"
 | Save as *Galaxy{number}-[Alignment_locus_nxs].zip*
 | If you unzip the file, a number of files are extracted (depends on the number of locus) : {name_of_file}.nxs
-| 
-| 
+|
+|
 
 **Alignment_{inputfile}_fasta**
 
