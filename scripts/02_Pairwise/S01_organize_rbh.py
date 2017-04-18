@@ -9,6 +9,9 @@ infiles = sys.argv[1]
 evalue = sys.argv[2]
 thread = sys.argv[3]
 
+os.mkdir("outputs_prot")
+os.mkdir("outputs_dna")
+
 def launching(RBH_folder):
     os.system("bash %s/XXX_pipeline_%s.sh %s" %(RBH_folder,RBH_folder,RBH_folder))
 
@@ -70,7 +73,3 @@ for pairwise in list_pairwise :
 ## Multithreading
 pool = Pool(processes=int(thread))
 result = pool.map(launching, list_RBH)
-
-os.system("rm 25_DNA*")
-os.system("rm 19_Reci*")
-os.system("rm *.fasta")
