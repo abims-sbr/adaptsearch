@@ -5,10 +5,12 @@ import sys, string, os, itertools, re, zipfile
 
 i=1
 j=i+1
-L1 = []
+
 fas = "^.*fas$"
 fasta = "^.*fasta$"
+
 script_path = os.path.dirname(sys.argv[0])
+os.mkdir("outputs")
 
 infiles = sys.argv[1]
 assembler = sys.argv[2]
@@ -53,8 +55,4 @@ for name in str.split(infiles,","):
     os.system("zcat -f < '%s.cap.singlets' | fasta_formatter -w 0 -o '%s'" % (name_find_orf,suffix))
     #Apply pgbrun script filter script TODO length parameter
     name_filter="%s%s"%(suffix,name)
-    os.system("python %s/S05_filter.py %s %s %s" %(script_path,suffix,length_seq_max,name_filter))
-    L1.append(name_filter)
-    f = zipfile.ZipFile("sequences_filtered.zip", "w")
-    for files in L1 :
-        f.write("./%s" %files)
+    os.system("python %s/S05_filter.py %s %s outputs/%s" %(script_path,suffix,length_seq_max,name_filter))

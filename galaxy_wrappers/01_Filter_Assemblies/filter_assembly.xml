@@ -38,7 +38,7 @@
 		$length_seq_max
         $percent_identity
         $overlap_length
-		> ${output}
+		> ${log}
 	]]>
   	</command>
 
@@ -54,8 +54,10 @@
 	</inputs>
 
 	<outputs>
-		<data format="no_unzip.zip" name="output_zip" label="Filter_oase_zip" from_work_dir="sequences_filtered.zip" />
-		<data format="txt" name="output" label="Filter_Assemblies_Summary"/>
+        <collection name="output_fasta" type="list" label="Filter Assemblies outputs">
+            <discover_datasets pattern="__name_and_ext__" directory="outputs" />
+        </collection>
+		<data format="txt" name="log" label="Filter Assemblies Summary"/>
 	</outputs>
 
 	<tests>
@@ -65,7 +67,13 @@
             <param name="percent_identity" value="100" />
 			<param name="overlap_length" value="60" />
 			<param name="length_seq_max" value="100" />
-			<output name="output" value="trinity.output" />
+			<output name="log" value="trinity.output" />
+            <output_collection name="output_fasta" type="list">
+                <element name="AcAcaud_trinity" value="trinity_out/AcAcaud_trinity.fasta" />
+                <element name="AmAmphi_trinity" value="trinity_out/AmAmphi_trinity.fasta" />
+                <element name="ApApomp_trinity" value="trinity_out/ApApomp_trinity.fasta" />
+                <element name="PfPfiji_trinity" value="trinity_out/PfPfiji_trinity.fasta" />
+            </output_collection>
 		</test>
 		<test>
             <param name="inputs" ftype="fasta" value="velvet/Pg_transcriptome_90109.fasta,velvet/Ap_transcriptome_35099.fasta,velvet/Ac_transcriptome_25591.fasta" />
@@ -73,7 +81,12 @@
 			<param name="percent_identity" value="100" />
 			<param name="overlap_length" value="60" />
 			<param name="length_seq_max" value="100" />
-			<output name="output" value="velvet.output" />
+			<output name="log" value="velvet.output" />
+            <output_collection name="output_fasta" type="list">
+                <element name="AcAc_transcriptome_25591" value="velvet_out/AcAc_transcriptome_25591.fasta" />
+                <element name="ApAp_transcriptome_35099" value="velvet_out/ApAp_transcriptome_35099.fasta" />
+                <element name="PgPg_transcriptome_90109" value="velvet_out/PgPg_transcriptome_90109.fasta" />
+            </output_collection>
 		</test>
 
 	</tests>
