@@ -35,7 +35,6 @@
         ln -s $__tool_directory__/scripts/S10_compare_list_pairs_for_reciprocal_best_hits_test.py . &&
         ln -s $__tool_directory__/scripts/S11_post_processing_of_pairwise.py . &&
         ln -s $__tool_directory__/scripts/S12_prot2dna.py . &&
-        ln -s $__tool_directory__/scripts/S13_zip.py . &&
 
 		python $__tool_directory__/scripts/S01_organize_rbh.py $infiles ${e_value} \${GALAXY_SLOTS:-1}
 		> ${output};
@@ -48,8 +47,12 @@
 
 	<outputs>
 		<data format="txt" name="output" label="Pairwise" />
-		<data format="no_unzip.zip" name="output_zip_DNA" label="Pairwise_zip_DNA" from_work_dir="output_file_DNA.zip" />
-		<data format="no_unzip.zip" name="output_zip_PROT" label="Pairwise_zip_PROT" from_work_dir="output_file_PROT.zip" />
+        <collection name="output_fasta_dna" type="list" label="Pairwise DNA">
+            <discover_datasets pattern="__name_and_ext__" directory="outputs_dna" />
+        </collection>
+        <collection name="output_fasta_prot" type="list" label="Pairwise PROT">
+            <discover_datasets pattern="__name_and_ext__" directory="outputs_prot" />
+        </collection>
 	</outputs>
 
 	<tests>
@@ -70,9 +73,24 @@
 					<has_text text="Number of pairwises parsed = 0" />
 					<has_text text="Number of pairwises parsed = 5" />
 					<has_text text="Number of pairwises parsed = 1" />
-
 				</assert_contents>
 			</output>
+            <output_collection name="output_fasta_prot" type="list">
+                <element name="ReciprocalBestHits_AmAmphi_AcAcaud" value="outputs_prot/ReciprocalBestHits_AmAmphi_AcAcaud.fasta" />
+                <element name="ReciprocalBestHits_ApApomp_AcAcaud" value="outputs_prot/ReciprocalBestHits_ApApomp_AcAcaud.fasta" />
+                <element name="ReciprocalBestHits_ApApomp_AmAmphi" value="outputs_prot/ReciprocalBestHits_ApApomp_AmAmphi.fasta" />
+                <element name="ReciprocalBestHits_PfPfiji_AcAcaud" value="outputs_prot/ReciprocalBestHits_PfPfiji_AcAcaud.fasta" />
+                <element name="ReciprocalBestHits_PfPfiji_AmAmphi" value="outputs_prot/ReciprocalBestHits_PfPfiji_AmAmphi.fasta" />
+                <element name="ReciprocalBestHits_PfPfiji_ApApomp" value="outputs_prot/ReciprocalBestHits_PfPfiji_ApApomp.fasta" />
+            </output_collection>
+            <output_collection name="output_fasta_dna" type="list">
+                <element name="DNAalignment_corresponding_to_protein_from_RBH_AmAmphi_AcAcaud" value="outputs_dna/DNAalignment_corresponding_to_protein_from_RBH_AmAmphi_AcAcaud.fasta" />
+                <element name="DNAalignment_corresponding_to_protein_from_RBH_ApApomp_AcAcaud" value="outputs_dna/DNAalignment_corresponding_to_protein_from_RBH_ApApomp_AcAcaud.fasta" />
+                <element name="DNAalignment_corresponding_to_protein_from_RBH_ApApomp_AmAmphi" value="outputs_dna/DNAalignment_corresponding_to_protein_from_RBH_ApApomp_AmAmphi.fasta" />
+                <element name="DNAalignment_corresponding_to_protein_from_RBH_PfPfiji_AcAcaud" value="outputs_dna/DNAalignment_corresponding_to_protein_from_RBH_PfPfiji_AcAcaud.fasta" />
+                <element name="DNAalignment_corresponding_to_protein_from_RBH_PfPfiji_AmAmphi" value="outputs_dna/DNAalignment_corresponding_to_protein_from_RBH_PfPfiji_AmAmphi.fasta" />
+                <element name="DNAalignment_corresponding_to_protein_from_RBH_PfPfiji_ApApomp" value="outputs_dna/DNAalignment_corresponding_to_protein_from_RBH_PfPfiji_ApApomp.fasta" />
+            </output_collection>
 		</test>
 	</tests>
 

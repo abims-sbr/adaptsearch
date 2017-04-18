@@ -41,6 +41,3 @@ python S11_post_processing_of_pairwise.py WORK_DIR
 ############################################
 ## 9 ## Conversion proteic to nucleic
 python S12_prot2dna.py XX2 XX1 WORK_DIR XX3 XX4 XX5 
-############################################
-## 10 ## Conversion output in format zip
-python S13_zip.py
