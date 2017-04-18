@@ -43,7 +43,9 @@
 
 	<outputs>
 		<data format="txt" name="log" label="POGs" />
-		<data format="no_unzip.zip" name="output_zip" label="POGs_locus_orthologs_unaligned" from_work_dir="POGs_locus_orthologs_unaligned.zip" />
+        <collection name="output" type="list" label="POGs locus orthologs unaligned">
+            <discover_datasets pattern="__name_and_ext__" directory="outputs" />
+        </collection>
 	</outputs>
 
 	<tests>
@@ -51,6 +53,19 @@
             <param name="inputs_from_filter_assembly" ftype="fasta" value="inputs_from_filter_assembly/PfPfiji_Trinity.fasta,inputs_from_filter_assembly/ApApomp_Trinity.fasta,inputs_from_filter_assembly/AmAmphi_Trinity.fasta,inputs_from_filter_assembly/AcAcaud_Trinity.fasta" />
             <param name="inputs_from_paiwise_prot" ftype="fasta" value="inputs_from_paiwise_prot/ReciprocalBestHits_AmAmphi_AcAcaud.fasta,inputs_from_paiwise_prot/ReciprocalBestHits_ApApomp_AcAcaud.fasta,inputs_from_paiwise_prot/ReciprocalBestHits_ApApomp_AmAmphi.fasta,inputs_from_paiwise_prot/ReciprocalBestHits_PfPfiji_AcAcaud.fasta,inputs_from_paiwise_prot/ReciprocalBestHits_PfPfiji_AmAmphi.fasta,inputs_from_paiwise_prot/ReciprocalBestHits_PfPfiji_ApApomp.fasta" />
 			<output name="log" value="pogs.output" />
+            <output_collection name="output" type="list">
+                <element name="locus1_sp2" value="outputs_pogs/locus1_sp2.fasta" />
+                <element name="locus1_sp3" value="outputs_pogs/locus1_sp3.fasta" />
+                <element name="locus2_sp2" value="outputs_pogs/locus2_sp2.fasta" />
+                <element name="locus3_sp2" value="outputs_pogs/locus3_sp2.fasta" />
+                <element name="locus4_sp2" value="outputs_pogs/locus4_sp2.fasta" />
+                <element name="locus5_sp2" value="outputs_pogs/locus5_sp2.fasta" />
+                <element name="locus6_sp2" value="outputs_pogs/locus6_sp2.fasta" />
+                <element name="locus7_sp2" value="outputs_pogs/locus7_sp2.fasta" />
+                <element name="locus8_sp2" value="outputs_pogs/locus8_sp2.fasta" />
+                <element name="locus9_sp2" value="outputs_pogs/locus9_sp2.fasta" />
+                <element name="locus10_sp2" value="outputs_pogs/locus10_sp2.fasta" />
+            </output_collection>
 		</test>
 	</tests>
 

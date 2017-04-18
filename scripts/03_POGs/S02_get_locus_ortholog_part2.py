@@ -61,13 +61,6 @@ infiles = sys.argv[1]
 
 L2 = str.split(infiles,",")
 
-nb=1
-os.mkdir("04_LOCUS_ORTHOLOGS_UNALIGNED_perCLASS")
-while nb<len(L2) :
-	nb+=1
-	os.mkdir("04_LOCUS_ORTHOLOGS_UNALIGNED_perCLASS/LOCUS_%i_sp" %nb)
-
-
 
 ## 2 ## [1rst treatment INTRA LOCUS] SELECT ONLY ORTHOLOGUOUS (list of names of orthologuous sequences) :
 ## test if locus is orthologuous (i.e. when a same species appear with only 1 sequence in the locus)
@@ -170,20 +163,7 @@ for subfile in L2:
 
 
 sp = 1
+os.mkdir("outputs")
 while sp<len(L2) :
     sp+=1
-    get_seq_per_locus(dico_LOCUS_sp['%i_sp' %sp], BASH, "04_LOCUS_ORTHOLOGS_UNALIGNED_perCLASS/LOCUS_%i_sp" %sp, "sp%i" %sp)      ## DEF2 ##
-    get_seq_per_locus(dico_LOCUS_sp['%i_sp' %sp], BASH, ".", "sp%i" %sp)        ## DEF2 ##
-
-
-## 5 ## OUTPUT CONVERSION TO ZIP FORMAT
-#######################################
-locus_orthologs_unaligned = "^locus.*$"
-
-f = zipfile.ZipFile("POGs_locus_orthologs_unaligned.zip", "w")
-
-folder = os.listdir("./")
-
-for i in folder :
-    if re.match(locus_orthologs_unaligned, i) :
-    	f.write("./%s" %i)
+    get_seq_per_locus(dico_LOCUS_sp['%i_sp' %sp], BASH, "outputs", "sp%i" %sp)        ## DEF2 ##
