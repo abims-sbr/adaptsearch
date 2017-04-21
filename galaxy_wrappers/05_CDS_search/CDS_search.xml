@@ -11,38 +11,27 @@
 	</macros>
 
 	<requirements>
-		<expand macro="python_required" />		
+		<expand macro="python_required" />
 	</requirements>
 
   	<command>
   	<![CDATA[
-		python $__tool_directory__/scripts/S01_find_orf_on_multiple_alignment.py ${input_file}  $__tool_directory__/scripts/code_universel_modified.txt
-		#if $lenght.lenght_CDS == "yes" :
-			${lenght.min_lenght_seq}
-		#else :
-			50
-		#end if
-		>${output};
+        python $__tool_directory__/scripts/S01_find_orf_on_multiple_alignment.py
+        $input_file
+        $__tool_directory__/scripts/code_universel_modified.txt
+        $length.min_length_seq
+		>$output &&
 
-		python $__tool_directory__/scripts/S02_remove_too_short_bit_or_whole_sequence.py ${nb_species_keep}
-		#if $methionine.value == "yes" :
-			oui
-		#else :
-			non
-		#end if
-		#if $lenght.lenght_CDS == "yes" :
-			${lenght.min_lenght_seq} ${lenght.min_lenght_subseq}
-		#else :
-			50 15
-		#end if
-		>>${output};
+        python $__tool_directory__/scripts/S02_remove_too_short_bit_or_whole_sequence.py
+        $nb_species_keep
+        $methionine
+        $length.min_length_seq
+        $length.min_length_subseq
+		>>$output &&
 
-		python $__tool_directory__/scripts/S03_remove_site_with_not_enough_species_represented.py ${nb_species_keep}
-		#if $lenght.lenght_CDS == "yes" :
-			${lenght.min_lenght_nuc}
-		#else :
-			50
-		#end if
+        python $__tool_directory__/scripts/S03_remove_site_with_not_enough_species_represented.py
+        $nb_species_keep
+        $length.min_length_nuc
 		>>${output};
 	]]>
   	</command>
@@ -53,24 +42,13 @@
 
 		<param name="nb_species_keep" type="integer" value="10" min="2" label="Minimal number of species in each locus" help="If you want to remove all the indels the maximum number of species is required" />
 
-		<param name="methionine" type="select" label="Do you want to consider the Methionine in the search of CDS ? ">
-			<option value="yes">Yes</option>
-			<option value="no">No</option>
-		</param>
+        <param name="methionine" type="boolean" checked="true" truevalue="oui" falsevalue="non" label="Do you want to consider the Methionine in the search of CDS ? " />
 
-		<conditional name="lenght">
-			<param name="lenght_CDS" type="select" label="Do you want to choose the minimum length oh the CDS ? ">
-				<option value="no">No</option>
-				<option value="yes">Yes</option>
-			</param>
-			<when value="yes">
-				<param name="min_lenght_seq" type="integer" value="50" min="0" label="Minimal lenght of the CDS, in proteic" help="By default it's 50" />
-				<param name="min_lenght_subseq" type="integer" value="15" min="0" label="Minimal lenght of the subsequence, in proteic between two series of indels" help="By default it's 15" />
-				<param name="min_lenght_nuc" type="integer" value="50" min="0" label="Minimal lenght of the CDS, in nucleic without the indel" help="By default it's 50" />
-			</when>
-			<when value="no">
-			</when>
-		</conditional>
+        <section name="length" title="Do you want to choose the minimum length of the CDS ?">
+            <param name="min_length_seq" type="integer" value="50" min="0" label="Minimal length of the CDS, in proteic" help="By default it's 50" />
+            <param name="min_length_subseq" type="integer" value="15" min="0" label="Minimal length of the subsequence, in proteic between two series of indels" help="By default it's 15" />
+            <param name="min_length_nuc" type="integer" value="50" min="0" label="Minimal length of the CDS, in nucleic without the indel" help="By default it's 50" />
+        </section>
 
 		<param name="out_BESTORF" type="select" label="Do you want the output zip containing files with the BEST ORF ? ">
 			<option value="no">No</option>
@@ -135,7 +113,11 @@
 			<param name="input_file" ftype="zip" value="test_05_input_CDS_Search.no_unzip.zip" />
 			<param name="nb_species_keep" value="2" />
 			<param name="methionine" value="yes" />
-			<param name="lenght_CDS" value="no" />
+            <section name="length">
+                <param name="min_length_seq" value="50" />
+                <param name="min_length_subseq" value="15" />
+                <param name="min_length_nuc" value="50" />
+            </section>
 			<param name="out_BESTORF" value="no" />
 			<param name="out_CDS" value="no" />
 			<param name="out_CDS_filter" value="nuc" />
@@ -149,7 +131,7 @@ What it does
 ============
 
 | This tool takes **zip file containing fasta files with nucleic aligned sequences** and search the ORF and the CDS
-| 
+|
 | The script in python was written by **Eric Fontanillas**.
 | The wrapper was written by **Julie Baffard**.
 
@@ -162,7 +144,7 @@ Parameters
 The choice of several parameters is possible.
 
 **min_length_seq**
-	| minimal length of the sequence in the proteic format 
+	| minimal length of the sequence in the proteic format
 	| when the removal of the indel is done, the minimal length equals :previous length less20
 	| for example if you choose 50 for the minimal length, the actual length equals 30
 	|
@@ -171,11 +153,11 @@ The choice of several parameters is possible.
 	| minimal length of the subsequence in the proteic format
 	| subsequence means the part of the original sequence between 2 sets of indels
 	| an indel set is composed by more than 2 indels, if not the set is considered as unknown amino acid
-	| 
+	|
 
 **min_length_nuc**
 	| Minimal length of the sequence in the nucleic format
-	| 
+	|
 
 --------
 
@@ -213,40 +195,40 @@ This tool, produces the following files :
 
 **ORF_Search**
 	| is the output with important informations (mainly statistics about the tools).
-	| 
+	|
 
 **ORF_Search_Best_ORF_aa**
 	| is the output with the best ORF in the proteic format.
-	| 
+	|
 
 **ORF_Search_Best_ORF_nuc**
 	| is the output with the best ORF in the nucleic format.
-	| 
+	|
 
 **ORF_Search_CDS_aa**
 	| is the output with the CDS (regardless the Methionine) in the proteic format.
-	| 
+	|
 
 **ORF_Search_CDS_nuc**
 	| is the output with the CDS (regardless the Methionine) in the nucleic format.
-	| 
+	|
 
 **ORF_Search_CDS_with_M_aa**
 	| is the output with the CDS (considering the Methionine) in proteic format.
-	| the rule : they must have a methionine before the minimale length of the sequence. 
+	| the rule : they must have a methionine before the minimale length of the sequence.
 	| for example before the 30 last amino acid.
-	| 
+	|
 
 **ORF_Search_CDS_with_M_nuc**
 	| is the output with the CDS (considering the Methionine) in nucleic format.
 	| the rule : they must have a methionine before the minimale length of the sequence.
 	| for example before the 30 last amino acid.
-	| 
+	|
 
 **ORF_Search_CDS_without_indel_aa**
 	| is the output with the CDS without indel in proteic format.
 	| considering the Methionine or not : according to the option chosen.
-	| 
+	|
 
 **ORF_Search_CDS_without_indel_nuc**
 	| is the output with the CDS without indel in proteic format.
@@ -270,7 +252,7 @@ The input file and its options
 
 | a zip file containing 47 files with 1, 2 or 3 sequences inside
 | for example the file : locus5_sp3.fasta which contains 3 species :
-| 
+|
 
 | &gt;Ac533/40375
 
@@ -306,38 +288,38 @@ The output files
 
 **ORF_Search_Best_ORF_aa**
 
-| 
+|
 | *************** CDS detection ***************
-| 
+|
 | Files processed: 47
-| 
+|
 | Files with CDS: 32
 | Files with CDS plus M (codon start): 20
 | Files without CDS: 15
-| 
-| In locus with CDS considering Methionine : 
-| 
+|
+| In locus with CDS considering Methionine :
+|
 | *************** 1st filter : selection of the locus ***************
-| 
- 
+|
+
 Total number of locus recorded  = 20
 
 | Number of locus with 1 species : 1
 | Number of locus with 2 species : 16
 | Number of locus with 3 species : 3
-| 
+|
 | Number of locus excluded (exclude if not at least 3 species in the alignment)= 17
 | 
 | *************** 2nd Filter : removal of the indel ***************
 | 
 | Total number of locus recorded  = 3
-| 
+|
 
 Total number of locus with no indels (SAVED) = 3
 
 Total number of locus with indels (EXCLUDED) = 0
 
-| 
+|
 
 **ORF_Search_Best_ORF_aa**
 
@@ -362,7 +344,7 @@ TTAVQGSGWGWLGYNKKMKKLEIATCANQDPLEGTTGLVPLFGIDVWEHAYYLQYKNVRPDYVKAIWNVANWDDIMERYN
 | Save as *Galaxy{number}-[ORF_Search_Best_ORF_aa].zip*
 | If you unzip the file, a number of files are extracted (depends on the number of locus keeped) : locus{nb}_sp{nb_sp}.fasta
 | for example : locus5_sp3.fasta
-| 
+|
 | 
 
 **ORF_Search_Best_ORF_nuc**
@@ -395,8 +377,8 @@ cccagaatgggttatccgtgaatgtctattggaatgtggcaccatacgatgtttactgtattagttacaattaaaa----
 | Save as *Galaxy{number}-[ORF_Search_Best_ORF_nuc].zip*
 | If you unzip the file, a number of files are extracted (depends on the number of locus keeped) : locus{nb}_sp{nb_sp}.fasta
 | for example : locus5_sp3.fasta
-| 
-| 
+|
+|
 
 **ORF_Search_CDS_with_M_aa**
 
@@ -422,8 +404,8 @@ KMKKLEIATCANQDPLEGTTGLVPLFGIDVWEHAYYLQYKNVRPDYVKAIWNVANWDDIMERYNNARK
 | for example : locus5_sp3.fasta
 
 | It's the same for the option : regardless Methionine
-| 
-| 
+|
+|
 
 **ORF_Search_CDS_with_M_nuc**
 
@@ -454,8 +436,8 @@ acaacaatgccagaaaa
 | for example : locus5_sp3.fasta
  
 | It's the same for the option : regardless Methionine
-| 
-| 
+|
+|
 
 **ORF_Search_CDS_without_indel_aa**
 
@@ -479,8 +461,8 @@ YKNVRPDYVKAIWNVANWDDIMERYNN
 | Save as *Galaxy{number}-[ORF_Search_CDS_without_indel_aa].zip*
 | If you unzip the file, a number of files are extracted (depends on the number of locus keeped) : locus{nb}_sp{old_nb_sp}_sp_{new_nb_sp}.fasta
 | for example locus5_sp3_sp3.fasta
-| 
-| 
+|
+|
 
 **ORF_Search_CDS_without_indel_nuc**
 
