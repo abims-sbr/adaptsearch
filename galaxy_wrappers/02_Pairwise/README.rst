@@ -1,7 +1,14 @@
 Changelog
+---------
 
-Version 1.0 - 13/04/2017
+**Version 2.0 - 18/04/2017**
 
-  - Add functional test with planemo
-  - Planemo test with conda dependencies for blast, samtools and python
-  - Scripts renamed + symlinks to the directory 'scripts'
+ - NEW: Replace the zip between tools by Dataset Collection
+
+
+**Version 1.0 - 13/04/2017**
+
+ - TEST: Add funtional test with planemo
+
+ - IMPROVEMENT: Use conda dependencies for blast, samtools and python
+
