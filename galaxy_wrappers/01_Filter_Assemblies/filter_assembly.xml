@@ -11,7 +11,7 @@
 	<requirements>
 		<expand macro="python_required" />
 		<requirement type="package" version="0.0.14">fastx_toolkit</requirement>
-		<requirement type="package">cap3</requirement>
+		<requirement type="package" version="10.2011">cap3</requirement>
 	</requirements>
 
   	<command>
