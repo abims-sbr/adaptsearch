@@ -39,6 +39,11 @@
  	<inputs>
         <param name="inputs_from_filter_assembly" type="data" format="fasta" multiple="true" label="Input files from Filter assemblies" />
         <param name="inputs_from_paiwise_prot" type="data" format="fasta" multiple="true" label="Input files from Pairwise Prot" />
+		<param name="minseq" type="integer" value="3" label="Drop orthogroups with less than n species" />
+		<param name="paralogs" type="select" label="Paralogs filtering" help="Yes : paralogs sequences will be (naively) filtered to keep only one sequence. No : the whole orthogroup will be removed." >
+			<option value="yes">Yes</option>
+			<option value="no">No</option>
+		</param>
 	</inputs>
 
 	<outputs>
@@ -52,6 +57,8 @@
 		<test>
             <param name="inputs_from_filter_assembly" ftype="fasta" value="inputs_from_filter_assembly/PfPfiji_Trinity.fasta,inputs_from_filter_assembly/ApApomp_Trinity.fasta,inputs_from_filter_assembly/AmAmphi_Trinity.fasta,inputs_from_filter_assembly/AcAcaud_Trinity.fasta" />
             <param name="inputs_from_paiwise_prot" ftype="fasta" value="inputs_from_paiwise_prot/ReciprocalBestHits_AmAmphi_AcAcaud.fasta,inputs_from_paiwise_prot/ReciprocalBestHits_ApApomp_AcAcaud.fasta,inputs_from_paiwise_prot/ReciprocalBestHits_ApApomp_AmAmphi.fasta,inputs_from_paiwise_prot/ReciprocalBestHits_PfPfiji_AcAcaud.fasta,inputs_from_paiwise_prot/ReciprocalBestHits_PfPfiji_AmAmphi.fasta,inputs_from_paiwise_prot/ReciprocalBestHits_PfPfiji_ApApomp.fasta" />
+			<param name="minseq" value="2" />
+			<param name="paralogs" value="no" />
 			<output name="log" value="pogs.output" />
             <output_collection name="output" type="list">
                 <element name="locus1_sp2" value="outputs_pogs/locus1_sp2.fasta" />
@@ -67,7 +74,27 @@
                 <element name="locus10_sp2" value="outputs_pogs/locus10_sp2.fasta" />
             </output_collection>
 		</test>
-	</tests>
+		<test>
+            <param name="inputs_from_filter_assembly" ftype="fasta" value="inputs_from_filter_assembly/PfPfiji_Trinity.fasta,inputs_from_filter_assembly/ApApomp_Trinity.fasta,inputs_from_filter_assembly/AmAmphi_Trinity.fasta,inputs_from_filter_assembly/AcAcaud_Trinity.fasta" />
+            <param name="inputs_from_paiwise_prot" ftype="fasta" value="inputs_from_paiwise_prot/ReciprocalBestHits_AmAmphi_AcAcaud.fasta,inputs_from_paiwise_prot/ReciprocalBestHits_ApApomp_AcAcaud.fasta,inputs_from_paiwise_prot/ReciprocalBestHits_ApApomp_AmAmphi.fasta,inputs_from_paiwise_prot/ReciprocalBestHits_PfPfiji_AcAcaud.fasta,inputs_from_paiwise_prot/ReciprocalBestHits_PfPfiji_AmAmphi.fasta,inputs_from_paiwise_prot/ReciprocalBestHits_PfPfiji_ApApomp.fasta" />
+			<param name="minseq" value="2" />
+			<param name="paralogs" value="yes" />
+			<output name="log" value="pogs_para.output" />
+            <output_collection name="output" type="list">
+                <element name="locus1_sp2" value="outputs_pogs/locus1_sp2.fasta" />
+                <element name="locus1_sp3" value="outputs_pogs/locus1_sp3.fasta" />
+                <element name="locus2_sp2" value="outputs_pogs/locus2_sp2.fasta" />
+                <element name="locus3_sp2" value="outputs_pogs/locus3_sp2.fasta" />
+                <element name="locus4_sp2" value="outputs_pogs/locus4_sp2.fasta" />
+                <element name="locus5_sp2" value="outputs_pogs/locus5_sp2.fasta" />
+                <element name="locus6_sp2" value="outputs_pogs/locus6_sp2.fasta" />
+                <element name="locus7_sp2" value="outputs_pogs/locus7_sp2.fasta" />
+                <element name="locus8_sp2" value="outputs_pogs/locus8_sp2.fasta" />
+                <element name="locus9_sp2" value="outputs_pogs/locus9_sp2.fasta" />
+                <element name="locus10_sp2" value="outputs_pogs/locus10_sp2.fasta" />
+            </output_collection>
+		</test>
+	</tests>	
 
 	<help>
 
@@ -79,7 +106,6 @@ What it does
 
 | This tool takes a 'data collection list' containing nucleic fasta sequence files and a 'data collection list' containing a file per pairwise with the homologous sequences (in proteic format). It searches for orthologous sequences.
 | There are 2 outputs.
-|
 
 --------
 
@@ -111,7 +137,6 @@ This tool, produces the following files :
 
 the sequences of each locus are in nucleic format.
 
---------
 
 ===============
 Working Example
@@ -231,6 +256,7 @@ Changelog
  - TEST: Add funtional test with planemo
 
  - IMPROVEMENT: Use conda dependencies for python
+
 
 
 	</help>
