@@ -181,10 +181,9 @@ def printCounts(matrix, listOrthogroups):
         i+=1
 
     print "\nThis script works on the 'Orthogroups' file output of Orthofinder to split each orthogroup\nin a single fasta file."
-    print "\nIt get rids of orthogroups of less than the number of loci specified by the user."
-    print "\nParalogous loci are not filtered yet."    
-    print "\tThe IDs format in AdaptSearch will probably allow to resolve that."
-    print "\n\t**** Results (without paralogous filter) ****\n"
+    print "\nThe script get rids of orthogroups with less sequences than the number specified by the user."        
+    
+    print "\n\t**** Results ****\n"
 
     print "\tSpecies per orthogroup : |",
     for elem in legend:
