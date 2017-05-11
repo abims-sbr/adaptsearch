@@ -14,57 +14,62 @@
 		<expand macro="python_required" />
 	</requirements>
 
-  	<command>
-  	<![CDATA[
+  	<command><![CDATA[
+        #set $infiles = ""
+        #for $input in $inputs
+            ln -s '$input' '$input.element_identifier';
+            #set $infiles = $infiles + $input.element_identifier + ","
+        #end for
+        #set $infiles = $infiles[:-1]
+
         python $__tool_directory__/scripts/S01_find_orf_on_multiple_alignment.py
-        $input_file
+        $infiles
         $__tool_directory__/scripts/code_universel_modified.txt
         $length.min_length_seq
-		>$output &&
+        > '$log' &&
 
         python $__tool_directory__/scripts/S02_remove_too_short_bit_or_whole_sequence.py
         $nb_species_keep
         $methionine
         $length.min_length_seq
         $length.min_length_subseq
-		>>$output &&
+        >> '$log' &&
 
         python $__tool_directory__/scripts/S03_remove_site_with_not_enough_species_represented.py
         $nb_species_keep
         $length.min_length_nuc
-		>>${output};
-	]]>
-  	</command>
+        >> '$log';
+    ]]></command>
 
  	<inputs>
-		<param name="input_file" type="data" format="no_unzip.zip,zip" label="Choose your file" help="Only a fasta file with nucleic align sequences" />
+        <param name="inputs" type="data" format="fasta" multiple="true" label="Input files" help="Only a fasta file with nucleic align sequences" />
 		<!-- <param name="code_file" type="data" format="txt" label="Choose your file containing the universal code (codons and their amino acids)" /> -->
 
 		<param name="nb_species_keep" type="integer" value="10" min="2" label="Minimal number of species in each locus" help="If you want to remove all the indels the maximum number of species is required" />
 
-        <param name="methionine" type="boolean" checked="true" truevalue="oui" falsevalue="non" label="Do you want to consider the Methionine in the search of CDS ? " />
+        <param name="methionine" type="boolean" checked="true" truevalue="oui" falsevalue="non" label="Do you want to consider the Methionine in the search of CDS? " />
 
-        <section name="length" title="Do you want to choose the minimum length of the CDS ?">
+        <section name="length" title="Do you want to choose the minimum length of the CDS?">
             <param name="min_length_seq" type="integer" value="50" min="0" label="Minimal length of the CDS, in proteic" help="By default it's 50" />
             <param name="min_length_subseq" type="integer" value="15" min="0" label="Minimal length of the subsequence, in proteic between two series of indels" help="By default it's 15" />
             <param name="min_length_nuc" type="integer" value="50" min="0" label="Minimal length of the CDS, in nucleic without the indel" help="By default it's 50" />
         </section>
 
-		<param name="out_BESTORF" type="select" label="Do you want the output zip containing files with the BEST ORF ? ">
+		<param name="out_BESTORF" type="select" label="Do you want the output zip containing files with the BEST ORF? ">
 			<option value="no">No</option>
 			<option value="aa">Yes, with the proteic format</option>
 			<option value="nuc">Yes, with the nucleic format</option>
 			<option value="both">Yes, with the proteic and nucleic format</option>
 		</param>
 
-		<param name="out_CDS" type="select" label="Do you want the output zip containing files with CDS ? ">
+		<param name="out_CDS" type="select" label="Do you want the output zip containing files with CDS? ">
 			<option value="no">No</option>
 			<option value="aa">Yes, with the proteic format</option>
 			<option value="nuc">Yes, with the nucleic format</option>
 			<option value="both">Yes, with the proteic and nucleic format</option>
 		</param>
 
-		<param name="out_CDS_filter" type="select" label="Do you want the output zip containing files with CDS without indel ? ">
+		<param name="out_CDS_filter" type="select" label="Do you want the output zip containing files with CDS without indel? ">
 			<option value="no">No</option>
 			<option value="aa">Yes, with the proteic format</option>
 			<option value="nuc">Yes, with the nucleic format</option>
@@ -73,7 +78,7 @@
 	</inputs>
 
 	<outputs>
-		<data format="txt" name="output" label="ORF_Search" />
+		<data format="text" name="log" label="ORF_Search" />
 
 		<data format="no_unzip.zip" name="output_BESTORF_aa" label="ORF_Search_Best_ORF_aa" from_work_dir="ORF_Search_bestORF_aa.zip">
 			<filter>out_BESTORF == "aa" or out_BESTORF == "both"</filter>
@@ -96,7 +101,7 @@
 		</data>
 
 		<data format="no_unzip.zip" name="output_CDS_M_nuc" label="ORF_Search_CDS_with_M_nuc" from_work_dir="ORF_Search_CDSM_nuc.zip">
-			<filter>(out_BESTORF == "nuc" and methionine == "yes") or (out_CDS == "both" and methionine == "yes")</filter>
+			<filter>(out_CDS == "nuc" and methionine == "yes") or (out_CDS == "both" and methionine == "yes")</filter>
 		</data>
 
 		<data format="no_unzip.zip" name="output_filter_aa" label="ORF_Search_CDS_without_indel_aa" from_work_dir="ORF_Search_CDS_without_indel_aa.zip">
@@ -110,9 +115,9 @@
 
 	<tests>
 		<test>
-			<param name="input_file" ftype="zip" value="test_05_input_CDS_Search.no_unzip.zip" />
+            <param name="inputs" ftype="fasta" value="inputs/locus1_sp5.fasta,inputs/locus1_sp7.fasta,inputs/locus2_sp4.fasta,inputs/locus2_sp6.fasta" />
 			<param name="nb_species_keep" value="2" />
-			<param name="methionine" value="yes" />
+			<param name="methionine" value="no" />
             <section name="length">
                 <param name="min_length_seq" value="50" />
                 <param name="min_length_subseq" value="15" />
@@ -121,10 +126,9 @@
 			<param name="out_BESTORF" value="no" />
 			<param name="out_CDS" value="no" />
 			<param name="out_CDS_filter" value="nuc" />
-			<output name="output" value="test_08.out" />
+			<output name="log" value="cds_search.log" />
 		</test>
 	</tests>
-
 	<help>
 ============
 What it does
