@@ -1,0 +1,83 @@
+<tool name="OrthoGroups" id="orthogroups" version="1.0">
+
+    <description>
+        This tool takes Orthogroups found by OrthoFinder and proceeds to retrieve nucleic sequences back, then write each orthogroups in its own fasta file.
+    </description>  
+
+    <requirements>
+        <requirement type="package" version="2.7">python</requirement>
+        <!-- biopython -->       
+    </requirements>
+    
+    <command>
+    <![CDATA[
+        ## Dataset collection for filter assemblies inputs
+        #set $infiles = ""
+        #for '$input' in $inputs_fasta
+            ln -s '$input' '$input.element_identifier';
+            #set $infiles2 = $infiles2 + $input.element_identifier + ","
+        #end for
+        #set $infiles = $infiles[:-1]
+
+        ./$__tool_directory__/scripts/format_headers.sh ${orthogroups}
+        &&
+        python $__tool_directory__/scripts/filter_orthofinder.py ${orthogroups} ${infiles} ${nbseq} > ${output};
+    ]]> 
+    </command>
+
+    <inputs>
+        <param name="orthogroups" type="data" format="txt" label="Select a file of Orthogroups" help="The output from OrthoFinder, 'Orthogroups.txt'."/>
+        <param name="inputs_fasta" type="data" format="fasta" multiple="true" label="Outputs from Filter Assemblies" help="Contains the nucleic sequences to retrieve."/>
+        <param name="nbseq" type="integer" value="3" label="Minimal number of sequences per orthogroup" help="Drop orthogroups with less than x sequences :" />
+    </inputs>
+
+    <outputs>
+        <data format="txt" name="output" label="Orthogroups_summary" />
+        <collection name="orthogroups_fasta" type="list" label="Orthogroups_fasta_files" >
+            <discover_datasets pattern="__name_and_ext__" directory="filtered_orthogroups" />
+        </collection>
+    </outputs>
+
+    <help>
+===========
+OrthoGroups
+===========
+
+This tool takes Orthogroups found by OrthoFinder and proceeds to retrieve nucleic sequences back, then write each orthogroups in its own fasta file.
+
+| I-Re-writing headers
+
+| .. class:: warningmark
+
+This tool is configured to work within the AdaptSearch toolsuite, which implies a specific format of headers. Indeed, due to the use of external tools (like TransDecoder), the genes IDs might have been modified. A regular expression rewrites all the genes IDs in order to have, for instance, this format :
+| &gt;Pf1004_1/1_1.000_369
+
+| II-Reading an re-writing orthoGroups from OrthoFinder
+
+| OrthoFinder is a fast, accurate and comprehensive analysis tool for comparative genomics. It finds orthologues and orthogroups infers gene trees for all orthogroups and infers a rooted species tree for the species being analysed. OrthoFinder also provides comprehensive statistics for comparative genomic analyses. 
+
+| Emms, D.M. and Kelly, S. (2015) OrthoFinder: solving fundamental biases in whole genome comparisons dramatically improves orthogroup inference accuracy, Genome Biology 16:157
+
+| Our tool focus on the orthogroups.txt file created before gene trees.The script proceeds to split each orthogroup in its own fasta file and, with the use of the output of Filter_Assemblies, to re-associate each ID with its sequence.
+
+---------------------
+inputs and parameters
+---------------------
+
+| - Input : the orthogroups.txt file from OrthoFinder.
+| - Minimal number of sequences : The orthogroups with less than the specified number won't be recorded. Thanks to the paralogous filtering, the number of sequences within an orthogroup is equivalent to the number of species.
+
+-------
+Outputs
+-------
+| - Dataset collection of fasta files : each file represents an orthogroup, each gene within tthe group has the couple ID-nucleic sequence.
+
+    </help>
+
+    <citations>
+        <citation type="bibtex">Credits : ABIMS team, Roscoff Marine Station</citation>
+        <citation type="bibtex">Contact support.abims@sb-roscoff.fr for any questions or concerns about the Galaxy implementation of this tool.</citation>
+        <citation type="bibtex">Author : Victor Mataigne -- Galaxy integration : Gildas Le Corguillé and Victor Mataigne.</citation>        
+    </citations>
+
+</tool>
