@@ -4,7 +4,6 @@
 
 ## This script takes an output file of OrthoFinder (Orthogroups.txt), which contains a set of orthogroups,
 ## and rewrite it to split each orthogroup into a single fasta file.
-## It does not remove paralogous yet
 ## Alpha version
 
 """ The used output does not give the number of species per orthogroups, making filtering more difficult.
@@ -208,8 +207,8 @@ def printCounts(matrix, listOrthogroups):
 
 def main():
     # Build hashtable    
-    path = glob.glob('*.fasta')
-    for file in path:
+    path = glob.glob('*.fasta') 
+    for file in path: # modif pour dataset ? : argv[1].split(",")
         #cpyAndRename(file) # DEF1
         seqOneLine(file) # DEF2
     path = glob.glob('*_oneline.fasta')

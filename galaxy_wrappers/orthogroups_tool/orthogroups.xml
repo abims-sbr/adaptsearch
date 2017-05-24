@@ -21,7 +21,7 @@
 
         ./$__tool_directory__/scripts/format_headers.sh ${orthogroups}
         &&
-        python $__tool_directory__/scripts/filter_orthofinder.py ${orthogroups} ${infiles} ${nbseq} > ${output};
+        python $__tool_directory__/scripts/filter_orthofinder.py ${orthogroups} ${nbseq} > ${output};
     ]]> 
     </command>
 
