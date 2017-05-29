@@ -237,8 +237,3 @@ folder = os.listdir("./")
 for i in folder :
     if re.match(locus_orthologs_unaligned, i) :
         f.write("./%s" %i)
-
-############################################################################################################################
-os.system("rm *.fasta") # A enlever quand on aura vire les zip
-os.system("rm -rf 04_LOCUS_ORTHOLOGS_UNALIGNED_perCLASS")
-#os.system("rm 02_backup_list_LOCUS")
