@@ -40,7 +40,7 @@
         <param name="inputs_from_filter_assembly" type="data" format="fasta" multiple="true" label="Input files from Filter assemblies" />
         <param name="inputs_from_paiwise_prot" type="data" format="fasta" multiple="true" label="Input files from Pairwise Prot" />
 		<param name="minseq" type="integer" value="3" label="Drop orthogroups with less than n species" />
-		<param name="paralogs" type="select" label="Paralogs filtering" help="Yes : paralogs sequences will be (naively) filtered to keep only one sequence. No : the whole orthogroup will be removed." >
+		<param name="paralogs" type="select" label="Paralogs savage removal" help="Yes : orthogroups with paralogs will be fully removed. No : paralogs sequences will be (naively) filtered to keep only one sequence." >
 			<option value="yes">Yes</option>
 			<option value="no">No</option>
 		</param>
