@@ -71,7 +71,3 @@ for pairwise in list_pairwise :
 ## Multithreading
 pool = Pool(processes=int(sys.argv[1]))
 result = pool.map(launching, list_RBH)
-
-os.system("rm 25_DNA*")
-os.system("rm 19_Reci*")
-os.system("rm *.fasta")
