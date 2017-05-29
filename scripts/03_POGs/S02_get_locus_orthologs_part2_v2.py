@@ -163,10 +163,10 @@ while nb<len(L2) :
 ## 2 ## intra LOCUS treatment
 ############################################################################################################################
 LOCUS_without_DUPLI = []
-if sys.argv[3] == "oui":
+if sys.argv[3] == "yes":
     LOCUS_without_DUPLI = intraLocusTreatment(list_LOCUS) #DEF1
     print "\nNUMBER OF REMAINING LOCUS AFTER INTRA LOCUS TREATMENT [REMOVE GROUPS WITH PARALOGS] = %d" %len(LOCUS_without_DUPLI)
-elif sys.argv[3] == "non":
+elif sys.argv[3] == "no":
     LOCUS_without_DUPLI = removeParalogous(list_LOCUS)
     print "\nNUMBER OF REMAINING LOCUS AFTER INTRA LOCUS TREATMENT [PARALOGS NAIVE FILTERING] = %d" %len(LOCUS_without_DUPLI)
 
