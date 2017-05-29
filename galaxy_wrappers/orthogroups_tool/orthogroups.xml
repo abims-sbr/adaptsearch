@@ -6,7 +6,7 @@
 
     <requirements>
         <requirement type="package" version="2.7">python</requirement>
-        <!-- biopython -->       
+        <requirement type="package" version="1.68">biopython</requirement>
     </requirements>
     
     <command>
@@ -21,7 +21,7 @@
 
         ./$__tool_directory__/scripts/format_headers.sh ${orthogroups}
         &&
-        python $__tool_directory__/scripts/filter_orthofinder.py ${orthogroups} ${nbseq} > ${output};
+        python $__tool_directory__/scripts/filter_orthofinder.py . ${orthogroups} ${nbseq} > ${output};
     ]]> 
     </command>
 
