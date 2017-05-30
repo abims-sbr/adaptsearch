@@ -1,1 +1,0 @@
-../../../scripts/orthogroups_tool/format_headers.sh

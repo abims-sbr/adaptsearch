@@ -10,16 +10,15 @@
     </requirements>
     
     <command>
-    <![CDATA[
-        ## Dataset collection for filter assemblies inputs
+    <![CDATA[        
         #set $infiles = ""
-        #for '$input' in $inputs_fasta
-            ln -s '$input' '$input.element_identifier';
-            #set $infiles2 = $infiles2 + $input.element_identifier + ","
+        #for $input in $inputs_fasta
+            ln -s $input $input.element_identifier;
+            #set $infiles = $infiles + $input.element_identifier + ","
         #end for
         #set $infiles = $infiles[:-1]
 
-        ./$__tool_directory__/scripts/format_headers.sh ${orthogroups}
+        ./$__tool_directory__/scripts/format_transdecoder_headers.sh ${orthogroups}
         &&
         python $__tool_directory__/scripts/filter_orthofinder.py . ${orthogroups} ${nbseq} > ${output};
     ]]> 
