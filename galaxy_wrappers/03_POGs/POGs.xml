@@ -57,7 +57,7 @@
 		<test>
             <param name="inputs_from_filter_assembly" ftype="fasta" value="inputs_from_filter_assembly/PfPfiji_Trinity.fasta,inputs_from_filter_assembly/ApApomp_Trinity.fasta,inputs_from_filter_assembly/AmAmphi_Trinity.fasta,inputs_from_filter_assembly/AcAcaud_Trinity.fasta" />
             <param name="inputs_from_paiwise_prot" ftype="fasta" value="inputs_from_paiwise_prot/ReciprocalBestHits_AmAmphi_AcAcaud.fasta,inputs_from_paiwise_prot/ReciprocalBestHits_ApApomp_AcAcaud.fasta,inputs_from_paiwise_prot/ReciprocalBestHits_ApApomp_AmAmphi.fasta,inputs_from_paiwise_prot/ReciprocalBestHits_PfPfiji_AcAcaud.fasta,inputs_from_paiwise_prot/ReciprocalBestHits_PfPfiji_AmAmphi.fasta,inputs_from_paiwise_prot/ReciprocalBestHits_PfPfiji_ApApomp.fasta" />
-			<param name="minseq" value="2" />
+			<param name="minseq" value="3" />
 			<param name="paralogs" value="no" />
 			<output name="log" value="pogs.output" />
             <output_collection name="output" type="list">
@@ -77,7 +77,7 @@
 		<test>
             <param name="inputs_from_filter_assembly" ftype="fasta" value="inputs_from_filter_assembly/PfPfiji_Trinity.fasta,inputs_from_filter_assembly/ApApomp_Trinity.fasta,inputs_from_filter_assembly/AmAmphi_Trinity.fasta,inputs_from_filter_assembly/AcAcaud_Trinity.fasta" />
             <param name="inputs_from_paiwise_prot" ftype="fasta" value="inputs_from_paiwise_prot/ReciprocalBestHits_AmAmphi_AcAcaud.fasta,inputs_from_paiwise_prot/ReciprocalBestHits_ApApomp_AcAcaud.fasta,inputs_from_paiwise_prot/ReciprocalBestHits_ApApomp_AmAmphi.fasta,inputs_from_paiwise_prot/ReciprocalBestHits_PfPfiji_AcAcaud.fasta,inputs_from_paiwise_prot/ReciprocalBestHits_PfPfiji_AmAmphi.fasta,inputs_from_paiwise_prot/ReciprocalBestHits_PfPfiji_ApApomp.fasta" />
-			<param name="minseq" value="2" />
+			<param name="minseq" value="3" />
 			<param name="paralogs" value="yes" />
 			<output name="log" value="pogs_para.output" />
             <output_collection name="output" type="list">

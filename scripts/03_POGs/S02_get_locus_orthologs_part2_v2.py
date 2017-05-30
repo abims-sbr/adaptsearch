@@ -55,10 +55,8 @@ def removeParalogous(list_orthogroups):
                 rang += 1
             elif loci[0:3] != new_group[rang][0:3]:
                 new_group.append(loci)
-                rang += 1
-        #print new_group
-        list_orthogroups_filtered.append(new_group)
-        #print list_orthogroups_filtered
+                rang += 1        
+        list_orthogroups_filtered.append(new_group)        
     
     return list_orthogroups_filtered
 
