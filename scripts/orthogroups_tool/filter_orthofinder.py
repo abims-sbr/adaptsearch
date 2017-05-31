@@ -14,20 +14,22 @@
     We could try to write a function able to read a csv file ...
 """
 
-import os, sys, string, glob
+import os, sys, string, glob, csv
 from Bio import SeqIO # BioPython
 
 # **********************************************************************************************************************************
 
 ## PART 1 : Make a dictionary of IDs : sequence
 
-""" DEF1 : make a fasta copy of .faa initial files (bioconductor SeqIO does not support .faa files) """
+""" Written for testing with the ExampleDataset of Orthofinder. Not deleted just in case.
+Make a fasta copy of .faa initial files (bioconductor SeqIO does not support .faa files) """
 def cpyAndRename(file):
     name = file.split('.')
     name = "%s_oneline.fasta" %name[0]
     os.system("cp %s %s" %(file, name))
 
-""" DEF 2 :make the fasta copy as one sequence per line (with biopython)"""
+""" Make the fasta copy as one sequence per line (with biopython).
+Also written for testing and not deleted, just in case we need it."""
 def seqOneLine(file):
     n = file.split('.')    
     name = "%s_oneline.fasta" %n[0]   
@@ -43,7 +45,7 @@ def seqOneLine(file):
             new_file.write(str(seq_record.seq))
             new_file.write("\n")    
 
-""" DEF 3 :Build a hash table with gene IDs and gene sequences from fasta made from input files (with DEF1 and DEF2)"""
+""" DEF 1 : Build a hash table with gene IDs and gene sequences from fasta made from input files """
 def hashSequences(path):
     hashTable = {}
     # Sequences are expected to be on one line    
@@ -67,7 +69,8 @@ def hashSequences(path):
 
 ## PART 2 : Create orthogroups file (one file per orthogroup)
 
-""" remove paralogous from orthogroups (called during DEF6, AFTER DEFY )"""
+""" Useless now : Remove paralogous from orthogroups (called during DEF6, AFTER DEFY )"""
+"""
 def removeParalogous(list_orthogroups):
     list_orthogroups_filtered = []
     list_orthogroups.sort()
@@ -80,57 +83,56 @@ def removeParalogous(list_orthogroups):
             if rang == -1 :
                 new_group.append(loci)
                 rang += 1
-            elif loci[0:2] != new_group[rang][0:2]:
+            elif loci[1:3] != new_group[rang][1:3]: #[1:3] : species identifier (e.g : 'Ap')
                 new_group.append(loci)
                 rang += 1
         list_orthogroups_filtered.append(new_group)  
     
     return list_orthogroups_filtered
-
-""" DEF4 : takes a file.txt of orthogroups as parameter and return a list of list of
-    orthogroups where there are at least argv[2] loci """
-def formatAndFilter(orthogroups, min):
+"""
+""" DEF3 : Takes a file.txt of orthogroups as parameter and return a list of list of
+    orthogroups where there are at least argv[2] loci; WARNING : sequences names within 
+    the groups must the same as IDs in fasta files from Filter_Assemblies. if not, the 
+    dictionnary will be false. That's is why the script "format_transdecoder_headers is for."""
+def formatAndFilter(orthogroups, mini):
     orthogroups = open(orthogroups, "r")
     list_orthogroups = []
     # STEP 1 - Read file into a list
     with orthogroups:
         while (1):
             group = orthogroups.readline()
+            group=group[:-1] # Removes terminal '\n'
             if not group:
                 break
             else:
-                list_orthogroups.append(group)    
-
+                list_orthogroups.append(group) 
+    
     # STEP 2 - Convert into a list of sublist
     list_orthogroups_format = []
 
     for group in list_orthogroups:
         group = string.split(group, " ")
-        group = group[1:]
-        list_orthogroups_format.append(group)    
-    
-    # STEP 4 - Remove orthogroups < argv[2] (less than argv|2) loci)
-    list_orthogroups_filtered = []
-    [list_orthogroups_filtered.append(group) for group in list_orthogroups_format if len(group) >= min]
 
-    # STEP 5 - Keep only one paralog if any :
-    list_orthogroups_no_para = removeParalogous(list_orthogroups_filtered)
-    
-    # Remove terminal '\n' in the last id
-    """
-    for group in list_orthogroups_filtered:
-        if group[-1][-1] == '\n':
-            group[-1] = group[-1][0:-1]
-    
-    return list_orthogroups_filtered
-    """
-    for group in list_orthogroups_no_para:
-        if group[-1][-1] == '\n':
-            group[-1] = group[-1][0:-1]
-    
-    return list_orthogroups_no_para
+        group.sort()
+        new_group = []
+        rang=-1
+        for loci in group: # loop for naive paralogs filtering
+            if rang == -1:
+                new_group.append(loci)
+                rang +=1                
+            elif loci[1:3] != new_group[rang][1:3]:
+                new_group.append(loci)
+                rang +=1
 
-""" DEF 5 : writes each orthogroup in a fasta file. Retrieves sequences with a hash table """
+        if len(new_group) >= mini: # Drop too small orthogroups
+            list_orthogroups_format.append(new_group) 
+    
+    # STEP 3 - Remove paralogous genes (naive filtering) Useless since the improvment with the double loop
+    #list_orthogroups_no_para = removeParalogous(list_orthogroups_format)
+    
+    return list_orthogroups_format #list_orthogroups_no_para
+
+""" DEF 4 : writes each orthogroup in a fasta file. Retrieves sequences with a hash table """
 def writingOutputFiles(list_orthogroups, hashTable):
     i = 1
     for group in list_orthogroups :
@@ -140,15 +142,14 @@ def writingOutputFiles(list_orthogroups, hashTable):
         result = open(name, "w")
         with result:
             for locus in group:                
-                result.write(">%s\n" %locus) # write geneID
+                result.write("%s\n" %locus) # write geneID. ">%s\n" before
                 result.write("%s\n" %hashTable[locus]) # write sequence        
 
 # **********************************************************************************************************************************
 
-## PART 3 : A short summary statistics printed on the screen
+## PART 3 : A short summary statistics printed on the screen 
 
-""" DEF 6 : print a (very) short summary statistics""" 
-
+# DEF 5 : return the right dimensions for a matrix
 def matrixDim(listOrthogroups):
     linesNbLoci = 0
     columnsNbSpec = 9
@@ -158,32 +159,30 @@ def matrixDim(listOrthogroups):
     matDim = [linesNbLoci, columnsNbSpec]
     return matDim
 
+# DEF 6 : Builds a matrix using the computed dimensions
 def matrixConstruction(matDim):
     matrix = []
     for i in range (0,matDim[0]):
         matrix.append([0] * matDim[1])
     return matrix
 
+# DEF 7 : Fill the matrix (number of Orthogroups, number of sequences & species per group)
 def matrixFilling(matrix, listOrthogroups):
     for group in listOrthogroups:
         listSpecs = []
         for loci in group:
-            if loci[0:2] not in listSpecs:
-                listSpecs.append(loci[0:2])
+            if loci[1:3] not in listSpecs:
+                listSpecs.append(loci[1:3])
         matrix[len(group)-1][len(listSpecs)-1] += 1
 
-def printCounts(matrix, listOrthogroups):
+""" DEF 8 : print a short summary statistics"""
+def printCounts(matrix):
     legend = []
     i=1
     for elem in matrix[0]:
         legend.append(i)
         i+=1
-
-    print "\nThis script works on the 'Orthogroups' file output of Orthofinder to split each orthogroup\nin a single fasta file."
-    print "\nThe script get rids of orthogroups with less sequences than the number specified by the user."        
     
-    print "\n\t**** Results ****\n"
-
     print "\tSpecies per orthogroup : |",
     for elem in legend:
         print elem,   
@@ -196,34 +195,58 @@ def printCounts(matrix, listOrthogroups):
             for elem in a:
                 print elem,
             print ""         
-        i +=1 
+        i +=1
 
-    print "\nTotal of orthogroups :", len(listOrthogroups)
-    print "\nNot recorded : orthogroups of less than " + sys.argv[2] +" loci.\n"  
+def writeTable(matrix, mini, filename):
+    tfile=open(filename, "w")
+    summary = csv.writer(tfile, delimiter='\t', quoting=csv.QUOTE_NONE)
 
-# **********************************************************************************************************************************  
+    summary.writerow(["Details of computed orthogroups"])
+    summary.writerow([])
+    summary.writerow(["sequences per orthogroup", "Species per orthogroup"])
+
+
+    for i in range (0, len(matrix)) :
+        nb = [mini+i]     
+        count = []
+        for j in range (0, len(matrix[i])) :
+            count.append(matrix[i][j])    
+        line = nb + count    
+        summary.writerow([line])
+
+    summ = 0
+    for elem in matrix:
+        summ += sum(elem)  
+    summary.writerow([])
+    summary.writerow(["Number of orthogroups :", summ])
    
 ## MAIN
 
 def main():
-    # Build hashtable    
-    path = glob.glob('*.fasta') 
-    for file in path: # modif pour dataset ? : argv[1].split(",")
-        #cpyAndRename(file) # DEF1
-        seqOneLine(file) # DEF2
-    path = glob.glob('*_oneline.fasta')
+    print "\n-This script works on the 'Orthogroups' file output of Orthofinder to split each orthogroup in a single fasta file."
+    print "-It also gets rid of orthogroups with less sequences than the number specified by the user."
+    print "-It also filters (naively) paralogous genes (only one copy is left while the other are removed from groups\n" 
+
+    # Build hashtable
+    print "  Building hashTable IDs/sequences ...\n"
+    path = glob.glob('*.fasta')    
     hashTable = hashSequences(path) # DEF3    
 
-    # Open txt file with orthogroups    
+    # Open txt file with orthogroups
+    print "  Reading Orthogroups.txt ..."
+    print "    (Dropping orthogroups of less than " + sys.argv[2] +" loci.)\n"    
     list_orthogroups = formatAndFilter(sys.argv[1], int(sys.argv[2])) # DEF4
-    
+
     # Print summary
+    print "  Writing summary ...\n"
     dim = matrixDim(list_orthogroups)
     mat = matrixConstruction(dim)    
     matrixFilling(mat, list_orthogroups)    
-    printCounts(mat, list_orthogroups) 
+    #printCounts(mat)
+    writeTable(mat, int(sys.argv[2]), "orthotool_summary.csv")
     
-    # Create orthgroups files
+    # Create orthogroups files
+    print "  Writing output files ...\n"
     writingOutputFiles(list_orthogroups, hashTable) # DEF5    
 
     # Move output files in a new directory
@@ -231,7 +254,10 @@ def main():
     path = glob.glob("orthogroup*")
     for file in path:
         os.system("mv %s filtered_orthogroups" %file)
-    os.system("rm *oneline.fasta")
+
+    print "\t**** Results ****\n"
+    print "\t Orthogroups files are written in the directory 'filtered_orthogroups'"
+    print "\t Countings are written in the file 'orthotool_summary.csv'\n"    
 
 if __name__ == "__main__":
     main()

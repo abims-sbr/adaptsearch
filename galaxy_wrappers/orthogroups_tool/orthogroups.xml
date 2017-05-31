@@ -18,9 +18,9 @@
         #end for
         #set $infiles = $infiles[:-1]
 
-        ./$__tool_directory__/scripts/format_transdecoder_headers.sh ${orthogroups}
+        $__tool_directory__/scripts/format_transdecoder_headers.sh ${orthogroups}
         &&
-        python $__tool_directory__/scripts/filter_orthofinder.py . ${orthogroups} ${nbseq} > ${output};
+        python $__tool_directory__/scripts/filter_orthofinder.py ${orthogroups} ${nbseq} > ${output};
     ]]> 
     </command>
 
@@ -31,7 +31,8 @@
     </inputs>
 
     <outputs>
-        <data format="txt" name="output" label="Orthogroups_summary" />
+        <data format="txt" name="output" label="Orthogroups_log" />
+        <data format="csv" name="countings" label="orthogroups_countings.csv" />
         <collection name="orthogroups_fasta" type="list" label="Orthogroups_fasta_files" >
             <discover_datasets pattern="__name_and_ext__" directory="filtered_orthogroups" />
         </collection>
