@@ -147,7 +147,7 @@ def writingOutputFiles(list_orthogroups, hashTable):
 
 # **********************************************************************************************************************************
 
-## PART 3 : A short summary statistics printed on the screen 
+## PART 3 : A short summary statistics
 
 # DEF 5 : return the right dimensions for a matrix
 def matrixDim(listOrthogroups):
@@ -175,7 +175,7 @@ def matrixFilling(matrix, listOrthogroups):
                 listSpecs.append(loci[1:3])
         matrix[len(group)-1][len(listSpecs)-1] += 1
 
-""" DEF 8 : print a short summary statistics"""
+""" DEF 8 : print a short summary statistics. Not used anymore 
 def printCounts(matrix):
     legend = []
     i=1
@@ -196,6 +196,7 @@ def printCounts(matrix):
                 print elem,
             print ""         
         i +=1
+"""
 
 def writeTable(matrix, mini, filename):
     tfile=open(filename, "w")
@@ -243,7 +244,7 @@ def main():
     mat = matrixConstruction(dim)    
     matrixFilling(mat, list_orthogroups)    
     #printCounts(mat)
-    writeTable(mat, int(sys.argv[2]), "orthotool_summary.csv")
+    writeTable(mat, int(sys.argv[2]), "summary_orthogroups.csv")
     
     # Create orthogroups files
     print "  Writing output files ...\n"

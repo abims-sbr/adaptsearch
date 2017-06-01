@@ -31,8 +31,8 @@
     </inputs>
 
     <outputs>
-        <data format="txt" name="output" label="Orthogroups_log" />
-        <data format="csv" name="countings" label="orthogroups_countings.csv" />
+        <data format="txt" name="output" label="log_orthogroups" />
+        <data format="csv" name="countings" label="summary_orthogroups.csv" from_work_dir="summary_orthogroups.csv"/>
         <collection name="orthogroups_fasta" type="list" label="Orthogroups_fasta_files" >
             <discover_datasets pattern="__name_and_ext__" directory="filtered_orthogroups" />
         </collection>
@@ -45,39 +45,46 @@ OrthoGroups
 
 This tool takes Orthogroups found by OrthoFinder and proceeds to retrieve nucleic sequences back, then write each orthogroups in its own fasta file.
 
-| I-Re-writing headers
+---------------------------
+Step 1 : re-writing headers
+---------------------------
 
-| .. class:: warningmark
+.. class:: warningmark
 
-This tool is configured to work within the AdaptSearch toolsuite, which implies a specific format of headers. Indeed, due to the use of external tools (like TransDecoder), the genes IDs might have been modified. A regular expression rewrites all the genes IDs in order to have, for instance, this format :
-| &gt;Pf1004_1/1_1.000_369
+This tool is configured to work within the AdaptSearch toolsuite, which implies a specific format of headers. Indeed, due to the use of external tools (like TransDecoder), the genes IDs might have been modified. A regular expression rewrites all the genes IDs in order to have, for instance, this format : &gt;Pf1004_1/1_1.000_369
 
-| II-Reading an re-writing orthoGroups from OrthoFinder
+-----------------------------------------------------------
+Step 2 : reading an re-writing orthoGroups from OrthoFinder
+-----------------------------------------------------------
 
-| OrthoFinder is a fast, accurate and comprehensive analysis tool for comparative genomics. It finds orthologues and orthogroups infers gene trees for all orthogroups and infers a rooted species tree for the species being analysed. OrthoFinder also provides comprehensive statistics for comparative genomic analyses. 
+OrthoFinder (Emms, D.M. and Kelly, S., 2015) is a fast, accurate and comprehensive analysis tool for comparative genomics. It finds orthologues and orthogroups infers gene trees for all orthogroups and infers a rooted species tree for the species being analysed. OrthoFinder also provides comprehensive statistics for comparative genomic analyses. 
 
-| Emms, D.M. and Kelly, S. (2015) OrthoFinder: solving fundamental biases in whole genome comparisons dramatically improves orthogroup inference accuracy, Genome Biology 16:157
-
-| Our tool focus on the orthogroups.txt file created before gene trees.The script proceeds to split each orthogroup in its own fasta file and, with the use of the output of Filter_Assemblies, to re-associate each ID with its sequence.
+Our tool focus on the orthogroups.txt file created before gene trees.The script proceeds to split each orthogroup in its own fasta file and, with the use of the output of Filter_Assemblies, to re-associate each ID with its sequence.
 
 ---------------------
 inputs and parameters
 ---------------------
 
-| - Input : the orthogroups.txt file from OrthoFinder.
-| - Minimal number of sequences : The orthogroups with less than the specified number won't be recorded. Thanks to the paralogous filtering, the number of sequences within an orthogroup is equivalent to the number of species.
+- File of Orthogroups : the orthogroups.txt file from OrthoFinder.
+- Output from Filter_Assemblies (either as multiple datasets or dataset collection)
+- Minimal number of sequences : The orthogroups with less than the specified number won't be recorded.
 
 -------
 Outputs
 -------
-| - Dataset collection of fasta files : each file represents an orthogroup, each gene within tthe group has the couple ID-nucleic sequence.
+- Dataset collection of fasta files : each file represents an orthogroup, each gene within tthe group has the couple ID-nucleic sequence.
+- A csv file with countings.
+- The tool log.
 
     </help>
 
     <citations>
         <citation type="bibtex">Credits : ABIMS team, Roscoff Marine Station</citation>
         <citation type="bibtex">Contact support.abims@sb-roscoff.fr for any questions or concerns about the Galaxy implementation of this tool.</citation>
-        <citation type="bibtex">Author : Victor Mataigne -- Galaxy integration : Gildas Le Corguillé and Victor Mataigne.</citation>        
+        <citation type="bibtex">Author : Victor Mataigne -- Galaxy integration : Gildas Le Corguillé and Victor Mataigne.
+        </citation>
+        <citation type="bibtex">Emms, D.M. and Kelly, S. (2015) OrthoFinder: solving fundamental biases in whole genome comparisons dramatically improves orthogroup inference accuracy, Genome Biology 16:157.
+        </citation>
     </citations>
 
 </tool>
