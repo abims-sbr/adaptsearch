@@ -94,6 +94,20 @@
                 <element name="locus10_sp2" value="outputs_pogs/locus10_sp2.fasta" />
             </output_collection>
 		</test>
+		<test>
+			<param name="zip" ftype="zip" value="outputfilter.zip" />
+			<param name="zip_file" ftype="zip" value="outputpairwise.zip" />
+			<param name="minseq" value="3" />
+			<param name="paralogs" value="no" />
+			<output name="output" value="test_big.out" />
+		</test>
+		<test>
+			<param name="zip" ftype="zip" value="outputfilter.zip" />
+			<param name="zip_file" ftype="zip" value="outputpairwise.zip" />
+			<param name="minseq" value="3" />
+			<param name="paralogs" value="yes" />
+			<output name="output" value="test_bigb.out" />
+		</test>
 	</tests>	
 
 	<help>
