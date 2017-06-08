@@ -15,7 +15,16 @@
 	</requirements>
 
   	<command><![CDATA[
-		python $__tool_directory__/scripts/S01_concatenate.py ${zip}
+        #set $infiles_filter_assemblies = ""
+        #for $input_filter_assemblie in $input_filter_assemblies
+            ln -s '$input_filter_assemblie' '$input_filter_assemblie.element_identifier';
+            #set $infiles_filter_assemblies = $infiles_filter_assemblies + $input_filter_assemblie.element_identifier + ","
+        #end for
+        #set $infiles_filter_assemblies = $infiles_filter_assemblies[:-1]
+
+		python $__tool_directory__/scripts/S01_concatenate.py
+
+        $infiles_filter_assemblies
 
 		#if $format.format_run == "nucleic" :
 			nucleic $format.zip_nuc
@@ -24,8 +33,8 @@
 		#end if
 		> ${output};
 
-		raxmlHPC 
-		#if $format.format_run == "nucleic" :			
+		raxmlHPC
+		#if $format.format_run == "nucleic" :
 			-n "galaxy_run"
 			##-q "./05_partitions_gene_NUC"
 			-s "./03_Concatenation_nuc.phy"
@@ -71,14 +80,14 @@
 
 	 	##-N 100 -f a -x 12345
 
-		##end if				
+		##end if
 		>> ${output};
 	]]>
   	</command>
 
  	<inputs>
 
-		<param name="zip" type="data" format="no_unzip.zip,zip" label="Choose your ZIP file" help="Contains the files filter after the tool oase" />
+		<param name="input_filter_assemblies" type="data" format="fasta" multiple="true" label="Files from Filter assemblies" />
 		<conditional name="format">
 			<param name="format_run" type="select" label="Which format do you want to use for this tool (concatenation and RAxML run) ? ">
 				<option value="nucleic">Nucleic format</option>
@@ -89,8 +98,8 @@
 				<param name="zip_nuc" type="data" format="no_unzip.zip,zip" label="Choose your ZIP file" help="It must contain the aligned files without indels in NUCLEIC format" />
 				<!-- ## Nucleotide substitution models -->
 		    	<param name="base_model" type="select" label="Substitution Model">
-		        	<option value="GTRCAT">GTRCAT</option> 
-		        	<option value="GTRCATI">GTRCATI</option> 
+		        	<option value="GTRCAT">GTRCAT</option>
+		        	<option value="GTRCATI">GTRCATI</option>
 		        	<option value="GTRGAMMA" selected="true">GTRGAMMA</option>
 		        	<option value="GTRGAMMAI">GTRGAMMAI</option>
 		   		</param>
@@ -111,7 +120,7 @@
 					<option value="JTT">JTT</option>
 					<option value="WAG">WAG</option>
 					<option value="BLOSUM62">BLOSUM62</option>
-			    </param>	
+			    </param>
 			</when>
 		</conditional>
 
@@ -180,7 +189,7 @@
 	  	<param name="multiple_model" format="txt" type="data" label="Multiple model assignment to alignment partitions" optional="True" help="Specify the file name which contains the assignment of models to alignment partitions for multiple models of substitution. For the syntax of this file please consult the manual." />
 
 	 	<!-- ## (-x) -->
-         <param name="rapid_bootstrap_random_seed" type="integer" value='1234567890' size="7" label="Rapid bootstrapping random seed" optional="True" help="Specify a random seed and turn on rapid bootstrapping. CAUTION: unlike in version 7.0.4 RAxML will conduct rapid BS replicates under the model of rate heterogeneity you specified via '-m' and not by default under CAT." />
+         <param name="rapid_bootstrap_random_seed" type="integer" value='123456789' size="7" label="Rapid bootstrapping random seed" optional="True" help="Specify a random seed and turn on rapid bootstrapping. CAUTION: unlike in version 7.0.4 RAxML will conduct rapid BS replicates under the model of rate heterogeneity you specified via '-m' and not by default under CAT." />
 <!-- </when> -->
 
 
@@ -189,11 +198,11 @@
 		<param name="out" type="select" label="What format of file do you want for your output (concatenation of the sequences) ? ">
 			<option value="nothing">No output</option>
 			<option value="fasta">Fasta format</option>
-			<option value="phylip">Phylip format</option> 
+			<option value="phylip">Phylip format</option>
 			<option value="nexus">Nexus format</option>
 		</param>
           <!-- -m GTRGAMMA -N 100 -f a -x 12345 -->
-		
+
 		<param name="raxml1" type="boolean" label="Do you want the output of RAxML : best tree ? " />
 		<param name="raxml3" type="boolean" label="Do you want the output of RAxML : bi-partition ? " />
 		<param name="raxml4" type="boolean" label="Do you want the output of RAxML : bootstrap ? " help="Only if the option 'rapid bootsptrap' is chosen. When you don't want to choose your options, this output is accessible"/>
@@ -230,11 +239,11 @@
 		<data name="out_raxml1" format="txt" label="Phylogeny_RAxML_BestTree" from_work_dir="RAxML_bestTree.galaxy_run">
 			<filter>raxml1 == True</filter>
 		</data>
-	
+
 		<data name="out_raxml3" format="txt" label="Phylogeny_RAxML_BiPartition" from_work_dir="RAxML_bipartitions.galaxy_run">
 			<filter>raxml3 == True</filter>
 		</data>
-		
+
 		<data name="out_raxml4" format="txt" label="Phylogeny_RAxML_BootStrap" from_work_dir="RAxML_bootstrap.galaxy_run">
 			<filter>raxml4 == True</filter>
 		</data>
@@ -242,7 +251,7 @@
 
 	<tests>
 		<test>
-			<param name="zip" ftype="zip" value="from_filter_oase.zip" />
+			<param name="input_filter_assemblies" ftype="fasta" value="input_filter_assemblies/AcAcaud_trinity.fasta,input_filter_assemblies/AmAmphi_trinity.fasta,input_filter_assemblies/ApApomp_trinity.fasta,input_filter_assemblies/PfPfiji_trinity.fasta,input_filter_assemblies/PgPgras_trinity.fasta,input_filter_assemblies/PhPhess_trinity.fasta,input_filter_assemblies/PuPunid_trinity.fasta,input_filter_assemblies/TeTerlap_trinity.fasta,input_filter_assemblies/ThThelep_trinity.fasta" />
 			<conditional name="format">
 				<param name="format_run" value="nucleic" />
 				<param name="zip_nuc" ftype="zip" value="test_05_output_CDS_Search_input_ConcatPhyl.zip" />
@@ -253,19 +262,19 @@
 			<param name="number_of_runs_bootstop" value="" />
 			<param name="search_algorithm" value="d" />
 			<!-- <param name="multiple_model" value="" /> -->
-			<param name="rapid_bootstrap_random_seed" value="123456789" />	
-			<param name="out" value="nothing" />			
+			<param name="rapid_bootstrap_random_seed" value="123456789" />
+			<param name="out" value="nothing" />
 			<param name="raxml1" value="True" />
 			<param name="raxml3" value="True" />
-			<param name="raxml4" value="True" />			
+			<param name="raxml4" value="True" />
 			<output name="out_raxml4">
-				<assert_contents>					
+				<assert_contents>
 					<has_text text="(Ap,(((Pf,Ph),Pg),((Pu,Te),(Am,Th))),Ac);"/>
 					<has_text text="(Ap,(Ph,(Pg,((Pf,(Pu,Te)),(Am,Th)))),Ac);"/>
 					<has_text text="(Ap,(((Pu,Te),(Am,Th)),((Pf,Ph),Pg)),Ac);"/>
 				</assert_contents>
-			</output>				
-			
+			</output>
+
 		</test>
 	</tests>
 
@@ -275,8 +284,8 @@
 What it does
 ============
 
-| This tool takes a zip file containing nucleic fasta sequence files and searches different homologous genes from pairwise comparisons. 
-| 
+| This tool takes a zip file containing nucleic fasta sequence files and searches different homologous genes from pairwise comparisons.
+|
 |
 | The run RAxML was written by **Alexandros Stamatakis**.
 | The script was written by **Eric Fontanillas**.
@@ -289,25 +298,25 @@ Parameters
 ==========
 
 | The choice of the format sequences is possible : **proteic** or **nucleic**
-| 
+|
 
-The choice of parameters for the RAxML run is possible : 
+The choice of parameters for the RAxML run is possible :
 
 **-m** :
-	| is the option for the choice of the substitution model. 
+	| is the option for the choice of the substitution model.
 	| By default it's GTRGAMMA.
-	| 
+	|
 
 **-N** :
 	| is the option for the choice of the number of run
 	| by default it's 100
-	| 
+	|
 
 **rapid bootstrapping** :
 	| is the option to have, in addition to the best tree search, the rapid bootstrapping
 	| this translates by : -x 12345 -f a
 	| by default, this option is choosen
-	| 
+	|
 
 --------
 
@@ -331,49 +340,49 @@ This tool, produces the following files :
 
 **Phylogeny** :
 	| is the general output. It gives the information about the concatenation (statistics) and the RAxML run.
-	| 
+	|
 
 **Phylogeny_concatenation_fasta_aa** :
 	| is the output which contains the sequences concatenated in fasta format when you choose the option proteic
-	| 
+	|
 
 **Phylogeny_concatenation_phylip_aa** :
 	| is the output which contains the sequences concatenated in phylip format when you choose the option proteic
-	| 
+	|
 
 **Phylogeny_concatenation_nexus_aa** :
 	| is the output which contains the sequences concatenated in nexus format when you choose the option proteic
-	| 
+	|
 
 **Phylogeny_concatenation_fasta_nuc** :
 	| is the output which contains the sequences concatenated in fasta format when you choose the option nucleic
-	| 
+	|
 
 **Phylogeny_concatenation_phylip_nuc** :
 	| is the output which contains the sequences concatenated in phylip format when you choose the option nucleic
 	| it's this output which is used for the RAxML run
-	| 
+	|
 
 **Phylogeny_concatenation_nexus_nuc** :
 	| is the output which contains the sequences concatenated in nexus format when you choose the option nucleic
-	| 
+	|
 
 **Phylogeny_RAxML_BestTree** :
 	| is the output of RAxML run which contains the Best Tree found
-	| 
+	|
 
 **Phylogeny_RAxML_BiPartitionBranchLabel** :
 	| is the output of RAxML run which contains the Best Tree found with supported values as branch labels
-	| 
+	|
 
 **Phylogeny_RAxML_BiPartition** :
 	| is the output of RAxML run which contains the Best Tree found with supported values
-	| 
+	|
 
 **Phylogeny_RAxML_BootStrap** :
 	| is the output of RAxML run which contains all the boostrapped trees
 	| the number of boostraped trees depending of the option -N (number of run)
-	| 
+	|
 
 --------
 
@@ -388,11 +397,11 @@ The input files and options
 **Input files**
 	| 6 files with 200 nucleic sequences each
 	| a zip file containing 2 locus aligned without indel (in nucleic format)
-	| 
+	|
 **Parameters**
 	| option : nucleic
 	| no option for the RAxML run, so by default it's : -m GTRGAMMA -N 100 -f a -x 12345
-	| 
+	|
 
 ----------------
 The output files
@@ -401,16 +410,16 @@ The output files
 **Phylogeny** :
 
 | ******************** CONCATENATION ********************
-| 
+|
 | Process nucleotides concatenation:
 | Number of taxa aligned = 6
 | Number of loci concatenated = 2
-| 
+|
 | Total length of the concatenated sequences [All codon positions] = 504
 | Total length of the concatenated sequences [Codon positions 1 and 2] = 336
 | Total length of the concatenated sequences [Codon position 3] = 168
-| 
-| 
+|
+|
 | 
 | ******************** RAxML RUN ********************
 | 
@@ -418,7 +427,7 @@ The output files
 the informations of the RAxML run
 
 | 
- 
+
 **Phylogeny_concatenation_fasta_nuc** :
 
 | &gt;Ps
@@ -458,7 +467,7 @@ cttgccttccttgtctatcttacacaagccagcccat
 .. class:: infomark
 
 | If you choose the option proteic : you obtain a file with proteic sequences
-| 
+|
 | 
 
 
@@ -480,7 +489,7 @@ ggtctccagtagagatctaacatcctccagctctgtttgcaatgcaatcctcttcctctcgagtacagttacagcggaac
 | Pp
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | ------------------------------------------------------------------------------------------------ataatccttgacgaccacacactgcatccaacaacttttctggccttgccttccttgtctattttacacaaaccagcccat
-| 
+|
 | Ap
 
 cgcagctcctcggtgacgcggtgcagctcggcggcgaggcgatcggctctctcctcggctgccctgcgggcgttcagggcctcatcaaggtcggcctgcatggcggcgatgtcgccctccatgcggcgcttgtcgccggtcagagtcgtcaccgtgatgttcagctcgttgacgcgagccgtggcgtcgtgtagctcgttctcggcattcttacgagctcgttcggc
@@ -500,7 +509,7 @@ cttgccttccttgtctatcttacacaagccagcccat
 .. class:: infomark
 
 | If you choose the option proteic : you obtain a file with proteic sequences
-| 
+|
 | 
 
 **Phylogeny_concatenation_nexus_nuc** :
@@ -538,19 +547,19 @@ ttgccttgccttccttgtctatcttacacaagccagcccat
 
 | 	;
 | End;
-| 
+|
 
 .. class:: infomark
 
 | If you choose the option proteic : you obtain a file with proteic sequences
-| 
+|
 | 
 
 **Phylogeny_RAxML_BestTree** :
 
 | ((Ac:0.02889451913999640381,Ap:0.01674414484251282934):0.17730049470177636217,
 | ((Pp:0.23405795780876006984,Pg:0.02012322210145659623):0.14429203507314311561,Pf:0.09977363663005259231):0.04320803212100913365,Ps:0.08351583721596630983):0.0;
-| 
+|
 | 
 
 
@@ -558,8 +567,8 @@ ttgccttgccttccttgtctatcttacacaagccagcccat
 
 | (Pg:0.02012322210145659623,(Pf:0.09977363663005259231,(Ps:0.08351583721596630983,
 | (Ac:0.02889451913999640381,Ap:0.01674414484251282934):0.17730049470177636217[89]):0.04320803212100913365[42]):0.14429203507314311561[70],Pp:0.23405795780876006984);
-| 
-| 
+|
+|
 
 
 **Phylogeny_RAxML_BiPartition** :
@@ -567,8 +576,8 @@ ttgccttgccttccttgtctatcttacacaagccagcccat
 (Pg:0.02012322210145659623,(Pf:0.09977363663005259231,(Ps:0.08351583721596630983,
 (Ac:0.02889451913999640381,Ap:0.01674414484251282934)89:0.17730049470177636217)42:0.04320803212100913365)70:0.14429203507314311561,Pp:0.23405795780876006984);
 
-| 
-| 
+|
+|
 
 **Phylogeny_RAxML_BootStrap** :
 

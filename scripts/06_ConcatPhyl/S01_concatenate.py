@@ -33,7 +33,7 @@ def concatenate(folder_with_loci, SPECIES_ID_LIST):
     ## 4 ## Process files
     ## 4.1 ## Create the bash and the fasta names entries (name of the species)
     bash_concat = {}
-    
+
     for species_ID in SPECIES_ID_LIST:
         bash_concat[species_ID] = ''
 
@@ -44,7 +44,7 @@ def concatenate(folder_with_loci, SPECIES_ID_LIST):
     ## 4.2 ## Concatenate
     for file in L_IN:
         nb_locus=nb_locus+1
-        
+
         ## a ## Open alignments
         file_IN = open("%s/%s" %(folder_with_loci, file), "r")
         dico_seq = dico(file_IN)   ### DEF 0 ###
@@ -61,10 +61,10 @@ def concatenate(folder_with_loci, SPECIES_ID_LIST):
         RAxML_name = file[:-6]
         sublist = [RAxML_name, position]
         list_genes_position.append(sublist)
-        
+
         ## c ## Generate "empty" sequence with alignment length * "-"
         empty_seq = "-" * ln
-        
+
         ## d ## Concatenate
         ## d.1 ## Detect missing species in this alignment
         list_ID=[]
@@ -85,7 +85,7 @@ def concatenate(folder_with_loci, SPECIES_ID_LIST):
             else:
                 fasta_name = bash_fastaName[ID]
                 seq = dico_seq[fasta_name]
-                bash_concat[ID] = bash_concat[ID] + seq      
+                bash_concat[ID] = bash_concat[ID] + seq
 
     return(bash_concat, ln_concat, nb_locus, list_genes_position)
 ####################################
@@ -107,7 +107,7 @@ def get_codon_position(seq_inORF):
        pos1 =  seq_inORF[i]
        pos2 =  seq_inORF[i+1]
        pos3 =  seq_inORF[i+2]
-       
+
        seq_pos1 = seq_pos1 + pos1
        seq_pos2 = seq_pos2 + pos2
        seq_pos12 = seq_pos12 + pos1 + pos2
@@ -131,9 +131,8 @@ fasta = "^.*fasta$"
 i=3
 
 ## add file to list_species
-zfile = zipfile.ZipFile(sys.argv[1])
-for name in zfile.namelist() :
-	list_species.append(name)
+infiles_filter_assemblies = sys.argv[1]
+list_species = str.split(infiles_filter_assemblies,",")
 
 ## in SPECIES_ID_LIST, only the 2 first letters of name of species
 for name in list_species :
@@ -189,14 +188,14 @@ if sys.argv[2] == "proteic" :
     ## 3.5 ## Print outputs
     for seq_name in bash_concatenation.keys():
         seq = bash_concatenation[seq_name]
-    
+
         ## Filtering the sequence in case of remaining "?"
-        seq = string.replace(seq, "?", "-")  
+        seq = string.replace(seq, "?", "-")
 
         #print seq FASTA FORMAT
         OUT1.write(">%s\n" %seq_name)
         OUT1.write("%s\n" %seq)
-    
+
         #print seq PHYLIP FORMAT
         OUT2.write("%s\n" %seq_name)
         OUT2.write("%s\n" %seq)
@@ -269,7 +268,7 @@ elif sys.argv[2] == "nucleic" :
         partition2 = "DNA, %s_2=%d-%d\\3\n" %(name,pos_start3, pos_end)
         OUT_PARTITION_gene_PLUS_codon_12_3.write(partition1)
         OUT_PARTITION_gene_PLUS_codon_12_3.write(partition2)
-    
+
     OUT_PARTITION_gene_PLUS_codon_12_3.close()
 
 
@@ -312,13 +311,13 @@ elif sys.argv[2] == "nucleic" :
     ## Print outputs
     for seq_name in bash_concatenation.keys():
         seq = bash_concatenation[seq_name]
-    
+
         ## Filtering the sequence in case of remaining "?"
-        seq = string.replace(seq, "?", "-")  
+        seq = string.replace(seq, "?", "-")
 
         ## Get the differentes codons partitions
         seq_pos1, seq_pos2, seq_pos12, seq_pos3 = get_codon_position(seq)    ### DEF 12 ###
-    
+
         #print seq FASTA FORMAT
         OUT1.write(">%s\n" %seq_name)
         OUT1.write("%s\n" %seq)
@@ -326,7 +325,7 @@ elif sys.argv[2] == "nucleic" :
         OUT1_pos12.write("%s\n" %seq_pos12)
         OUT1_pos3.write(">%s\n" %seq_name)
         OUT1_pos3.write("%s\n" %seq_pos3)
-    
+
         #print seq PHYLIP FORMAT
         OUT2.write("%s\n" %seq_name)
         OUT2.write("%s\n" %seq)
