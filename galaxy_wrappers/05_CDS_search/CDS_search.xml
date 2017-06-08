@@ -79,38 +79,45 @@
 
 	<outputs>
 		<data format="text" name="log" label="ORF_Search" />
+        <collection name="output_BESTORF_aa" type="list" label="ORF_Search_Best_ORF_aa">
+            <filter>out_BESTORF in ["aa","both"]</filter>
+            <discover_datasets pattern="__name_and_ext__" directory="04_BEST_ORF_aa" />
+        </collection>
 
-		<data format="no_unzip.zip" name="output_BESTORF_aa" label="ORF_Search_Best_ORF_aa" from_work_dir="ORF_Search_bestORF_aa.zip">
-			<filter>out_BESTORF == "aa" or out_BESTORF == "both"</filter>
-		</data>
+        <collection name="output_BESTORF_nuc" type="list" label="ORF_Search_Best_ORF_nuc">
+            <filter>out_BESTORF in ["nuc","both"]</filter>
+            <discover_datasets pattern="__name_and_ext__" directory="04_BEST_ORF_nuc" />
+        </collection>
 
-		<data format="no_unzip.zip" name="output_BESTORF_nuc" label="ORF_Search_Best_ORF_nuc" from_work_dir="ORF_Search_bestORF_nuc.zip">
-			<filter>out_BESTORF == "nuc" or out_BESTORF == "both"</filter>
-		</data>
+        <collection name="output_CDS_aa" type="list" label="ORF_Search_CDS_aa">
+            <filter>out_CDS in ["aa","both"] and not methionine</filter>
+            <discover_datasets pattern="__name_and_ext__" directory="05_CDS_aa" />
+        </collection>
 
-		<data format="no_unzip.zip" name="output_CDS_aa" label="ORF_Search_CDS_aa" from_work_dir="ORF_Search_CDS_aa.zip">
-			<filter>(out_CDS == "aa" and methionine == "no") or (out_CDS == "both" and methionine == "no")</filter>
-		</data>
+        <collection name="output_CDS_nuc" type="list" label="ORF_Search_CDS_nuc">
+            <filter>out_CDS in ["nuc","both"] and not methionine</filter>
+            <discover_datasets pattern="__name_and_ext__" directory="05_CDS_nuc" />
+        </collection>
 
-		<data format="no_unzip.zip" name="output_CDS_nuc" label="ORF_Search_CDS_nuc" from_work_dir="ORF_Search_CDS_nuc.zip">
-			<filter>(out_CDS == "nuc" and methionine == "no") or (out_CDS == "both" and methionine == "no")</filter>
-		</data>
+        <collection name="output_CDS_M_aa" type="list" label="ORF_Search_CDS_with_M_aa">
+            <filter>(out_CDS == "aa" and methionine) or (out_CDS == "both" and methionine)</filter>
+            <discover_datasets pattern="__name_and_ext__" directory="06_CDS_with_M_aa" />
+        </collection>
 
-		<data format="no_unzip.zip" name="output_CDS_M_aa" label="ORF_Search_CDS_with_M_aa" from_work_dir="ORF_Search_CDSM_aa.zip">
-			<filter>(out_CDS == "aa" and methionine == "yes") or (out_CDS == "both" and methionine == "yes")</filter>
-		</data>
+        <collection name="output_CDS_M_nuc" type="list" label="ORF_Search_CDS_with_M_nuc">
+            <filter>(out_CDS == "nuc" and methionine) or (out_CDS == "both" and methionine)</filter>
+            <discover_datasets pattern="__name_and_ext__" directory="06_CDS_with_M_nuc" />
+        </collection>
 
-		<data format="no_unzip.zip" name="output_CDS_M_nuc" label="ORF_Search_CDS_with_M_nuc" from_work_dir="ORF_Search_CDSM_nuc.zip">
-			<filter>(out_CDS == "nuc" and methionine == "yes") or (out_CDS == "both" and methionine == "yes")</filter>
-		</data>
+        <collection name="output_filter_aa" type="list" label="ORF_Search_CDS_without_indel_aa">
+            <filter>out_CDS_filter in ["aa","both"]</filter>
+            <discover_datasets pattern="__name_and_ext__" directory="08_CDS_aa_MINIMUM_MISSING_SEQUENCES" />
+        </collection>
 
-		<data format="no_unzip.zip" name="output_filter_aa" label="ORF_Search_CDS_without_indel_aa" from_work_dir="ORF_Search_CDS_without_indel_aa.zip">
-			<filter>out_CDS_filter == "aa" or out_CDS_filter == "both"</filter>
-		</data>
-
-		<data format="no_unzip.zip" name="output_filter_nuc" label="ORF_Search_CDS_without_indel_nuc" from_work_dir="ORF_Search_CDS_without_indel_nuc.zip">
-			<filter>out_CDS_filter == "nuc" or out_CDS_filter == "both"</filter>
-		</data>
+        <collection name="output_filter_nuc" type="list" label="ORF_Search_CDS_without_indel_nuc">
+            <filter>out_CDS_filter in ["nuc","both"]</filter>
+            <discover_datasets pattern="__name_and_ext__" directory="08_CDS_nuc_MINIMUM_MISSING_SEQUENCES" />
+        </collection>
 	</outputs>
 
 	<tests>
@@ -123,10 +130,58 @@
                 <param name="min_length_subseq" value="15" />
                 <param name="min_length_nuc" value="50" />
             </section>
-			<param name="out_BESTORF" value="no" />
-			<param name="out_CDS" value="no" />
-			<param name="out_CDS_filter" value="nuc" />
+			<param name="out_BESTORF" value="both" />
+			<param name="out_CDS" value="both" />
+			<param name="out_CDS_filter" value="both" />
 			<output name="log" value="cds_search.log" />
+            <output_collection name="output_BESTORF_aa" type="list">
+                <element name="locus1_sp7" value="outputs_ORF_Search_Best_ORF_aa/locus1_sp7.fasta" />
+                <element name="locus2_sp6" value="outputs_ORF_Search_Best_ORF_aa/locus2_sp6.fasta" />
+            </output_collection>
+            <output_collection name="output_BESTORF_nuc" type="list">
+                <element name="locus1_sp7" value="outputs_ORF_Search_Best_ORF_nuc/locus1_sp7.fasta" />
+                <element name="locus2_sp6" value="outputs_ORF_Search_Best_ORF_nuc/locus2_sp6.fasta" />
+            </output_collection>
+            <output_collection name="output_CDS_aa" type="list">
+                <element name="locus1_sp7" value="outputs_ORF_Search_CDS_aa/locus1_sp7.fasta" />
+                <element name="locus2_sp6" value="outputs_ORF_Search_CDS_aa/locus2_sp6.fasta" />
+            </output_collection>
+            <output_collection name="output_CDS_nuc" type="list">
+                <element name="locus1_sp7" value="outputs_ORF_Search_CDS_nuc/locus1_sp7.fasta" />
+                <element name="locus2_sp6" value="outputs_ORF_Search_CDS_nuc/locus2_sp6.fasta" />
+            </output_collection>
+            <output_collection name="output_filter_aa" type="list">
+                <element name="locus2_sp4_sp4" value="outputs_ORF_Search_CDS_without_indel_aa/locus2_sp4_sp4.fasta" />
+            </output_collection>
+            <output_collection name="output_filter_nuc" type="list">
+                <element name="locus2_sp4_sp4" value="outputs_ORF_Search_CDS_without_indel_nuc/locus2_sp4_sp4.fasta" />
+            </output_collection>
+		</test>
+        <test>
+            <param name="inputs" ftype="fasta" value="inputs/locus2_sp6.fasta" />
+			<param name="nb_species_keep" value="2" />
+			<param name="methionine" value="yes" />
+            <section name="length">
+                <param name="min_length_seq" value="50" />
+                <param name="min_length_subseq" value="15" />
+                <param name="min_length_nuc" value="50" />
+            </section>
+			<param name="out_BESTORF" value="both" />
+			<param name="out_CDS" value="both" />
+			<param name="out_CDS_filter" value="both" />
+			<output name="log" value="cds_search_methionine.log" />
+            <output_collection name="output_BESTORF_aa" type="list">
+                <element name="locus2_sp6" value="outputs_ORF_Search_Best_ORF_aa/locus2_sp6.fasta" />
+            </output_collection>
+            <output_collection name="output_BESTORF_nuc" type="list">
+                <element name="locus2_sp6" value="outputs_ORF_Search_Best_ORF_nuc/locus2_sp6.fasta" />
+            </output_collection>
+            <output_collection name="output_CDS_M_aa" type="list">
+                <element name="locus2_sp6" value="outputs_ORF_Search_CDS_with_M_aa/locus2_sp6.fasta" />
+            </output_collection>
+            <output_collection name="output_CDS_M_nuc" type="list">
+                <element name="locus2_sp6" value="outputs_ORF_Search_CDS_with_M_nuc/locus2_sp6.fasta" />
+            </output_collection>
 		</test>
 	</tests>
 	<help>
