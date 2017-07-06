@@ -96,15 +96,19 @@
     </tests>
 
     <help>
+
+.. class:: infomark
+
+**Authors**  The script in perl was written by **Robert Belshaw** and **Aris Katzourakis**.
+
+@HELP_AUTHORS@
+
 ============
 What it does
 ============
 
-| This tool takes **nucleic sequences in fasta format** or **zip file containing fasta files** and returns a multiple alignement (in Nexus and Phylip formats) using BLAST+
+| This tool takes **nucleic sequences in fasta format** or **'dataset collection list' containing fasta files** and returns a multiple alignement (in Nexus and Phylip formats) using BLAST+
 |
-| The script in perl was written by **Robert Belshaw** and **Aris Katzourakis**.
-| The script in python was written by **Eric Fontanillas**.
-| The wrapper was written by **Julie Baffard**.
 
 --------
 
@@ -139,10 +143,6 @@ The choice of several parameters for the blast is possible.
     | integer (between 0 and total number of sequences)
     | Default is finding the reference sequence by blasting all sequences against all sequences, only randomly subsampling when it thinks the blast output file might be too large.
 
-.. class:: infomark
-
-m and n are the only parameters which can used for the 2 options (one file and many files).
-
 --------
 
 =======
@@ -161,31 +161,15 @@ This tool, produces the following files :
     |
 
 **Alignment_{inputfile}_phylip**
-    | is the output with the aligned sequences in Phylip format when you choose "one file" option.
+    | is the output with the aligned sequences in Phylip format.
     |
 
 **Alignment_{inputfile}_nexus**
-    | is the output with the aligned sequences in Nexus format when you choose "one file" option.
+    | is the output with the aligned sequences in Nexus format.
     |
 
 **Alignment_{input_file}_fasta**
-    | is the output with the aligned sequences in Fasta format when you choose "one file" and "fasta forme" options
-    |
-
-**Alignment_locus_phylip**
-    | is the output with the aligned sequences in Phylip format when you choose "many files" option.
-    |
-
-**Alignment_locus_nexus**
-    | is the output with the aligned sequences in Nexus format when you choose "many files" option.
-    |
-
-**Alignment_locus_fasta**
-    | is the output with the aligned sequences in Fasta forme when you choose "many file" and "fasta forme" options
-
-.. class:: warningmark
-
-The zip outputs have to be downloaded (and extracts the files with a file archiver software), you cannot visualize them with the "eye icon" through the interface.
+    | is the output with the aligned sequences in Fasta format.
 
 --------
 
@@ -215,11 +199,6 @@ The input file and its options
 CCAGTGTAGATTTGTTCAAGAAGGTGTGCTGGCGTTGTTTGAATTTTGTAATAGTACCATGATTTAAATACCCGGTTAACGGCCTACCTGTTATGTAGAAATTGTAGAGAAAAAATTAAATCAATTTTGTATGAACTATAAGCAGCAGCTAATATATTTGCAGTTT
 TACATGTTTATCTGTTCATCAGCATGGGTCAGAGAATGACCGTACTTTGCTGGTGATAGAATGCTTGTATTCAAAGTTTAATAAATGGTTGTAAGCCATTTAAAAAAAAAAAAAAA
 
-**Parameters**
-
-| option : one file. It's the same for the option "many files" except that the output files are in zip format (inside : 1 file corresponding to one output of BlastAlign)
-| no option for the run Blast. So, by default it's -m 95 -n F
-
 ----------------
 The output files
 ----------------
@@ -238,13 +217,6 @@ The output files
 | BlastAlign finished: it has produced a multiple alignment of 2 sequences and length 720 by aligning to sequence Pf2101/11000920 (proportion of gaps in each sequence is less than 0.95)
 | 
 
-.. class:: infomark
-
-| if you choose the option "many files"
-| there will be as template output that number of file in the input zip.
-|
-|
-
 **Alignment_{inputfile}_phylip**
 
 | 2 720 S
@@ -260,13 +232,6 @@ tttgtccagacctggcttgtttgacattgcttgttggattttgcaacaatatcatgattaga
 | -------------
 |
 
-.. class:: infomark
-
-| If you choose the option "many file"
-| Save as *Galaxy{number}-[Alignment_locus_phy].zip*
-| If you unzip the file, a number of files are extracted (depends on the number of locus) : {name_of_file}.phy
-|
-| 
 
 **Alignment_{inputfile}_nexus**
 
@@ -293,13 +258,6 @@ tttgtccagacctggcttgtttgacattgcttgttggattttgcaacaatatcatgattaga
 | end;
 |
 
-.. class:: infomark
-
-| If you choose the option "many file"
-| Save as *Galaxy{number}-[Alignment_locus_nxs].zip*
-| If you unzip the file, a number of files are extracted (depends on the number of locus) : {name_of_file}.nxs
-|
-|
 
 **Alignment_{inputfile}_fasta**
 
@@ -316,11 +274,6 @@ ccggtggccattttctgcacctcgtgggt---------------------------------------------------
 actagcagtaaataatattccaggtatagaagaggttaatatgataaaagatgatggacaggtaatacattttaccaatccaaaagtacaggcttctctacagtcaaacacatttgctattaatgggcaagctgagacaaaacaaatcaccgaattgttgcctggtatattaaatcagctgggagcagaaagtttaacaaatctgaagaaactggctacatccg
 tgactggtggagttgattctgataacaagccagaaacagcagaaattgatgaagacgatgatgatgttccagatttggttgaaaactttgacgaggcatccaagaatgaaggaacgtaatt-----------------------------------------------------------------acccagtgtagatttgt---------------------------------------------------------
 
-.. class:: infomark
-
-| If you choose the option "many file"
-| Save as *Galaxy{number}-[Alignment_locus_fasta].zip*
-| If you unzip the file, a number of files are extracted (depends on the number of locus) : {name_of_file}.fasta
 
 ---------------------------------------------------
 

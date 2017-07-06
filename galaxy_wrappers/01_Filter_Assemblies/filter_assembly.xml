@@ -91,17 +91,7 @@
 
 	<help>
 
-.. class:: infomark
-
-**Authors**  Eric Fontanillas creates the scripts of this pipeline.
-
-.. class:: infomark
-
-**Galaxy integration** Julie Baffard and ABIMS TEAM
-
- | Contact support.abims@sb-roscoff.fr for any questions or concerns about the Galaxy implementation of this tool.
-
----------------------------------------------------
+@HELP_AUTHORS@
 
 ===========
 Filter Oase
@@ -114,16 +104,7 @@ Description
 
 This script reformats Velvet Oases or Trinity assemblies for the AdaptSearch galaxy suite and selects only one variant per gene according to its length and quality check.
 
-
-
-.. class:: infomark
-
-
-**Important part of this tool (the inputs format)**
-
 --------
-
-
 
 ============
 Input format

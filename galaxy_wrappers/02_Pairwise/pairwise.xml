@@ -94,16 +94,15 @@
 
 	<help>
 
+@HELP_AUTHORS@
+
 ============
 What it does
 ============
 
-| This tool takes a zip archive containing nucleic fasta sequence files and searches different homologous genes from pairwise comparaisons.
+| This tool takes a 'data collection list' containing nucleic fasta sequence files and searches different homologous genes from pairwise comparaisons.
 | There are 3 outputs.
 |
-| The run blast was written by the **NCBI**.
-| The script was written by **Eric Fontanillas**.
-| The wrapper was written by **Julie Baffard**.
 
 --------
 
@@ -126,28 +125,24 @@ Outputs
 
 This tool, produces the following files :
 
-**Pairwise** :
+**Pairwise**:
 	| is the general output. It gives the information about what the tool is doing (for each pairwise).
 	|
 
-**Pairwise_zip_DNA.zip** :
-	| is the output wich contains nucleic sequences (of the pairwise) that are homologues. The sequences are with nucleotides. Shows :
+**Pairwise DNA**:
+	| is the output wich contains nucleic sequences (of the pairwise) that are homologues. The sequences are with nucleotides. Shows:
 	| the name of the query sequence
 	| the part of the sequence in nucleotides
 	| the name of the match sequence
 	| the part of the sequence in nucleotides
 	|
 
-**Pairwise_zip_PROT.zip** :
-	| is the output wich contains proteic sequences (of the pairwise) that are homologues. The sequences are with protein. Shows :
+**Pairwise PROT**:
+	| is the output wich contains proteic sequences (of the pairwise) that are homologues. The sequences are with protein. Shows:
 	| the name of the query sequence (the name of the sequence || the position (Start and End) of the homologous sequences || divergence || number of gaps || real divergence || the length of the homologous sequence)
 	| the part of the sequence in protein
 	| the name of the match sequence (the name of the sequence || the position (Start and End) of the homologous sequences || divergence || number of gaps || real divergence || the length of the homologous sequence)
 	| the part of the sequence in protein
-
-.. class:: warningmark
-
-The two zip outputs have to be downloaded (and extracts the files with a file archiver software), you cannot visualize them with the "eye icon" through the interface.
 
 --------
 
@@ -240,8 +235,6 @@ The output files
 
 **Pairwise_output_file_PROT**
 
-| Save as *Galaxy{number}-[Pairwise_output_file_PROT].zip*
-| If you unzip the file, a number of file appears (number of pairwise) : 19_ReciprocalBestHits_{name_of_pairwise}.fasta
 | For example the 4 last sequences of the file 19_ReciprocalBestHits_Pp_Ap.fasta
 |
 | &gt;Ap123_1/1_1.000_748||254...478||[[1/1]][[1/6]]||29.3333333333||0||29.3333333333||75.0
@@ -257,8 +250,6 @@ The output files
 
 **Pairwise_output_file_DNA**
 
-| Save as *Galaxy{number}-[Pairwise_output_file_DNA].zip*
-| If you unzip the file, a number of file appears (number of pairwise) : 25_DNAalignment_corresponding_to_protein_from_19_RBH_{name_of_pairwise}.fasta
 | For example the 4 last sequences of the file 25_DNAalignement_corresponding_to_protein_from_19_RBH_Pp_Ap.fasta
 |
 | &gt;Ap123_1/1_1.000_748

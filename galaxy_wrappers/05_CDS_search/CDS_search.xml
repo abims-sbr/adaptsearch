@@ -1,6 +1,4 @@
-<?xml version="1.0"?>
-
-<tool name="CDS_search" id="cds_search" version="1.0">
+<tool name="CDS_search" id="cds_search" version="2.0">
 
 	<description>
 		ORF and CDS search
@@ -55,21 +53,21 @@
             <param name="min_length_nuc" type="integer" value="50" min="0" label="Minimal length of the CDS, in nucleic without the indel" help="By default it's 50" />
         </section>
 
-		<param name="out_BESTORF" type="select" label="Do you want the output zip containing files with the BEST ORF? ">
+		<param name="out_BESTORF" type="select" label="Do you want the outputs (dataset collection list) containing files with the BEST ORF? ">
 			<option value="no">No</option>
 			<option value="aa">Yes, with the proteic format</option>
 			<option value="nuc">Yes, with the nucleic format</option>
 			<option value="both">Yes, with the proteic and nucleic format</option>
 		</param>
 
-		<param name="out_CDS" type="select" label="Do you want the output zip containing files with CDS? ">
+		<param name="out_CDS" type="select" label="Do you want the outputs (dataset collection list) containing files with CDS? ">
 			<option value="no">No</option>
 			<option value="aa">Yes, with the proteic format</option>
 			<option value="nuc">Yes, with the nucleic format</option>
 			<option value="both">Yes, with the proteic and nucleic format</option>
 		</param>
 
-		<param name="out_CDS_filter" type="select" label="Do you want the output zip containing files with CDS without indel? ">
+		<param name="out_CDS_filter" type="select" label="Do you want the outputs (dataset collection list) containing files with CDS without indel? ">
 			<option value="no">No</option>
 			<option value="aa">Yes, with the proteic format</option>
 			<option value="nuc">Yes, with the nucleic format</option>
@@ -185,14 +183,15 @@
 		</test>
 	</tests>
 	<help>
+
+@HELP_AUTHORS@
+
 ============
 What it does
 ============
 
-| This tool takes **zip file containing fasta files with nucleic aligned sequences** and search the ORF and the CDS
+| This tool takes **'dataset collection list' containing fasta files with nucleic aligned sequences** and search the ORF and the CDS
 |
-| The script in python was written by **Eric Fontanillas**.
-| The wrapper was written by **Julie Baffard**.
 
 --------
 
@@ -293,9 +292,6 @@ This tool, produces the following files :
 	| is the output with the CDS without indel in proteic format.
 	| considering the Methionine or not : according to the option chosen.
 
-.. class:: warningmark
-
-The zip outputs have to be downloaded (and extracts the files with a file archiver software), you cannot visualize them with the "eye icon" through the interface.
 
 --------
 
@@ -309,7 +305,7 @@ The input file and its options
 
 **ORF_Search**
 
-| a zip file containing 47 files with 1, 2 or 3 sequences inside
+| a 'dataset collection list' containing 47 files with 1, 2 or 3 sequences inside
 | for example the file : locus5_sp3.fasta which contains 3 species :
 |
 
@@ -400,10 +396,7 @@ TTAVQGSGWGWLGYNKKMKKLEIATCANQDPLEGTTGLVPLFGIDVWEHAYYLQYKNVRPDYVKAIWNVANWDDIMERYN
 
 .. class:: infomark
 
-| Save as *Galaxy{number}-[ORF_Search_Best_ORF_aa].zip*
-| If you unzip the file, a number of files are extracted (depends on the number of locus keeped) : locus{nb}_sp{nb_sp}.fasta
 | for example : locus5_sp3.fasta
-|
 | 
 
 **ORF_Search_Best_ORF_nuc**
@@ -433,10 +426,7 @@ cccagaatgggttatccgtgaatgtctattggaatgtggcaccatacgatgtttactgtattagttacaattaaaa----
 
 .. class:: infomark
 
-| Save as *Galaxy{number}-[ORF_Search_Best_ORF_nuc].zip*
-| If you unzip the file, a number of files are extracted (depends on the number of locus keeped) : locus{nb}_sp{nb_sp}.fasta
 | for example : locus5_sp3.fasta
-|
 |
 
 **ORF_Search_CDS_with_M_aa**
@@ -458,12 +448,9 @@ KMKKLEIATCANQDPLEGTTGLVPLFGIDVWEHAYYLQYKNVRPDYVKAIWNVANWDDIMERYNNARK
 
 .. class:: infomark
 
-| Save as *Galaxy{number}-[ORF_Search_CDS_with_M_aa].zip*
-| If you unzip the file, a number of files are extracted (depends on the number of locus keeped) : locus{nb}_sp{nb_sp}.fasta
 | for example : locus5_sp3.fasta
 
 | It's the same for the option : regardless Methionine
-|
 |
 
 **ORF_Search_CDS_with_M_nuc**
@@ -490,12 +477,10 @@ acaacaatgccagaaaa
 
 .. class:: infomark
 
-| Save as *Galaxy{number}-[ORF_Search_CDS_nuc].zip*
-| if you unzip the file, a number of files are extracted (depends on the number of locus keeped) : locus{nb}_sp{nb_sp}.fasta
 | for example : locus5_sp3.fasta
+|
  
 | It's the same for the option : regardless Methionine
-|
 |
 
 **ORF_Search_CDS_without_indel_aa**
@@ -517,11 +502,8 @@ YKNVRPDYVKAIWNVANWDDIMERYNN
 
 .. class:: infomark
 
-| Save as *Galaxy{number}-[ORF_Search_CDS_without_indel_aa].zip*
-| If you unzip the file, a number of files are extracted (depends on the number of locus keeped) : locus{nb}_sp{old_nb_sp}_sp_{new_nb_sp}.fasta
 | for example locus5_sp3_sp3.fasta
-|
-|
+||
 
 **ORF_Search_CDS_without_indel_nuc**
 
@@ -545,9 +527,28 @@ ggtctcgtcccgttgtttggcatagatgtctgggaacatgcctattacttgcagtacaagaatgttcgtccagactatgt
 
 .. class:: infomark
 
-| Save as *Galaxy{number}-[ORF_Search_CDS_without_indel_nuc].zip*
-| If you unzip the file, a number of files are extracted (depends on the number of locus keeped) : locus{nb}_sp{old_nb_sp}_sp_{new_nb_sp}.fasta
 | for example : locus5_sp3_sp3.fasta
+|
+
+---------------------------------------------------
+
+Changelog
+---------
+
+**Version 2.0 - 05/07/2017**
+
+ - NEW: Replace the zip between tools by Dataset Collection
+
+
+**Version 1.0 - 13/04/2017**
+
+ - Add funtional test with planemo
+
+ - planemo test with conda dependency for python
+
+ - Scripts renamed + symlinks to the directory 'scripts'
+
+
 	</help>
 
 	<expand macro="citations" />

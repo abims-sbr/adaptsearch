@@ -1,4 +1,4 @@
-<tool name="ConcatPhyl" id="concatphyl" version="1.0">
+<tool name="ConcatPhyl" id="concatphyl" version="2.0">
 
 	<description>
 		Concatenation and phylogeny
@@ -288,16 +288,14 @@
 
 	<help>
 
+@HELP_AUTHORS@
+
 ============
 What it does
 ============
 
-| This tool takes a zip file containing nucleic fasta sequence files and searches different homologous genes from pairwise comparisons.
+| This tool takes a 'dataset collection list'  containing nucleic fasta sequence files and searches different homologous genes from pairwise comparisons.
 |
-|
-| The run RAxML was written by **Alexandros Stamatakis**.
-| The script was written by **Eric Fontanillas**.
-| The wrapper was written by **Julie Baffard**.
 
 --------
 
@@ -331,12 +329,6 @@ The choice of parameters for the RAxML run is possible :
 ======
 Inputs
 ======
-
-option **Select a zip file containing the input files** :
-
-| the input zip file must have the extension .ort.zip
-| At the beginning, when you upload your input, you have to change the extension .zip to .ort.zip
-
 
 --------
 
@@ -404,7 +396,7 @@ The input files and options
 
 **Input files**
 	| 6 files with 200 nucleic sequences each
-	| a zip file containing 2 locus aligned without indel (in nucleic format)
+	| a 'dataset collection list' containing 2 locus aligned without indel (in nucleic format)
 	|
 **Parameters**
 	| option : nucleic
@@ -598,6 +590,24 @@ ttgccttgccttccttgtctatcttacacaagccagcccat
 | ((Pp,Pg),(Pf,(Ap,Ac)),Ps);
 
 ...
+
+---------------------------------------------------
+
+Changelog
+---------
+
+**Version 2.0 - 06/07/2017**
+
+ - NEW: Replace the zip between tools by Dataset Collection
+
+
+**Version 1.0 - 13/04/2017**
+
+ - Add funtional test with planemo
+
+ - Planemo test with conda dependencies for raxml and python
+
+ - Scripts renamed + symlinks to the directory 'scripts'
 
 	</help>
 
