@@ -29,7 +29,7 @@ def dico(F2):
 ####################
 ## Concatenate sequences
 ###########################
-def concatenate(folder_with_loci, SPECIES_ID_LIST):
+def concatenate(L_IN, SPECIES_ID_LIST):
     ## 4 ## Process files
     ## 4.1 ## Create the bash and the fasta names entries (name of the species)
     bash_concat = {}
@@ -46,7 +46,7 @@ def concatenate(folder_with_loci, SPECIES_ID_LIST):
         nb_locus=nb_locus+1
 
         ## a ## Open alignments
-        file_IN = open("%s/%s" %(folder_with_loci, file), "r")
+        file_IN = open(file, "r")
         dico_seq = dico(file_IN)   ### DEF 0 ###
         file_IN.close()
         ## b ## Get alignment length + genes positions for RAxML
@@ -130,8 +130,12 @@ SPECIES_ID_LIST = []
 fasta = "^.*fasta$"
 i=3
 
-## add file to list_species
+## Arguments
 infiles_filter_assemblies = sys.argv[1]
+format_run = sys.argv[2]
+input_alignments = sys.argv[3]
+
+## add file to list_species
 list_species = str.split(infiles_filter_assemblies,",")
 
 ## in SPECIES_ID_LIST, only the 2 first letters of name of species
@@ -139,15 +143,12 @@ for name in list_species :
     name = name[:2]
     SPECIES_ID_LIST.append(name)
 
+## add alignment files to L_IN
+L_IN = str.split(input_alignments,",")
+print(L_IN)
 
 ### 1 ### Proteic
-if sys.argv[2] == "proteic" :
-    os.mkdir("02_CDS_No_Missing_Data_aa")
-    zfile_nuc = zipfile.ZipFile(sys.argv[3])
-    for name in zfile_nuc.namelist() :
-        zfile_nuc.extract(name, "./02_CDS_No_Missing_Data_aa")
-    path_IN = "./02_CDS_No_Missing_Data_aa"
-    L_IN = os.listdir(path_IN)
+if format_run == "proteic" :
 
     OUT1 = open("02_Concatenation_aa.fas", "w")
     OUT2 = open("02_Concatenation_aa.phy", "w")
@@ -156,7 +157,7 @@ if sys.argv[2] == "proteic" :
 
 
     ##  Get bash with concatenation
-    bash_concatenation, ln, nb_locus,list_genes_position= concatenate(path_IN, SPECIES_ID_LIST)    ### DEF 11 ##
+    bash_concatenation, ln, nb_locus,list_genes_position= concatenate(L_IN, SPECIES_ID_LIST)    ### DEF 11 ##
 
     ## Write gene AA partition file for RAxML
     for sublist in list_genes_position:
@@ -212,14 +213,7 @@ if sys.argv[2] == "proteic" :
 
 
 ### 2 ### Nucleic
-elif sys.argv[2] == "nucleic" :
-    os.mkdir("02_CDS_No_Missing_Data_nuc")
-
-    zfile_nuc = zipfile.ZipFile(sys.argv[3])
-    for name in zfile_nuc.namelist() :
-        zfile_nuc.extract(name, "./02_CDS_No_Missing_Data_nuc")
-    path_IN = "./02_CDS_No_Missing_Data_nuc"
-    L_IN = os.listdir(path_IN)
+elif format_run == "nucleic" :
 
     OUT1 = open("03_Concatenation_nuc.fas", "w")
     OUT2 = open("03_Concatenation_nuc.phy", "w")
@@ -238,7 +232,7 @@ elif sys.argv[2] == "nucleic" :
     OUT_PARTITION_gene_PLUS_codon_12_3 = open("05_partitions_gene_PLUS_codon12_3","w")
 
     ## Get bash with concatenation
-    bash_concatenation, ln, nb_locus, list_genes_position = concatenate(path_IN, SPECIES_ID_LIST)    ### DEF 11 ##
+    bash_concatenation, ln, nb_locus, list_genes_position = concatenate(L_IN, SPECIES_ID_LIST)    ### DEF 11 ##
     ln_12 = ln/3*2   ### length of the alignment when only the 2 first codon position
     ln_3 = ln/3      ### length of the alignment when only the third codon position
 

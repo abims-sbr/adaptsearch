@@ -10,7 +10,6 @@
 
 	<requirements>
 		<expand macro="python_required" />
-		<!-- <requirement type="package" version="1.3.1">samtools</requirement> -->
 		<requirement type="package" version="8.2.9">raxml</requirement>
 	</requirements>
 
@@ -22,15 +21,24 @@
         #end for
         #set $infiles_filter_assemblies = $infiles_filter_assemblies[:-1]
 
+        #set $infiles_alignments = ""
+        #for $input_alignment in $input_alignments
+            ln -s '$input_alignment' '$input_alignment.element_identifier';
+            #set $infiles_alignments = $infiles_alignments + $input_alignment.element_identifier + ","
+        #end for
+        #set $infiles_alignments = $infiles_alignments[:-1]
+
 		python $__tool_directory__/scripts/S01_concatenate.py
 
         $infiles_filter_assemblies
 
 		#if $format.format_run == "nucleic" :
-			nucleic $format.zip_nuc
+			nucleic
 		#elif $format.format_run == "proteic" :
-			proteic $format.zip_aa
+			proteic
 		#end if
+
+        $infiles_alignments
 		> ${output};
 
 		raxmlHPC
@@ -88,6 +96,8 @@
  	<inputs>
 
 		<param name="input_filter_assemblies" type="data" format="fasta" multiple="true" label="Files from Filter assemblies" />
+        <param name="input_alignments" type="data" format="fasta" multiple="true" label="Aligned files without indels" />
+
 		<conditional name="format">
 			<param name="format_run" type="select" label="Which format do you want to use for this tool (concatenation and RAxML run) ? ">
 				<option value="nucleic">Nucleic format</option>
@@ -95,7 +105,6 @@
 			</param>
 
 			<when value="nucleic">
-				<param name="zip_nuc" type="data" format="no_unzip.zip,zip" label="Choose your ZIP file" help="It must contain the aligned files without indels in NUCLEIC format" />
 				<!-- ## Nucleotide substitution models -->
 		    	<param name="base_model" type="select" label="Substitution Model">
 		        	<option value="GTRCAT">GTRCAT</option>
@@ -106,7 +115,6 @@
 			</when>
 
 			<when value="proteic">
-				<param name="zip_aa" type="data" format="no_unzip.zip,zip" label="Choose your ZIP file" help="It must contain the aligned files without indels in PROTEIC format" />
 				<!-- ## Aminoacid substitution models -->
 				<!--<param name="aa_model_empirical_base_frequencies" type="boolean" checked="no" truevalue="F" falsevalue="X" display="checkboxes" label="Use empirical base frequencies in AA models." /> -->
 		    	<param name="base_model" type="select" label="Substitution Model (-m)">
@@ -252,9 +260,9 @@
 	<tests>
 		<test>
 			<param name="input_filter_assemblies" ftype="fasta" value="input_filter_assemblies/AcAcaud_trinity.fasta,input_filter_assemblies/AmAmphi_trinity.fasta,input_filter_assemblies/ApApomp_trinity.fasta,input_filter_assemblies/PfPfiji_trinity.fasta,input_filter_assemblies/PgPgras_trinity.fasta,input_filter_assemblies/PhPhess_trinity.fasta,input_filter_assemblies/PuPunid_trinity.fasta,input_filter_assemblies/TeTerlap_trinity.fasta,input_filter_assemblies/ThThelep_trinity.fasta" />
-			<conditional name="format">
+            <param name="input_alignments" ftype="fasta" value="input_from_CDS_Search/locus1008_sp2_sp2.fasta,input_from_CDS_Search/locus100_sp2_sp2.fasta,input_from_CDS_Search/locus1015_sp2_sp2.fasta,input_from_CDS_Search/locus1020_sp2_sp2.fasta,input_from_CDS_Search/locus1040_sp2_sp2.fasta,input_from_CDS_Search/locus108_sp2_sp2.fasta,input_from_CDS_Search/locus10_sp2_sp2.fasta,input_from_CDS_Search/locus110_sp2_sp2.fasta,input_from_CDS_Search/locus1148_sp2_sp2.fasta,input_from_CDS_Search/locus1199_sp2_sp2.fasta,input_from_CDS_Search/locus11_sp2_sp2.fasta,input_from_CDS_Search/locus1231_sp2_sp2.fasta,input_from_CDS_Search/locus126_sp2_sp2.fasta,input_from_CDS_Search/locus132_sp2_sp2.fasta,input_from_CDS_Search/locus133_sp2_sp2.fasta,input_from_CDS_Search/locus135_sp2_sp2.fasta,input_from_CDS_Search/locus1364_sp2_sp2.fasta,input_from_CDS_Search/locus1370_sp2_sp2.fasta,input_from_CDS_Search/locus1394_sp2_sp2.fasta,input_from_CDS_Search/locus139_sp2_sp2.fasta,input_from_CDS_Search/locus13_sp2_sp2.fasta,input_from_CDS_Search/locus1423_sp2_sp2.fasta,input_from_CDS_Search/locus1425_sp2_sp2.fasta,input_from_CDS_Search/locus142_sp2_sp2.fasta,input_from_CDS_Search/locus144_sp2_sp2.fasta,input_from_CDS_Search/locus147_sp3_sp3.fasta,input_from_CDS_Search/locus148_sp2_sp2.fasta,input_from_CDS_Search/locus1490_sp2_sp2.fasta,input_from_CDS_Search/locus149_sp2_sp2.fasta,input_from_CDS_Search/locus1507_sp2_sp2.fasta,input_from_CDS_Search/locus1518_sp2_sp2.fasta,input_from_CDS_Search/locus153_sp2_sp2.fasta,input_from_CDS_Search/locus154_sp3_sp3.fasta,input_from_CDS_Search/locus1550_sp2_sp2.fasta,input_from_CDS_Search/locus155_sp2_sp2.fasta,input_from_CDS_Search/locus15_sp2_sp2.fasta,input_from_CDS_Search/locus161_sp2_sp2.fasta,input_from_CDS_Search/locus164_sp2_sp2.fasta,input_from_CDS_Search/locus164_sp3_sp3.fasta,input_from_CDS_Search/locus172_sp2_sp2.fasta,input_from_CDS_Search/locus1757_sp2_sp2.fasta,input_from_CDS_Search/locus175_sp2_sp2.fasta,input_from_CDS_Search/locus177_sp2_sp2.fasta,input_from_CDS_Search/locus177_sp3_sp3.fasta,input_from_CDS_Search/locus179_sp2_sp2.fasta,input_from_CDS_Search/locus17_sp3_sp3.fasta,input_from_CDS_Search/locus181_sp3_sp3.fasta,input_from_CDS_Search/locus183_sp3_sp3.fasta,input_from_CDS_Search/locus1845_sp2_sp2.fasta,input_from_CDS_Search/locus186_sp2_sp2.fasta,input_from_CDS_Search/locus18_sp2_sp2.fasta,input_from_CDS_Search/locus191_sp2_sp2.fasta,input_from_CDS_Search/locus193_sp2_sp2.fasta,input_from_CDS_Search/locus196_sp2_sp2.fasta,input_from_CDS_Search/locus197_sp2_sp2.fasta,input_from_CDS_Search/locus1993_sp2_sp2.fasta,input_from_CDS_Search/locus203_sp2_sp2.fasta,input_from_CDS_Search/locus2088_sp2_sp2.fasta,input_from_CDS_Search/locus209_sp2_sp2.fasta,input_from_CDS_Search/locus20_sp2_sp2.fasta,input_from_CDS_Search/locus212_sp2_sp2.fasta,input_from_CDS_Search/locus215_sp2_sp2.fasta,input_from_CDS_Search/locus2164_sp2_sp2.fasta,input_from_CDS_Search/locus218_sp2_sp2.fasta,input_from_CDS_Search/locus2194_sp2_sp2.fasta,input_from_CDS_Search/locus221_sp2_sp2.fasta,input_from_CDS_Search/locus224_sp2_sp2.fasta,input_from_CDS_Search/locus225_sp2_sp2.fasta,input_from_CDS_Search/locus232_sp2_sp2.fasta,input_from_CDS_Search/locus233_sp2_sp2.fasta,input_from_CDS_Search/locus243_sp2_sp2.fasta,input_from_CDS_Search/locus253_sp2_sp2.fasta,input_from_CDS_Search/locus261_sp3_sp3.fasta,input_from_CDS_Search/locus267_sp2_sp2.fasta,input_from_CDS_Search/locus287_sp2_sp2.fasta,input_from_CDS_Search/locus28_sp2_sp2.fasta,input_from_CDS_Search/locus292_sp2_sp2.fasta,input_from_CDS_Search/locus298_sp2_sp2.fasta,input_from_CDS_Search/locus2_sp4_sp4.fasta,input_from_CDS_Search/locus309_sp2_sp2.fasta,input_from_CDS_Search/locus321_sp2_sp2.fasta,input_from_CDS_Search/locus326_sp2_sp2.fasta,input_from_CDS_Search/locus327_sp2_sp2.fasta,input_from_CDS_Search/locus329_sp2_sp2.fasta,input_from_CDS_Search/locus331_sp2_sp2.fasta,input_from_CDS_Search/locus334_sp2_sp2.fasta,input_from_CDS_Search/locus334_sp3_sp3.fasta,input_from_CDS_Search/locus337_sp2_sp2.fasta,input_from_CDS_Search/locus345_sp2_sp2.fasta,input_from_CDS_Search/locus348_sp2_sp2.fasta,input_from_CDS_Search/locus349_sp2_sp2.fasta,input_from_CDS_Search/locus34_sp2_sp2.fasta,input_from_CDS_Search/locus351_sp2_sp2.fasta,input_from_CDS_Search/locus356_sp3_sp3.fasta,input_from_CDS_Search/locus361_sp2_sp2.fasta,input_from_CDS_Search/locus362_sp2_sp2.fasta,input_from_CDS_Search/locus369_sp2_sp2.fasta,input_from_CDS_Search/locus375_sp2_sp2.fasta,input_from_CDS_Search/locus383_sp2_sp2.fasta,input_from_CDS_Search/locus387_sp2_sp2.fasta,input_from_CDS_Search/locus389_sp2_sp2.fasta,input_from_CDS_Search/locus393_sp2_sp2.fasta,input_from_CDS_Search/locus394_sp2_sp2.fasta,input_from_CDS_Search/locus396_sp2_sp2.fasta,input_from_CDS_Search/locus398_sp2_sp2.fasta,input_from_CDS_Search/locus407_sp2_sp2.fasta,input_from_CDS_Search/locus412_sp2_sp2.fasta,input_from_CDS_Search/locus414_sp2_sp2.fasta,input_from_CDS_Search/locus41_sp2_sp2.fasta,input_from_CDS_Search/locus429_sp2_sp2.fasta,input_from_CDS_Search/locus42_sp3_sp3.fasta,input_from_CDS_Search/locus432_sp2_sp2.fasta,input_from_CDS_Search/locus436_sp2_sp2.fasta,input_from_CDS_Search/locus438_sp2_sp2.fasta,input_from_CDS_Search/locus445_sp2_sp2.fasta,input_from_CDS_Search/locus46_sp2_sp2.fasta,input_from_CDS_Search/locus471_sp2_sp2.fasta,input_from_CDS_Search/locus480_sp2_sp2.fasta,input_from_CDS_Search/locus482_sp2_sp2.fasta,input_from_CDS_Search/locus483_sp2_sp2.fasta,input_from_CDS_Search/locus484_sp2_sp2.fasta,input_from_CDS_Search/locus48_sp3_sp3.fasta,input_from_CDS_Search/locus490_sp2_sp2.fasta,input_from_CDS_Search/locus491_sp2_sp2.fasta,input_from_CDS_Search/locus4_sp2_sp2.fasta,input_from_CDS_Search/locus502_sp2_sp2.fasta,input_from_CDS_Search/locus504_sp2_sp2.fasta,input_from_CDS_Search/locus512_sp2_sp2.fasta,input_from_CDS_Search/locus525_sp2_sp2.fasta,input_from_CDS_Search/locus52_sp3_sp3.fasta,input_from_CDS_Search/locus544_sp2_sp2.fasta,input_from_CDS_Search/locus555_sp2_sp2.fasta,input_from_CDS_Search/locus557_sp2_sp2.fasta,input_from_CDS_Search/locus558_sp2_sp2.fasta,input_from_CDS_Search/locus55_sp2_sp2.fasta,input_from_CDS_Search/locus562_sp2_sp2.fasta,input_from_CDS_Search/locus563_sp2_sp2.fasta,input_from_CDS_Search/locus565_sp2_sp2.fasta,input_from_CDS_Search/locus572_sp2_sp2.fasta,input_from_CDS_Search/locus584_sp2_sp2.fasta,input_from_CDS_Search/locus585_sp2_sp2.fasta,input_from_CDS_Search/locus586_sp2_sp2.fasta,input_from_CDS_Search/locus5_sp2_sp2.fasta,input_from_CDS_Search/locus608_sp2_sp2.fasta,input_from_CDS_Search/locus619_sp2_sp2.fasta,input_from_CDS_Search/locus624_sp2_sp2.fasta,input_from_CDS_Search/locus627_sp2_sp2.fasta,input_from_CDS_Search/locus629_sp2_sp2.fasta,input_from_CDS_Search/locus646_sp2_sp2.fasta,input_from_CDS_Search/locus656_sp2_sp2.fasta,input_from_CDS_Search/locus686_sp2_sp2.fasta,input_from_CDS_Search/locus687_sp2_sp2.fasta,input_from_CDS_Search/locus71_sp2_sp2.fasta,input_from_CDS_Search/locus74_sp2_sp2.fasta,input_from_CDS_Search/locus74_sp3_sp3.fasta,input_from_CDS_Search/locus75_sp2_sp2.fasta,input_from_CDS_Search/locus76_sp2_sp2.fasta,input_from_CDS_Search/locus77_sp2_sp2.fasta,input_from_CDS_Search/locus789_sp2_sp2.fasta,input_from_CDS_Search/locus78_sp2_sp2.fasta,input_from_CDS_Search/locus798_sp2_sp2.fasta,input_from_CDS_Search/locus79_sp2_sp2.fasta,input_from_CDS_Search/locus803_sp2_sp2.fasta,input_from_CDS_Search/locus81_sp2_sp2.fasta,input_from_CDS_Search/locus822_sp2_sp2.fasta,input_from_CDS_Search/locus82_sp2_sp2.fasta,input_from_CDS_Search/locus849_sp2_sp2.fasta,input_from_CDS_Search/locus854_sp2_sp2.fasta,input_from_CDS_Search/locus85_sp3_sp3.fasta,input_from_CDS_Search/locus883_sp2_sp2.fasta,input_from_CDS_Search/locus88_sp2_sp2.fasta,input_from_CDS_Search/locus8_sp2_sp2.fasta,input_from_CDS_Search/locus92_sp2_sp2.fasta,input_from_CDS_Search/locus94_sp2_sp2.fasta,input_from_CDS_Search/locus96_sp2_sp2.fasta,input_from_CDS_Search/locus984_sp2_sp2.fasta,input_from_CDS_Search/locus985_sp2_sp2.fasta,input_from_CDS_Search/locus9_sp3_sp3.fasta" />
+            <conditional name="format">
 				<param name="format_run" value="nucleic" />
-				<param name="zip_nuc" ftype="zip" value="test_05_output_CDS_Search_input_ConcatPhyl.zip" />
 				<param name="base_model" value="GTRGAMMA" />
 			</conditional>
 			<param name="random_seed" value="1234567890" />
