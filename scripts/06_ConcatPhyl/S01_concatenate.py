@@ -29,11 +29,11 @@ def dico(F2):
 ####################
 ## Concatenate sequences
 ###########################
-def concatenate(folder_with_loci, SPECIES_ID_LIST):
+def concatenate(L_IN, SPECIES_ID_LIST):
     ## 4 ## Process files
     ## 4.1 ## Create the bash and the fasta names entries (name of the species)
     bash_concat = {}
-    
+
     for species_ID in SPECIES_ID_LIST:
         bash_concat[species_ID] = ''
 
@@ -44,9 +44,9 @@ def concatenate(folder_with_loci, SPECIES_ID_LIST):
     ## 4.2 ## Concatenate
     for file in L_IN:
         nb_locus=nb_locus+1
-        
+
         ## a ## Open alignments
-        file_IN = open("%s/%s" %(folder_with_loci, file), "r")
+        file_IN = open(file, "r")
         dico_seq = dico(file_IN)   ### DEF 0 ###
         file_IN.close()
         ## b ## Get alignment length + genes positions for RAxML
@@ -61,10 +61,10 @@ def concatenate(folder_with_loci, SPECIES_ID_LIST):
         RAxML_name = file[:-6]
         sublist = [RAxML_name, position]
         list_genes_position.append(sublist)
-        
+
         ## c ## Generate "empty" sequence with alignment length * "-"
         empty_seq = "-" * ln
-        
+
         ## d ## Concatenate
         ## d.1 ## Detect missing species in this alignment
         list_ID=[]
@@ -85,7 +85,7 @@ def concatenate(folder_with_loci, SPECIES_ID_LIST):
             else:
                 fasta_name = bash_fastaName[ID]
                 seq = dico_seq[fasta_name]
-                bash_concat[ID] = bash_concat[ID] + seq      
+                bash_concat[ID] = bash_concat[ID] + seq
 
     return(bash_concat, ln_concat, nb_locus, list_genes_position)
 ####################################
@@ -107,7 +107,7 @@ def get_codon_position(seq_inORF):
        pos1 =  seq_inORF[i]
        pos2 =  seq_inORF[i+1]
        pos3 =  seq_inORF[i+2]
-       
+
        seq_pos1 = seq_pos1 + pos1
        seq_pos2 = seq_pos2 + pos2
        seq_pos12 = seq_pos12 + pos1 + pos2
@@ -130,25 +130,25 @@ SPECIES_ID_LIST = []
 fasta = "^.*fasta$"
 i=3
 
+## Arguments
+infiles_filter_assemblies = sys.argv[1]
+format_run = sys.argv[2]
+input_alignments = sys.argv[3]
+
 ## add file to list_species
-zfile = zipfile.ZipFile(sys.argv[1])
-for name in zfile.namelist() :
-	list_species.append(name)
+list_species = str.split(infiles_filter_assemblies,",")
 
 ## in SPECIES_ID_LIST, only the 2 first letters of name of species
 for name in list_species :
     name = name[:2]
     SPECIES_ID_LIST.append(name)
 
+## add alignment files to L_IN
+L_IN = str.split(input_alignments,",")
+print(L_IN)
 
 ### 1 ### Proteic
-if sys.argv[2] == "proteic" :
-    os.mkdir("02_CDS_No_Missing_Data_aa")
-    zfile_nuc = zipfile.ZipFile(sys.argv[3])
-    for name in zfile_nuc.namelist() :
-        zfile_nuc.extract(name, "./02_CDS_No_Missing_Data_aa")
-    path_IN = "./02_CDS_No_Missing_Data_aa"
-    L_IN = os.listdir(path_IN)
+if format_run == "proteic" :
 
     OUT1 = open("02_Concatenation_aa.fas", "w")
     OUT2 = open("02_Concatenation_aa.phy", "w")
@@ -157,7 +157,7 @@ if sys.argv[2] == "proteic" :
 
 
     ##  Get bash with concatenation
-    bash_concatenation, ln, nb_locus,list_genes_position= concatenate(path_IN, SPECIES_ID_LIST)    ### DEF 11 ##
+    bash_concatenation, ln, nb_locus,list_genes_position= concatenate(L_IN, SPECIES_ID_LIST)    ### DEF 11 ##
 
     ## Write gene AA partition file for RAxML
     for sublist in list_genes_position:
@@ -189,14 +189,14 @@ if sys.argv[2] == "proteic" :
     ## 3.5 ## Print outputs
     for seq_name in bash_concatenation.keys():
         seq = bash_concatenation[seq_name]
-    
+
         ## Filtering the sequence in case of remaining "?"
-        seq = string.replace(seq, "?", "-")  
+        seq = string.replace(seq, "?", "-")
 
         #print seq FASTA FORMAT
         OUT1.write(">%s\n" %seq_name)
         OUT1.write("%s\n" %seq)
-    
+
         #print seq PHYLIP FORMAT
         OUT2.write("%s\n" %seq_name)
         OUT2.write("%s\n" %seq)
@@ -213,14 +213,7 @@ if sys.argv[2] == "proteic" :
 
 
 ### 2 ### Nucleic
-elif sys.argv[2] == "nucleic" :
-    os.mkdir("02_CDS_No_Missing_Data_nuc")
-
-    zfile_nuc = zipfile.ZipFile(sys.argv[3])
-    for name in zfile_nuc.namelist() :
-        zfile_nuc.extract(name, "./02_CDS_No_Missing_Data_nuc")
-    path_IN = "./02_CDS_No_Missing_Data_nuc"
-    L_IN = os.listdir(path_IN)
+elif format_run == "nucleic" :
 
     OUT1 = open("03_Concatenation_nuc.fas", "w")
     OUT2 = open("03_Concatenation_nuc.phy", "w")
@@ -239,7 +232,7 @@ elif sys.argv[2] == "nucleic" :
     OUT_PARTITION_gene_PLUS_codon_12_3 = open("05_partitions_gene_PLUS_codon12_3","w")
 
     ## Get bash with concatenation
-    bash_concatenation, ln, nb_locus, list_genes_position = concatenate(path_IN, SPECIES_ID_LIST)    ### DEF 11 ##
+    bash_concatenation, ln, nb_locus, list_genes_position = concatenate(L_IN, SPECIES_ID_LIST)    ### DEF 11 ##
     ln_12 = ln/3*2   ### length of the alignment when only the 2 first codon position
     ln_3 = ln/3      ### length of the alignment when only the third codon position
 
@@ -269,7 +262,7 @@ elif sys.argv[2] == "nucleic" :
         partition2 = "DNA, %s_2=%d-%d\\3\n" %(name,pos_start3, pos_end)
         OUT_PARTITION_gene_PLUS_codon_12_3.write(partition1)
         OUT_PARTITION_gene_PLUS_codon_12_3.write(partition2)
-    
+
     OUT_PARTITION_gene_PLUS_codon_12_3.close()
 
 
@@ -312,13 +305,13 @@ elif sys.argv[2] == "nucleic" :
     ## Print outputs
     for seq_name in bash_concatenation.keys():
         seq = bash_concatenation[seq_name]
-    
+
         ## Filtering the sequence in case of remaining "?"
-        seq = string.replace(seq, "?", "-")  
+        seq = string.replace(seq, "?", "-")
 
         ## Get the differentes codons partitions
         seq_pos1, seq_pos2, seq_pos12, seq_pos3 = get_codon_position(seq)    ### DEF 12 ###
-    
+
         #print seq FASTA FORMAT
         OUT1.write(">%s\n" %seq_name)
         OUT1.write("%s\n" %seq)
@@ -326,7 +319,7 @@ elif sys.argv[2] == "nucleic" :
         OUT1_pos12.write("%s\n" %seq_pos12)
         OUT1_pos3.write(">%s\n" %seq_name)
         OUT1_pos3.write("%s\n" %seq_pos3)
-    
+
         #print seq PHYLIP FORMAT
         OUT2.write("%s\n" %seq_name)
         OUT2.write("%s\n" %seq)

@@ -1,6 +1,4 @@
-<?xml version="1.0"?>
-
-<tool name="Pairwise" id="pairwise" version="1.0">
+<tool name="Pairwise" id="pairwise" version="2.0">
 
 	<description>
 		Run reciproque tblastx pairwise
@@ -11,56 +9,53 @@
 	</macros>
 
 	<requirements>
-		<expand macro="python_required" />		
-		<requirement type="package" version="2.2.22">blast-legacy</requirement>	
+		<expand macro="python_required" />
+		<requirement type="package" version="2.2.22">blast-legacy</requirement>
 		<requirement type="package" version="1.3.1">samtools</requirement>
 	</requirements>
 
-  	<command>
-        	<![CDATA[
-        ln -s $__tool_directory__/scripts/S02_xxx_patron_pipeline.sh .
-        &&        
-        ln -s $__tool_directory__/scripts/S03_run_blast_with_k_filter.sh .
-        &&
-        ln -s $__tool_directory__/scripts/S04_run_blast2_with_k_filter.sh .
-        &&
-        ln -s $__tool_directory__/scripts/S05_script_extract_match_v20_blastx.py .
-        &&
-        ln -s $__tool_directory__/scripts/S06_post_processing_of_pairwise.py .        
-        && 
-        ln -s $__tool_directory__/scripts/S07_format_match_get_back_nucleotides.py .
-        &&
-        ln -s $__tool_directory__/scripts/S08_script_extract_match_v20_blastx.py .
-        &&
-        ln -s $__tool_directory__/scripts/S09_post_processing_of_pairwise.py .
-        &&
-        ln -s $__tool_directory__/scripts/S10_compare_list_pairs_for_reciprocal_best_hits_test.py .
-        &&
-        ln -s $__tool_directory__/scripts/S11_post_processing_of_pairwise.py .
-        &&
-        ln -s $__tool_directory__/scripts/S12_prot2dna.py .
-        &&
-        ln -s $__tool_directory__/scripts/S13_zip.py .
-        &&
-		python $__tool_directory__/scripts/S01_organize_rbh.py 8 ${e_value} ${zip}
+  	<command><![CDATA[
+        #set $infiles = ""
+        #for $input in $inputs
+            ln -s '$input' '$input.element_identifier';
+            #set $infiles = $infiles + $input.element_identifier + ","
+        #end for
+        #set $infiles = $infiles[:-1]
+
+        ln -s $__tool_directory__/scripts/S02_xxx_patron_pipeline.sh . &&
+        ln -s $__tool_directory__/scripts/S03_run_blast_with_k_filter.sh . &&
+        ln -s $__tool_directory__/scripts/S04_run_blast2_with_k_filter.sh . &&
+        ln -s $__tool_directory__/scripts/S05_script_extract_match_v20_blastx.py . &&
+        ln -s $__tool_directory__/scripts/S06_post_processing_of_pairwise.py . &&
+        ln -s $__tool_directory__/scripts/S07_format_match_get_back_nucleotides.py . &&
+        ln -s $__tool_directory__/scripts/S08_script_extract_match_v20_blastx.py . &&
+        ln -s $__tool_directory__/scripts/S09_post_processing_of_pairwise.py . &&
+        ln -s $__tool_directory__/scripts/S10_compare_list_pairs_for_reciprocal_best_hits_test.py . &&
+        ln -s $__tool_directory__/scripts/S11_post_processing_of_pairwise.py . &&
+        ln -s $__tool_directory__/scripts/S12_prot2dna.py . &&
+
+		python $__tool_directory__/scripts/S01_organize_rbh.py $infiles ${e_value} \${GALAXY_SLOTS:-1}
 		> ${output};
-		]]>
-  	</command>
+  	]]></command>
 
  	<inputs>
-		<param name="zip" type="data" format="no_unzip.zip,zip" multiple="true" label="Choose your ZIP file" help="Contains the output of the filter tool" />
-		<param name="e_value" type="float" value="1e-5" label="e_value" help="By default, it's 1e-5. you can write the e-value like this: 1e-5" />	
+        <param name="inputs" type="data" format="fasta" multiple="true" label="Input files" />
+		<param name="e_value" type="float" value="1e-5" label="e_value" help="By default, it's 1e-5. you can write the e-value like this: 1e-5" />
 	</inputs>
 
 	<outputs>
 		<data format="txt" name="output" label="Pairwise" />
-		<data format="no_unzip.zip" name="output_zip_DNA" label="Pairwise_zip_DNA" from_work_dir="output_file_DNA.zip" />
-		<data format="no_unzip.zip" name="output_zip_PROT" label="Pairwise_zip_PROT" from_work_dir="output_file_PROT.zip" />
+        <collection name="output_fasta_dna" type="list" label="Pairwise DNA">
+            <discover_datasets pattern="__name_and_ext__" directory="outputs_dna" />
+        </collection>
+        <collection name="output_fasta_prot" type="list" label="Pairwise PROT">
+            <discover_datasets pattern="__name_and_ext__" directory="outputs_prot" />
+        </collection>
 	</outputs>
 
 	<tests>
 		<test>
-			<param name="zip" ftype="zip" value="test_02_input_pairwise.zip" />
+            <param name="inputs" ftype="fasta" value="inputs/PfPfiji_Trinity.fasta,inputs/ApApomp_Trinity.fasta,inputs/AmAmphi_Trinity.fasta,inputs/AcAcaud_Trinity.fasta" />
 			<param name="e-value" value="1e-5" />
 			<output name="output" >
 				<assert_contents>
@@ -70,30 +65,44 @@
 					<has_line line="('ApApomp_Trinity.fasta', 'AmAmphi_Trinity.fasta')"/>
 					<has_line line="('ApApomp_Trinity.fasta', 'AcAcaud_Trinity.fasta')"/>
 					<has_line line="('AmAmphi_Trinity.fasta', 'AcAcaud_Trinity.fasta')"/>
-					
+
 					<has_text text="Number of pairwises parsed = 2" />
 					<has_text text="Number of pairwises parsed = 3" />
 					<has_text text="Number of pairwises parsed = 0" />
-					<has_text text="Number of pairwises parsed = 5" />					
+					<has_text text="Number of pairwises parsed = 5" />
 					<has_text text="Number of pairwises parsed = 1" />
-					
 				</assert_contents>
 			</output>
+            <output_collection name="output_fasta_prot" type="list">
+                <element name="ReciprocalBestHits_AmAmphi_AcAcaud" value="outputs_prot/ReciprocalBestHits_AmAmphi_AcAcaud.fasta" />
+                <element name="ReciprocalBestHits_ApApomp_AcAcaud" value="outputs_prot/ReciprocalBestHits_ApApomp_AcAcaud.fasta" />
+                <element name="ReciprocalBestHits_ApApomp_AmAmphi" value="outputs_prot/ReciprocalBestHits_ApApomp_AmAmphi.fasta" />
+                <element name="ReciprocalBestHits_PfPfiji_AcAcaud" value="outputs_prot/ReciprocalBestHits_PfPfiji_AcAcaud.fasta" />
+                <element name="ReciprocalBestHits_PfPfiji_AmAmphi" value="outputs_prot/ReciprocalBestHits_PfPfiji_AmAmphi.fasta" />
+                <element name="ReciprocalBestHits_PfPfiji_ApApomp" value="outputs_prot/ReciprocalBestHits_PfPfiji_ApApomp.fasta" />
+            </output_collection>
+            <output_collection name="output_fasta_dna" type="list">
+                <element name="DNAalignment_corresponding_to_protein_from_RBH_AmAmphi_AcAcaud" value="outputs_dna/DNAalignment_corresponding_to_protein_from_RBH_AmAmphi_AcAcaud.fasta" />
+                <element name="DNAalignment_corresponding_to_protein_from_RBH_ApApomp_AcAcaud" value="outputs_dna/DNAalignment_corresponding_to_protein_from_RBH_ApApomp_AcAcaud.fasta" />
+                <element name="DNAalignment_corresponding_to_protein_from_RBH_ApApomp_AmAmphi" value="outputs_dna/DNAalignment_corresponding_to_protein_from_RBH_ApApomp_AmAmphi.fasta" />
+                <element name="DNAalignment_corresponding_to_protein_from_RBH_PfPfiji_AcAcaud" value="outputs_dna/DNAalignment_corresponding_to_protein_from_RBH_PfPfiji_AcAcaud.fasta" />
+                <element name="DNAalignment_corresponding_to_protein_from_RBH_PfPfiji_AmAmphi" value="outputs_dna/DNAalignment_corresponding_to_protein_from_RBH_PfPfiji_AmAmphi.fasta" />
+                <element name="DNAalignment_corresponding_to_protein_from_RBH_PfPfiji_ApApomp" value="outputs_dna/DNAalignment_corresponding_to_protein_from_RBH_PfPfiji_ApApomp.fasta" />
+            </output_collection>
 		</test>
-	</tests>	
+	</tests>
 
 	<help>
+
+@HELP_AUTHORS@
 
 ============
 What it does
 ============
 
-| This tool takes a zip archive containing nucleic fasta sequence files and searches different homologous genes from pairwise comparaisons. 
+| This tool takes a 'data collection list' containing nucleic fasta sequence files and searches different homologous genes from pairwise comparaisons.
 | There are 3 outputs.
 |
-| The run blast was written by the **NCBI**.
-| The script was written by **Eric Fontanillas**.
-| The wrapper was written by **Julie Baffard**.
 
 --------
 
@@ -101,12 +110,12 @@ What it does
 Parameters
 ==========
 
-The choice of parameters is possible : 
+The choice of parameters is possible :
 
 **-e** :
-	|  is the option for the choice of the e-value. 
+	|  is the option for the choice of the e-value.
 	| By default it's 10.
-	| 
+	|
 
 --------
 
@@ -116,28 +125,24 @@ Outputs
 
 This tool, produces the following files :
 
-**Pairwise** :
+**Pairwise**:
 	| is the general output. It gives the information about what the tool is doing (for each pairwise).
-	| 
+	|
 
-**Pairwise_zip_DNA.zip** :
-	| is the output wich contains nucleic sequences (of the pairwise) that are homologues. The sequences are with nucleotides. Shows : 
+**Pairwise DNA**:
+	| is the output wich contains nucleic sequences (of the pairwise) that are homologues. The sequences are with nucleotides. Shows:
 	| the name of the query sequence
 	| the part of the sequence in nucleotides
 	| the name of the match sequence
 	| the part of the sequence in nucleotides
-	| 
+	|
 
-**Pairwise_zip_PROT.zip** :
-	| is the output wich contains proteic sequences (of the pairwise) that are homologues. The sequences are with protein. Shows :
+**Pairwise PROT**:
+	| is the output wich contains proteic sequences (of the pairwise) that are homologues. The sequences are with protein. Shows:
 	| the name of the query sequence (the name of the sequence || the position (Start and End) of the homologous sequences || divergence || number of gaps || real divergence || the length of the homologous sequence)
 	| the part of the sequence in protein
 	| the name of the match sequence (the name of the sequence || the position (Start and End) of the homologous sequences || divergence || number of gaps || real divergence || the length of the homologous sequence)
 	| the part of the sequence in protein
-
-.. class:: warningmark
-
-The two zip outputs have to be downloaded (and extracts the files with a file archiver software), you cannot visualize them with the "eye icon" through the interface.
 
 --------
 
@@ -151,10 +156,10 @@ The input files and options
 
 **Input files**
 	| 3 files with 200 nucleic sequences each : Ap.fasta, Ac.fasta et Pp.fasta
-	| 
+	|
 **Parameters**
 	| e-value = 1e-20
-	| 
+	|
 
 ----------------
 The output files
@@ -163,77 +168,75 @@ The output files
 **Pairwise**
 
 | -------------------- Pairwise Pp_Ap --------------------
-|  
+|
 | database :  Pp.fasta
 | query file :  Ap.fasta
-|  
+|
 | ***** START run BLAST *****
 | ***** END run BLAST *****
-|  
-| 
+|
+|
 | database :  Ap.fasta
 | query file : only the sequences of Pp.fasta who matched during the last BLAST
-| 
+|
 | ***** START run BLAST *****
 | ***** END run BLAST *****
-|  
+|
 | [3/5] Get pairs of sequences ...
 | Get list of fasta name involved in RBH
 | Number of pairwises parsed = 15
 | Get subset of Alvinella db
-| Get subset of Paralvinella db 
-| 
+| Get subset of Paralvinella db
+|
 | -------------------- Pairwise Pp_Ac --------------------
-|  
+|
 | database :  Pp.fasta
 | query file :  Ac.fasta
-|  
+|
 | ***** START run BLAST *****
 | ***** END run BLAST *****
-|  
-| 
+|
+|
 | database :  Ac.fasta
 | query file : only the sequences of Pp.fasta who matched during the last BLAST
-|  
+|
 | ***** START run BLAST *****
 | ***** END run BLAST *****
-|  
+|
 | [3/5] Get pairs of sequences ...
 | Get list of fasta name involved in RBH
 | Number of pairwises parsed = 13
 | Get subset of Alvinella db
-| Get subset of Paralvinella db 
-| 
-| 
+| Get subset of Paralvinella db
+|
+|
 | -------------------- Pairwise Ap_Ac --------------------
-|  
+|
 | database :  Ap.fasta
 | query file :  Ac.fasta
-|  
+| 
 | ***** START run BLAST *****
 | ***** END run BLAST *****
-|  
-| 
+|
+|
 | database :  Ac.fasta
 | query file : only the sequences of Ap.fasta who matched during the last BLAST
-|  
+|
 | ***** START run BLAST *****
 | ***** END run BLAST *****
-|  
+|
 | [3/5] Get pairs of sequences ...
 | Get list of fasta name involved in RBH
 | Number of pairwises parsed = 24
 | Get subset of Alvinella db
-| Get subset of Paralvinella db 
-| 
-| 
+| Get subset of Paralvinella db
+|
+|
 
 **Pairwise_output_file_PROT**
 
-| Save as *Galaxy{number}-[Pairwise_output_file_PROT].zip*
-| If you unzip the file, a number of file appears (number of pairwise) : 19_ReciprocalBestHits_{name_of_pairwise}.fasta
 | For example the 4 last sequences of the file 19_ReciprocalBestHits_Pp_Ap.fasta
-| 
+|
 | &gt;Ap123_1/1_1.000_748||254...478||[[1/1]][[1/6]]||29.3333333333||0||29.3333333333||75.0
 | FVRITVGDEMSRRPKFAMITWVGPEVSPMKRAKVSTDKAFVKQIFQNFAKEIQTSERSELEEEYVRQEVMKAGGA
 | &gt;Pp_146_1/2_1.000_713||259...483||[[1/1]][[1/6]]||29.3333333333||0||29.3333333333||75.0
@@ -242,27 +245,25 @@ The output files
 | LSTSLLNWRKHTLCF*GMKLILIILLISFIIPAILFLLSIFTTMRMPESREKFRPYECGFDPNHSARTP
 | &gt;Pp_201_2/2_1.000_691||14...220||[[1/1]][[1/6]]||21.7391304348||0||21.7391304348||69.0
 | LSTSLLN*RKQPFASEEMKLLILLLFISALIPRILIILSIFTSIRTPKNREKSSPYECGFDPNHSARTP
-| 
-| 
+|
+|
 
 **Pairwise_output_file_DNA**
-																				                  	              
-| Save as *Galaxy{number}-[Pairwise_output_file_DNA].zip*																		      	
-| If you unzip the file, a number of file appears (number of pairwise) : 25_DNAalignment_corresponding_to_protein_from_19_RBH_{name_of_pairwise}.fasta    	
+
 | For example the 4 last sequences of the file 25_DNAalignement_corresponding_to_protein_from_19_RBH_Pp_Ap.fasta
-| 
+|
 | &gt;Ap123_1/1_1.000_748
 | CCAGTAACAAGCCGCCACGGGTCCGTCGTGTCTTCTCTTCAAGGAAAGGTTGACAGATTCTCGTACGCTAGACGTCGCCACCTACTCGTCCTGGACTCCGGTGCCGTAGGTGGCGCCACCTGCTTTCATCACTTCCTGCCTA
 | ACGTACTCCTCTTCTAGCTCCGATCTCTCGCTCGTCTGGATCTCTTTGGCAAAGTTCTGGAATATCTGCTTGACGAACGCCTTGTCCGTGCTGACTTTGGCGCGCTTCATTGGGCTCACTTCCGGTCCGACCCACGTGATCA
 | TGGCGAACTTCGGTCTTCTGCTCATTTCGTCCCCGACGGTAATACGGACAAAGGCGAACGCCCGCTGGTCATCTTGTAGTTTTGATAACAGATCCTCGTATTCGGTTCCTGTAGAGTCCAGTATAATATTGTCGCCATCATA
 | CGTCACAAACGCCCAGTTTGTCTCCGTCGCGTCGCTCCTGACGTCTTCGTAAGCCTGTCCGATAGCCTCTCTGTCGATGTCTGCCATGCTGCTGGTCCCGCTCTCGACGCTAATGAGCCAATCACGACTTCTGACAGACGAG
 | TAGACATGCAGACAGCCAGACGGACTGACGGACTGACG
-| &gt;Pp_146_1/2_1.000_713																						      
+| &gt;Pp_146_1/2_1.000_713
 | CATTAATTGTGTGTCTGGTTGTGGGTGTGTGTTATAAGAGACATCACTTAGTGTATACTGATGTCCACGTGGTAGTTGACCAGCATGTCGAATATGGATAGGGACTCGATCTTGAATGGCTATGAGGAGGTTCGCAACGACGA
 | CTCGGACATTAACTGGGCTTTCGTAACGTATTCACCTGACAACAAACTAGTACTTGATTCAACTGGCACAGACTACTTCCAGCTCCAGGAGAAATATCAAGATGATATGCGAGGATTTGCTTACATCCGGTGCACTAACGAGG
 | AGAGTAAACGTTCTAAATTTGCCATGATTACCTGGATTGGACAAGGAGTGGAAGCAATGAAGCGTGCCAAGGTCAGCATGGACAAACAGTTCCTAAAGGAAATCTTCCAGAATTTCGCAAGAGAATTTCAGACGAGTGAAAAG
 | TCAGAGCTTGATGAGGTCTGTATTAAACACGCGCTTGCCATTGACGATGGAGCTGGTTGCAAAGTGGAAAGCGAGGACACGAGAAAAGGGGCCTTTCTCAGGAAAGAGGATGACACTGAAGTGGAAAGGGAAACTAATGTCAA
-| CAATGTCTCCGGTGTCGTGGAAGAAGATGATGACGCAAAAAATGCAAATGATTTTAATTACGAAGAGGACTGTAACAATGAATAGGTGCATGTCGATGATTTATATAGAGAACTAGACTTCGCACTCGCTAGGTGGTTGAT 
+| CAATGTCTCCGGTGTCGTGGAAGAAGATGATGACGCAAAAAATGCAAATGATTTTAATTACGAAGAGGACTGTAACAATGAATAGGTGCATGTCGATGATTTATATAGAGAACTAGACTTCGCACTCGCTAGGTGGTTGAT
 | &gt;Ap66_1/1_1.000_400
 | TGATCGTCTTATAAACCTAACTTGAAAAACCTTCCTACCATTTAGGGCTAGCAGCCCTATTAATTATCACACCTATCGCAGCGCTCTCACTATAATTATAAGTATTGCGCCGGGTTTGAACGGATAGCTCTGATGCTGCTAATT
 | ACGGGACCTAATAATCCCCAATACTTTATCCTTAGAGAGCTGTACCTCTTAGCACCAGTCTTTTAAACTGGCGAAAGCACACTTTATGCTTCTAAGGAATGAAACTAATTCTTATAATCCTACTAATCTCTTTTATCATCCCCG
@@ -270,6 +271,22 @@ The output files
 | &gt;Pp_201_2/2_1.000_691
 | ATCGTAGGGAAAAAGGTGTTCGTGCAGAATGATTGGGGTCAAATCCACATTCGTAGGGGCTAGATTTTTCACGGTTTTTAGGTGTACGAATAGAGGTGAAGATTGATAGGATGATTAAAATTCTTGGGATTAATGCTGAAATAAA
 | GAGAAGTAGGATTAAAAGTTTCATTTCCTCAGAAGCAAAGGGTTGCTTTCGTCAGTTTAAAAGACTGGTGCTAAGTAGGTACAGCTCTCTAAGGG
+
+---------------------------------------------------
+
+Changelog
+---------
+
+**Version 2.0 - 18/04/2017**
+
+ - NEW: Replace the zip between tools by Dataset Collection
+
+
+**Version 1.0 - 13/04/2017**
+
+ - TEST: Add funtional test with planemo
+
+ - IMPROVEMENT: Use conda dependencies for blast, samtools and python
 
     </help>
 

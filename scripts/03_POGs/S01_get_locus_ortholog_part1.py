@@ -43,26 +43,18 @@ def get_pairs(fasta_file_path):
 import string, os, time, re, sys, pickle, zipfile #modif julie : ajout de zipfile
 
 ## 1 ## INPUT/OUTPUT
-#extraction du fichier zip contenant les sorties
-zfile = zipfile.ZipFile(sys.argv[1])
-for name in zfile.namelist() :
-	zfile.extract(name)
-
-PATH = "./"
-L1 = os.listdir(PATH)
+infiles = sys.argv[1]
 
 ## 2 ## RUN
 ##Get list locus
 list_LOCUS=[]
-for subfolder in L1:
-    if subfolder.startswith("19_") : 
-    	fileIN = subfolder
+for fileIN in str.split(infiles,","):
 	list_pairwises = get_pairs(fileIN)          ### DEF1 ###
 
     	jj=0
     	for pair in list_pairwises:
             name1 = pair[0]
-            name2 = pair[2]         
+            name2 = pair[2]
             m=0
 
             ## If one of the 2 names yet present ==> complete the locus
@@ -92,14 +84,14 @@ for locus in list_LOCUS:
     for seq in locus:
         if seq not in short_locus:
             short_locus.append(seq)
-            
+
     ## Sort the list of sequence name (by alphabetical order)
     short_locus.sort()
 
     ## Add the locus to the new list (list_short_LOCUS) if not yet present (avoid redondant locus)
     if short_locus not in list_short_LOCUS:
         list_short_LOCUS.append(short_locus)
-    
+
 list_LOCUS = list_short_LOCUS
 
 ## Control list locus length
@@ -108,6 +100,6 @@ print "\nNumber of locus = %d\n" %ln
 
 ## Backup list locus with PICKLE
 backup_list_LOCUS = open("02_backup_list_LOCUS", "w")
-pickle.dump(list_LOCUS, backup_list_LOCUS) 
+pickle.dump(list_LOCUS, backup_list_LOCUS)
 
 backup_list_LOCUS.close()

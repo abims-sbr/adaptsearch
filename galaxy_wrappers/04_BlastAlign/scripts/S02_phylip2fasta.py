@@ -1,1 +1,0 @@
-../../../scripts/04_BlastAlign/S02_phylip2fasta.py
