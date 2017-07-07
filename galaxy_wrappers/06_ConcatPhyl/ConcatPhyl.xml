@@ -55,40 +55,19 @@
 			## (-m)
 			-m $format.base_model$format.aa_search_matrix
 		#end if
+			
+	    -p $random_seed
+	    
+	    #if $number_of_runs_bootstop != "":
+	        -# $number_of_runs_bootstop
+	    #else :
+	        -N $number_of_runs
+	    #end if	    
+			
+		-f $search_algorithm
+		
+		-x $rapid_bootstrap_random_seed	 			
 
-		## --- Optional parameters ---
-
-		##if $raxml_options.options == "yes" :
-
-			## (-p)
-			#if $random_seed:
-	    		-p $random_seed
-			#else
-	    		-p 1234567890
-			#end if
-
-			## (-N/#)
-	   	 	#if $number_of_runs:
-	        		-N $number_of_runs
-	   		#end if
-			#if $number_of_runs_bootstop:
-	    		-# $number_of_runs_bootstop
-			#end if
-
-			## (-f)
-			#if $search_algorithm:
-				-f $search_algorithm
-			#end if
-
-			## (-x)
-			#if $rapid_bootstrap_random_seed:
-			-x $rapid_bootstrap_random_seed
-			#end if
-		##else :
-
-	 	##-N 100 -f a -x 12345
-
-		##end if
 		>> ${output};
 	]]>
   	</command>
@@ -105,7 +84,7 @@
 			</param>
 
 			<when value="nucleic">
-				<!-- ## Nucleotide substitution models -->
+				<param name="zip_nuc" type="data" format="no_unzip.zip,zip" label="Choose your ZIP file" help="It must contain the aligned files without indels in NUCLEIC format" />
 		    	<param name="base_model" type="select" label="Substitution Model">
 		        	<option value="GTRCAT">GTRCAT</option>
 		        	<option value="GTRCATI">GTRCATI</option>
@@ -115,8 +94,8 @@
 			</when>
 
 			<when value="proteic">
-				<!-- ## Aminoacid substitution models -->
-				<!--<param name="aa_model_empirical_base_frequencies" type="boolean" checked="no" truevalue="F" falsevalue="X" display="checkboxes" label="Use empirical base frequencies in AA models." /> -->
+				<param name="zip_aa" type="data" format="no_unzip.zip,zip" label="Choose your ZIP file" help="It must contain the aligned files without indels in PROTEIC format" />
+				
 		    	<param name="base_model" type="select" label="Substitution Model (-m)">
 					<option value="PROTCAT" selected="true">PROTCAT</option>
 					<option value="PROTCATI">PROTCATI</option>
@@ -132,19 +111,7 @@
 			</when>
 		</conditional>
 
-<!-- <conditional name="raxml_options"> -->
-
-<!--
-<param name="options" type="select" label="Raxml advanced options">
-				<option value="yes">Yes</option>
-				<option value="no" select="true">No</option>
-</param>
-
--->
-
-<!-- <when value="yes"> -->
-
-		<param name="random_seed" type="integer" value="326395" size="12" label="Random seed used for the parsimony inferences" />
+		<param name="random_seed" type="integer" value="1234567890" size="12" label="Random seed used for the parsimony inferences" />
 
 		<!-- ## (-N/#) -->
 		<param name="number_of_runs" type="integer" size="8" value="100"
@@ -197,11 +164,7 @@
 	  	<param name="multiple_model" format="txt" type="data" label="Multiple model assignment to alignment partitions" optional="True" help="Specify the file name which contains the assignment of models to alignment partitions for multiple models of substitution. For the syntax of this file please consult the manual." />
 
 	 	<!-- ## (-x) -->
-         <param name="rapid_bootstrap_random_seed" type="integer" value='955415' size="7" label="Rapid bootstrapping random seed" optional="True" help="Specify a random seed and turn on rapid bootstrapping. CAUTION: unlike in version 7.0.4 RAxML will conduct rapid BS replicates under the model of rate heterogeneity you specified via '-m' and not by default under CAT." />
-<!-- </when> -->
-
-
-<!-- </conditional> -->
+         <param name="rapid_bootstrap_random_seed" type="integer" value='1234567890' size="7" label="Rapid bootstrapping random seed" optional="True" help="Specify a random seed and turn on rapid bootstrapping. CAUTION: unlike in version 7.0.4 RAxML will conduct rapid BS replicates under the model of rate heterogeneity you specified via '-m' and not by default under CAT." />
 
 		<param name="out" type="select" label="What format of file do you want for your output (concatenation of the sequences) ? ">
 			<option value="nothing">No output</option>
@@ -209,8 +172,7 @@
 			<option value="phylip">Phylip format</option>
 			<option value="nexus">Nexus format</option>
 		</param>
-          <!-- -m GTRGAMMA -N 100 -f a -x 12345 -->
-
+		
 		<param name="raxml1" type="boolean" label="Do you want the output of RAxML : best tree ? " />
 		<param name="raxml3" type="boolean" label="Do you want the output of RAxML : bi-partition ? " />
 		<param name="raxml4" type="boolean" label="Do you want the output of RAxML : bootstrap ? " help="Only if the option 'rapid bootsptrap' is chosen. When you don't want to choose your options, this output is accessible"/>
@@ -282,7 +244,6 @@
 					<has_text text="((Ph,Ap),(Am,(Pg,Th)),Ac);"/>
 				</assert_contents>
 			</output>
-
 		</test>
 	</tests>
 
