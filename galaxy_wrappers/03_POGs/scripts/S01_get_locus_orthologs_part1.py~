@@ -105,6 +105,9 @@ import string, os, time, re, sys, pickle, zipfile #modif julie : ajout de zipfil
 zfile = zipfile.ZipFile(sys.argv[1])
 for name in zfile.namelist() :
 	zfile.extract(name)
+	
+## MODIF ICI : INFILES sys.argv[1] A LA PLACE DE ZIP
+# infiles = sys.argv[1]
 
 PATH = "./"
 L1 = os.listdir(PATH) # Liste des fichiers dans PATH
@@ -121,11 +124,6 @@ print "\nNumber of locus = %d\n" %ln
 
 ## Backup list locus with PICKLE
 backup_list_LOCUS = open("02_backup_list_LOCUS", "w")
-# Ecrit au format pickle dans le fichier
 pickle.dump(list_short_locus, backup_list_LOCUS)
-""" pickle save an object in a file and allows to load it afterwards without parsing. """
 
 backup_list_LOCUS.close()
-
-os.system("rm -f 19*")
-
