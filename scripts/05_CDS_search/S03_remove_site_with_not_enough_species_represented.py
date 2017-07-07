@@ -61,7 +61,7 @@ def remove_position_with_too_much_missing_data(bash_aa, bash_nuc, MIN_SPECIES_NB
         LIST_POSITION_KEEPED_nuc.append(position1)
         LIST_POSITION_KEEPED_nuc.append(position2)
         LIST_POSITION_KEEPED_nuc.append(position3)
-        
+
     ## 4 ## Create entries for "filtered_bash" for aa & nuc
     filtered_bash_aa = {}
     filtered_bash_nuc = {}
@@ -69,7 +69,7 @@ def remove_position_with_too_much_missing_data(bash_aa, bash_nuc, MIN_SPECIES_NB
         filtered_bash_aa[fasta_name] = ""
     for fasta_name in bash_nuc.keys():
         filtered_bash_nuc[fasta_name] = ""
-    
+
     ## 5 ## Write "filtered_bash" for aa
     j=0
     while j < ln_aa:
@@ -87,8 +87,8 @@ def remove_position_with_too_much_missing_data(bash_aa, bash_nuc, MIN_SPECIES_NB
         seq = filtered_bash_aa[name]
         if seq == '':
             del filtered_bash_aa[name]
-            
-    
+
+
     ## 7 ## Write "filtered_bash" for nuc
     j=0
     while j < ln_nuc:
@@ -101,13 +101,13 @@ def remove_position_with_too_much_missing_data(bash_aa, bash_nuc, MIN_SPECIES_NB
                 seq = seq + pos
                 filtered_bash_nuc[fasta_name] = seq
         j = j + 1
-        
+
     ## 8 ## Remove empty sequence
     for name in filtered_bash_nuc.keys():
         seq = filtered_bash_nuc[name]
         if seq == '':
             del filtered_bash_nuc[name]
-    
+
     return(filtered_bash_aa, filtered_bash_nuc)
 ####################################
 
@@ -118,7 +118,7 @@ def remove_position_with_too_much_missing_data(bash_aa, bash_nuc, MIN_SPECIES_NB
 import string, os, time, re, sys, zipfile
 
 ### 0 ### PARAMETERS
-MIN_SPECIES_NB = int(sys.argv[1]) 
+MIN_SPECIES_NB = int(sys.argv[1])
 MAX_sp = MIN_SPECIES_NB
 MIN_LENGTH_FINAL_ALIGNMENT_NUC = int(sys.argv[2])
 n0 = 0
@@ -167,7 +167,7 @@ for file in L_IN1 :
     ## 4.1 ## REMOVE POSITIONS WITH TOO MUCH MISSING DATA (i.e. not enough taxa represented at each position in the alignment)
     filtered_bash_aa, filtered_bash_nuc = remove_position_with_too_much_missing_data(dico_aa, dico_nuc, MIN_SPECIES_NB)   ### DEF 2 ###
 
-    k = filtered_bash_nuc.keys()    
+    k = filtered_bash_nuc.keys()
     new_leng_nuc = 0
     if k != []:
         k0 = k[0]
@@ -185,7 +185,7 @@ for file in L_IN1 :
     ln_aa = len(filtered_bash_aa.keys())
     nb = "sp%d" %ln_aa
     new_name = LS[0] + "_" + nb + "_" + LS[1]
-    n0+=1 
+    n0+=1
 
     ## 4.5 ## Write filtered alignment in OUTPUTs
     ## aa
@@ -204,28 +204,14 @@ for file in L_IN1 :
             seq_nuc = filtered_bash_nuc[fasta_name]
             OUTnuc.write("%s\n" %fasta_name)
             OUTnuc.write("%s\n" %seq_nuc)
-        OUTnuc.close() 
+        OUTnuc.close()
     else:
 	bad+=1
 
-   
+
 ## 5 ## Print
 print "*************** 2nd Filter : removal of the indel ***************"
 print "\nTotal number of locus recorded  = %d" %n0
 print "\tTotal number of locus with no indels (SAVED) = %d" %good
 print "\tTotal number of locus, when removing indel, wich are empty (EXCLUDED) = %d" %bad
 print ""
-
-## ZipFile
-f_filter_aa = zipfile.ZipFile("ORF_Search_CDS_without_indel_aa.zip", "w")
-f_filter_nuc = zipfile.ZipFile("ORF_Search_CDS_without_indel_nuc.zip", "w")
-
-os.chdir("%s" %path_OUT1)
-folder = os.listdir("./")
-for i in folder :
-    f_filter_aa.write("./%s" %i)
-
-os.chdir("../%s" %path_OUT2)
-folder = os.listdir("./")
-for i in folder :
-    f_filter_nuc.write("./%s" %i)
