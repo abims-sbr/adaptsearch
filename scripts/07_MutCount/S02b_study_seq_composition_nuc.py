@@ -4,7 +4,7 @@
 ## Object: Test for compositional bias in genome and proteome as marker of thermal adaptation (comparison between 2 "hot" species: Ap and Ps and one "cold" species: Pg)
 
 
-import sys,os,zipfile,shutil,subprocess
+import sys,os,zipfile,shutil,subprocess, string
 
 #############
 ### DEF 0 ###
@@ -140,11 +140,6 @@ def purine_loading(seq):
 ###################
 ### RUN RUN RUN ###
 ###################
-import string, os,sys,zipfile
-
-
-
-
 
 ##Create specific folders
 Path_IN_loci_NUC = "./IN_NUC"
@@ -152,20 +147,9 @@ outpath= "./OUT"
 os.makedirs(Path_IN_loci_NUC)
 os.makedirs(outpath)
 
-
-
-
-#Check if the file is a zip or fasta file
-
-the_zip_file = zipfile.ZipFile(sys.argv[1])
-ret = the_zip_file.testzip()
-
-if ret is not None:
-    shutil.copy2(sys.argv[1], './IN_NUC/input.fasta')
-else:
-    cmd="unzip %s -d ./IN_NUC"%(sys.argv[1])
-    os.system(cmd)
-
+infiles = str.split(sys.argv[1], ",")
+for file in infiles:
+    os.system("cp %s %s" %(file, Path_IN_loci_NUC))
 
 ## 1 ## List taxa
 LT=[]
@@ -227,10 +211,8 @@ for locus in Lloci_NUC:
     fileOUT_percent_GC.write("%s," %locus)
     fileOUT_percent_purine.write("%s," %locus)
     fileOUT_Purine_Load.write("%s," %locus)
-    #print bash
-    for taxa in LT:
-        print taxa
-	if taxa in bash.keys():
+    
+    if taxa in bash.keys():
             seq = bash[taxa]
             percent_GC, percent_purine,prop_A, prop_T, prop_C, prop_G = base_composition(seq)   ### DEF2 ###
             TOTAL, DIFF_GC, DIFF_AT,PLI_GC,PLI_AT,PLI_GC_1000,PLI_AT_1000 = purine_loading(seq) ### DEF3 ###
@@ -246,3 +228,4 @@ fileOUT_NUC.close()
 fileOUT_percent_GC.close()
 fileOUT_percent_purine.close()
 fileOUT_Purine_Load.close()
+

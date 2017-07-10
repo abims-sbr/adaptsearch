@@ -3,7 +3,7 @@
 ## Author: Eric FONTANILLAS
 ## Date: 21.12.10
 ## Object: Test for compositional bias in genome and proteome as marker of thermal adaptation (comparison between 2 "hot" species: Ap and Ps and two "cold" species: Pg, Pp)
-import sys, os
+import sys,os,shutil,subprocess,string
 script_path = os.path.dirname(sys.argv[0])
 
 #############
@@ -421,7 +421,7 @@ def sequence_properties_from_aa_properties(seq, bash_properties):
 ###################
 ### RUN RUN RUN ###
 ###################
-import sys,os,zipfile,shutil,subprocess,string
+
 
 ##Create specific folders
 Path_IN_loci_NUC = "./IN_AA"
@@ -429,19 +429,9 @@ outpath= "./OUT"
 os.makedirs(Path_IN_loci_NUC)
 os.makedirs(outpath)
 
-
-#Check if the file is a zip or fasta file
-
-the_zip_file = zipfile.ZipFile(sys.argv[1])
-ret = the_zip_file.testzip()
-
-if ret is not None:
-    shutil.copy2(sys.argv[1], './IN_AA/input.fasta')
-else:
-    cmd="unzip %s -d ./IN_AA"%(sys.argv[1])
-    os.system(cmd)
-
-
+infiles = str.split(sys.argv[1], ",")
+for file in infiles:
+    os.system("cp %s %s" %(file, Path_IN_loci_NUC))
 
 ## 1 ## List taxa
 LT=[]
@@ -456,7 +446,7 @@ print LT
 
 
 ## 2 ## PathIN
-fileIN_properties = open("%s/01_AminoAcid_Properties2.csv"%(script_path), "r")
+fileIN_properties = open("amino_acid_properties.csv", "r")
 Path_IN_loci_AA = "./IN_AA"
 #Path_IN_loci_AA = "02_CDS_No_Missing_Data_aa_CDS_withM"
 Lloci_AA = os.listdir(Path_IN_loci_AA)
@@ -622,4 +612,5 @@ for locus in Lloci_AA:
 
     
     
+
 
