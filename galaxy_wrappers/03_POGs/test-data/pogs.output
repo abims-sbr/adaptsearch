@@ -4,7 +4,9 @@ Number of locus before removeRedondancy = 11
 
 Number of locus = 11
 
-NUMBER OF REMAINING LOCUS AFTER 2ND TREATMENT [INTER LOCUS] = 0
+
+NUMBER OF REMAINING LOCUS AFTER INTRA LOCUS TREATMENT [PARALOGS NAIVE FILTERING] = 11
+NUMBER OF REMAINING LOCUS AFTER 2ND TREATMENT [INTER LOCUS] = 11
 
 
 REMOVAL OF LOCUS WITH LESS THAN 2 SEQUENCES
@@ -13,8 +15,8 @@ Number of species in the locus : 4
 	Number of locus : 0
 
 Number of species in the locus : 3
-	Number of locus : 0
+	Number of locus : 1
 
 Number of species in the locus : 2
-	Number of locus : 0
+	Number of locus : 10
 
