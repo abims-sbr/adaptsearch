@@ -1,29 +1,29 @@
 <?xml version="1.0"?>
 
 <tool name="MutCount" id="mutcount" version="1.0">
-	<description>
-		This tool proceeds to count codons, amino acids on each species of a set of species, and then proceeds to permutation tests.
-	</description>
-	
-	<macros>
-		<import>macros.xml</import>
-	</macros>
-	
-	<requirements>
-		<expand macro="python_required" />		
-	</requirements>
-	
-  	<command>
-	<![CDATA[
-		#if str($method.method_run) == "concat" :
-			python $__tool_directory__/scripts/S01a_mutcount_pairs.py $method.num_sampled $method.num_iter $method.list_species
-			&&
-			python $__tool_directory__/scripts/S02a_codon_counting.py ${method.concat_nuc} 
-		#end if
+    <description>
+        This tool proceeds to count codons, amino acids on each species of a set of species, and then proceeds to permutation tests.
+    </description>
 
-		#if str($method.method_run) == "separated" :
+    <macros>
+        <import>macros.xml</import>
+    </macros>
 
-			#if str($method.format.format_run)== "nucleic" :
+    <requirements>
+        <expand macro="python_required" />
+    </requirements>
+
+    <command>
+    <![CDATA[
+        #if str($method.method_run) == "concat" :
+            python $__tool_directory__/scripts/S01a_mutcount_pairs.py $method.num_sampled $method.num_iter $method.list_species
+            &&
+            python $__tool_directory__/scripts/S02a_codon_counting.py ${method.concat_nuc} 
+        #end if
+
+        #if str($method.method_run) == "separated" :
+
+            #if str($method.format.format_run)== "nucleic" :
                 #set $infiles = ""
                 #for $input in $method.format.sep_nuc
                     ln -s '$input' '$input.element_identifier';
@@ -31,12 +31,12 @@
                 #end for
                 #set $infiles = $infiles[:-1]
 
-				python $__tool_directory__/scripts/S02b_study_seq_composition_nuc.py ${infiles}  ${method.format.concat_phy_nuc} 
-				&&
-				zip -r multigenes_nucleic.zip OUT/
-			#end if
-			
-			#if str($method.format.format_run)== "proteic" :
+                python $__tool_directory__/scripts/S02b_study_seq_composition_nuc.py ${infiles}  ${method.format.concat_phy_nuc} 
+                &&
+                zip -r multigenes_nucleic.zip OUT/
+            #end if
+
+            #if str($method.format.format_run)== "proteic" :
                 #set $infiles = ""
                 #for $input in $method.format.sep_aa
                     ln -s '$input' '$input.element_identifier';
@@ -44,73 +44,76 @@
                 #end for
                 #set $infiles = $infiles[:-1]
 
-				cp $__tool_directory__/scripts/amino_acid_properties.csv .
-				&&
+                cp $__tool_directory__/scripts/amino_acid_properties.csv .
+                &&
                 python $__tool_directory__/scripts/S01b_study_seq_composition_aa.py ${infiles} ${method.format.concat_phy_prot}
-				&& 
-				zip -r multigenes_proteic.zip OUT/
-			#end if
-		#end if
+                && 
+                zip -r multigenes_proteic.zip OUT/
+            #end if
+        #end if
     ]]>
-	</command>
+    </command>
 
-    <inputs>	
-	    <conditional name="method">
-		    <param name="method_run" type="select" label="Which method do you want to use for this tool? ">
-			    <option value="concat">Concatenated genes in DNA (concatenation from RAxML run)</option>
-			    <option value="separated">Set of separated genes (from ORF_Search output "output zip containing files with CDS without indel")</option>
-		    </param>
-		    
-		    <when value="concat">
-			    <param name="concat_nuc" type="data" format="fasta" label="Choose your fasta file in nucleic format" help="It must contain the concatenated file in NUCLEIC format from Phylogeny tool" />
-			    <param name="num_sampled" type="integer" value="100" min="0" label="Number of iterations"/>
-			    <param name="num_iter" type="integer" value="100" min="0" label="Number of sampled codons"/>
-			    <param name="list_species" type="text" size="100" label="List of species" help="List the species separated with a comma (for e.g Ap,As,Ct,Gt,Yu)" />		
-		    </when>
-		    		
-		    <when value="separated">
-			    <conditional name="format"> 
-				    <param name="format_run" type="select" label="Which format do you want to use for this tool (concatenation and RAxML run) ? ">
-					    <option value="nucleic">Nucleic format</option>
-					    <option value="proteic">Proteic format</option>
-				    </param>
-				    
-				    <when value="nucleic">		
-					    <param name="sep_nuc" type="data" format="fasta" multiple="true" label="Choose fasta files" help="Concatenated files in NUCLEIC format from ORF_search tool" />
-					    <param name="concat_phy_nuc" type="data" format="fasta" label="Concatenated file from Phylogeny step" help="This file is used to retrieve the species names" />	
-				    </when>
-				    
-				    <when value="proteic">
-					    <param name="sep_aa" type="data" format="fasta" multiple="true" label="Choose your ZIP file" help="Concatenated files in PROTEIC format from ORF_search tool" />
-					    <param name="concat_phy_prot" type="data" format="fasta" label="concatenated file from Phylogeny step" help="This file is used to retrieve the species names" />	
-				    </when>	
-			    </conditional>
-		    </when>	
-		    
-	    </conditional>
+    <inputs>
+        <conditional name="method">
+            <param name="method_run" type="select" label="Which method do you want to use for this tool? ">
+                <option value="concat">Concatenated genes in DNA (concatenation from RAxML run)</option>
+                <option value="separated">Set of separated genes (from ORF_Search output "output zip containing files with CDS without indel")</option>
+            </param>
+
+            <when value="concat">
+                <param name="concat_nuc" type="data" format="fasta" label="Choose your fasta file in nucleic format" help="It must contain the concatenated file in NUCLEIC format from Phylogeny tool" />
+                <param name="num_sampled" type="integer" value="100" min="0" label="Number of iterations"/>
+                <param name="num_iter" type="integer" value="100" min="0" label="Number of sampled codons"/>
+                <param name="list_species" type="text" size="100" label="List of species" help="List the species separated with a comma (for e.g Ap,As,Ct,Gt,Yu)" />
+            </when>
+
+            <when value="separated">
+                <conditional name="format"> 
+                    <param name="format_run" type="select" label="Which format do you want to use for this tool (concatenation and RAxML run) ? ">
+                        <option value="nucleic">Nucleic format</option>
+                        <option value="proteic">Proteic format</option>
+                    </param>
+
+                    <when value="nucleic">
+                        <param name="sep_nuc" type="data" format="fasta" multiple="true" label="Choose fasta files" help="Concatenated files in NUCLEIC format from ORF_search tool" />
+                        <param name="concat_phy_nuc" type="data" format="fasta" label="Concatenated file from Phylogeny step" help="This file is used to retrieve the species names" />	
+                    </when>
+
+                    <when value="proteic">
+                        <param name="sep_aa" type="data" format="fasta" multiple="true" label="Choose your ZIP file" help="Concatenated files in PROTEIC format from ORF_search tool" />
+                        <param name="concat_phy_prot" type="data" format="fasta" label="concatenated file from Phylogeny step" help="This file is used to retrieve the species names" />
+                    </when>	
+                </conditional>
+             </when>
+
+        </conditional>
     </inputs>
 
-	<outputs>
-		<data format="txt" name="output1" label="concatenated_results.txt" from_work_dir="codoncounting_results.txt" >
-			<filter>(method['method_run']=='concat')</filter>
-		</data>
-		<data format="no_unzip.zip" name="output2" label="multigenes_nucleic.zip" from_work_dir="multigenes_nucleic.zip" >
-			<filter>(method['method_run']=='separated' and method['format']['format_run']== 'nucleic')</filter>
-		</data>
-		<data format="no_unzip.zip" name="output3" label="multigenes_proteic.zip" from_work_dir="multigenes_proteic.zip"  >
-			<filter>(method['method_run']=='separated' and method['format']['format_run']== 'proteic')</filter>
-		</data>		
-	</outputs>
-	
-	<tests>
-	    <test>
-	        <conditional name="method" >
-	            <param name="method_run" value="concat" />
-	            <param name="concat_nuc" ftype="fasta" value="test_07_output_phylogeny_concatenation.fasta" />
-	            <param name="num_sampled" value="100" />
-	            <param name="num_iter" value="100" />
-	            <param name="list_species" ftype="text" value="Ac,Pu,Am,Ap,Pf,Pg,Th,Ph,Te" />
-	        </conditional>
+    <outputs>
+        <data format="txt" name="output1" label="concatenated_results.txt" from_work_dir="codoncounting_results.txt" >
+            <filter>(method['method_run']=='concat')</filter>
+        </data>
+        <collection name="output_sep_nuc" type="list" label="MutCount_Separated_Nucleic">
+            <discover_datasets pattern="__name_and_ext__" directory="OUT" />
+            <filter>(method['method_run']=='separated' and method['format']['format_run']== 'nucleic')</filter>
+        </collection>
+        <!-- A modifier : plusierus fichiers csv -->
+        <collection name="output_sep_aa" type="list" label="MutCount_Separated_AminoAcids">
+            <discover_datasets pattern="__name_and_ext__" directory="OUT" />
+            <filter>(method['method_run']=='separated' and method['format']['format_run']== 'proteic')</filter>
+        </collection>
+    </outputs>
+    
+    <tests>
+        <test>
+            <conditional name="method" >
+                <param name="method_run" value="concat" />
+                <param name="concat_nuc" ftype="fasta" value="test_07_output_phylogeny_concatenation.fasta" />
+                <param name="num_sampled" value="100" />
+                <param name="num_iter" value="100" />
+                <param name="list_species" ftype="text" value="Ac,Pu,Am,Ap,Pf,Pg,Th,Ph,Te" />
+            </conditional>
             <output name="output1">
                 <assert_contents>
                     <has_text text="counting of Ac"/>
@@ -123,10 +126,28 @@
                     <has_text text="counting of Ph"/>
                 </assert_contents>
             </output>
-        </test>	   
-	</tests>
-	
-	<help>
+        </test>
+
+        <test>
+            <conditional name="method" >
+                <param name="method_run" value="separated" />
+                <conditional name="format" >
+                    <param name="format_run" value="nucleic" />
+                    <param name="sep_nuc" ftype="fasta" value="sep_nuc/locus1_sp6_sp6.fasta,sep_nuc/locus1_sp8_sp8.fasta,sep_nuc/locus2_sp6_sp6.fasta" />
+                    <param name="concat_phy_nuc" ftype="fasta" value="phylogeny_concat.fasta" />
+                </conditional>
+            </conditional>
+            <output_collection name="output_sep_nuc" type="list" >
+                <element name="10_nuc_compositions.csv" value="OUT_nuc/10_nuc_compositions.csv" />
+                <element name="11_percent_GC.csv" value="OUT_nuc/11_percent_GC.csv" />
+                <element name="12_percent_purine.csv" value="OUT_nuc/12_percent_purine.csv" />
+                <element name="12_Purine_Load_Indice.csv" value="OUT_nuc/12_Purine_Load_Indice.csv" />
+            </output_collection>
+        </test>
+        
+    </tests>
+    
+    <help>
 
 .. class:: infomark
 
@@ -195,9 +216,9 @@ The script takes as input the DNA alignment (fasta format): python codoncounting
 
 example.
 
-	</help>
-	
-	<expand macro="citations" />
-	
+    </help>
+    
+    <expand macro="citations" />
+
 </tool>
 
