@@ -87,9 +87,67 @@
     </inputs>
 
     <outputs>
+        <!-- output concat -->
         <data format="txt" name="output1" label="concatenated_results.txt" from_work_dir="codoncounting_results.txt" >
             <filter>(method['method_run']=='concat')</filter>
         </data>
+
+        <!-- outputs separated - nucleic -->
+        <data format="csv" name="nuc_comp" label="10_nuc_compositions.csv" from_work_dir="OUT/10_nuc_compositions.csv" >
+            <filter>(method['method_run']=='separated' and method['format']['format_run']== 'nucleic')</filter>
+        </data>
+        <data format="csv" name="percent_gc" label="11_percent_GC.csv" from_work_dir="OUT/11_percent_GC.csv" >
+            <filter>(method['method_run']=='separated' and method['format']['format_run']== 'nucleic')</filter>
+        </data>
+        <data format="csv" name="percent_pur" label="12_percent_purine.csv" from_work_dir="OUT/12_percent_purine.csv" >
+            <filter>(method['method_run']=='separated' and method['format']['format_run']== 'nucleic')</filter>
+        </data>
+        <data format="csv" name="purine_load" label="12_Purine_Load_Indice.csv" from_work_dir="OUT/12_Purine_Load_Indice.csv" >
+            <filter>(method['method_run']=='separated' and method['format']['format_run']== 'nucleic')</filter>
+        </data>
+
+        <!-- outputs separated - proteic -->
+        <data format="csv" name="prot_comp" label="13_prot_compositions_All_AA.csv" from_work_dir="OUT/13_prot_compositions_All_AA.csv" >
+            <filter>(method['method_run']=='separated' and method['format']['format_run']== 'proteic')</filter>
+        </data>
+        <data format="csv" name="ivywrel" label="14_IVYWREL.csv" from_work_dir="OUT/14_IVYWREL.csv" >
+            <filter>(method['method_run']=='separated' and method['format']['format_run']== 'proteic')</filter>
+        </data>
+        <data format="csv" name="erk_dnqtsh" label="15_ERK_DNQTSH.csv" from_work_dir="OUT/15_ERK_DNQTSH.csv" >
+            <filter>(method['method_run']=='separated' and method['format']['format_run']== 'proteic')</filter>
+        </data>
+        <data format="csv" name="ek_qh" label="16_EK_QH.csv" from_work_dir="OUT/16_EK_QH.csv" >
+            <filter>(method['method_run']=='separated' and method['format']['format_run']== 'proteic')</filter>
+        </data>
+        <data format="csv" name="fymink_garp" label="17_FYMINK_GARP.csv" from_work_dir="OUT/17_FYMINK_GARP.csv" >
+            <filter>(method['method_run']=='separated' and method['format']['format_run']== 'proteic')</filter>
+        </data>
+        <data format="csv" name="avlimfyw" label="18_AVLIMFYW.csv" from_work_dir="OUT/18_AVLIMFYW.csv" >
+            <filter>(method['method_run']=='separated' and method['format']['format_run']== 'proteic')</filter>
+        </data>
+        <data format="csv" name="stnq" label="19_STNQ.csv" from_work_dir="OUT/19_STNQ.csv" >
+            <filter>(method['method_run']=='separated' and method['format']['format_run']== 'proteic')</filter>
+        </data>
+        <data format="csv" name="rhkde" label="20_RHKDE.csv" from_work_dir="OUT/20_RHKDE.csv" >
+            <filter>(method['method_run']=='separated' and method['format']['format_run']== 'proteic')</filter>
+        </data>
+        <data format="csv" name="payre_mvgds" label="21_PAYRE-MVGDS.csv" from_work_dir="OUT/21_PAYRE-MVGDS.csv" >
+            <filter>(method['method_run']=='separated' and method['format']['format_run']== 'proteic')</filter>
+        </data>
+        <data format="csv" name="res_weigth" label="22_TotalResidueWeight.csv" from_work_dir="OUT/22_TotalResidueWeight.csv" >
+            <filter>(method['method_run']=='separated' and method['format']['format_run']== 'proteic')</filter>
+        </data>
+        <data format="csv" name="res_vol" label="23_TotalResidueVolume.csv" from_work_dir="OUT/23_TotalResidueVolume.csv" >
+            <filter>(method['method_run']=='separated' and method['format']['format_run']== 'proteic')</filter>
+        </data>
+        <data format="csv" name="spec_vol" label="24_TotalPartialSpecificVolume.csv" from_work_dir="OUT/24_TotalPartialSpecificVolume.csv" >
+            <filter>(method['method_run']=='separated' and method['format']['format_run']== 'proteic')</filter>
+        </data>
+        <data format="csv" name="hydrat" label="25_TotalHydratation.csv" from_work_dir="OUT/25_TotalHydratation.csv" >
+            <filter>(method['method_run']=='separated' and method['format']['format_run']== 'proteic')</filter>
+        </data>
+
+        <!--
         <collection name="output_sep_nuc" type="list" label="MutCount_Separated_Nucleic">
             <discover_datasets pattern="__name_and_ext__" directory="OUT" />
             <filter>(method['method_run']=='separated' and method['format']['format_run']== 'nucleic')</filter>
@@ -98,6 +156,7 @@
             <discover_datasets pattern="__name_and_ext__" directory="OUT" />
             <filter>(method['method_run']=='separated' and method['format']['format_run']== 'proteic')</filter>
         </collection>
+        -->    
     </outputs>
     
     <tests>
@@ -132,12 +191,26 @@
                     <param name="concat_phy_nuc" ftype="fasta" value="phylogeny_concat.fasta" />
                 </conditional>
             </conditional>
-            <output_collection name="output_sep_nuc" type="list" >
-                <element name="10_nuc_compositions.csv" value="OUT_nuc/10_nuc_compositions.csv" />
-                <element name="11_percent_GC.csv" value="OUT_nuc/11_percent_GC.csv" />
-                <element name="12_percent_purine.csv" value="OUT_nuc/12_percent_purine.csv" />
-                <element name="12_Purine_Load_Indice.csv" value="OUT_nuc/12_Purine_Load_Indice.csv" />
-            </output_collection>
+            <output name="nuc_comp" >
+                <assert_contents>
+                    <has_line line="locus1_sp8_sp8.fasta,0.29870,0.25541,0.19481,0.25108," />
+                </assert_contents>
+            </output>
+            <output name="percent_gc">
+                <assert_contents>
+                    <has_line line="locus2_sp6_sp6.fasta,42.70833," />
+                </assert_contents>
+            </output>
+            <output name="percent_pur" >
+                <assert_contents>
+                    <has_line line="locus2_sp6_sp6.fasta,56.77083," />
+                </assert_contents>
+            </output>
+            <output name="purine_load" >
+                <assert_contents>
+                    <has_line line="locus2_sp6_sp6.fasta,192,14,12,72.91667,62.50000," />
+                </assert_contents>
+            </output>
         </test>
 
         <test>
@@ -149,7 +222,57 @@
                     <param name="concat_phy_prot" ftype="fasta" value="phylogeny_concat.fasta" />
                 </conditional>
             </conditional>
+            <output name="prot_comp" >
+                <assert_contents>
+                    <has_line line="locus2_sp6_sp6.fasta,0.12500,0.00000,0.09375,0.04688,0.03125,0.09375,0.03125,0.07812,0.00000,0.04688,0.01562,0.03125,0.03125,0.01562,0.04688,0.00000,0.07812,0.07812,0.06250,0.09375,0.12500,0.00000,0.09375,0.04688,0.03125,0.09375,0.01562,0.10938,0.00000,0.04688,0.01562,0.04688,0.01562,0.01562,0.04688,0.00000,0.07812,0.07812,0.06250,0.07812,0.12500,0.00000,0.09375,0.04688,0.04688,0.09375,0.01562,0.09375,0.00000,0.04688,0.01562,0.03125,0.01562,0.01562,0.04688,0.00000,0.07812,0.07812,0.06250,0.09375,0.14062,0.00000,0.09375,0.06250,0.04688,0.09375,0.01562,0.09375,0.00000,0.03125,0.01562,0.04688,0.01562,0.01562,0.03125,0.00000,0.07812,0.07812,0.06250,0.07812,0.12500,0.00000,0.12500,0.04688,0.03125,0.09375,0.01562,0.10938,0.00000,0.04688,0.01562,0.04688,0.01562,0.01562,0.04688,0.00000,0.07812,0.07812,0.06250,0.04688,0.14062,0.00000,0.09375,0.06250,0.04688,0.09375,0.01562,0.09375,0.00000,0.03125,0.01562,0.04688,0.01562,0.01562,0.03125,0.00000,0.07812,0.07812,0.06250,0.07812," />
+                </assert_contents>
+            </output>
+            <output name="ivywrel">
+                <assert_contents>
+                    <has_line line="locus2_sp6_sp6.fasta,21.00000,0.32812,23.00000,0.35938,23.00000,0.35938,22.00000,0.34375,23.00000,0.35938,22.00000,0.34375," />
+                </assert_contents>
+            </output>
+            <output name="res_vol" >
+                <assert_contents>
+                    <has_line line="locus2_sp6_sp6.fasta,6575.00000,6593.00000,6587.00000,6645.00000,6631.00000,6645.00000," />
+                </assert_contents>
+            </output>
+            <output name="hydrat" >
+                <assert_contents>
+                    <has_line line="locus2_sp6_sp6.fasta,171.50000,171.50000,170.50000,171.00000,171.50000,171.00000," />
+                </assert_contents>
+            </output>
+        </test>
+
+        <!--
+        <test>
+            <conditional name="method" >
+                <param name="method_run" value="separated" />
+                <conditional name="format" >
+                    <param name="format_run" value="nucleic" />
+                    <param name="sep_nuc" ftype="fasta" value="sep_nuc/locus1_sp6_sp6.fasta,sep_nuc/locus1_sp8_sp8.fasta,sep_nuc/locus2_sp6_sp6.fasta" />
+                    <param name="concat_phy_nuc" ftype="fasta" value="phylogeny_concat.fasta" />
+                </conditional>
+            </conditional>
             <output_collection name="output_sep_nuc" type="list" >
+                <element name="10_nuc_compositions.csv" value="OUT_nuc/10_nuc_compositions.csv" />
+                <element name="11_percent_GC.csv" value="OUT_nuc/11_percent_GC.csv" />
+                <element name="12_percent_purine.csv" value="OUT_nuc/12_percent_purine.csv" />
+                <element name="12_Purine_Load_Indice.csv" value="OUT_nuc/12_Purine_Load_Indice.csv" />
+            </output_collection>
+        </test>
+        
+
+        <test>
+            <conditional name="method" >
+                <param name="method_run" value="separated" />
+                <conditional name="format" >
+                    <param name="format_run" value="proteic" />
+                    <param name="sep_aa" ftype="fasta" value="sep_aa/locus1_sp6_sp6.fasta,sep_aa/locus1_sp8_sp8.fasta,sep_aa/locus2_sp6_sp6.fasta" />
+                    <param name="concat_phy_prot" ftype="fasta" value="phylogeny_concat.fasta" />
+                </conditional>
+            </conditional>
+            <output_collection name="output_sep_aa" type="list" >
                 <element name="13_prot_compositions_All_AA.csv" value="OUT_aa/13_prot_compositions_All_AA.csv" />
                 <element name="14_IVYWREL.csv" value="OUT_aa/14_IVYWREL.csv" />
                 <element name="15_ERK_DNQTSH.csv" value="OUT_aa/15_ERK_DNQTSH.csv" />
@@ -165,6 +288,7 @@
                 <element name="25_TotalHydratation.csv" value="OUT_aa/25_TotalHydratation.csv" />
             </output_collection>
         </test>
+        -->
 
     </tests>
     

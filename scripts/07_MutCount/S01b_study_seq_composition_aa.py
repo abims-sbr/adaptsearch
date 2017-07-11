@@ -9,8 +9,7 @@ script_path = os.path.dirname(sys.argv[0])
 #############
 ### DEF 0 ###
 #############
-def simplify_fasta_name(fasta_name,LT):
-
+def simplify_fasta_name(fasta_name,LT):    
     for abbreviation in LT:
         if abbreviation in fasta_name:
             new_fasta_name = abbreviation
