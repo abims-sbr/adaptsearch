@@ -31,9 +31,7 @@
                 #end for
                 #set $infiles = $infiles[:-1]
 
-                python $__tool_directory__/scripts/S02b_study_seq_composition_nuc.py ${infiles}  ${method.format.concat_phy_nuc} 
-                &&
-                zip -r multigenes_nucleic.zip OUT/
+                python $__tool_directory__/scripts/S02b_study_seq_composition_nuc.py ${infiles}  ${method.format.concat_phy_nuc}                 
             #end if
 
             #if str($method.format.format_run)== "proteic" :
@@ -46,9 +44,7 @@
 
                 cp $__tool_directory__/scripts/amino_acid_properties.csv .
                 &&
-                python $__tool_directory__/scripts/S01b_study_seq_composition_aa.py ${infiles} ${method.format.concat_phy_prot}
-                && 
-                zip -r multigenes_proteic.zip OUT/
+                python $__tool_directory__/scripts/S01b_study_seq_composition_aa.py ${infiles} ${method.format.concat_phy_prot}               
             #end if
         #end if
     ]]>
@@ -97,8 +93,7 @@
         <collection name="output_sep_nuc" type="list" label="MutCount_Separated_Nucleic">
             <discover_datasets pattern="__name_and_ext__" directory="OUT" />
             <filter>(method['method_run']=='separated' and method['format']['format_run']== 'nucleic')</filter>
-        </collection>
-        <!-- A modifier : plusierus fichiers csv -->
+        </collection>        
         <collection name="output_sep_aa" type="list" label="MutCount_Separated_AminoAcids">
             <discover_datasets pattern="__name_and_ext__" directory="OUT" />
             <filter>(method['method_run']=='separated' and method['format']['format_run']== 'proteic')</filter>
@@ -144,7 +139,33 @@
                 <element name="12_Purine_Load_Indice.csv" value="OUT_nuc/12_Purine_Load_Indice.csv" />
             </output_collection>
         </test>
-        
+
+        <test>
+            <conditional name="method" >
+                <param name="method_run" value="separated" />
+                <conditional name="format" >
+                    <param name="format_run" value="proteic" />
+                    <param name="sep_aa" ftype="fasta" value="sep_aa/locus1_sp6_sp6.fasta,sep_aa/locus1_sp8_sp8.fasta,sep_aa/locus2_sp6_sp6.fasta" />
+                    <param name="concat_phy_prot" ftype="fasta" value="phylogeny_concat.fasta" />
+                </conditional>
+            </conditional>
+            <output_collection name="output_sep_nuc" type="list" >
+                <element name="13_prot_compositions_All_AA.csv" value="OUT_aa/13_prot_compositions_All_AA.csv" />
+                <element name="14_IVYWREL.csv" value="OUT_aa/14_IVYWREL.csv" />
+                <element name="15_ERK_DNQTSH.csv" value="OUT_aa/15_ERK_DNQTSH.csv" />
+                <element name="16_EK_QH.csv" value="OUT_aa/16_EK_QH.csv" />
+                <element name="17_FYMINK_GARP.csv" value="OUT_aa/17_FYMINK_GARP.csv" />
+                <element name="18_AVLIMFYW.csv" value="OUT_aa/18_AVLIMFYW.csv" />
+                <element name="19_STNQ.csv" value="OUT_aa/19_STNQ.csv" />
+                <element name="20_RHKDE.csv" value="OUT_aa/20_RHKDE.csv" />
+                <element name="21_PAYRE-MVGDS.csv" value="OUT_aa/21_PAYRE-MVGDS.csv" />
+                <element name="22_TotalResidueWeight.csv" value="OUT_aa/22_TotalResidueWeight.csv" />
+                <element name="23_TotalResidueVolume.csv" value="OUT_aa/23_TotalResidueVolume.csv" />
+                <element name="24_TotalPartialSpecificVolume.csv" value="OUT_aa/24_TotalPartialSpecificVolume.csv" />
+                <element name="25_TotalHydratation.csv" value="OUT_aa/25_TotalHydratation.csv" />
+            </output_collection>
+        </test>
+
     </tests>
     
     <help>
@@ -167,12 +188,12 @@ Mutcount
 ========
 
 -----------
-Description (temporary - need to be to re-writed)
+Description
 -----------
 
 
-This script counts the number of codons, amino acids, and types of amino acids in sequences, as well as the mutation bias from one item to another between 2 sequences
-counting is then compared to empirical p-values, obtained from bootstrapped sequences obtained from a subset of sequences
+This script counts the number of codons, amino acids, and types of amino acids in sequences, as well as the mutation bias from one item to another between 2 sequences.
+Counting is then compared to empirical p-values, obtained from bootstrapped sequences obtained from a subset of sequences
      
 In the output files, the pvalues indicate the position of the observed data in a distribution of empirical countings obtained from a resample of the data. Values above 0.95 indicate a significantly higher counting, values under 0.05 a significantly lower counting
 
