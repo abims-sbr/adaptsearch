@@ -263,14 +263,7 @@
             <param name="raxml3" value="True" />
             <param name="raxml4" value="True" />
             <output name="out_raxml1" value="RAxML_bestTree"/>     
-            <output name="out_raxml3" value="RAxML_bipartitions"/>
-            <output name="out_raxml4">
-                <assert_contents>
-                    <has_text text="((Pg,(Am,Th)),(Ph,Ap),Ac);"/>
-                    <has_text text="((Th,(Pg,Am)),(Ph,Ap),Ac);"/>
-                    <has_text text="((Ph,Ap),(Am,(Pg,Th)),Ac);"/>
-                </assert_contents>
-            </output>          
+            <output name="out_raxml3" value="RAxML_bipartitions"/>                
         </test>
 	</tests>
 
