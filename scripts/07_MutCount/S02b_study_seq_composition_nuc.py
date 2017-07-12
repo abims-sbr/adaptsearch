@@ -4,11 +4,11 @@
 ## Object: Test for compositional bias in genome and proteome as marker of thermal adaptation (comparison between 2 "hot" species: Ap and Ps and one "cold" species: Pg)
 
 
-import sys,os,zipfile,shutil,subprocess, string
+import sys,os,shutil,subprocess, string
 
 #############
 ### DEF 0 ###
-#############import sys,os,zipfile
+
 def simplify_fasta_name(fasta_name,LT):
     for abbreviation in LT:
         if abbreviation in fasta_name:
