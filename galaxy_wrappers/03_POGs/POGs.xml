@@ -28,10 +28,10 @@
         #end for
         #set $infiles_from_paiwise_prot = $infiles_from_paiwise_prot[:-1]
 
-		python $__tool_directory__/scripts/S01_get_locus_orthologs_part1.py $infiles_from_paiwise_prot
+		python '$__tool_directory__/scripts/S01_get_locus_orthologs_part1.py' '$infiles_from_paiwise_prot'
 		> ${log} &&
 
-		python $__tool_directory__/scripts/S02_get_locus_orthologs_part2.py $infiles_from_filter_assembly $minseq $paralogs
+		python '$__tool_directory__/scripts/S02_get_locus_orthologs_part2.py' '$infiles_from_filter_assembly' $minseq $paralogs
 		>> ${log};
 	]]>
   	</command>
