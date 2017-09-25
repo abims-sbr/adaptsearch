@@ -76,7 +76,7 @@
 	</inputs>
 
 	<outputs>
-		<data format="text" name="log" label="ORF_Search" />
+		<data format="txt" name="log" label="ORF_Search" />
         <collection name="output_BESTORF_aa" type="list" label="ORF_Search_Best_ORF_aa">
             <filter>out_BESTORF in ["aa","both"]</filter>
             <discover_datasets pattern="__name_and_ext__" directory="04_BEST_ORF_aa" />
