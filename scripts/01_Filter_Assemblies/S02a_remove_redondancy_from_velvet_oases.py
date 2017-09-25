@@ -17,18 +17,21 @@ def dico_filtering_redundancy(path_in):
     bash = {}
     bash_unredundant = {}
     file_read = f_in.read()
-    S1 = string.split(file_read, ">")
+    # S1 = string.split(file_read, ">")
+    S1 = file_read.split(">")
     k = 0
 
 
     ## 1 ## Extract each transcript and group them in same locus if they share the same "short_fasta_name"
     for element in S1:
         if element != "":
-            S2 = string.split(element, "\n")
+            # S2 = string.split(element, "\n")
+            S2 = element.split("\n")
             fasta_name = S2[0]
             fasta_seq = S2[1:-1] # that line was unindented
             fasta_seq = "".join(fasta_seq) # that line was unindented
-            L = string.split(fasta_name, "_")
+            # L = string.split(fasta_name, "_")
+            L = fasta_name.split("_")
             short_fasta_name = L[0] + L[1]
             
             
@@ -37,18 +40,19 @@ def dico_filtering_redundancy(path_in):
             confidence_oases_criteria = L[-3]
 
             ## Used later for [CRITERIA 1] (see below)
-            countN = string.count(fasta_seq, "N")
+            # countN = string.count(fasta_seq, "N")
+            countN = fasta_seq.count("N")
             length = len(fasta_seq)
             effective_length = length - countN
             #####################################################
-            if short_fasta_name not in bash.keys(): 
+            if short_fasta_name not in list(bash.keys()): 
                 bash[short_fasta_name] = [[fasta_name, fasta_seq, confidence_oases_criteria, effective_length]]
             else:
                 bash[short_fasta_name].append([fasta_name, fasta_seq, confidence_oases_criteria, effective_length])
         k = k+1
         f_in.close()
 
-    for key in bash.keys():
+    for key in list(bash.keys()):
         ## 2 ## IF ONE TRANSCRIPT PER LOCUS:
         ## In this case => we record directly
         if len(bash[key]) == 1:
@@ -74,8 +78,9 @@ def dico_filtering_redundancy(path_in):
                 MAX_LENGTH[effective_length] = entry
 
                 ## Bash for [CRITERIA 1]
-                confidence_oases_criteria = string.atof(confidence_oases_criteria)
-                if confidence_oases_criteria not in MAX_CONFIDENCE.keys():
+                # confidence_oases_criteria = string.atof(confidence_oases_criteria)
+                confidence_oases_criteria = float(confidence_oases_criteria)
+                if confidence_oases_criteria not in list(MAX_CONFIDENCE.keys()):
                     MAX_CONFIDENCE[confidence_oases_criteria] = entry
                 else:    ## IF SEVERAL SEQUENCES WITH THE SAME CONFIDENCE INTERVAL => RECORD ONLY THE LONGUEST ONE [CRITERIA 2]
                     current_seq_length = effective_length
@@ -86,7 +91,7 @@ def dico_filtering_redundancy(path_in):
             
             
             ## Sort keys() for MAX_CONFIDENCE bash 
-            KC = MAX_CONFIDENCE.keys()
+            KC = list(MAX_CONFIDENCE.keys())
             KC.sort()
             
             ## Select the best entry
@@ -120,16 +125,18 @@ file_OUT = open(path_OUT, "w")
 dico = dico_filtering_redundancy(path_IN)   ### DEF1 ###
 
 
-KB = dico.keys()
+KB = list(dico.keys())
 
 ## Sort the fasta_name depending their number XX : ApXX
 BASH_KB = {}
 for name in KB:
-    L = string.split(name, "_")
-    nb = string.atoi(L[1])
+    # L = string.split(name, "_")
+    L = name.split("_")
+    # nb = string.atoi(L[1])
+    nb = int(L[1])
     BASH_KB[nb] = name
 NEW_KB = []    
-KKB = BASH_KB.keys()
+KKB = list(BASH_KB.keys())
 KKB.sort()
 
 for nb in KKB:

@@ -20,9 +20,9 @@ def find_orf(entry):
       orf_length[i].append(orf[i][u]-orf[i][u-1]+1)
     orf[i]=[orf[i][orf_length[i].index(max(orf_length[i]))],orf[i][orf_length[i].index(max(orf_length[i]))+1]]
   orf_max={0:max(orf_length[0]),1:max(orf_length[1]),2:max(orf_length[2])}
-  orf=orf[max(orf_max.keys(), key=(lambda k: orf_max[k]))]
+  orf=orf[max(list(orf_max.keys()), key=(lambda k: orf_max[k]))]
   if orf[0]==0:
-    orf[0]=orf[0]+max(orf_max.keys(), key=(lambda k: orf_max[k]))
+    orf[0]=orf[0]+max(list(orf_max.keys()), key=(lambda k: orf_max[k]))
   return orf
 
 

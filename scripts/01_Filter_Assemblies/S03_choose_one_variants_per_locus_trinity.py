@@ -15,18 +15,21 @@ def dico_filtering_redundancy(path_in):
     bash = {}
     bash_unredundant = {}
     file_read = f_in.read()
-    S1 = string.split(file_read, ">")
+    # S1 = string.split(file_read, ">")
+    S1 = file_read.split(">")
     k = 0
 
 
     ## 1 ## Extract each transcript and group them in same locus if they share the same "short_fasta_name"
     for element in S1:
         if element != "":
-            S2 = string.split(element, "\n")
+            # S2 = string.split(element, "\n")
+            S2 = element.split("\n")
             fasta_name = S2[0]
             fasta_seq = S2[1]
 
-            L = string.split(fasta_name, "_")
+            # L = string.split(fasta_name, "_")
+            L = fasta_name.split("_")
 
             ## 1.1. ## Extract short fasta name
             short_fasta_name = L[0] + L[1]
@@ -41,13 +44,14 @@ def dico_filtering_redundancy(path_in):
             #print "\tLength in fasta name = %.5f" %length
             
             ## Used later for [CRITERIA 1] (see below)
-            countN = string.count(fasta_seq, "N")
+            # countN = string.count(fasta_seq, "N")
+            countN = fasta_seq.count("N")
             #print "\tNb of N in sequence = %d" %countN
             length = len(fasta_seq)
             effective_length = length - countN
             #####################################################
 
-            if short_fasta_name not in bash.keys():
+            if short_fasta_name not in list(bash.keys()):
                 bash[short_fasta_name] = [[fasta_name, fasta_seq, effective_length]]
             else:
                 bash[short_fasta_name].append([fasta_name, fasta_seq, effective_length])
@@ -56,7 +60,7 @@ def dico_filtering_redundancy(path_in):
             print (k)
     f_in.close()
 
-    for key in bash.keys():
+    for key in list(bash.keys()):
         #print "%s = %d" %(key,len(bash[key]))
 
         ## 2 ## IF ONE TRANSCRIPT PER LOCUS:
@@ -84,7 +88,7 @@ def dico_filtering_redundancy(path_in):
 
             
             ## Sort keys() for MAX_LENGTH bash 
-            KC = MAX_LENGTH.keys()
+            KC = list(MAX_LENGTH.keys())
             KC.sort()
             
             ## Select the best entry
@@ -115,20 +119,22 @@ dico = dico_filtering_redundancy(path_IN)   ### DEF1 ###
 
 #print len(dico.keys())
 
-KB = dico.keys()
+KB = list(dico.keys())
 #print "dis donc %s" %KB
 
 ## Sort the fasta_name depending their number XX : ApXX
 BASH_KB = {}
 for name in KB:
     #print name
-    L = string.split(name, "_")
+    # L = string.split(name, "_")
+    L = name.split("_")
     nb = L[0][2:]
-    nb = string.atoi(nb)
+    # nb = string.atoi(nb)
+    nb = int(nb)
     #print nb
     BASH_KB[nb] = name
 
-KKB = BASH_KB.keys()
+KKB = list(BASH_KB.keys())
 KKB.sort()
 
 for nb in KKB:
