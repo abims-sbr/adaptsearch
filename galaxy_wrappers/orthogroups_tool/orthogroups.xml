@@ -38,44 +38,62 @@
         </collection>
     </outputs>
 
+    <tests>
+        <test>
+            <param name="orthogroups" value="Orthogroups.txt"/>
+            <param name="inputs_fasta" value="output_filterassemblies/AcAcaud_trinity.fasta,output_filterassemblies/AmAmphi_trinity.fasta,output_filterassemblies/ApApomp_trinity.fasta,output_filterassemblies/PfPfiji_trinity.fasta,output_filterassemblies/PgPgras_trinity.fasta,output_filterassemblies/PhPhess_trinity.fasta,output_filterassemblies/PuPunid_trinity.fasta,output_filterassemblies/TeTerlap_trinity.fasta,output_filterassemblies/ThThelep_trinity.fasta"/>
+            <param name="nbseq" value="3"/>
+            <output name="log_orthogroups" value="log_orthogroups.txt"/>
+        </test>
+    </tests>
+
     <help>
-===========
-OrthoGroups
-===========
+<![CDATA[
+
+.. class:: infomark
+
+**Galaxy integration** Victor Mataigne and ABIMS TEAM.
+
+Contact support.abims@sb-roscoff.fr for any questions or concerns about the Galaxy implementation of this tool.
+
+-------------------------------------------
+
+**OrthoGroups**
 
 This tool takes Orthogroups found by OrthoFinder and proceeds to retrieve nucleic sequences back, then write each orthogroups in its own fasta file.
 
----------------------------
-Step 1 : re-writing headers
----------------------------
+-------------------------------------------
+
+**Step 1 : re-writing headers**
 
 .. class:: warningmark
 
 This tool is configured to work within the AdaptSearch toolsuite, which implies a specific format of headers. Indeed, due to the use of external tools (like TransDecoder), the genes IDs might have been modified. A regular expression rewrites all the genes IDs in order to have, for instance, this format : &gt;Pf1004_1/1_1.000_369
 
------------------------------------------------------------
-Step 2 : reading an re-writing orthoGroups from OrthoFinder
------------------------------------------------------------
+-------------------------------------------
+
+**Step 2 : reading an re-writing orthoGroups from OrthoFinder**
 
 OrthoFinder (Emms, D.M. and Kelly, S., 2015) is a fast, accurate and comprehensive analysis tool for comparative genomics. It finds orthologues and orthogroups infers gene trees for all orthogroups and infers a rooted species tree for the species being analysed. OrthoFinder also provides comprehensive statistics for comparative genomic analyses. 
 
 Our tool focus on the orthogroups.txt file created before gene trees.The script proceeds to split each orthogroup in its own fasta file and, with the use of the output of Filter_Assemblies, to re-associate each ID with its sequence.
 
----------------------
-inputs and parameters
----------------------
+-------------------------------------------
+
+**Inputs and parameters**
 
 - File of Orthogroups : the orthogroups.txt file from OrthoFinder.
 - Output from Filter_Assemblies (either as multiple datasets or dataset collection)
 - Minimal number of sequences : The orthogroups with less than the specified number won't be recorded.
 
--------
-Outputs
--------
+-------------------------------------------
+
+**Outputs**
+
 - Dataset collection of fasta files : each file represents an orthogroup, each gene within tthe group has the couple ID-nucleic sequence.
 - A csv file with countings.
 - The tool log.
-
+]]>
     </help>
 
     <citations>
