@@ -1,4 +1,4 @@
-<tool name="OrthoGroups" id="orthogroups" version="1.0">
+<tool name="Orthogroups_Tool" id="orthogroups_tool" version="1.0">
 
     <description>
         This tool takes Orthogroups found by OrthoFinder and proceeds to retrieve nucleic sequences back, then write each orthogroups in its own fasta file.

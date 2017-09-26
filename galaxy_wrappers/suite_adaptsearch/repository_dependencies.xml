@@ -3,6 +3,7 @@
 	<repository name="filter_assemblies" owner="abims-sbr"/>
         <repository name="pairwise" owner="abims-sbr"/>
         <repository name="pogs" owner="abims-sbr"/>
+	<repository name="orthogroups_tool" owner="abims-sbr"/>
         <repository name="blastalign" owner="abims-sbr"/>
         <repository name="cds_search" owner="abims-sbr"/>
         <repository name="concatphyl" owner="abims-sbr"/>
