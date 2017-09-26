@@ -1,0 +1,24 @@
+*************** CDS detection ***************
+
+Files processed: 4
+	Files with CDS: 2
+		Files with CDS plus M (codon start): 1
+	Files without CDS: 2 
+
+
+
+In locus with CDS regardless of the Methionine : 
+
+*************** 1st filter : selection of the locus ***************
+
+Total number of locus recorded  = 2
+	Number of locus with 1 species : 1
+	Number of locus with 2 species : 0
+Number of locus excluded (exclude if not at least 2 species in the alignment)= 1
+
+*************** 2nd Filter : removal of the indel ***************
+
+Total number of locus recorded  = 1
+	Total number of locus with no indels (SAVED) = 1
+	Total number of locus, when removing indel, wich are empty (EXCLUDED) = 0
+
