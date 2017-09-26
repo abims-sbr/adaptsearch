@@ -28,50 +28,50 @@
         #end for
         #set $infiles_alignments = $infiles_alignments[:-1]
 
-		python $__tool_directory__/scripts/S01_concatenate.py
+        python $__tool_directory__/scripts/S01_concatenate.py
 
         $infiles_filter_assemblies
 
-		#if $format.format_run == "nucleic" :
-			nucleic
-		#elif $format.format_run == "proteic" :
-			proteic
-		#end if
+        #if $format.format_run == "nucleic" :
+            nucleic
+        #elif $format.format_run == "proteic" :
+            proteic
+        #end if
 
         $infiles_alignments
-		> ${output};
+        > ${output};
 
-		raxmlHPC -n galaxy_run
-		#if $format.format_run == "nucleic" :			
-			##-q 05_partitions_gene_NUC
-			-s "03_Concatenation_nuc.phy"			
-			-m $format.base_model
-		#elif $format.format_run == "proteic" :			
-			##-q 06_partitions_gene_AA
- 			-s 02_Concatenation_aa.phy			
-			-m $format.base_model$format.aa_search_matrix
-		#end if
-			
-	    -p $random_seed
-	    
-	    #if $number_of_runs !="" and $number_of_runs_bootstop == "":
-	        -N $number_of_runs	        
-	        -x $rapid_bootstrap_random_seed	 
-	    #elif ($number_of_runs !="" and $number_of_runs_bootstop != "") or ($number_of_runs =="" and $number_of_runs_bootstop != ""):
-	        -N $number_of_runs_bootstop	        
-	        -x $rapid_bootstrap_random_seed	 
-	    #end if
-	    
-	    -f $search_algorithm		
+        raxmlHPC -n galaxy_run
+        #if $format.format_run == "nucleic" :
+            ##-q 05_partitions_gene_NUC
+            -s "03_Concatenation_nuc.phy"
+            -m $format.base_model
+        #elif $format.format_run == "proteic" :
+            ##-q 06_partitions_gene_AA
+            -s 02_Concatenation_aa.phy
+            -m $format.base_model$format.aa_search_matrix
+        #end if
 
-		>> ${output};
-	]]>
+        -p $random_seed
+        
+        #if $number_of_runs !="" and $number_of_runs_bootstop =="":
+            -N $number_of_runs
+            -x $rapid_bootstrap_random_seed
+        #elif ($number_of_runs !="" and $number_of_runs_bootstop !="") or ($number_of_runs =="" and $number_of_runs_bootstop !=""):
+            -N $number_of_runs_bootstop
+            -x $rapid_bootstrap_random_seed
+        #end if
+
+        -f $search_algorithm
+
+        >> ${output};
+    ]]>
   	</command>
 
  	<inputs>
 
 		<param name="input_filter_assemblies" type="data" format="fasta" multiple="true" label="Files from Filter assemblies" />
-        <param name="input_alignments" type="data" format="fasta" multiple="true" label="Aligned files without indels" />
+        <param name="input_alignments" type="data" format="fasta" multiple="true" label="Aligned files without indels" help="nucleic or proteic format according to the analysis you want to do below"/>
 
 		<conditional name="format">
 			<param name="format_run" type="select" label="Which format do you want to use for this tool (concatenation and RAxML run) ? ">
@@ -79,8 +79,7 @@
 				<option value="proteic">Proteic format</option>
 			</param>
 
-			<when value="nucleic">
-				<param name="zip_nuc" type="data" format="no_unzip.zip,zip" label="Choose your ZIP file" help="It must contain the aligned files without indels in NUCLEIC format" />
+			<when value="nucleic">				
 		    	<param name="base_model" type="select" label="Substitution Model">
 		        	<option value="GTRCAT">GTRCAT</option>
 		        	<option value="GTRCATI">GTRCATI</option>
@@ -89,9 +88,7 @@
 		   		</param>
 			</when>
 
-			<when value="proteic">
-				<param name="zip_aa" type="data" format="no_unzip.zip,zip" label="Choose your ZIP file" help="It must contain the aligned files without indels in PROTEIC format" />
-				
+			<when value="proteic">			
 		    	<param name="base_model" type="select" label="Substitution Model (-m)">
 					<option value="PROTCAT" selected="true">PROTCAT</option>
 					<option value="PROTCATI">PROTCATI</option>
