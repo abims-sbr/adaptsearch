@@ -30,6 +30,9 @@ planemo shed_update -t $TARGET
 cd $ROOTPATH/06_ConcatPhyl
 planemo shed_update -t $TARGET
 
+cd $ROOTPATH/07_MutCount
+planemo shed_update -t $TARGET
+
 cd $ROOTPATH/suite_adaptsearch
 planemo shed_update -t $TARGET
 
