@@ -3,14 +3,13 @@
 ## Author: Eric FONTANILLAS
 ## Date: 21.12.10
 ## Object: Test for compositional bias in genome and proteome as marker of thermal adaptation (comparison between 2 "hot" species: Ap and Ps and two "cold" species: Pg, Pp)
-import sys, os
+import sys,os,shutil,subprocess,string
 script_path = os.path.dirname(sys.argv[0])
 
 #############
 ### DEF 0 ###
 #############
-def simplify_fasta_name(fasta_name,LT):
-
+def simplify_fasta_name(fasta_name,LT):    
     for abbreviation in LT:
         if abbreviation in fasta_name:
             new_fasta_name = abbreviation
@@ -421,7 +420,7 @@ def sequence_properties_from_aa_properties(seq, bash_properties):
 ###################
 ### RUN RUN RUN ###
 ###################
-import sys,os,zipfile,shutil,subprocess,string
+
 
 ##Create specific folders
 Path_IN_loci_NUC = "./IN_AA"
@@ -429,19 +428,9 @@ outpath= "./OUT"
 os.makedirs(Path_IN_loci_NUC)
 os.makedirs(outpath)
 
-
-#Check if the file is a zip or fasta file
-
-the_zip_file = zipfile.ZipFile(sys.argv[1])
-ret = the_zip_file.testzip()
-
-if ret is not None:
-    shutil.copy2(sys.argv[1], './IN_AA/input.fasta')
-else:
-    cmd="unzip %s -d ./IN_AA"%(sys.argv[1])
-    os.system(cmd)
-
-
+infiles = str.split(sys.argv[1], ",")
+for file in infiles:
+    os.system("cp %s %s" %(file, Path_IN_loci_NUC))
 
 ## 1 ## List taxa
 LT=[]
@@ -456,7 +445,7 @@ print LT
 
 
 ## 2 ## PathIN
-fileIN_properties = open("%s/01_AminoAcid_Properties2.csv"%(script_path), "r")
+fileIN_properties = open("amino_acid_properties.csv", "r")
 Path_IN_loci_AA = "./IN_AA"
 #Path_IN_loci_AA = "02_CDS_No_Missing_Data_aa_CDS_withM"
 Lloci_AA = os.listdir(Path_IN_loci_AA)
@@ -464,14 +453,14 @@ Lloci_AA = os.listdir(Path_IN_loci_AA)
 ## 3 ## PathOUT
 
 ## 3.1 ## PROT composition
-fileOUT_PROT_ALL=open("./OUT/13_prot_compositions_All_AA.csv","w")
+fileOUT_PROT_ALL=open("./OUT/prot_compositions_All_AA.csv","w")
 fileOUT_PROT_ALL.write("LOCUS,")
 for taxa in LT:
     fileOUT_PROT_ALL.write("%s_prop_K,%s_prop_R,%s_prop_A,%s_prop_F,%s_prop_I,%s_prop_L,%s_prop_M,%s_prop_V,%s_prop_W,%s_prop_N,%s_prop_Q,%s_prop_S,%s_prop_T,%s_prop_H,%s_prop_Y,%s_prop_C,%s_prop_D,%s_prop_E,%s_prop_P,%s_prop_G," %(taxa,taxa,taxa,taxa,taxa,taxa,taxa,taxa,taxa,taxa,taxa,taxa,taxa,taxa,taxa,taxa,taxa,taxa,taxa,taxa))
 fileOUT_PROT_ALL.write("\n")
 
 ## 3.2 ## PROT IVYWREL
-fileOUT_IVYWREL=open("./OUT/14_IVYWREL.csv","w")
+fileOUT_IVYWREL=open("./OUT/IVYWREL.csv","w")
 fileOUT_IVYWREL.write("LOCUS,")
 for taxa in LT:
     fileOUT_IVYWREL.write("%s_count_IVYWREL,%s_prop_IVYWREL," %(taxa,taxa))
@@ -479,14 +468,14 @@ fileOUT_IVYWREL.write("\n")
 
 
 ## 3.3 ## PROT ERK_DNQTSHA
-fileOUT_ERK_DNQTSH=open("./OUT/15_ERK_DNQTSH.csv","w")
+fileOUT_ERK_DNQTSH=open("./OUT/ERK_DNQTSH.csv","w")
 fileOUT_ERK_DNQTSH.write("LOCUS,")
 for taxa in LT:
     fileOUT_ERK_DNQTSH.write("%s_count_ERK,%s_prop_ERK,%s_count_DNQTSH,%s_prop_DNQTSH,%s_ratio_ERK_vs_DNQTSH," %(taxa,taxa,taxa,taxa,taxa))
 fileOUT_ERK_DNQTSH.write("\n")
 
 ## 3.4 ## PROT EK_QH
-fileOUT_EK_QH=open("./OUT/16_EK_QH.csv","w")
+fileOUT_EK_QH=open("./OUT/EK_QH.csv","w")
 fileOUT_EK_QH.write("LOCUS,")
 for taxa in LT:
     fileOUT_EK_QH.write("%s_count_EK,%s_prop_EK,%s_count_QH,%s_prop_QH,%s_ratio_EK_vs_QH," %(taxa,taxa,taxa,taxa,taxa))
@@ -494,7 +483,7 @@ fileOUT_EK_QH.write("\n")
 
 
 ## 3.5 ## PROT FYMINK_GARP
-fileOUT_FYMINK_GARP=open("./OUT/17_FYMINK_GARP.csv","w")
+fileOUT_FYMINK_GARP=open("./OUT/FYMINK_GARP.csv","w")
 fileOUT_FYMINK_GARP.write("LOCUS,")
 for taxa in LT:
     fileOUT_FYMINK_GARP.write("%s_count_FYMINK,%s_prop_FYMINK,%s_count_GARP,%s_prop_GARP," %(taxa,taxa,taxa,taxa))
@@ -502,56 +491,56 @@ fileOUT_FYMINK_GARP.write("\n")
 
 
 ## 3.6 ## PROT AVLIMFYW
-fileOUT_AVLIMFYW=open("./OUT/18_AVLIMFYW.csv","w")
+fileOUT_AVLIMFYW=open("./OUT/AVLIMFYW.csv","w")
 fileOUT_AVLIMFYW.write("LOCUS,")
 for taxa in LT:
     fileOUT_AVLIMFYW.write("%s_count_AVLIMFYW,%s_prop_AVLIMFYW,%s_count_AVLIM,%s_prop_AVLIM,%s_count_FYW,%s_prop_FYW," %(taxa,taxa,taxa,taxa,taxa,taxa))
 fileOUT_AVLIMFYW.write("\n")
 
 ## 3.7 ## PROT STNQ
-fileOUT_STNQ=open("./OUT/19_STNQ.csv","w")
+fileOUT_STNQ=open("./OUT/STNQ.csv","w")
 fileOUT_STNQ.write("LOCUS,")
 for taxa in LT:
     fileOUT_STNQ.write("%s_count_STNQ,%s_prop_STNQ," %(taxa,taxa))
 fileOUT_STNQ.write("\n")
 
 ## 3.8 ## PROT RHKDE
-fileOUT_RHKDE=open("./OUT/20_RHKDE.csv","w")
+fileOUT_RHKDE=open("./OUT/RHKDE.csv","w")
 fileOUT_RHKDE.write("LOCUS,")
 for taxa in LT:
     fileOUT_RHKDE.write("%s_count_RHKDE,%s_prop_RHKDE,%s_count_RHK,%s_prop_RHK,%s_count_DE,%s_prop_DE," %(taxa,taxa,taxa,taxa,taxa,taxa))
 fileOUT_RHKDE.write("\n")
 
 ## 3.9 ## PROT DIDER CRITERIA
-fileOUT_PAYRE=open("./OUT/21_PAYRE-MVGDS.csv","w")
+fileOUT_PAYRE=open("./OUT/PAYRE-MVGDS.csv","w")
 fileOUT_PAYRE.write("LOCUS,")
 for taxa in LT:
     fileOUT_PAYRE.write("%s_count_PAYRE,%s_prop_PAYRE,%s_count_AC,%s_prop_AC,%s_count_MVGDS,%s_prop_MVGDS,%s_ratio_PAYRE_vs_MVGDS,%s_ratio_AC_vs_MVGDS," %(taxa,taxa,taxa,taxa,taxa,taxa,taxa,taxa))
 fileOUT_PAYRE.write("\n")
 
 ## 3.10 ## PROT Total residue weight
-fileOUT_TotalResidueWeight=open("./OUT/22_TotalResidueWeight.csv","w")
+fileOUT_TotalResidueWeight=open("./OUT/TotalResidueWeight.csv","w")
 fileOUT_TotalResidueWeight.write("LOCUS,")
 for taxa in LT:
     fileOUT_TotalResidueWeight.write("%s_Total_Residue_Weight," %taxa)
 fileOUT_TotalResidueWeight.write("\n")
 
 ## 3.11 ## PROT Total residue volume
-fileOUT_TotalResidueVolume=open("./OUT/23_TotalResidueVolume.csv","w")
+fileOUT_TotalResidueVolume=open("./OUT/TotalResidueVolume.csv","w")
 fileOUT_TotalResidueVolume.write("LOCUS,")
 for taxa in LT:
     fileOUT_TotalResidueVolume.write("%s_Total_Residue_Volume," %taxa)
 fileOUT_TotalResidueVolume.write("\n")
 
 ## 3.12 ## PROT Total partial specific volume
-fileOUT_TotalPartialSpecificVolume=open("./OUT/24_TotalPartialSpecificVolume.csv","w")
+fileOUT_TotalPartialSpecificVolume=open("./OUT/TotalPartialSpecificVolume.csv","w")
 fileOUT_TotalPartialSpecificVolume.write("LOCUS,")
 for taxa in LT:
     fileOUT_TotalPartialSpecificVolume.write("%s_Total_Partial_Specific_Volume," %taxa)
 fileOUT_TotalPartialSpecificVolume.write("\n")
 
 ## 3.13 ## PROT Total hydratation
-fileOUT_TotalHydratation=open("./OUT/25_TotalHydratation.csv","w")
+fileOUT_TotalHydratation=open("./OUT/TotalHydratation.csv","w")
 fileOUT_TotalHydratation.write("LOCUS,")
 for taxa in LT:
     fileOUT_TotalHydratation.write("%s_Total_Hydratation," %taxa)
@@ -622,4 +611,5 @@ for locus in Lloci_AA:
 
     
     
+
 
