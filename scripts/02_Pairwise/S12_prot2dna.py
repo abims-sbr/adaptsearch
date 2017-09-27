@@ -13,7 +13,7 @@ def get_pairs_modified(fasta_file_path):
     list_pairwises = []
     list_query = []
     list_match= []
-    
+
     h = 0
     while 1:
         next2 = F2.readline()
@@ -30,19 +30,19 @@ def get_pairs_modified(fasta_file_path):
             fasta_seq_match = next3[:-1]
             h = h+1
 
-            ## Format shorter names 
+            ## Format shorter names
             S1 = string.split(fasta_name_query, "||")
             short_fasta_name_query = S1[0]
 
             S2 = string.split(fasta_name_match, "||")
             short_fasta_name_match = S2[0]
-           
+
             ## create and record pairwise (in list format)
             pairwise = [short_fasta_name_query,short_fasta_name_match]
             list_pairwises.append(pairwise)
             list_query.append(short_fasta_name_query)
             list_match.append(short_fasta_name_match)
-            
+
 
     F2.close()
 
@@ -58,17 +58,17 @@ def get_dico_seq_subset(path, list_fastaNames):
     F1 = open(path, "r")
 
     nb_line_treated = 0
-    
+
     bash_subset = {}
-    
+
     while 1:
         nextline = F1.readline()
 
         nb_line_treated = nb_line_treated + 1
-        
+
         if not nextline :
             break
-        
+
         if nextline[0] == ">":
             if nextline[1:-1] in list_fastaNames:
                 name = nextline[1:-1]
@@ -95,9 +95,9 @@ name2 = sys.argv[5]
 option_e = string.atof(sys.argv[6])
 
 path3 = "%s/19_ReciprocalBestHits_%s.fasta" %(SHORT_FILE, SHORT_FILE)
-os.system("cp -fr %s ./" %path3)
+os.system("cp -fr %s ./outputs_prot/ReciprocalBestHits_%s.fasta" %(path3,SHORT_FILE))
 
-file_OUT = open("./25_DNAalignment_corresponding_to_protein_from_19_RBH_%s.fasta" %SHORT_FILE, "w")
+file_OUT = open("./outputs_dna/DNAalignment_corresponding_to_protein_from_RBH_%s.fasta" %SHORT_FILE, "w")
 
 ## 2 ## RUN
 ##Get DB
@@ -122,14 +122,14 @@ bash_subset2 = get_dico_seq_subset(path2, list_match)   ### DEF2 ###
 
 ## 3 ## Grab Pairwise DNA
 for pair in  list_pairwise:  # list pairwise comes from '19_RBH ...'
-    name1 = pair[0]    
+    name1 = pair[0]
     seq1 = bash_subset1[name1]
-    name2 = pair[1]    
+    name2 = pair[1]
     seq2 = bash_subset2[name2]
 
     file_OUT.write(">%s\n" %name1)
     file_OUT.write("%s\n" %seq1)
     file_OUT.write(">%s\n" %name2)
     file_OUT.write("%s\n" %seq2)
-    
+
 file_OUT.close()

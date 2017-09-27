@@ -1,0 +1,9 @@
+categories: [Phylogenetics,RNA,Transcriptomics]
+description: Phylogenetic tree under maximum likelyhood
+long_description: This tool builds a phylogenetic tree under maximum likelyhood using
+  data from the tools filter_assemblies and cds_search. Several substitution models
+  and algorithms can be used, and several trees can be built (best-tree, bi-parition,
+  with-bootstraps).
+name: concatphyl
+owner: abims-sbr
+remote_repository_url: https://github.com/abims-sbr/adaptsearch
