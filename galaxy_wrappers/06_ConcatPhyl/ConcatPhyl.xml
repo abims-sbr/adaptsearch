@@ -28,75 +28,50 @@
         #end for
         #set $infiles_alignments = $infiles_alignments[:-1]
 
-		python $__tool_directory__/scripts/S01_concatenate.py
+        python $__tool_directory__/scripts/S01_concatenate.py
 
         $infiles_filter_assemblies
 
-		#if $format.format_run == "nucleic" :
-			nucleic
-		#elif $format.format_run == "proteic" :
-			proteic
-		#end if
+        #if $format.format_run == "nucleic" :
+            nucleic
+        #elif $format.format_run == "proteic" :
+            proteic
+        #end if
 
         $infiles_alignments
-		> ${output};
+        > ${output};
 
-		raxmlHPC
-		#if $format.format_run == "nucleic" :
-			-n "galaxy_run"
-			##-q "./05_partitions_gene_NUC"
-			-s "./03_Concatenation_nuc.phy"
-			## (-m)
-			-m $format.base_model
-		#elif $format.format_run == "proteic" :
-			-n "galaxy_run"
-			##-q "./06_partitions_gene_AA"
- 			-s "./02_Concatenation_aa.phy"
-			## (-m)
-			-m $format.base_model$format.aa_search_matrix
-		#end if
+        raxmlHPC -n galaxy_run
+        #if $format.format_run == "nucleic" :
+            ##-q 05_partitions_gene_NUC
+            -s "03_Concatenation_nuc.phy"
+            -m $format.base_model
+        #elif $format.format_run == "proteic" :
+            ##-q 06_partitions_gene_AA
+            -s 02_Concatenation_aa.phy
+            -m $format.base_model$format.aa_search_matrix
+        #end if
 
-		## --- Optional parameters ---
+        -p $random_seed
+        
+        #if $number_of_runs !="" and $number_of_runs_bootstop =="":
+            -N $number_of_runs
+            -x $rapid_bootstrap_random_seed
+        #elif ($number_of_runs !="" and $number_of_runs_bootstop !="") or ($number_of_runs =="" and $number_of_runs_bootstop !=""):
+            -N $number_of_runs_bootstop
+            -x $rapid_bootstrap_random_seed
+        #end if
 
-		##if $raxml_options.options == "yes" :
+        -f $search_algorithm
 
-			## (-p)
-			#if $random_seed:
-	    		-p $random_seed
-			#else
-	    		-p 1234567890
-			#end if
-
-			## (-N/#)
-	   	 	#if $number_of_runs:
-	        		-N $number_of_runs
-	   		#end if
-			#if $number_of_runs_bootstop:
-	    		-# $number_of_runs_bootstop
-			#end if
-
-			## (-f)
-			#if $search_algorithm:
-				-f $search_algorithm
-			#end if
-
-			## (-x)
-			#if $rapid_bootstrap_random_seed:
-			-x $rapid_bootstrap_random_seed
-			#end if
-		##else :
-
-	 	##-N 100 -f a -x 12345
-
-		##end if
-		>> ${output};
-	]]>
+        >> ${output};
+    ]]>
   	</command>
 
  	<inputs>
 
 		<param name="input_filter_assemblies" type="data" format="fasta" multiple="true" label="Files from Filter assemblies" />
-        <param name="input_alignments" type="data" format="fasta" multiple="true" label="Aligned files without indels" />
+        <param name="input_alignments" type="data" format="fasta" multiple="true" label="Aligned files without indels" help="nucleic or proteic format according to the analysis you want to do below"/>
 
 		<conditional name="format">
 			<param name="format_run" type="select" label="Which format do you want to use for this tool (concatenation and RAxML run) ? ">
@@ -104,8 +79,7 @@
 				<option value="proteic">Proteic format</option>
 			</param>
 
-			<when value="nucleic">
-				<!-- ## Nucleotide substitution models -->
+			<when value="nucleic">				
 		    	<param name="base_model" type="select" label="Substitution Model">
 		        	<option value="GTRCAT">GTRCAT</option>
 		        	<option value="GTRCATI">GTRCATI</option>
@@ -114,9 +88,7 @@
 		   		</param>
 			</when>
 
-			<when value="proteic">
-				<!-- ## Aminoacid substitution models -->
-				<!--<param name="aa_model_empirical_base_frequencies" type="boolean" checked="no" truevalue="F" falsevalue="X" display="checkboxes" label="Use empirical base frequencies in AA models." /> -->
+			<when value="proteic">			
 		    	<param name="base_model" type="select" label="Substitution Model (-m)">
 					<option value="PROTCAT" selected="true">PROTCAT</option>
 					<option value="PROTCATI">PROTCATI</option>
@@ -132,19 +104,7 @@
 			</when>
 		</conditional>
 
-<!-- <conditional name="raxml_options"> -->
-
-<!--
-<param name="options" type="select" label="Raxml advanced options">
-				<option value="yes">Yes</option>
-				<option value="no" select="true">No</option>
-</param>
-
--->
-
-<!-- <when value="yes"> -->
-
-		<param name="random_seed" type="integer" value="326395" size="12" label="Random seed used for the parsimony inferences" />
+		<param name="random_seed" type="integer" value="1234567890" size="12" label="Random seed used for the parsimony inferences" />
 
 		<!-- ## (-N/#) -->
 		<param name="number_of_runs" type="integer" size="8" value="100"
@@ -166,11 +126,11 @@
 
 		<!-- ## (-f) -->
    		<param name="search_algorithm" type="select" label="Algorithm to execute" optional="True">
-            <option value="a">Rapid bootstrap and best ML tree search (a)</option>
+            <option value="a" selected="true">Rapid bootstrap and best ML tree search (a)</option>
             <option value="A">Compute marginal ancestral states (A)</option>
             <option value="b">Draw bipartition information (b)</option>
             <option value="c">Check if the alignment can be read (c)</option>
-            <option value="d" selected="true">Hill-climbing ML Search (d) (default)</option>
+            <option value="d">Hill-climbing ML Search (d) (default)</option>
             <option value="e">Optimize GAMMA/GAMMAI model/branches (e)</option>
             <option value="g">Compute per-site log likelihoods for -z trees (g)</option>
             <option value="h">Compute log likelihood test for -t / -z trees (h)</option>
@@ -197,11 +157,7 @@
 	  	<param name="multiple_model" format="txt" type="data" label="Multiple model assignment to alignment partitions" optional="True" help="Specify the file name which contains the assignment of models to alignment partitions for multiple models of substitution. For the syntax of this file please consult the manual." />
 
 	 	<!-- ## (-x) -->
-         <param name="rapid_bootstrap_random_seed" type="integer" value='955415' size="7" label="Rapid bootstrapping random seed" optional="True" help="Specify a random seed and turn on rapid bootstrapping. CAUTION: unlike in version 7.0.4 RAxML will conduct rapid BS replicates under the model of rate heterogeneity you specified via '-m' and not by default under CAT." />
-<!-- </when> -->
-
-
-<!-- </conditional> -->
+         <param name="rapid_bootstrap_random_seed" type="integer" value='12345' size="7" label="Rapid bootstrapping random seed" optional="True" help="Specify a random seed and turn on rapid bootstrapping. CAUTION: unlike in version 7.0.4 RAxML will conduct rapid BS replicates under the model of rate heterogeneity you specified via '-m' and not by default under CAT." />
 
 		<param name="out" type="select" label="What format of file do you want for your output (concatenation of the sequences) ? ">
 			<option value="nothing">No output</option>
@@ -209,8 +165,7 @@
 			<option value="phylip">Phylip format</option>
 			<option value="nexus">Nexus format</option>
 		</param>
-          <!-- -m GTRGAMMA -N 100 -f a -x 12345 -->
-
+		
 		<param name="raxml1" type="boolean" label="Do you want the output of RAxML : best tree ? " />
 		<param name="raxml3" type="boolean" label="Do you want the output of RAxML : bi-partition ? " />
 		<param name="raxml4" type="boolean" label="Do you want the output of RAxML : bootstrap ? " help="Only if the option 'rapid bootsptrap' is chosen. When you don't want to choose your options, this output is accessible"/>
@@ -282,8 +237,47 @@
 					<has_text text="((Ph,Ap),(Am,(Pg,Th)),Ac);"/>
 				</assert_contents>
 			</output>
-
 		</test>
+
+        <test>
+            <param name="input_filter_assemblies" ftype="fasta" value="input_filter_assemblies/AcAcaud_trinity.fasta,input_filter_assemblies/AmAmphi_trinity.fasta,input_filter_assemblies/ApApomp_trinity.fasta,input_filter_assemblies/PgPgras_trinity.fasta,input_filter_assemblies/PhPhess_trinity.fasta,input_filter_assemblies/ThThelep_trinity.fasta" />
+            <param name="input_alignments" ftype="fasta" value="input_from_CDS_Search/locus17_sp3_sp3.fasta,input_from_CDS_Search/locus147_sp3_sp3.fasta,input_from_CDS_Search/locus183_sp3_sp3.fasta,input_from_CDS_Search/locus334_sp3_sp3.fasta" />
+            <conditional name="format">
+                <param name="format_run" value="nucleic" />
+                <param name="base_model" value="GTRGAMMA" />
+            </conditional>
+            <param name="random_seed" value="1234567890" />
+            <param name="number_of_runs" value="100" />
+            <param name="number_of_runs_bootstop" value="" />
+            <param name="search_algorithm" value="a" />            
+            <param name="rapid_bootstrap_random_seed" value="1234567890" />
+            <param name="out" value="nothing" />
+            <param name="raxml1" value="True" />
+            <param name="raxml3" value="True" />
+            <param name="raxml4" value="True" />
+            <output name="out_raxml1" value="RAxML_bestTree"/>     
+            <output name="out_raxml3" value="RAxML_bipartitions"/>                
+        </test>
+        
+        <test>
+            <param name="input_filter_assemblies" ftype="fasta" value="input_filter_assemblies/AcAcaud_trinity.fasta,input_filter_assemblies/AmAmphi_trinity.fasta,input_filter_assemblies/ApApomp_trinity.fasta,input_filter_assemblies/PgPgras_trinity.fasta,input_filter_assemblies/PhPhess_trinity.fasta,input_filter_assemblies/ThThelep_trinity.fasta" />
+            <param name="input_alignments" ftype="fasta" value="input_from_CDS_Search/locus17_sp3_sp3.fasta,input_from_CDS_Search/locus147_sp3_sp3.fasta,input_from_CDS_Search/locus183_sp3_sp3.fasta,input_from_CDS_Search/locus334_sp3_sp3.fasta" />
+            <conditional name="format">
+                <param name="format_run" value="nucleic" />
+                <param name="base_model" value="GTRGAMMA" />
+            </conditional>
+            <param name="random_seed" value="1234567890" />
+            <param name="number_of_runs" value="100" />
+            <param name="number_of_runs_bootstop" value="autoMR" />
+            <param name="search_algorithm" value="a" />            
+            <param name="rapid_bootstrap_random_seed" value="1234567890" />
+            <param name="out" value="nothing" />
+            <param name="raxml1" value="True" />
+            <param name="raxml3" value="True" />
+            <param name="raxml4" value="True" />
+            <output name="out_raxml1" value="RAxML_bestTree_test3"/>     
+            <output name="out_raxml3" value="RAxML_bipartitions_test3"/>                
+        </test>
 	</tests>
 
 	<help>
@@ -295,7 +289,6 @@ What it does
 ============
 
 | This tool takes a 'dataset collection list'  containing nucleic fasta sequence files and searches different homologous genes from pairwise comparisons.
-|
 
 --------
 
@@ -324,6 +317,15 @@ The choice of parameters for the RAxML run is possible :
 	| by default, this option is choosen
 	|
 
+.. class:: warningmark
+| RAxML has some incompatible parameters. 
+| The search algorithm compatible with boostrapping and giving a besttree file is the one set by default:
+| -f a
+
+| The search algorithm compatible with boostrapping and NOT giving a besttree file are:
+| -f d
+| -f o
+| -f t
 --------
 
 ======
@@ -599,6 +601,7 @@ Changelog
 **Version 2.0 - 06/07/2017**
 
  - NEW: Replace the zip between tools by Dataset Collection
+ - Corrected bug : output files were empty due to errors in the command section (incompatible parameters set by default instead of the ones mentioned in the help)
 
 
 **Version 1.0 - 13/04/2017**
