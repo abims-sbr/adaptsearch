@@ -1,1 +1,1 @@
-../../../scripts/orthogroups_tool/format_transdecoder_headers.sh
+../../../scripts/03b_Orthogroups_Tool/format_transdecoder_headers.sh

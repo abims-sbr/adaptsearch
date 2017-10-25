@@ -44,6 +44,7 @@
             <param name="inputs_fasta" value="output_filterassemblies/AcAcaud_trinity.fasta,output_filterassemblies/AmAmphi_trinity.fasta,output_filterassemblies/ApApomp_trinity.fasta,output_filterassemblies/PfPfiji_trinity.fasta,output_filterassemblies/PgPgras_trinity.fasta,output_filterassemblies/PhPhess_trinity.fasta,output_filterassemblies/PuPunid_trinity.fasta,output_filterassemblies/TeTerlap_trinity.fasta,output_filterassemblies/ThThelep_trinity.fasta"/>
             <param name="nbseq" value="3"/>
             <output name="log_orthogroups" value="log_orthogroups.txt"/>
+            <output name="countings" label="summary_orthogroups.csv"/>
         </test>
     </tests>
 

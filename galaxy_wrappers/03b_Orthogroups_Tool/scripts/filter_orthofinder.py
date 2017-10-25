@@ -1,1 +1,1 @@
-../../../scripts/orthogroups_tool/filter_orthofinder.py
+../../../scripts/03b_Orthogroups_Tool/filter_orthofinder.py

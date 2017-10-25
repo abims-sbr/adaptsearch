@@ -200,8 +200,7 @@ def writeTable(matrix, mini, filename):
 
 def main():
     print "\n-This script works on the 'Orthogroups' file output of Orthofinder to split each orthogroup in a single fasta file."
-    print "-It also gets rid of orthogroups with less sequences than the number specified by the user."
-    print "-It also filters (naively) paralogous genes (only one copy is left while the other are removed from groups)\n" 
+    print "-It also gets rid of orthogroups with less sequences than the number specified by the user." 
 
     # Build hashtable
     print "  Building hashTable IDs/sequences ...\n"
