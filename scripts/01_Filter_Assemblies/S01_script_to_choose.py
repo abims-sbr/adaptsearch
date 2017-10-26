@@ -61,7 +61,7 @@ def main():
     path = glob.glob('*_oneline.fasta')
 
     for name in path:
-        print "species file: %s" %name[0:2]     
+             
         prefix=name[0:2]
         name_find_orf_input = nameFormatting(name, script_path, prefix)
         #Pierre guillaume find_orf script for keeping the longuest ORF
@@ -76,8 +76,7 @@ def main():
         os.system("python S05_filter.py %s %s outputs/%s" %(prefix, length_seq_max, name_filter))
 
         path = glob.glob('outputs/*_oneline.fasta')
-        print "------------------------"
-
+        
     for name in path:
         name_new = name.split("_oneline.")[0]
         os.system("mv %s %s.fasta" %(name, name_new))
