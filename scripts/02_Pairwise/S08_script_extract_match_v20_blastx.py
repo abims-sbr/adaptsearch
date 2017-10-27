@@ -38,46 +38,45 @@ def split_file(path_in, keyword):
     RUN = ''
     BASH1={}
     
-    while 1:
-        nextline = file_in.readline()
+    with open(path_in, "r") as file_in:    
+        for nextline in file_in.readlines():       
 
-        ##################################
-        ###  [A] FORMATTING QUERY NAME ###
+            ##################################
+            ###  [A] FORMATTING QUERY NAME ###
 
-        # Get query name
-        if nextline[0:6]=='Query=':
-            L1 = string.split(nextline, "||")
-            L2 = string.split(L1[0], " ")
-            query = L2[1]
-            if query[-1] == "\n":
-                query = query[:-1]
+            # Get query name
+            if nextline[0:6]=='Query=':
+                L1 = string.split(nextline, "||")
+                L2 = string.split(L1[0], " ")
+                query = L2[1]
+                if query[-1] == "\n":
+                    query = query[:-1]
 
-        ###  [A] END FORMATTING QUERY NAME ###
-        ######################################
-        
-
-        ### split the file with keyword ###
-        if keyword in nextline:
-            # Two cases here:
-            #1# If it is the first "RUN" in the block (i.e. the first occurence of "BLASTN" in the file), we have just to add the new lines in the "RUN" list ... 2nd , we have also to detect the 'key' of bash1, which is the "query" name ... and third we will have to save this "RUN" in the bash1, once we will have detected a new "RUN" (i.e. a new line beginning with "BLASTN".
-            #2# If it isn't the first run, we have the save the previous "RUN" in the "bash1", before to re-initialize the RUN list (RUN =[]), before to append lines to the new "RUN"
-
-            if RUN == '':                          # case #1#
-                RUN = RUN + nextline     # we just added the first line of  the file
-
-            else:                                # case #2# (there was a run before)
-                BASH1[query] = RUN    # add the previous run to the bash
-                RUN = ''                           # re-initialize the "RUN"
-                RUN = RUN + nextline    # add the line starting with the keyword ("BLASTN") (except the first line of the file (the first "RUN")
-
-        else:                          # Treatment of the subsequent lines of the one starting with the keyword ("BLASTN")  (which is not treated here but previously)
-            RUN = RUN + nextline
+            ###  [A] END FORMATTING QUERY NAME ###
+            ######################################
             
 
-        if not nextline:                                   # when no more line, we should record the last "RUN" in the bash1
+            ### split the file with keyword ###
+            if keyword in nextline:
+                # Two cases here:
+                #1# If it is the first "RUN" in the block (i.e. the first occurence of "BLASTN" in the file), we have just to add the new lines in the "RUN" list ... 2nd , we have also to detect the 'key' of bash1, which is the "query" name ... and third we will have to save this "RUN" in the bash1, once we will have detected a new "RUN" (i.e. a new line beginning with "BLASTN".
+                #2# If it isn't the first run, we have the save the previous "RUN" in the "bash1", before to re-initialize the RUN list (RUN =[]), before to append lines to the new "RUN"
+
+                if RUN == '':                          # case #1#
+                    RUN = RUN + nextline     # we just added the first line of  the file
+
+                else:                                # case #2# (there was a run before)
+                    BASH1[query] = RUN    # add the previous run to the bash
+                    RUN = ''                           # re-initialize the "RUN"
+                    RUN = RUN + nextline    # add the line starting with the keyword ("BLASTN") (except the first line of the file (the first "RUN")
+
+            else:                          # Treatment of the subsequent lines of the one starting with the keyword ("BLASTN")  (which is not treated here but previously)
+                RUN = RUN + nextline
+            
+
+        if RUN:                           
             BASH1[query] = RUN                       # add the last "RUN"
-            break
-    
+   
     
     file_in.close()
     return(BASH1)

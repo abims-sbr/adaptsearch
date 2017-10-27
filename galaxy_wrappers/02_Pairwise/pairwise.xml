@@ -54,6 +54,16 @@
 	</outputs>
 
 	<tests>
+        <test>
+            <param name="inputs" ftype="fasta" value="inputs2/PfPfiji_trinity.fasta,inputs2/ApApomp_trinity.fasta,inputs2/AmAmphi_trinity.fasta,inputs2/AcAcaud_trinity.fasta" />
+            <param name="e-value" value="1e-5" />
+            <output_collection name="output_fasta_dna" type="list">
+                <element name="DNAalignment_corresponding_to_protein_from_RBH_AmAmphi_AcAcaud" value="outputs_dna2/DNAalignment_corresponding_to_protein_from_RBH_AmAmphi_AcAcaud.fasta" />                
+                <element name="DNAalignment_corresponding_to_protein_from_RBH_PfPfiji_AcAcaud" value="outputs_dna2/DNAalignment_corresponding_to_protein_from_RBH_PfPfiji_AcAcaud.fasta" />                
+                <element name="DNAalignment_corresponding_to_protein_from_RBH_PfPfiji_AmAmphi" value="outputs_dna2/DNAalignment_corresponding_to_protein_from_RBH_PfPfiji_AmAmphi.fasta" />
+                <element name="DNAalignment_corresponding_to_protein_from_RBH_PfPfiji_ApApomp" value="outputs_dna2/DNAalignment_corresponding_to_protein_from_RBH_PfPfiji_ApApomp.fasta" />
+            </output_collection>
+        </test>
 		<test>
             <param name="inputs" ftype="fasta" value="inputs/PfPfiji_Trinity.fasta,inputs/ApApomp_Trinity.fasta,inputs/AmAmphi_Trinity.fasta,inputs/AcAcaud_Trinity.fasta" />
 			<param name="e-value" value="1e-5" />
