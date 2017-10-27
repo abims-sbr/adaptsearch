@@ -2,7 +2,11 @@
 
     <description>
         This tool takes Orthogroups found by OrthoFinder and proceeds to retrieve nucleic sequences back, then write each orthogroups in its own fasta file.
-    </description>  
+    </description>
+
+    <macros>
+        <import>macros.xml</import>
+    </macros>
 
     <requirements>
         <requirement type="package" version="2.7">python</requirement>
@@ -49,13 +53,10 @@
     </tests>
 
     <help>
+
+@HELP_AUTHORS@
+
 <![CDATA[
-
-.. class:: infomark
-
-**Galaxy integration** Victor Mataigne and ABIMS TEAM.
-
-Contact support.abims@sb-roscoff.fr for any questions or concerns about the Galaxy implementation of this tool.
 
 -------------------------------------------
 
