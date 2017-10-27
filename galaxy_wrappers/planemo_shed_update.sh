@@ -21,6 +21,9 @@ planemo shed_update -t $TARGET
 cd $ROOTPATH/03_POGs
 planemo shed_update -t $TARGET
 
+cd $ROOTPATH/03b_Orthogroups_Tool
+planemo shed_update -t $TARGET
+
 cd $ROOTPATH/04_BlastAlign
 planemo shed_update -t $TARGET
 
