@@ -13,14 +13,14 @@
     <![CDATA[        
         #set $infiles = ""
         #for $input in $inputs_fasta
-            ln -s $input $input.element_identifier;
+            ln -s '$input' '$input.element_identifier';
             #set $infiles = $infiles + $input.element_identifier + ","
         #end for
         #set $infiles = $infiles[:-1]
 
-        $__tool_directory__/scripts/format_transdecoder_headers.sh ${orthogroups}
+        $__tool_directory__/scripts/format_transdecoder_headers.sh '$orthogroups'
         &&
-        python $__tool_directory__/scripts/filter_orthofinder.py ${orthogroups} ${nbseq} > ${output};
+        python $__tool_directory__/scripts/filter_orthofinder.py '$orthogroups' $nbseq > '$output';
     ]]> 
     </command>
 
@@ -43,8 +43,8 @@
             <param name="orthogroups" value="Orthogroups.txt"/>
             <param name="inputs_fasta" value="output_filterassemblies/AcAcaud_trinity.fasta,output_filterassemblies/AmAmphi_trinity.fasta,output_filterassemblies/ApApomp_trinity.fasta,output_filterassemblies/PfPfiji_trinity.fasta,output_filterassemblies/PgPgras_trinity.fasta,output_filterassemblies/PhPhess_trinity.fasta,output_filterassemblies/PuPunid_trinity.fasta,output_filterassemblies/TeTerlap_trinity.fasta,output_filterassemblies/ThThelep_trinity.fasta"/>
             <param name="nbseq" value="3"/>
-            <output name="log_orthogroups" value="log_orthogroups.txt"/>
-            <output name="countings" label="summary_orthogroups.csv"/>
+            <output name="output" value="log_orthogroups.txt" lines_diff="2"/>
+            <output name="countings" value="summary_orthogroups.csv"/>
         </test>
     </tests>
 
