@@ -19,6 +19,8 @@
             #set $infiles = $infiles + $input.element_identifier + ","
         #end for
         #set $infiles = $infiles[:-1]
+        
+        ln -s $__tool_directory__/scripts/dico.py . &&
 
         python $__tool_directory__/scripts/S01_find_orf_on_multiple_alignment.py
         $infiles
@@ -191,7 +193,6 @@ What it does
 ============
 
 | This tool takes **'dataset collection list' containing fasta files with nucleic aligned sequences** and search the ORF and the CDS
-|
 
 --------
 

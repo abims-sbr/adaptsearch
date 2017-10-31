@@ -5,28 +5,6 @@
 ## Description : find and remove indels
 
 
-###############################
-##### DEF 0 : Dico fasta  #####
-###############################
-def dico(F2):
-    #F2 = open(fasta_file_path, "r")
-    dicoco = {}
-    while 1:
-        next2 = F2.readline()
-        if not next2:
-            break
-        if next2[0] == ">":
-            fasta_name_query = next2[:-1]
-            Sn = string.split(fasta_name_query, "||")
-            fasta_name_query = Sn[0]
-            next3 = F2.readline()
-            fasta_seq_query = next3[:-1]
-            dicoco[fasta_name_query]=fasta_seq_query
-    #F2.close()
-    return(dicoco)
-###################################################################################
-
-
 ###################
 ###### DEF 9 ######
 ###################
@@ -63,6 +41,7 @@ def detect_short_indel(seq,MAX_LENGTH_SMALL_INDEL):
 ##### RUN RUN RUN #####
 #######################
 import string, os, time, re, sys
+from dico import dico
 
 ### 0 ### PARAMETERS
 MIN_LENGTH_ALL_aa = int(sys.argv[3])-20
