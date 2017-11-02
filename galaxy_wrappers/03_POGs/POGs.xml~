@@ -21,7 +21,7 @@
         #end for
         #set $infiles_from_paiwise_prot = $infiles_from_paiwise_prot[:-1]
 
-		python '$__tool_directory__/scripts/pogsPOO_dev2.py' '$infiles_from_paiwise_prot' > ${log}
+		python '$__tool_directory__/scripts/pogsPOO.py' '$infiles_from_paiwise_prot' > ${log}
 
 	]]>
   	</command>
