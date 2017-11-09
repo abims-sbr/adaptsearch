@@ -22,6 +22,7 @@
         #end for
         #set $infiles = $infiles[:-1]
 
+        ln -s $__tool_directory__/scripts/functions.py . &&
         ln -s $__tool_directory__/scripts/S02_xxx_patron_pipeline.sh . &&
         ln -s $__tool_directory__/scripts/S03_run_blast_with_k_filter.sh . &&
         ln -s $__tool_directory__/scripts/S04_run_blast2_with_k_filter.sh . &&

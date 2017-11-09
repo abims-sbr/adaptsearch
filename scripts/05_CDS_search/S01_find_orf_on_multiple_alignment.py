@@ -9,29 +9,6 @@
                                  ## OUTPUTs "05_CDS_aa" & "05_CDS_nuc" => NOT INCLUDE THIS CRITERIA
                                  ## OUTPUTs "06_CDS_with_M_aa" & "06_CDS_with_M_nuc" => INCLUDE THIS CRITERIA
 
-
-###############################
-##### DEF 1 : Dico fasta  #####
-###############################
-def dico(fasta_file_path):
-    F2 = open(fasta_file_path, "r")
-    dicoco = {}
-    while 1:
-        next2 = F2.readline()
-        if not next2:
-            break
-        if next2[0] == ">":
-            fasta_name_query = next2[:-1]
-            Sn = string.split(fasta_name_query, "||")
-            fasta_name_query = Sn[0]
-            next3 = F2.readline()
-            fasta_seq_query = next3[:-1]
-            dicoco[fasta_name_query]=fasta_seq_query
-    F2.close()
-    return(dicoco)
-############################################################
-
-
 ####################################################
 ###### DEF 2 : Create bash for genetic code ########
 ####################################################
@@ -343,6 +320,7 @@ def ReverseComplement2(seq):
 ##### RUN RUN RUN #####
 #######################
 import string, os, time, re, zipfile, sys
+from dico import dico
 
 infiles = sys.argv[1]
 MINIMAL_CDS_LENGTH = int(sys.argv[3])  ## in aa number
@@ -382,7 +360,9 @@ count_file_with_CDS_plus_M = 0
 for file in list_file:
     count_file_processed = count_file_processed + 1
     fasta_file_path = "./%s" %file
-    bash_fasta = dico(fasta_file_path)   ### DEF 1 ###
+    fasta_file = open(fasta_file_path, "r")
+    bash_fasta = dico(fasta_file)   ### DEF 1 ###
+    fasta_file.close()
     BESTORF_nuc, BESTORF_nuc_CODING, BESTORF_nuc_CDS_with_M, BESTORF_aa, BESTORF_aa_CODING, BESTORF_aa_CDS_with_M  = find_good_ORF_criteria_3(bash_fasta, bash_codeUniversel)   ### DEF 4 - PART 2 - ###
 
     ## a ## OUTPUT BESTORF_nuc
