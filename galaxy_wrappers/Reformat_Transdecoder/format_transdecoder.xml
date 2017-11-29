@@ -1,0 +1,100 @@
+<tool name="FormatTransdecoder" id="format_transdecoder" version="2.0">
+
+    <description>
+        Reformat Transdecoder .pep output files (shorter headers and one-line sequences)
+    </description>
+
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+
+    <requirements>
+        <expand macro="python_required" />
+        <requirement type="package" version="1.68">biopython</requirement>
+    </requirements>
+
+    <stdio>
+        <exit_code range="1:" level="fatal" />
+    </stdio>
+
+    <command><![CDATA[
+        ln -s $__tool_directory__/scripts/oneLine.py . &&
+        ln -s '$input' '$input.element_identifier' &&
+
+        bash $__tool_directory__/scripts/script.sh '$input.element_identifier' temp &&
+        cat Formatted* > $out;     
+
+    ]]></command>
+    <inputs>
+        <param name="input" type="data" format="fasta" label="Choose your file" help="A fasta file from TransDecoder .pep Collection (also works with .bed files, but useless for AdaptSearch)." />
+    </inputs>
+
+    <outputs>        
+        <data name="out" format="fasta" label="Formatted_${input.name}"/>           
+    </outputs>
+
+    <tests>        
+        <test>
+            <param name="input" ftype="fasta" value="input/Ac_Acaud_Trinity.fasta" />
+            <output name="out" value="output/Ac_Acaud_Trinity.fasta"/>
+        </test> 
+    </tests>
+
+    <help>
+
+.. class:: infomark
+
+@HELP_AUTHORS@
+
+============
+What it does
+============
+
+This small tool shorten headers from TransDecoder output files and re-write each sequence on a single line.
+
+==========
+Parameters
+==========
+
+- A .pep output file / a .pep collection from TransDecoder
+
+=======
+Outputs
+=======
+
+- The same file(s), but with a simplier header suited to adaptSearch and with each sequence on a single line.
+
+===============
+Working Example
+===============
+
+A sequence like :
+
+>Gene.2799::Am10001_1/1_1.000_1145::g.2799::m.2799 Gene.2799::Am10001_1/1_1.000_1145::g.2799  ORF type:internal len:382 (+) Am10001_1/1_1.000_1145:1-1143(+)
+SNQSEMYKIKHCILWLLPCVIILCVLWLKQWNFYYLNDVSVYAMKSEASESSPESVASVS
+EEIKSNQSEMYKIKHCILWLLPCVIILCVLWLKQWNFYYLNDVSVYAMKSEASESSPESV
+ASVSEEIIKGVVPLRKGPTCPQENRNKMIHKICKAHKRTELKAYNYQWLLVDKIHKVIYC
+IIPKAGSTSMTTFMGLNQLNQSLSHYDTGKKFKAAHRRRWLNEHKLYTLNQFTEKSVQFK
+LDNYFKFLIVRHPLERIFSAFSDKFLVQGNLKWKFEPLLKKHFPKLFKTNDSLKFDKFLK
+LFVLANANNTLISGPLKSFVNNPHWAKQFDICQPCIIYYDYIAKLDTMDIDQQTILNHFK
+ASLIPVLNVAANSAGTNHVKH
+
+Becomes : 
+
+A sequence like :
+
+>Am10001_1/1_1.000_1145
+SNQSEMYKIKHCILWLLPCVIILCVLWLKQWNFYYLNDVSVYAMKSEASESSPESVASVSEEIKSNQSEMYKIKHCILWLLPCVIILCVLWLKQWNFYYLNDVSVYAMKS...etc...
+
+Changelog
+=========
+
+**Version 1.0 - 28/11/2017**
+
+ - Tool added to the AdaptSearch toolSuite (between TransDecoder and OrthoFinder).
+
+    </help>
+
+    <expand macro="citations" />
+
+</tool>
