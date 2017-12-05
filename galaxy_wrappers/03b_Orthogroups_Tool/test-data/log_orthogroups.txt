@@ -1,11 +1,10 @@
 
 -This script works on the 'Orthogroups' file output of Orthofinder to split each orthogroup in a single fasta file.
 -It also gets rid of orthogroups with less sequences than the number specified by the user.
-
   Building hashTable IDs/sequences ...
 
   Reading Orthogroups.txt ...
-    (Dropping orthogroups of less than 3 loci.)
+    (Dropping orthogroups of less than 2 loci.)
 
   Writing summary ...
 
@@ -15,13 +14,9 @@
 
 	Species per orthogroup : | 1 2 3 4 5 6 7 8 9 
 	-------------------------|---------------------------
-	 loci per orthogroup : 3 | 0 0 275 0 0 0 0 0 0 
-	 loci per orthogroup : 4 | 0 0 0 139 0 0 0 0 0 
-	 loci per orthogroup : 5 | 0 0 0 0 55 0 0 0 0 
-	 loci per orthogroup : 6 | 0 0 0 0 0 36 0 0 0 
-	 loci per orthogroup : 7 | 0 0 0 0 0 0 21 0 0 
-	 loci per orthogroup : 8 | 0 0 0 0 0 0 0 13 0 
-	 loci per orthogroup : 9 | 0 0 0 0 0 0 0 0 10 
+	 loci per orthogroup : 2 | 0 2 0 0 0 0 0 0 0 
+	 loci per orthogroup : 3 | 0 0 4 0 0 0 0 0 0 
+	 loci per orthogroup : 4 | 0 0 0 1 0 0 0 0 0 
 
 
 	 Orthogroups files are written in the directory 'filtered_orthogroups'
