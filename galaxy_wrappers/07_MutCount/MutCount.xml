@@ -18,7 +18,7 @@
     
         ln -s $__tool_directory__/scripts/functions.py . &&
         
-        #if str($method.method_run) == "concat" :            
+        #if str($method.method_run) == "concat" :
             python '$__tool_directory__/scripts/S01a_mutcount_pairs.py' $method.num_sampled $method.num_iter $method.list_species
             &&
             python '$__tool_directory__/scripts/S02a_codon_counting.py' ${method.concat_nuc} 
@@ -26,24 +26,24 @@
         
         #if str($method.method_run) == "separated" :
             #set $infiles = ""
-            #for $input in $method.sep_file               
+            #for $input in $method.sep_file
                 ln -s '$input' '$input.element_identifier';
                 #set $infiles = $infiles + $input.element_identifier + ","
             #end for
             #set $infiles = $infiles[:-1]
 
             #if str($method.format_run)== "nucleic" :
-                python '$__tool_directory__/scripts/S02b_study_seq_composition_nuc.py' '$infiles' ${method.concat_phy}                 
+                python '$__tool_directory__/scripts/S02b_study_seq_composition_nuc.py' '$infiles' ${method.concat_phy}
             #end if
 
-            #if str($method.format_run)== "proteic" :                
+            #if str($method.format_run)== "proteic" :
                 cp '$__tool_directory__/scripts/amino_acid_properties.csv' .
                 &&
-                python '$__tool_directory__/scripts/S01b_study_seq_composition_aa.py' '$infiles' ${method.concat_phy}               
+                python '$__tool_directory__/scripts/S01b_study_seq_composition_aa.py' '$infiles' ${method.concat_phy}
             #end if
         #end if
     ]]>
-    </command>   
+    </command>
 
     <inputs>
         <conditional name="method">
@@ -158,6 +158,18 @@
 
         <test>
             <conditional name="method" >
+                <param name="method_run" value="separated" />
+                <param name="format_run" value="nucleic" />
+                <param name="sep_file" ftype="fasta" value="sep_nuc/locus1_sp6_sp6.fasta,sep_nuc/locus1_sp8_sp8.fasta,sep_nuc/locus2_sp6_sp6.fasta" />
+                <param name="concat_phy" ftype="fasta" value="phylogeny_concat.fasta" />
+            </conditional>
+            <output name="nuc_comp" value="OUT_nuc/nuc_compositions.csv" lines_diff="2"/>
+            <output name="percent_gc" value="OUT_nuc/percent_GC.csv" lines_diff="2"/>
+            <output name="percent_pur" value="OUT_nuc/percent_purine.csv" lines_diff="2"/>
+            <output name="purine_load" value="OUT_nuc/Purine_Load_Indice.csv" lines_diff="2"/>
+
+            <!--
+            <conditional name="method" >
                 <param name="method_run" value="separated" />                
                 <param name="format_run" value="nucleic" />
                 <param name="sep_file" ftype="fasta" value="sep_nuc/locus1_sp6_sp6.fasta,sep_nuc/locus1_sp8_sp8.fasta,sep_nuc/locus2_sp6_sp6.fasta" />
@@ -183,6 +195,7 @@
                     <has_line line="locus2_sp6_sp6.fasta,192,14,12,72.91667,62.50000," />
                 </assert_contents>
             </output>
+            -->
         </test>
 
         <test>
@@ -191,7 +204,12 @@
                 <param name="format_run" value="proteic" />
                 <param name="sep_file" ftype="fasta" value="sep_aa/locus1_sp6_sp6.fasta,sep_aa/locus1_sp8_sp8.fasta,sep_aa/locus2_sp6_sp6.fasta" />
                 <param name="concat_phy" ftype="fasta" value="phylogeny_concat.fasta" />
-            </conditional>
+            </conditional>            
+            <output name="ivywrel" value="OUT_aa/IVYWREL.csv" lines_diff="2"/>
+            <output name="rhkde" value="OUT_aa/RHKDE.csv" lines_diff="2"/>
+            <output name="payre_mvgds" value="OUT_aa/PAYRE-MVGDS.csv" lines_diff="2"/>
+            <output name="avlimfyw" value="OUT_aa/AVLIMFYW.csv" lines_diff="2"/>
+            <!--
             <output name="prot_comp" >
                 <assert_contents>
                     <has_line line="locus2_sp6_sp6.fasta,0.12500,0.00000,0.09375,0.04688,0.03125,0.09375,0.03125,0.07812,0.00000,0.04688,0.01562,0.03125,0.03125,0.01562,0.04688,0.00000,0.07812,0.07812,0.06250,0.09375,0.12500,0.00000,0.09375,0.04688,0.03125,0.09375,0.01562,0.10938,0.00000,0.04688,0.01562,0.04688,0.01562,0.01562,0.04688,0.00000,0.07812,0.07812,0.06250,0.07812,0.12500,0.00000,0.09375,0.04688,0.04688,0.09375,0.01562,0.09375,0.00000,0.04688,0.01562,0.03125,0.01562,0.01562,0.04688,0.00000,0.07812,0.07812,0.06250,0.09375,0.14062,0.00000,0.09375,0.06250,0.04688,0.09375,0.01562,0.09375,0.00000,0.03125,0.01562,0.04688,0.01562,0.01562,0.03125,0.00000,0.07812,0.07812,0.06250,0.07812,0.12500,0.00000,0.12500,0.04688,0.03125,0.09375,0.01562,0.10938,0.00000,0.04688,0.01562,0.04688,0.01562,0.01562,0.04688,0.00000,0.07812,0.07812,0.06250,0.04688,0.14062,0.00000,0.09375,0.06250,0.04688,0.09375,0.01562,0.09375,0.00000,0.03125,0.01562,0.04688,0.01562,0.01562,0.03125,0.00000,0.07812,0.07812,0.06250,0.07812," />
@@ -212,6 +230,7 @@
                     <has_line line="locus2_sp6_sp6.fasta,171.50000,171.50000,170.50000,171.00000,171.50000,171.00000," />
                 </assert_contents>
             </output>
+            -->
         </test>
     </tests>
 
