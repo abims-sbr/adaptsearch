@@ -15,15 +15,18 @@
 
     <command>
     <![CDATA[
-        #if str($method.method_run) == "concat" :
+    
+        ln -s $__tool_directory__/scripts/functions.py . &&
+        
+        #if str($method.method_run) == "concat" :            
             python '$__tool_directory__/scripts/S01a_mutcount_pairs.py' $method.num_sampled $method.num_iter $method.list_species
             &&
             python '$__tool_directory__/scripts/S02a_codon_counting.py' ${method.concat_nuc} 
         #end if
-
+        
         #if str($method.method_run) == "separated" :
             #set $infiles = ""
-            #for $input in $method.sep_file
+            #for $input in $method.sep_file               
                 ln -s '$input' '$input.element_identifier';
                 #set $infiles = $infiles + $input.element_identifier + ","
             #end for
@@ -33,7 +36,7 @@
                 python '$__tool_directory__/scripts/S02b_study_seq_composition_nuc.py' '$infiles' ${method.concat_phy}                 
             #end if
 
-            #if str($method.format_run)== "proteic" :
+            #if str($method.format_run)== "proteic" :                
                 cp '$__tool_directory__/scripts/amino_acid_properties.csv' .
                 &&
                 python '$__tool_directory__/scripts/S01b_study_seq_composition_aa.py' '$infiles' ${method.concat_phy}               

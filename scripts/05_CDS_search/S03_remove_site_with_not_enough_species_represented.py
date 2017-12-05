@@ -4,28 +4,6 @@
 
 ## Description : find and remove indels
 
-
-###############################
-##### DEF 1 : Dico fasta  #####
-###############################
-def dico(F2):
-    dicoco = {}
-    while 1:
-        next2 = F2.readline()
-        if not next2:
-            break
-        if next2[0] == ">":
-            fasta_name_query = next2[:-1]
-            Sn = string.split(fasta_name_query, "||")
-            fasta_name_query = Sn[0]
-            next3 = F2.readline()
-            fasta_seq_query = next3[:-1]
-            dicoco[fasta_name_query]=fasta_seq_query
-    #F2.close()
-    return(dicoco)
-###################################################################################
-
-
 ####################
 ###### DEF 2 #######
 ####################
@@ -116,6 +94,7 @@ def remove_position_with_too_much_missing_data(bash_aa, bash_nuc, MIN_SPECIES_NB
 ##### RUN RUN RUN #####
 #######################
 import string, os, time, re, sys, zipfile
+from dico import dico
 
 ### 0 ### PARAMETERS
 MIN_SPECIES_NB = int(sys.argv[1])
@@ -149,6 +128,9 @@ for file in L_IN1:
 
     dico_aa = dico(file_INaa)   ### DEF 1 ###
     dico_nuc = dico(file_INnuc)   ### DEF 1 ###
+    
+    file_INaa.close()
+    file_INnuc.close()
 
     if len(dico_aa) < MIN_SPECIES_NB :
 	list_file.append(file)
