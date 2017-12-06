@@ -55,9 +55,9 @@
     </inputs>
 
     <outputs>
-        <data format="phylip" name="phy" from_work_dir="out.phy" label="Alignment of ${input.name} in phylip" />
-        <data format="nexus" name="nxs" from_work_dir="out.nxs" label="Alignment of ${input.name} in nexus" />
-        <data format="fasta" name="fasta" from_work_dir="out.fasta" label="Alignment of ${input.name} in fasta">
+        <data format="phylip" name="phy" from_work_dir="out.phy" label="Alignment of ${input.name} in phylip" hidden="True"/>
+        <data format="nexus" name="nxs" from_work_dir="out.nxs" label="Alignment of ${input.name} in nexus" hidden="True"/>
+        <data format="fasta" name="fasta" from_work_dir="out.fasta" label="Alignment of ${input.name} in fasta" hidden="True">
             <filter>fasta_out == True</filter>
         </data>
     </outputs>
