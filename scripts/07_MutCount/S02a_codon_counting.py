@@ -62,7 +62,7 @@ def substrcountings(table,pvalues):
   names.append('\n')
   numbers.append('\n')
   stats.append('\n')
-  string=names+numbers+stats
+  string=names+numbers+stats  
 
   return string
 
@@ -74,16 +74,15 @@ def substrbiases(table,pvalues):
   stats=['pvalues']
   for f in table:
     for g in table[f]:
-      names.append('	%s to %s' % (g,f))
+      names.append('	%s>%s' % (g,f))
       numbers.append('	%f' % table[f][g])
       stats.append('	%f' % pvalues[f][g])
   names.append('\n')
   numbers.append('\n')
-  stats.append('\n')
-  string=names+numbers+stats
+  stats.append('\n')  
+  string=names+numbers+stats  
 
   return string
-
 
 def strcountings(codons, aa, classif,codonspvalues,aapvalues,classifpvalues,GC3,GC12,IVYWREL,EKQH,PAYRESDGM,purineload,CvP):
 
@@ -96,14 +95,38 @@ def strcountings(codons, aa, classif,codonspvalues,aapvalues,classifpvalues,GC3,
   return string
 
 
-def strbiases(codons, aa, classif,codonspvalues,aapvalues,classifpvalues):
+def strbiases(codons, aa, classif,codonspvalues,aapvalues,classifpvalues,fileaa, fileaatype, p):
 
-  subcodons=['codons mutations biases\n']+substrbiases(codons,codonspvalues)
+  # Writing to files (tab separated; the tab characters are in the lists values)
+
+  aafreq, aapval = substrbiases(aa,aapvalues)[401:801], substrbiases(aa,aapvalues)[803:-1]
+  aatypefreq, aatypepval = substrbiases(classif,classifpvalues)[17:33], substrbiases(classif,classifpvalues)[35:-1]
+      
+  fileaa.write("%s>%s" %(p[1], p[0]))
+  for value in aafreq:
+    fileaa.write(str(value))
+  fileaa.write("\n")
+  fileaa.write("%s>%s_pvalue" %(p[1], p[0]))
+  for value in aapval:
+    fileaa.write(str(value))
+  fileaa.write("\n")
+  
+  fileaatype.write("%s>%s" %(p[1], p[0]))
+  for value in aatypefreq:
+    fileaatype.write(str(value))
+  fileaatype.write("\n")
+  fileaatype.write("%s>%s_pvalue" %(p[1], p[0]))
+  for value in aatypepval:
+    fileaatype.write(str(value))
+  fileaatype.write("\n")
+
+  # Origin code
+
+  subcodons=['codons mutations biases\n']+substrbiases(codons,codonspvalues)  
   subaa=subcodons+['\namino acids mutation biases\n']+substrbiases(aa,aapvalues)
-  subclassif=subaa+['\ntypes of amino_acids mutation biasecodoncountingv22.pys\n']+substrbiases(classif,classifpvalues)
+  subclassif=subaa+['\ntypes of amino_acids mutation biasecodoncountingv22.pys\n']+substrbiases(classif,classifpvalues)  
 
   return subclassif
-
 
 def testpvalue(bootstrap,value,iterration): #computes where the observed value is located in the expected counting distribution
 
@@ -122,7 +145,6 @@ def testpvalue(bootstrap,value,iterration): #computes where the observed value i
   pvalue=(testval+1)/float(iterration+1)
 
   return pvalue
-
 
 def gettables(content,reversecode,code,classif): #generates the tables contening all the countings
 
@@ -170,13 +192,13 @@ def gettables(content,reversecode,code,classif): #generates the tables contening
 
   return codonscount, aacount, aaclassifcount, codons, aa, aaclassif
 
-
 def countings(seq1,seq2,code,classif,reversecode,reverseclassif):
+# COMPTAGES (output counts.txt) functions used : gettables()
 #countings actually counts occurence and mutation bias of codons, amino acids and types of amino acids
   
-  codonscount, aacount, aaclassifcount, codons, aa, aaclassif=gettables(0,reversecode,code,classif)
+  codonscount, aacount, aaclassifcount, codons, aa, aaclassif=gettables(0,reversecode,code,classif)  
   codonscount2, aacount2, aaclassifcount2, _, _, _=gettables(0,reversecode,code,classif)
-
+ 
   G12=0
   C12=0
   G3=0
@@ -299,11 +321,10 @@ def countings(seq1,seq2,code,classif,reversecode,reverseclassif):
   IVYWREL=IVYWREL/float(compcodons)
   CvP=aaclassifcount['charged']-aaclassifcount['polar']
   
-
   return codonscount, aacount, aaclassifcount, codons, aa, aaclassif, GC3, GC12, IVYWREL, EKQH, PAYRESDGM, purineload, CvP
 
-
 def sampling(inputfile,length,iterration,plusminus,species,code,classif,reversecode,reverseclassif):
+# functions used : gettables, countings
 #sampling provides 'iterations' pairs of sequences of 'length' non ambiguous codons obtained from the dataset specified by 'species' and 'plusminus'
 #sort of bootstrap
 
@@ -409,6 +430,32 @@ def sampling(inputfile,length,iterration,plusminus,species,code,classif,reversec
  
 import string, os, sys, re, random
 from math import pow
+
+codons_counts = open("codons_counts.csv", "w")
+aa_counts = open("aa_counts.csv", "w")
+aatypes_counts = open("aatypes_counts.csv", "w")
+gc_counts = open("gc_counts.csv", "w")
+
+# ou bien utiliser le reversecode plus bas
+column_index_codons = "Species\ttat\ttgt\ttct\tttt\ttgc\ttgg\ttac\tttc\ttcg\ttta\tttg\ttcc\ttca\tgca\tgta\tgcc\tgtc\tgcg\tgtg\tcaa\tgtt\tgct\tacc\tggt\tcga\tcgc\tgat\taag\tcgg\tact\tggg\tgga\tggc\tgag\taaa\tgac\tcgt\tgaa\tctt\tatg\taca\tacg\tatc\taac\tata\tagg\tcct\tagc\taga\tcat\taat\tatt\tctg\tcta\tctc\tcac\tccg\tagt\tcag\tcca\tccc\n"
+column_index_aa = "Species\tcys\tasn\this\tile\tser\tgln\tlys\tmet\tpro\tthr\tphe\tala\tgly\tval\tleu\tasp\targ\ttrp\tglu\ttyr\n"
+column_index_aatypes = "Species\taromatics\tpolar\tunpolar\tcharged\n"
+column_index_gc = "Species\tGC3\tGC12\tIVYWREL\tEKQH\tPAYRESDGM\tpurineload\tCvP\n"
+
+codons_counts.write(column_index_codons)
+aa_counts.write(column_index_aa)
+aatypes_counts.write(column_index_aatypes)
+gc_counts.write(column_index_gc)
+
+aa_transitions = open("aa_transitions.csv", "w")
+aatypes_transitions = open("aatypes_transitions.csv", "w")
+
+column_index_aa_transitions = "Species\tcys>cys\tasn>cys\this>cys\tile>cys\tser>cys\tgln>cys\tlys>cys\tmet>cys\tpro>cys\tthr>cys\tphe>cys\tala>cys\tgly>cys\tval>cys\tleu>cys\tasp>cys\targ>cys\ttrp>cys\tglu>cys\ttyr>cys\tcys>asn\tasn>asn\this>asn\tile>asn\tser>asn\tgln>asn\tlys>asn\tmet>asn\tpro>asn\tthr>asn\tphe>asn\tala>asn\tgly>asn\tval>asn\tleu>asn\tasp>asn\targ>asn\ttrp>asn\tglu>asn\ttyr>asn\tcys>his\tasn>his\this>his\tile>his\tser>his\tgln>his\tlys>his\tmet>his\tpro>his\tthr>his\tphe>his\tala>his\tgly>his\tval>his\tleu>his\tasp>his\targ>his\ttrp>his\tglu>his\ttyr>his\tcys>ile\tasn>ile\this>ile\tile>ile\tser>ile\tgln>ile\tlys>ile\tmet>ile\tpro>ile\tthr>ile\tphe>ile\tala>ile\tgly>ile\tval>ile\tleu>ile\tasp>ile\targ>ile\ttrp>ile\tglu>ile\ttyr>ile\tcys>ser\tasn>ser\this>ser\tile>ser\tser>ser\tgln>ser\tlys>ser\tmet>ser\tpro>ser\tthr>ser\tphe>ser\tala>ser\tgly>ser\tval>ser\tleu>ser\tasp>ser\targ>ser\ttrp>ser\tglu>ser\ttyr>ser\tcys>gln\tasn>gln\this>gln\tile>gln\tser>gln\tgln>gln\tlys>gln\tmet>gln\tpro>gln\tthr>gln\tphe>gln\tala>gln\tgly>gln\tval>gln\tleu>gln\tasp>gln\targ>gln\ttrp>gln\tglu>gln\ttyr>gln\tcys>lys\tasn>lys\this>lys\tile>lys\tser>lys\tgln>lys\tlys>lys\tmet>lys\tpro>lys\tthr>lys\tphe>lys\tala>lys\tgly>lys\tval>lys\tleu>lys\tasp>lys\targ>lys\ttrp>lys\tglu>lys\ttyr>lys\tcys>met\tasn>met\this>met\tile>met\tser>met\tgln>met\tlys>met\tmet>met\tpro>met\tthr>met\tphe>met\tala>met\tgly>met\tval>met\tleu>met\tasp>met\targ>met\ttrp>met\tglu>met\ttyr>met\tcys>pro\tasn>pro\this>pro\tile>pro\tser>pro\tgln>pro\tlys>pro\tmet>pro\tpro>pro\tthr>pro\tphe>pro\tala>pro\tgly>pro\tval>pro\tleu>pro\tasp>pro\targ>pro\ttrp>pro\tglu>pro\ttyr>pro\tcys>thr\tasn>thr\this>thr\tile>thr\tser>thr\tgln>thr\tlys>thr\tmet>thr\tpro>thr\tthr>thr\tphe>thr\tala>thr\tgly>thr\tval>thr\tleu>thr\tasp>thr\targ>thr\ttrp>thr\tglu>thr\ttyr>thr\tcys>phe\tasn>phe\this>phe\tile>phe\tser>phe\tgln>phe\tlys>phe\tmet>phe\tpro>phe\tthr>phe\tphe>phe\tala>phe\tgly>phe\tval>phe\tleu>phe\tasp>phe\targ>phe\ttrp>phe\tglu>phe\ttyr>phe\tcys>ala\tasn>ala\this>ala\tile>ala\tser>ala\tgln>ala\tlys>ala\tmet>ala\tpro>ala\tthr>ala\tphe>ala\tala>ala\tgly>ala\tval>ala\tleu>ala\tasp>ala\targ>ala\ttrp>ala\tglu>ala\ttyr>ala\tcys>gly\tasn>gly\this>gly\tile>gly\tser>gly\tgln>gly\tlys>gly\tmet>gly\tpro>gly\tthr>gly\tphe>gly\tala>gly\tgly>gly\tval>gly\tleu>gly\tasp>gly\targ>gly\ttrp>gly\tglu>gly\ttyr>gly\tcys>val\tasn>val\this>val\tile>val\tser>val\tgln>val\tlys>val\tmet>val\tpro>val\tthr>val\tphe>val\tala>val\tgly>val\tval>val\tleu>val\tasp>val\targ>val\ttrp>val\tglu>val\ttyr>val\tcys>leu\tasn>leu\this>leu\tile>leu\tser>leu\tgln>leu\tlys>leu\tmet>leu\tpro>leu\tthr>leu\tphe>leu\tala>leu\tgly>leu\tval>leu\tleu>leu\tasp>leu\targ>leu\ttrp>leu\tglu>leu\ttyr>leu\tcys>asp\tasn>asp\this>asp\tile>asp\tser>asp\tgln>asp\tlys>asp\tmet>asp\tpro>asp\tthr>asp\tphe>asp\tala>asp\tgly>asp\tval>asp\tleu>asp\tasp>asp\targ>asp\ttrp>asp\tglu>asp\ttyr>asp\tcys>arg\tasn>arg\this>arg\tile>arg\tser>arg\tgln>arg\tlys>arg\tmet>arg\tpro>arg\tthr>arg\tphe>arg\tala>arg\tgly>arg\tval>arg\tleu>arg\tasp>arg\targ>arg\ttrp>arg\tglu>arg\ttyr>arg\tcys>trp\tasn>trp\this>trp\tile>trp\tser>trp\tgln>trp\tlys>trp\tmet>trp\tpro>trp\tthr>trp\tphe>trp\tala>trp\tgly>trp\tval>trp\tleu>trp\tasp>trp\targ>trp\ttrp>trp\tglu>trp\ttyr>trp\tcys>glu\tasn>glu\this>glu\tile>glu\tser>glu\tgln>glu\tlys>glu\tmet>glu\tpro>glu\tthr>glu\tphe>glu\tala>glu\tgly>glu\tval>glu\tleu>glu\tasp>glu\targ>glu\ttrp>glu\tglu>glu\ttyr>glu\tcys>tyr\tasn>tyr\this>tyr\tile>tyr\tser>tyr\tgln>tyr\tlys>tyr\tmet>tyr\tpro>tyr\tthr>tyr\tphe>tyr\tala>tyr\tgly>tyr\tval>tyr\tleu>tyr\tasp>tyr\targ>tyr\ttrp>tyr\tglu>tyr\ttyr>tyr\n"
+column_index_aatypes_transitions = "Species\taromatics>aromatics\tpolar>aromatics\tunpolar>aromatics\tcharged>aromatics\taromatics>polar\tpolar>polar\tunpolar>polar\tcharged>polar\taromatics>unpolar\tpolar>unpolar\tunpolar>unpolar\tcharged>unpolar\taromatics>charged\tpolar>charged\tunpolar>charged\tcharged>charged\n"
+
+aa_transitions.write(column_index_aa_transitions)
+aatypes_transitions.write(column_index_aatypes_transitions)
+
 PATH = sys.argv[1]
 length=1000
 iterration=100
@@ -423,6 +470,8 @@ classif={'unpolar':['gly','ala','val','leu','met','ile'],'polar':['ser','thr','c
 
 reversecode={v:k for k in code for v in code[k]}
 reverseclassif={v:k for k in classif for v in classif[k]} 
+
+# --------------------------------------------------------------
 
 pairs=open("pairs.txt","r") #finds the pairs to analyze
 pairlist=[]
@@ -449,6 +498,7 @@ while 1:
       species=listparameters[3:]
       background=1
 
+# --------------------------------------------------------------
 
 concat=open(sys.argv[1],"r")
 
@@ -475,6 +525,9 @@ for p in pairlist: #pairs analysis
     stringbiases.append(applause+'\n\n\n')
     codonscountboot, aacountboot, aaclassifcountboot, codonsboot, aaboot, aaclassifboot=sampling(concat,length,iterration,plusminus,species,code,classif,reversecode,reverseclassif)
   print str(p[0])+' vs '+str(p[1])
+
+  # -----------------------------
+  # Mise en memoire des calculs pour les comptages par sps + Ecriture fichiers de sortie
   codonscount, aacount, aaclassifcount, codons, aa, aaclassif, GC3, GC12, IVYWREL, EKQH, PAYRESDGM, purineload, CvP=countings(seq1,seq2,code,classif,reversecode,reverseclassif)
   codonscountpvalue, aacountpvalue, aaclassifcountpvalue, codonspvalue, aapvalue, aaclassifpvalue=gettables(0,reversecode,code,classif)
 
@@ -501,25 +554,85 @@ for p in pairlist: #pairs analysis
       aacountpvalue[f]=testpvalue(aacountboot[f],aacount[f],iterration)
     for f in aaclassifcount:
       aaclassifcountpvalue[f]=testpvalue(aaclassifcountboot[f],aaclassifcount[f],iterration)
+   
+    ## Writing countings into separated output files ##
+
+    codons_counts.write(p[0])
+    codons_counts.write("\t")
+    for value in codonscount.values():
+      codons_counts.write(str(value) + "\t")
+    codons_counts.write("\t\n")
+
+    codons_counts.write(p[0])
+    codons_counts.write("_pvalue\t")
+    for value in codonscountpvalue.values():
+      codons_counts.write(str(value) + "\t")
+    codons_counts.write("\t\n")
+
+    aa_counts.write(p[0])
+    aa_counts.write("\t")
+    for value in aacount.values():
+      aa_counts.write(str(value) + "\t")
+    aa_counts.write("\t\n")
+
+    aa_counts.write(p[0])
+    aa_counts.write("_pvalue\t")
+    for value in aacountpvalue.values():
+      aa_counts.write(str(value) + "\t")
+    aa_counts.write("\t\n")
+
+    aatypes_counts.write(p[0])
+    aatypes_counts.write("\t")
+    for value in aaclassifcount.values():
+      aatypes_counts.write(str(value) + "\t")
+    aatypes_counts.write("\t\n")
+
+    aatypes_counts.write(p[0])
+    aatypes_counts.write("_pvalue\t")
+    for value in aaclassifcountpvalue.values():
+      aatypes_counts.write(str(value) + "\t")
+    aatypes_counts.write("\t\n")
+
+    gc_counts.write(p[0])
+    gc_counts.write("\t")
+    gc_counts.write(str(GC3)+"\t"+str(GC12)+"\t"+str(IVYWREL)+"\t"+str(EKQH)+"\t"+str(PAYRESDGM)+"\t"+str(purineload)+"\t"+str(CvP))
+    gc_counts.write("\t\n")
+
+    # end writing
     
     stringcounts=stringcounts[:-1]+[''.join([stringcounts[-1],("counting of %s\n\n" % p[0])+''.join(strcountings(codonscount, aacount, aaclassifcount,codonscountpvalue,aacountpvalue,aaclassifcountpvalue,GC3,GC12,IVYWREL,EKQH,PAYRESDGM,purineload,CvP))+'\n\n'])]
   else:
     towrite=1
+  # -----------------------------
 
   stringbiases.append("mutation biases from %s to %s\n\n" % (p[1], p[0]))
-  stringbiases=stringbiases+strbiases(codons, aa, aaclassif,codonspvalue,aapvalue,aaclassifpvalue)
-  stringbiases.append('\n\n')
+  stringbiases=stringbiases+strbiases(codons, aa, aaclassif,codonspvalue,aapvalue,aaclassifpvalue,aa_transitions,aatypes_transitions,p)
+  stringbiases.append('\n\n') 
   print 'done'
 
 concat.close()
 
+# --------------------------------------------------------------
+
 stringcounts=''.join(stringcounts)
 stringbiases=''.join(stringbiases)
+
 # results=open(os.path.dirname(PATH)+"/"+string(os.path.split(PATH)[1],' ')[0]+'_results.txt',"w")
-results=open('./codoncounting_results.txt',"w")
-results.write("%s" % stringcounts)
-results.write("\n\n")
-results.write("%s" % stringbiases)
-results.close()
+#results=open('./codoncounting_results.txt',"w")
+results1=open('./counts.txt', "w")
+results1.write("%s" % stringcounts)
+results1.close()
+results2=open('./biases.txt', "w")
+results2.write("%s" % stringbiases)
+results2.close()
+#results.write("%s" % stringcounts)
+#results.write("\n\n")
+#results.write("%s" % stringbiases)
+#results.close()
 
-
+codons_counts.close()
+aa_counts.close()
+aatypes_counts.close()
+gc_counts.close()
+aa_transitions.close()
+aatypes_transitions.close()

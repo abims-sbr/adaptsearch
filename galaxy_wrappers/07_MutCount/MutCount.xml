@@ -72,7 +72,28 @@
 
     <outputs>
         <!-- output concat -->
-        <data format="txt" name="output1" label="concatenated_results.txt" from_work_dir="codoncounting_results.txt" >
+        <data format="txt" name="output1" label="counts.txt" from_work_dir="counts.txt" >
+            <filter>(method['method_run']=='concat')</filter>
+        </data>
+        <data format="txt" name="output2" label="biases.txt" from_work_dir="biases.txt" >
+            <filter>(method['method_run']=='concat')</filter>
+        </data>
+        <data format="csv" name="codons_counts" label="codons_counts.csv" from_work_dir="codons_counts.csv" >
+            <filter>(method['method_run']=='concat')</filter>
+        </data>
+        <data format="csv" name="aa_counts" label="aa_counts.csv" from_work_dir="aa_counts.csv" >
+            <filter>(method['method_run']=='concat')</filter>
+        </data>
+        <data format="csv" name="aatypes_counts" label="aatypes_counts.csv" from_work_dir="aatypes_counts.csv" >
+            <filter>(method['method_run']=='concat')</filter>
+        </data>
+        <data format="csv" name="gc_counts" label="codons_counts.csv" from_work_dir="gc_counts.csv" >
+            <filter>(method['method_run']=='concat')</filter>
+        </data>
+        <data format="csv" name="aa_transitions" label="aa_transitions.csv" from_work_dir="aa_transitions.csv" >
+            <filter>(method['method_run']=='concat')</filter>
+        </data>
+        <data format="csv" name="aatypes_transitions" label="aatypes_transitions.csv" from_work_dir="aatypes_transitions.csv" >
             <filter>(method['method_run']=='concat')</filter>
         </data>
 
@@ -140,20 +161,31 @@
                 <param name="concat_nuc" ftype="fasta" value="test_07_output_phylogeny_concatenation.fasta" />
                 <param name="num_sampled" value="100" />
                 <param name="num_iter" value="100" />
-                <param name="list_species" ftype="text" value="Ac,Pu,Am,Ap,Pf,Pg,Th,Ph,Te" />
+                <param name="list_species" ftype="text" value="Ac,Pu,Am,Ap" />
             </conditional>
             <output name="output1">
                 <assert_contents>
                     <has_text text="counting of Ac"/>
                     <has_text text="counting of Pu"/>
-                    <has_text text="counting of Am"/>
-                    <has_text text="counting of Ap"/>
-                    <has_text text="counting of Pf"/>
-                    <has_text text="counting of Pg"/>
-                    <has_text text="counting of Th"/>
-                    <has_text text="counting of Ph"/>
+                    <has_text text="counting of Am"/>                    
                 </assert_contents>
             </output>
+            <output name="output2">
+                <assert_contents>
+                    <has_text text="mutation biases from Pu to Ac"/>
+                    <has_text text="mutation biases from Am to Ac"/>
+                    <has_text text="mutation biases from Ap to Ac"/>
+                    <has_text text="mutation biases from Am to Pu"/>
+                    <has_text text="mutation biases from Ap to Pu"/>
+                    <has_text text="mutation biases from Ap to Am"/>
+                </assert_contents>
+            </output>
+            <output name="codons_counts" value="OUT_concat/codons_counts.csv" lines_diff="2"/>
+            <output name="aa_counts" value="OUT_concat/aa_counts.csv" lines_diff="2"/>
+            <output name="aatypes_counts" value="OUT_concat/aatypes_counts.csv" lines_diff="2"/>
+            <output name="gc_counts" value="OUT_concat/gc_counts.csv" lines_diff="2"/>
+            <output name="aa_transitions" value="OUT_concat/aa_transitions.csv" lines_diff="2"/>
+            <output name="aatypes_transitions" value="OUT_concat/aatypes_transitions.csv" lines_diff="2"/>
         </test>
 
         <test>
@@ -166,36 +198,7 @@
             <output name="nuc_comp" value="OUT_nuc/nuc_compositions.csv" lines_diff="2"/>
             <output name="percent_gc" value="OUT_nuc/percent_GC.csv" lines_diff="2"/>
             <output name="percent_pur" value="OUT_nuc/percent_purine.csv" lines_diff="2"/>
-            <output name="purine_load" value="OUT_nuc/Purine_Load_Indice.csv" lines_diff="2"/>
-
-            <!--
-            <conditional name="method" >
-                <param name="method_run" value="separated" />                
-                <param name="format_run" value="nucleic" />
-                <param name="sep_file" ftype="fasta" value="sep_nuc/locus1_sp6_sp6.fasta,sep_nuc/locus1_sp8_sp8.fasta,sep_nuc/locus2_sp6_sp6.fasta" />
-                <param name="concat_phy" ftype="fasta" value="phylogeny_concat.fasta" />                
-            </conditional>
-            <output name="nuc_comp" >
-                <assert_contents>
-                    <has_line line="locus1_sp8_sp8.fasta,0.29870,0.25541,0.19481,0.25108," />
-                </assert_contents>
-            </output>
-            <output name="percent_gc">
-                <assert_contents>
-                    <has_line line="locus2_sp6_sp6.fasta,42.70833," />
-                </assert_contents>
-            </output>
-            <output name="percent_pur" >
-                <assert_contents>
-                    <has_line line="locus2_sp6_sp6.fasta,56.77083," />
-                </assert_contents>
-            </output>
-            <output name="purine_load" >
-                <assert_contents>
-                    <has_line line="locus2_sp6_sp6.fasta,192,14,12,72.91667,62.50000," />
-                </assert_contents>
-            </output>
-            -->
+            <output name="purine_load" value="OUT_nuc/Purine_Load_Indice.csv" lines_diff="2"/>            
         </test>
 
         <test>
@@ -208,29 +211,7 @@
             <output name="ivywrel" value="OUT_aa/IVYWREL.csv" lines_diff="2"/>
             <output name="rhkde" value="OUT_aa/RHKDE.csv" lines_diff="2"/>
             <output name="payre_mvgds" value="OUT_aa/PAYRE-MVGDS.csv" lines_diff="2"/>
-            <output name="avlimfyw" value="OUT_aa/AVLIMFYW.csv" lines_diff="2"/>
-            <!--
-            <output name="prot_comp" >
-                <assert_contents>
-                    <has_line line="locus2_sp6_sp6.fasta,0.12500,0.00000,0.09375,0.04688,0.03125,0.09375,0.03125,0.07812,0.00000,0.04688,0.01562,0.03125,0.03125,0.01562,0.04688,0.00000,0.07812,0.07812,0.06250,0.09375,0.12500,0.00000,0.09375,0.04688,0.03125,0.09375,0.01562,0.10938,0.00000,0.04688,0.01562,0.04688,0.01562,0.01562,0.04688,0.00000,0.07812,0.07812,0.06250,0.07812,0.12500,0.00000,0.09375,0.04688,0.04688,0.09375,0.01562,0.09375,0.00000,0.04688,0.01562,0.03125,0.01562,0.01562,0.04688,0.00000,0.07812,0.07812,0.06250,0.09375,0.14062,0.00000,0.09375,0.06250,0.04688,0.09375,0.01562,0.09375,0.00000,0.03125,0.01562,0.04688,0.01562,0.01562,0.03125,0.00000,0.07812,0.07812,0.06250,0.07812,0.12500,0.00000,0.12500,0.04688,0.03125,0.09375,0.01562,0.10938,0.00000,0.04688,0.01562,0.04688,0.01562,0.01562,0.04688,0.00000,0.07812,0.07812,0.06250,0.04688,0.14062,0.00000,0.09375,0.06250,0.04688,0.09375,0.01562,0.09375,0.00000,0.03125,0.01562,0.04688,0.01562,0.01562,0.03125,0.00000,0.07812,0.07812,0.06250,0.07812," />
-                </assert_contents>
-            </output>
-            <output name="ivywrel">
-                <assert_contents>
-                    <has_line line="locus2_sp6_sp6.fasta,21.00000,0.32812,23.00000,0.35938,23.00000,0.35938,22.00000,0.34375,23.00000,0.35938,22.00000,0.34375," />
-                </assert_contents>
-            </output>
-            <output name="res_vol" >
-                <assert_contents>
-                    <has_line line="locus2_sp6_sp6.fasta,6575.00000,6593.00000,6587.00000,6645.00000,6631.00000,6645.00000," />
-                </assert_contents>
-            </output>
-            <output name="hydrat" >
-                <assert_contents>
-                    <has_line line="locus2_sp6_sp6.fasta,171.50000,171.50000,170.50000,171.00000,171.50000,171.00000," />
-                </assert_contents>
-            </output>
-            -->
+            <output name="avlimfyw" value="OUT_aa/AVLIMFYW.csv" lines_diff="2"/>            
         </test>
     </tests>
 
