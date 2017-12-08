@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+# Command line : ./S02a_codon_counting.py <concatenation_file_from_phylogeny>
+
 #python codoncounting.py alignement_file
 #Warning!! alignement_file should always be preceded by a path, at least ./
 #Warning!! pairs.txt should be located in the same folder as alignement_file
@@ -502,9 +504,11 @@ while 1:
 
 concat=open(sys.argv[1],"r")
 
-for p in pairlist: #pairs analysis
+last_iter = 1
+for p in pairlist: #pairs analysis  
   concat.seek(0)
   while 1:
+    # Everything lowercase
     line=concat.readline()
     seq=concat.readline()
     if p[0] in line:
@@ -515,14 +519,16 @@ for p in pairlist: #pairs analysis
       break
   
   if len(p)>2: #bootstrap simulations if the background changed
+    # Only len(pairlist[0]) > 2
     length=p[2]
     iterration=p[3]
     plusminus=p[4]
-    species=p[5]
+    species=p[5] # ex : 'all'
     applause='background: '+str(length)+' '+str(iterration)+' '+str(plusminus)+' '+' '.join(species)
     print applause
     stringcounts.append(applause+'\n\n\n')
     stringbiases.append(applause+'\n\n\n')
+    # variables below are computed on the first iteration and then used for the rest of the loop
     codonscountboot, aacountboot, aaclassifcountboot, codonsboot, aaboot, aaclassifboot=sampling(concat,length,iterration,plusminus,species,code,classif,reversecode,reverseclassif)
   print str(p[0])+' vs '+str(p[1])
 
@@ -557,19 +563,19 @@ for p in pairlist: #pairs analysis
    
     ## Writing countings into separated output files ##
 
-    codons_counts.write(p[0])
-    codons_counts.write("\t")
+    codons_counts.write(p[0]) # Species name
+    codons_counts.write("\t") # next cell
     for value in codonscount.values():
-      codons_counts.write(str(value) + "\t")
-    codons_counts.write("\t\n")
+      codons_counts.write(str(value) + "\t") # write codons_counts line for the species
+    codons_counts.write("\t\n") # next line
 
     codons_counts.write(p[0])
-    codons_counts.write("_pvalue\t")
+    codons_counts.write("_pvalue\t") # Same species, but line for computed pvalues
     for value in codonscountpvalue.values():
-      codons_counts.write(str(value) + "\t")
+      codons_counts.write(str(value) + "\t") # write pvalues line for the species
     codons_counts.write("\t\n")
 
-    aa_counts.write(p[0])
+    aa_counts.write(p[0]) # Same method as above
     aa_counts.write("\t")
     for value in aacount.values():
       aa_counts.write(str(value) + "\t")
@@ -598,6 +604,72 @@ for p in pairlist: #pairs analysis
     gc_counts.write(str(GC3)+"\t"+str(GC12)+"\t"+str(IVYWREL)+"\t"+str(EKQH)+"\t"+str(PAYRESDGM)+"\t"+str(purineload)+"\t"+str(CvP))
     gc_counts.write("\t\n")
 
+    """ IMPROVMENT BELOW :
+    Countings was not done on the last species of the list. It is now compute when the loop reaches the last iteration, thanks to the countings()
+    function : it is called with a switch between the arguments 'seq1' and seq2'. P-values lines are still missing    
+    """
+    
+    if last_iter == len(pairlist):
+      codonscount2, aacount2, aaclassifcount2, codons2, aa2, aaclassif2, GC3_b, GC12_b, IVYWREL_b, EKQH_b, PAYRESDGM_b, purineload_b, CvP_b=countings(seq2,seq1,code,classif,reversecode,reverseclassif)
+      codonscountpvalue2, aacountpvalue2, aaclassifcountpvalue2, codonspvalue2, aapvalue2, aaclassifpvalue2=gettables(0,reversecode,code,classif)
+
+      for f in codons2: #tests the countings and saves the pvalues
+        for g in codons2[f]:
+          codonspvalue2[f][g]=testpvalue(codonsboot[f][g],codons[f][g],iterration)
+      for f in aa2:
+        for g in aa2[f]:
+          aapvalue2[f][g]=testpvalue(aaboot[f][g],aa[f][g],iterration)
+      for f in aaclassif2:
+        for g in aaclassif2[f]:
+          aaclassifpvalue2[f][g]=testpvalue(aaclassifboot[f][g],aaclassif[f][g],iterration)
+
+      for f in codonscount2:
+        codonscountpvalue2[f]=testpvalue(codonscountboot[f],codonscount[f],iterration)
+      for f in aacount2:
+        aacountpvalue2[f]=testpvalue(aacountboot[f],aacount[f],iterration)
+      for f in aaclassifcount2:
+        aaclassifcountpvalue2[f]=testpvalue(aaclassifcountboot[f],aaclassifcount[f],iterration)
+
+      codons_counts.write(p[1]) # second species of the couple, the last one to be written in the file
+      codons_counts.write("\t") # next line
+      for value in codonscount2.values():
+        codons_counts.write(str(value) + "\t")
+      codons_counts.write("\t\n")
+
+      codons_counts.write(p[1])
+      codons_counts.write("_pvalue\t") # Same species, but line for computed pvalues
+      for value in codonscountpvalue2.values():
+        codons_counts.write(str(value) + "\t") # write pvalues line for the species
+      codons_counts.write("\t\n")
+
+      aa_counts.write(p[1])
+      aa_counts.write("\t")
+      for value in aacount2.values():
+        aa_counts.write(str(value) + "\t")
+      aa_counts.write("\t\n")
+
+      aa_counts.write(p[1])
+      aa_counts.write("_pvalue\t") # Same species, but line for computed pvalues
+      for value in aacountpvalue2.values():
+        aa_counts.write(str(value) + "\t") # write pvalues line for the species
+      aa_counts.write("\t\n")
+
+      aatypes_counts.write(p[1])
+      aatypes_counts.write("\t")
+      for value in aaclassifcount2.values():
+        aatypes_counts.write(str(value) + "\t")
+      aatypes_counts.write("\t\n")
+
+      aatypes_counts.write(p[1])
+      aatypes_counts.write("_pvalue\t") # Same species, but line for computed pvalues
+      for value in aaclassifcountpvalue2.values():
+        aatypes_counts.write(str(value) + "\t") # write pvalues line for the species
+      aatypes_counts.write("\t\n")
+
+      gc_counts.write(p[1])
+      gc_counts.write("\t")
+      gc_counts.write(str(GC3_b)+"\t"+str(GC12_b)+"\t"+str(IVYWREL_b)+"\t"+str(EKQH_b)+"\t"+str(PAYRESDGM_b)+"\t"+str(purineload_b)+"\t"+str(CvP_b))
+
     # end writing
     
     stringcounts=stringcounts[:-1]+[''.join([stringcounts[-1],("counting of %s\n\n" % p[0])+''.join(strcountings(codonscount, aacount, aaclassifcount,codonscountpvalue,aacountpvalue,aaclassifcountpvalue,GC3,GC12,IVYWREL,EKQH,PAYRESDGM,purineload,CvP))+'\n\n'])]
@@ -609,6 +681,7 @@ for p in pairlist: #pairs analysis
   stringbiases=stringbiases+strbiases(codons, aa, aaclassif,codonspvalue,aapvalue,aaclassifpvalue,aa_transitions,aatypes_transitions,p)
   stringbiases.append('\n\n') 
   print 'done'
+  last_iter +=1
 
 concat.close()
 

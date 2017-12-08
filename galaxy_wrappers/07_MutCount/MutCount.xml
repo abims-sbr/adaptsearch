@@ -72,12 +72,14 @@
 
     <outputs>
         <!-- output concat -->
+        <!--
         <data format="txt" name="output1" label="counts.txt" from_work_dir="counts.txt" >
             <filter>(method['method_run']=='concat')</filter>
         </data>
         <data format="txt" name="output2" label="biases.txt" from_work_dir="biases.txt" >
             <filter>(method['method_run']=='concat')</filter>
         </data>
+        -->
         <data format="csv" name="codons_counts" label="codons_counts.csv" from_work_dir="codons_counts.csv" >
             <filter>(method['method_run']=='concat')</filter>
         </data>
@@ -161,31 +163,14 @@
                 <param name="concat_nuc" ftype="fasta" value="test_07_output_phylogeny_concatenation.fasta" />
                 <param name="num_sampled" value="100" />
                 <param name="num_iter" value="100" />
-                <param name="list_species" ftype="text" value="Ac,Pu,Am,Ap" />
-            </conditional>
-            <output name="output1">
-                <assert_contents>
-                    <has_text text="counting of Ac"/>
-                    <has_text text="counting of Pu"/>
-                    <has_text text="counting of Am"/>                    
-                </assert_contents>
-            </output>
-            <output name="output2">
-                <assert_contents>
-                    <has_text text="mutation biases from Pu to Ac"/>
-                    <has_text text="mutation biases from Am to Ac"/>
-                    <has_text text="mutation biases from Ap to Ac"/>
-                    <has_text text="mutation biases from Am to Pu"/>
-                    <has_text text="mutation biases from Ap to Pu"/>
-                    <has_text text="mutation biases from Ap to Am"/>
-                </assert_contents>
-            </output>
-            <output name="codons_counts" value="OUT_concat/codons_counts.csv" lines_diff="2"/>
-            <output name="aa_counts" value="OUT_concat/aa_counts.csv" lines_diff="2"/>
-            <output name="aatypes_counts" value="OUT_concat/aatypes_counts.csv" lines_diff="2"/>
-            <output name="gc_counts" value="OUT_concat/gc_counts.csv" lines_diff="2"/>
-            <output name="aa_transitions" value="OUT_concat/aa_transitions.csv" lines_diff="2"/>
-            <output name="aatypes_transitions" value="OUT_concat/aatypes_transitions.csv" lines_diff="2"/>
+                <param name="list_species" ftype="text" value="Ac,Am,Ap,Pu" />
+            </conditional>            
+            <output name="codons_counts" value="OUT_concat/codons_counts.csv" lines_diff="8"/>
+            <output name="aa_counts" value="OUT_concat/aa_counts.csv" lines_diff="8"/>
+            <output name="aatypes_counts" value="OUT_concat/aatypes_counts.csv" lines_diff="8"/>
+            <output name="gc_counts" value="OUT_concat/gc_counts.csv"/>
+            <output name="aa_transitions" value="OUT_concat/aa_transitions.csv" lines_diff="14"/>
+            <output name="aatypes_transitions" value="OUT_concat/aatypes_transitions.csv" lines_diff="14"/>
         </test>
 
         <test>
