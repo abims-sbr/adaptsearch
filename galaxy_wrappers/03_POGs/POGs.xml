@@ -67,7 +67,6 @@ What it does
 ============
 
 | This tool parses homologous sequences obtained by pairwise and gather sequences into groups of orthologous sequences.
-| There are 2 outputs.
 
 --------
 
@@ -96,57 +95,12 @@ This tool, produces the following files :
 
 the sequences of each group are in nucleic format.
 
-
-===============
-Working Example
-===============
-
----------------
-The input files
----------------
-
-| 4 simulated files with a few nucleic sequences each : Ac.fasta Am.fasta Ap.fasta Pf.fasta.
-| 6 files containing the homologous sequences of each pairwise.
-
-----------------
-The output files
-----------------
-
-**POGs**
-
-
-| Number of locus before removeRedondancy = 11
-
-
-| Number of locus = 11
-
-
-| NUMBER OF REMAINING LOCUS AFTER INTRA LOCUS TREATMENT [REMOVE GROUPS WITH PARALOGS] = 11
-| NUMBER OF REMAINING LOCUS AFTER 2ND TREATMENT [INTER LOCUS] = 11
-
-
-| REMOVAL OF LOCUS WITH LESS THAN 2 SEQUENCES
-
-| Number of species in the locus : 4
-    Number of locus : 0
-
-| Number of species in the locus : 3
-    Number of locus : 1
-
-| Number of species in the locus : 2
-    Number of locus : 10
-
-**POGs_locus_orthologs_unaligned**
-
-| For example the file locus1_sp2.fasta :
-| &gt;Ac7_1/1_1.000_160
-| GCACCTAGAATTACCCGAAGTTGCTTGGCAATAGCGACACCTAACGGTCGCCATGATATTTGCAGGAAGAAGGCATGTGGTACCATTGGGAACCGTCAAGCGTTTCCTCAGCCCTGTGGCAGCTGCCCGTCTGCGCCCGTGTTTGACCTTGAGCACCAAG
-| &gt;Am3_1/1_1.000_160
-  GCACCTAGAATTACCCGAAGCTTCTTGGCAATAGCGACACCTAACGGTCGCCATGATATTTGGTGGAAGAAGGCATGTGGTACCATTGGGGTGGTACAAGCGTTTCCTCAGCCCTGTGGCAGCTGCCCGTCTGCGGAGCAGTTTGACCTTGAGCACCAAG
----------------------------------------------------
-
 Changelog
 ---------
+
+**Version 2.1 - 04/01/2018**
+
+  - Rewritten with improved results and better code
 
 **Version 2.0 - 11/07/2017**
 

@@ -1,907 +1,914 @@
+*** pogs.py ***
+
+Building of orthogroups based on pairs of genes obtained by pairwise comparisons between pairs of species.
+Genes are gathered in orthogroups based on the principle of transitivity between genes pairs.
+
 Parsing input files ...
 Creating Orthogroups ...
+
+
 *** Orthogroup with 5 sequences ***
-{ Header :  >Ap2303_1/1_1.000_424  }
-{ Header :  >Ac3644_1/1_1.000_1626  }
-{ Header :  >Am7472_1/1_1.000_254  }
-{ Header :  >Ap5412_1/1_1.000_903  }
-{ Header :  >Am1485_1/1_1.000_263  }
+[ Header : >Ap2303_1/1_1.000_424 ]
+[ Header : >Ac3644_1/1_1.000_1626 ]
+[ Header : >Am7472_1/1_1.000_254 ]
+[ Header : >Ap5412_1/1_1.000_903 ]
+[ Header : >Am1485_1/1_1.000_263 ]
 
 *** Orthogroup with 8 sequences ***
-{ Header :  >Ap6182_1/1_1.000_588  }
-{ Header :  >Ap683_1/1_1.000_267  }
-{ Header :  >Ac2602_1/1_1.000_238  }
-{ Header :  >Th560_1/1_1.000_1206  }
-{ Header :  >Th3029_1/1_1.000_1764  }
-{ Header :  >Ap5503_1/1_1.000_245  }
-{ Header :  >Am5408_1/1_1.000_234  }
-{ Header :  >Ac4490_1/1_1.000_807  }
+[ Header : >Ap6182_1/1_1.000_588 ]
+[ Header : >Ap683_1/1_1.000_267 ]
+[ Header : >Ac2602_1/1_1.000_238 ]
+[ Header : >Th560_1/1_1.000_1206 ]
+[ Header : >Th3029_1/1_1.000_1764 ]
+[ Header : >Ap5503_1/1_1.000_245 ]
+[ Header : >Am5408_1/1_1.000_234 ]
+[ Header : >Ac4490_1/1_1.000_807 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ac6015_1/1_1.000_327  }
-{ Header :  >Am5358_1/1_1.000_462  }
-{ Header :  >Ac5257_1/1_1.000_618  }
-{ Header :  >Th5317_1/1_1.000_1008  }
+[ Header : >Ac6015_1/1_1.000_327 ]
+[ Header : >Am5358_1/1_1.000_462 ]
+[ Header : >Ac5257_1/1_1.000_618 ]
+[ Header : >Th5317_1/1_1.000_1008 ]
 
 *** Orthogroup with 8 sequences ***
-{ Header :  >Am7510_1/1_1.000_209  }
-{ Header :  >Ac7556_1/1_1.000_223  }
-{ Header :  >Ap195_1/1_1.000_335  }
-{ Header :  >Th204_1/1_1.000_293  }
-{ Header :  >Th99_1/1_1.000_791  }
-{ Header :  >Am2269_1/1_1.000_388  }
-{ Header :  >Am1545_1/1_1.000_1122  }
-{ Header :  >Ap1308_1/1_1.000_244  }
+[ Header : >Am7510_1/1_1.000_209 ]
+[ Header : >Ac7556_1/1_1.000_223 ]
+[ Header : >Ap195_1/1_1.000_335 ]
+[ Header : >Th204_1/1_1.000_293 ]
+[ Header : >Th99_1/1_1.000_791 ]
+[ Header : >Am2269_1/1_1.000_388 ]
+[ Header : >Am1545_1/1_1.000_1122 ]
+[ Header : >Ap1308_1/1_1.000_244 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Th7108_1/1_1.000_552  }
-{ Header :  >Ap5072_1/1_1.000_437  }
-{ Header :  >Am977_1/1_1.000_507  }
-{ Header :  >Ac1013_1/1_1.000_525  }
+[ Header : >Th7108_1/1_1.000_552 ]
+[ Header : >Ap5072_1/1_1.000_437 ]
+[ Header : >Am977_1/1_1.000_507 ]
+[ Header : >Ac1013_1/1_1.000_525 ]
 
 *** Orthogroup with 6 sequences ***
-{ Header :  >Am6963_1/1_1.000_854  }
-{ Header :  >Ac4450_1/1_1.000_336  }
-{ Header :  >Ac2818_1/1_1.000_1055  }
-{ Header :  >Ap4621_1/1_1.000_374  }
-{ Header :  >Am926_1/1_1.000_315  }
-{ Header :  >Th3303_1/1_1.000_482  }
+[ Header : >Am6963_1/1_1.000_854 ]
+[ Header : >Ac4450_1/1_1.000_336 ]
+[ Header : >Ac2818_1/1_1.000_1055 ]
+[ Header : >Ap4621_1/1_1.000_374 ]
+[ Header : >Am926_1/1_1.000_315 ]
+[ Header : >Th3303_1/1_1.000_482 ]
 
 *** Orthogroup with 6 sequences ***
-{ Header :  >Am450_1/1_1.000_954  }
-{ Header :  >Th1454_1/1_1.000_512  }
-{ Header :  >Ap1681_1/1_1.000_323  }
-{ Header :  >Ap2672_1/1_1.000_321  }
-{ Header :  >Ac1604_1/1_1.000_876  }
-{ Header :  >Ac7332_1/1_1.000_220  }
+[ Header : >Am450_1/1_1.000_954 ]
+[ Header : >Th1454_1/1_1.000_512 ]
+[ Header : >Ap1681_1/1_1.000_323 ]
+[ Header : >Ap2672_1/1_1.000_321 ]
+[ Header : >Ac1604_1/1_1.000_876 ]
+[ Header : >Ac7332_1/1_1.000_220 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ac2967_1/1_1.000_201  }
-{ Header :  >Ac5016_1/1_1.000_368  }
-{ Header :  >Ap2573_1/1_1.000_224  }
-{ Header :  >Am5426_1/1_1.000_420  }
+[ Header : >Ac2967_1/1_1.000_201 ]
+[ Header : >Ac5016_1/1_1.000_368 ]
+[ Header : >Ap2573_1/1_1.000_224 ]
+[ Header : >Am5426_1/1_1.000_420 ]
 
 *** Orthogroup with 6 sequences ***
-{ Header :  >Ac6193_1/1_1.000_876  }
-{ Header :  >Th3206_1/1_1.000_882  }
-{ Header :  >Am5007_1/1_1.000_705  }
-{ Header :  >Ap5336_1/1_1.000_666  }
-{ Header :  >Am7165_1/1_1.000_345  }
-{ Header :  >Am6349_1/1_1.000_420  }
+[ Header : >Ac6193_1/1_1.000_876 ]
+[ Header : >Th3206_1/1_1.000_882 ]
+[ Header : >Am5007_1/1_1.000_705 ]
+[ Header : >Ap5336_1/1_1.000_666 ]
+[ Header : >Am7165_1/1_1.000_345 ]
+[ Header : >Am6349_1/1_1.000_420 ]
 
 *** Orthogroup with 6 sequences ***
-{ Header :  >Th232_1/1_1.000_1161  }
-{ Header :  >Am2221_1/1_1.000_612  }
-{ Header :  >Ac689_1/1_1.000_714  }
-{ Header :  >Am1105_1/1_1.000_703  }
-{ Header :  >Ap6163_1/1_1.000_569  }
-{ Header :  >Ac4622_1/1_1.000_819  }
+[ Header : >Th232_1/1_1.000_1161 ]
+[ Header : >Am2221_1/1_1.000_612 ]
+[ Header : >Ac689_1/1_1.000_714 ]
+[ Header : >Am1105_1/1_1.000_703 ]
+[ Header : >Ap6163_1/1_1.000_569 ]
+[ Header : >Ac4622_1/1_1.000_819 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ap1491_1/1_1.000_963  }
-{ Header :  >Am1147_1/1_1.000_306  }
-{ Header :  >Ac6688_1/1_1.000_963  }
-{ Header :  >Th5381_1/1_1.000_981  }
+[ Header : >Ap1491_1/1_1.000_963 ]
+[ Header : >Am1147_1/1_1.000_306 ]
+[ Header : >Ac6688_1/1_1.000_963 ]
+[ Header : >Th5381_1/1_1.000_981 ]
 
 *** Orthogroup with 7 sequences ***
-{ Header :  >Am7013_1/1_1.000_308  }
-{ Header :  >Ac1239_1/1_1.000_610  }
-{ Header :  >Ac2342_1/1_1.000_218  }
-{ Header :  >Ap726_1/1_1.000_723  }
-{ Header :  >Ap1484_1/1_1.000_540  }
-{ Header :  >Ac1614_1/1_1.000_378  }
-{ Header :  >Th4070_1/1_1.000_1617  }
+[ Header : >Am7013_1/1_1.000_308 ]
+[ Header : >Ac1239_1/1_1.000_610 ]
+[ Header : >Ac2342_1/1_1.000_218 ]
+[ Header : >Ap726_1/1_1.000_723 ]
+[ Header : >Ap1484_1/1_1.000_540 ]
+[ Header : >Ac1614_1/1_1.000_378 ]
+[ Header : >Th4070_1/1_1.000_1617 ]
 
 *** Orthogroup with 8 sequences ***
-{ Header :  >Ap2691_1/1_1.000_432  }
-{ Header :  >Ac305_1/1_1.000_610  }
-{ Header :  >Ac6397_1/1_1.000_346  }
-{ Header :  >Ap5127_1/1_1.000_412  }
-{ Header :  >Am1292_1/1_1.000_406  }
-{ Header :  >Th7171_1/1_1.000_579  }
-{ Header :  >Th7205_1/1_1.000_789  }
-{ Header :  >Am3750_1/1_1.000_1017  }
+[ Header : >Ap2691_1/1_1.000_432 ]
+[ Header : >Ac305_1/1_1.000_610 ]
+[ Header : >Ac6397_1/1_1.000_346 ]
+[ Header : >Ap5127_1/1_1.000_412 ]
+[ Header : >Am1292_1/1_1.000_406 ]
+[ Header : >Th7171_1/1_1.000_579 ]
+[ Header : >Th7205_1/1_1.000_789 ]
+[ Header : >Am3750_1/1_1.000_1017 ]
 
 *** Orthogroup with 6 sequences ***
-{ Header :  >Ap3730_1/1_1.000_226  }
-{ Header :  >Am6065_1/1_1.000_610  }
-{ Header :  >Ac273_1/1_1.000_431  }
-{ Header :  >Th2878_1/1_1.000_963  }
-{ Header :  >Th1118_1/1_1.000_854  }
-{ Header :  >Ac7339_1/1_1.000_257  }
+[ Header : >Ap3730_1/1_1.000_226 ]
+[ Header : >Am6065_1/1_1.000_610 ]
+[ Header : >Ac273_1/1_1.000_431 ]
+[ Header : >Th2878_1/1_1.000_963 ]
+[ Header : >Th1118_1/1_1.000_854 ]
+[ Header : >Ac7339_1/1_1.000_257 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ap5115_1/1_1.000_244  }
-{ Header :  >Ac2340_1/1_1.000_1134  }
-{ Header :  >Th434_1/1_1.000_420  }
-{ Header :  >Am5147_1/1_1.000_262  }
+[ Header : >Ap5115_1/1_1.000_244 ]
+[ Header : >Ac2340_1/1_1.000_1134 ]
+[ Header : >Th434_1/1_1.000_420 ]
+[ Header : >Am5147_1/1_1.000_262 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Am1418_1/1_1.000_334  }
-{ Header :  >Ac2782_1/1_1.000_951  }
-{ Header :  >Th1387_1/1_1.000_265  }
-{ Header :  >Am6331_1/1_1.000_1455  }
+[ Header : >Am1418_1/1_1.000_334 ]
+[ Header : >Ac2782_1/1_1.000_951 ]
+[ Header : >Th1387_1/1_1.000_265 ]
+[ Header : >Am6331_1/1_1.000_1455 ]
 
 *** Orthogroup with 11 sequences ***
-{ Header :  >Ap832_1/1_1.000_520  }
-{ Header :  >Th6491_1/1_1.000_1341  }
-{ Header :  >Am6288_1/1_1.000_597  }
-{ Header :  >Am8061_1/1_1.000_885  }
-{ Header :  >Th7760_1/1_1.000_521  }
-{ Header :  >Am4504_1/1_1.000_711  }
-{ Header :  >Ap1355_1/1_1.000_777  }
-{ Header :  >Ac1525_1/1_1.000_1458  }
-{ Header :  >Th7229_1/1_1.000_331  }
-{ Header :  >Ap5914_1/1_1.000_1041  }
-{ Header :  >Ac4988_1/1_1.000_580  }
+[ Header : >Ap832_1/1_1.000_520 ]
+[ Header : >Th6491_1/1_1.000_1341 ]
+[ Header : >Am6288_1/1_1.000_597 ]
+[ Header : >Am8061_1/1_1.000_885 ]
+[ Header : >Th7760_1/1_1.000_521 ]
+[ Header : >Am4504_1/1_1.000_711 ]
+[ Header : >Ap1355_1/1_1.000_777 ]
+[ Header : >Ac1525_1/1_1.000_1458 ]
+[ Header : >Th7229_1/1_1.000_331 ]
+[ Header : >Ap5914_1/1_1.000_1041 ]
+[ Header : >Ac4988_1/1_1.000_580 ]
 
 *** Orthogroup with 5 sequences ***
-{ Header :  >Ap591_1/1_1.000_216  }
-{ Header :  >Ap5113_1/1_1.000_227  }
-{ Header :  >Ac2725_1/1_1.000_1557  }
-{ Header :  >Th5729_1/1_1.000_1290  }
-{ Header :  >Am2545_1/1_1.000_437  }
+[ Header : >Ap591_1/1_1.000_216 ]
+[ Header : >Ap5113_1/1_1.000_227 ]
+[ Header : >Ac2725_1/1_1.000_1557 ]
+[ Header : >Th5729_1/1_1.000_1290 ]
+[ Header : >Am2545_1/1_1.000_437 ]
 
 *** Orthogroup with 5 sequences ***
-{ Header :  >Th4381_1/1_1.000_528  }
-{ Header :  >Ap2686_1/1_1.000_378  }
-{ Header :  >Am3899_1/1_1.000_798  }
-{ Header :  >Ac5165_1/1_1.000_1185  }
-{ Header :  >Ap6574_1/1_1.000_880  }
+[ Header : >Th4381_1/1_1.000_528 ]
+[ Header : >Ap2686_1/1_1.000_378 ]
+[ Header : >Am3899_1/1_1.000_798 ]
+[ Header : >Ac5165_1/1_1.000_1185 ]
+[ Header : >Ap6574_1/1_1.000_880 ]
 
 *** Orthogroup with 7 sequences ***
-{ Header :  >Am1409_1/1_1.000_318  }
-{ Header :  >Ap3599_1/1_1.000_1132  }
-{ Header :  >Ap4669_1/1_1.000_1160  }
-{ Header :  >Ac5936_1/1_1.000_512  }
-{ Header :  >Am5140_1/1_1.000_557  }
-{ Header :  >Th1260_1/1_1.000_7410  }
-{ Header :  >Am3004_1/1_1.000_757  }
+[ Header : >Am1409_1/1_1.000_318 ]
+[ Header : >Ap3599_1/1_1.000_1132 ]
+[ Header : >Ap4669_1/1_1.000_1160 ]
+[ Header : >Ac5936_1/1_1.000_512 ]
+[ Header : >Am5140_1/1_1.000_557 ]
+[ Header : >Th1260_1/1_1.000_7410 ]
+[ Header : >Am3004_1/1_1.000_757 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Th534_1/1_1.000_1320  }
-{ Header :  >Ac1640_1/1_1.000_1305  }
-{ Header :  >Ap2612_1/1_1.000_803  }
-{ Header :  >Am3009_1/1_1.000_303  }
+[ Header : >Th534_1/1_1.000_1320 ]
+[ Header : >Ac1640_1/1_1.000_1305 ]
+[ Header : >Ap2612_1/1_1.000_803 ]
+[ Header : >Am3009_1/1_1.000_303 ]
 
 *** Orthogroup with 5 sequences ***
-{ Header :  >Ac7433_1/1_1.000_1266  }
-{ Header :  >Th3348_1/1_1.000_551  }
-{ Header :  >Am277_1/1_1.000_321  }
-{ Header :  >Ap3293_1/1_1.000_238  }
-{ Header :  >Ac5594_1/1_1.000_390  }
+[ Header : >Ac7433_1/1_1.000_1266 ]
+[ Header : >Th3348_1/1_1.000_551 ]
+[ Header : >Am277_1/1_1.000_321 ]
+[ Header : >Ap3293_1/1_1.000_238 ]
+[ Header : >Ac5594_1/1_1.000_390 ]
 
 *** Orthogroup with 6 sequences ***
-{ Header :  >Ap3856_1/1_1.000_206  }
-{ Header :  >Am849_1/1_1.000_381  }
-{ Header :  >Th6640_1/1_1.000_433  }
-{ Header :  >Ac5172_1/1_1.000_219  }
-{ Header :  >Am522_1/1_1.000_386  }
-{ Header :  >Th7363_1/1_1.000_430  }
+[ Header : >Ap3856_1/1_1.000_206 ]
+[ Header : >Am849_1/1_1.000_381 ]
+[ Header : >Th6640_1/1_1.000_433 ]
+[ Header : >Ac5172_1/1_1.000_219 ]
+[ Header : >Am522_1/1_1.000_386 ]
+[ Header : >Th7363_1/1_1.000_430 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Th6034_1/1_1.000_402  }
-{ Header :  >Ap6286_1/1_1.000_308  }
-{ Header :  >Ac6236_1/1_1.000_496  }
-{ Header :  >Am2576_1/1_1.000_280  }
+[ Header : >Th6034_1/1_1.000_402 ]
+[ Header : >Ap6286_1/1_1.000_308 ]
+[ Header : >Ac6236_1/1_1.000_496 ]
+[ Header : >Am2576_1/1_1.000_280 ]
 
 *** Orthogroup with 5 sequences ***
-{ Header :  >Th4612_1/1_1.000_315  }
-{ Header :  >Am3681_1/1_1.000_433  }
-{ Header :  >Ac6517_1/1_1.000_621  }
-{ Header :  >Th6733_1/1_1.000_594  }
-{ Header :  >Ap2404_1/1_1.000_232  }
+[ Header : >Th4612_1/1_1.000_315 ]
+[ Header : >Am3681_1/1_1.000_433 ]
+[ Header : >Ac6517_1/1_1.000_621 ]
+[ Header : >Th6733_1/1_1.000_594 ]
+[ Header : >Ap2404_1/1_1.000_232 ]
 
 *** Orthogroup with 6 sequences ***
-{ Header :  >Ap3976_1/1_1.000_1265  }
-{ Header :  >Ac513_1/1_1.000_384  }
-{ Header :  >Th5335_1/1_1.000_1677  }
-{ Header :  >Ac7016_1/1_1.000_341  }
-{ Header :  >Am378_1/1_1.000_261  }
-{ Header :  >Ap5746_1/1_1.000_222  }
+[ Header : >Ap3976_1/1_1.000_1265 ]
+[ Header : >Ac513_1/1_1.000_384 ]
+[ Header : >Th5335_1/1_1.000_1677 ]
+[ Header : >Ac7016_1/1_1.000_341 ]
+[ Header : >Am378_1/1_1.000_261 ]
+[ Header : >Ap5746_1/1_1.000_222 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Am3295_1/1_1.000_1111  }
-{ Header :  >Ac5149_1/1_1.000_839  }
-{ Header :  >Ap6483_1/1_1.000_3751  }
-{ Header :  >Th7028_1/1_1.000_732  }
+[ Header : >Am3295_1/1_1.000_1111 ]
+[ Header : >Ac5149_1/1_1.000_839 ]
+[ Header : >Ap6483_1/1_1.000_3751 ]
+[ Header : >Th7028_1/1_1.000_732 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Am3148_1/1_1.000_795  }
-{ Header :  >Th3947_1/1_1.000_174  }
-{ Header :  >Ac7285_1/1_1.000_492  }
-{ Header :  >Ap2644_1/1_1.000_244  }
+[ Header : >Am3148_1/1_1.000_795 ]
+[ Header : >Th3947_1/1_1.000_174 ]
+[ Header : >Ac7285_1/1_1.000_492 ]
+[ Header : >Ap2644_1/1_1.000_244 ]
 
 *** Orthogroup with 5 sequences ***
-{ Header :  >Ac2732_1/1_1.000_654  }
-{ Header :  >Ap1987_1/1_1.000_335  }
-{ Header :  >Am454_1/1_1.000_2250  }
-{ Header :  >Am575_1/1_1.000_435  }
-{ Header :  >Th3560_1/1_1.000_357  }
+[ Header : >Ac2732_1/1_1.000_654 ]
+[ Header : >Ap1987_1/1_1.000_335 ]
+[ Header : >Am454_1/1_1.000_2250 ]
+[ Header : >Am575_1/1_1.000_435 ]
+[ Header : >Th3560_1/1_1.000_357 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ap4842_1/1_1.000_438  }
-{ Header :  >Ac1961_1/1_1.000_486  }
-{ Header :  >Am7034_1/1_1.000_450  }
-{ Header :  >Th358_1/1_1.000_542  }
+[ Header : >Ap4842_1/1_1.000_438 ]
+[ Header : >Ac1961_1/1_1.000_486 ]
+[ Header : >Am7034_1/1_1.000_450 ]
+[ Header : >Th358_1/1_1.000_542 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ap5699_1/1_1.000_798  }
-{ Header :  >Ac2771_1/1_1.000_801  }
-{ Header :  >Am652_1/1_1.000_632  }
-{ Header :  >Th5368_1/1_1.000_876  }
+[ Header : >Ap5699_1/1_1.000_798 ]
+[ Header : >Ac2771_1/1_1.000_801 ]
+[ Header : >Am652_1/1_1.000_632 ]
+[ Header : >Th5368_1/1_1.000_876 ]
 
 *** Orthogroup with 7 sequences ***
-{ Header :  >Th6298_1/1_1.000_1155  }
-{ Header :  >Am2523_1/1_1.000_777  }
-{ Header :  >Ap1915_1/1_1.000_203  }
-{ Header :  >Ac1555_1/1_1.000_279  }
-{ Header :  >Th3454_1/1_1.000_567  }
-{ Header :  >Ap5660_1/1_1.000_322  }
-{ Header :  >Ac1647_1/1_1.000_822  }
+[ Header : >Th6298_1/1_1.000_1155 ]
+[ Header : >Am2523_1/1_1.000_777 ]
+[ Header : >Ap1915_1/1_1.000_203 ]
+[ Header : >Ac1555_1/1_1.000_279 ]
+[ Header : >Th3454_1/1_1.000_567 ]
+[ Header : >Ap5660_1/1_1.000_322 ]
+[ Header : >Ac1647_1/1_1.000_822 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ac1469_1/1_1.000_1260  }
-{ Header :  >Th4012_1/1_1.000_3411  }
-{ Header :  >Am7845_1/1_1.000_204  }
-{ Header :  >Ap5188_1/1_1.000_3048  }
+[ Header : >Ac1469_1/1_1.000_1260 ]
+[ Header : >Th4012_1/1_1.000_3411 ]
+[ Header : >Am7845_1/1_1.000_204 ]
+[ Header : >Ap5188_1/1_1.000_3048 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Am1450_1/1_1.000_567  }
-{ Header :  >Ac2666_1/1_1.000_1512  }
-{ Header :  >Ap4399_1/1_1.000_294  }
-{ Header :  >Ap4325_1/1_1.000_423  }
+[ Header : >Am1450_1/1_1.000_567 ]
+[ Header : >Ac2666_1/1_1.000_1512 ]
+[ Header : >Ap4399_1/1_1.000_294 ]
+[ Header : >Ap4325_1/1_1.000_423 ]
 
 *** Orthogroup with 5 sequences ***
-{ Header :  >Am5061_1/1_1.000_265  }
-{ Header :  >Th3651_1/1_1.000_1070  }
-{ Header :  >Ac3925_1/1_1.000_1478  }
-{ Header :  >Ap3263_1/1_1.000_624  }
-{ Header :  >Th934_1/1_1.000_240  }
+[ Header : >Am5061_1/1_1.000_265 ]
+[ Header : >Th3651_1/1_1.000_1070 ]
+[ Header : >Ac3925_1/1_1.000_1478 ]
+[ Header : >Ap3263_1/1_1.000_624 ]
+[ Header : >Th934_1/1_1.000_240 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ap5521_1/1_1.000_1695  }
-{ Header :  >Ac2165_1/1_1.000_1629  }
-{ Header :  >Ap2211_1/1_1.000_220  }
-{ Header :  >Am4254_1/1_1.000_351  }
+[ Header : >Ap5521_1/1_1.000_1695 ]
+[ Header : >Ac2165_1/1_1.000_1629 ]
+[ Header : >Ap2211_1/1_1.000_220 ]
+[ Header : >Am4254_1/1_1.000_351 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Am629_1/1_1.000_1131  }
-{ Header :  >Th732_1/1_1.000_463  }
-{ Header :  >Ac7356_1/1_1.000_644  }
-{ Header :  >Am4727_1/1_1.000_604  }
+[ Header : >Am629_1/1_1.000_1131 ]
+[ Header : >Th732_1/1_1.000_463 ]
+[ Header : >Ac7356_1/1_1.000_644 ]
+[ Header : >Am4727_1/1_1.000_604 ]
 
 *** Orthogroup with 6 sequences ***
-{ Header :  >Ap2543_1/1_1.000_243  }
-{ Header :  >Am2658_1/1_1.000_206  }
-{ Header :  >Th1640_1/1_1.000_405  }
-{ Header :  >Ac5804_1/1_1.000_236  }
-{ Header :  >Am4251_1/1_1.000_257  }
-{ Header :  >Th5824_1/1_1.000_783  }
+[ Header : >Ap2543_1/1_1.000_243 ]
+[ Header : >Am2658_1/1_1.000_206 ]
+[ Header : >Th1640_1/1_1.000_405 ]
+[ Header : >Ac5804_1/1_1.000_236 ]
+[ Header : >Am4251_1/1_1.000_257 ]
+[ Header : >Th5824_1/1_1.000_783 ]
 
 *** Orthogroup with 5 sequences ***
-{ Header :  >Ac4508_1/1_1.000_215  }
-{ Header :  >Th1909_1/1_1.000_1896  }
-{ Header :  >Am6347_1/1_1.000_1869  }
-{ Header :  >Ac5888_1/1_1.000_561  }
-{ Header :  >Ap1148_1/1_1.000_674  }
+[ Header : >Ac4508_1/1_1.000_215 ]
+[ Header : >Th1909_1/1_1.000_1896 ]
+[ Header : >Am6347_1/1_1.000_1869 ]
+[ Header : >Ac5888_1/1_1.000_561 ]
+[ Header : >Ap1148_1/1_1.000_674 ]
 
 *** Orthogroup with 5 sequences ***
-{ Header :  >Th5420_1/1_1.000_369  }
-{ Header :  >Ac4842_1/1_1.000_1542  }
-{ Header :  >Ac7387_1/1_1.000_384  }
-{ Header :  >Am7713_1/1_1.000_217  }
-{ Header :  >Ap6295_1/1_1.000_1141  }
+[ Header : >Th5420_1/1_1.000_369 ]
+[ Header : >Ac4842_1/1_1.000_1542 ]
+[ Header : >Ac7387_1/1_1.000_384 ]
+[ Header : >Am7713_1/1_1.000_217 ]
+[ Header : >Ap6295_1/1_1.000_1141 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Am5211_1/1_1.000_450  }
-{ Header :  >Ac7428_1/1_1.000_254  }
-{ Header :  >Ac6611_1/1_1.000_321  }
-{ Header :  >Ap6628_1/1_1.000_1254  }
+[ Header : >Am5211_1/1_1.000_450 ]
+[ Header : >Ac7428_1/1_1.000_254 ]
+[ Header : >Ac6611_1/1_1.000_321 ]
+[ Header : >Ap6628_1/1_1.000_1254 ]
 
 *** Orthogroup with 6 sequences ***
-{ Header :  >Ac3661_1/1_1.000_534  }
-{ Header :  >Ap5632_1/1_1.000_2403  }
-{ Header :  >Th1165_1/1_1.000_183  }
-{ Header :  >Am2610_1/1_1.000_976  }
-{ Header :  >Ac4788_1/1_1.000_826  }
-{ Header :  >Ap1824_1/1_1.000_1234  }
+[ Header : >Ac3661_1/1_1.000_534 ]
+[ Header : >Ap5632_1/1_1.000_2403 ]
+[ Header : >Th1165_1/1_1.000_183 ]
+[ Header : >Am2610_1/1_1.000_976 ]
+[ Header : >Ac4788_1/1_1.000_826 ]
+[ Header : >Ap1824_1/1_1.000_1234 ]
 
 *** Orthogroup with 7 sequences ***
-{ Header :  >Ac569_1/1_1.000_573  }
-{ Header :  >Ap6047_1/1_1.000_423  }
-{ Header :  >Ap6598_1/1_1.000_1677  }
-{ Header :  >Th3233_1/1_1.000_561  }
-{ Header :  >Am2692_1/1_1.000_1266  }
-{ Header :  >Ac6546_1/1_1.000_1269  }
-{ Header :  >Th6764_1/1_1.000_1875  }
+[ Header : >Ac569_1/1_1.000_573 ]
+[ Header : >Ap6047_1/1_1.000_423 ]
+[ Header : >Ap6598_1/1_1.000_1677 ]
+[ Header : >Th3233_1/1_1.000_561 ]
+[ Header : >Am2692_1/1_1.000_1266 ]
+[ Header : >Ac6546_1/1_1.000_1269 ]
+[ Header : >Th6764_1/1_1.000_1875 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ac4288_1/1_1.000_247  }
-{ Header :  >Th1181_1/1_1.000_317  }
-{ Header :  >Am6752_1/1_1.000_417  }
-{ Header :  >Ap3923_1/1_1.000_420  }
+[ Header : >Ac4288_1/1_1.000_247 ]
+[ Header : >Th1181_1/1_1.000_317 ]
+[ Header : >Am6752_1/1_1.000_417 ]
+[ Header : >Ap3923_1/1_1.000_420 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ac7452_1/1_1.000_1200  }
-{ Header :  >Ac1869_1/1_1.000_314  }
-{ Header :  >Am3322_1/1_1.000_747  }
-{ Header :  >Th498_1/1_1.000_1986  }
+[ Header : >Ac7452_1/1_1.000_1200 ]
+[ Header : >Ac1869_1/1_1.000_314 ]
+[ Header : >Am3322_1/1_1.000_747 ]
+[ Header : >Th498_1/1_1.000_1986 ]
 
 *** Orthogroup with 5 sequences ***
-{ Header :  >Ap5094_1/1_1.000_376  }
-{ Header :  >Am6199_1/1_1.000_1464  }
-{ Header :  >Ap4254_1/1_1.000_453  }
-{ Header :  >Ac1406_1/1_1.000_1083  }
-{ Header :  >Th2826_1/1_1.000_1575  }
+[ Header : >Ap5094_1/1_1.000_376 ]
+[ Header : >Am6199_1/1_1.000_1464 ]
+[ Header : >Ap4254_1/1_1.000_453 ]
+[ Header : >Ac1406_1/1_1.000_1083 ]
+[ Header : >Th2826_1/1_1.000_1575 ]
 
 *** Orthogroup with 6 sequences ***
-{ Header :  >Th2271_1/1_1.000_624  }
-{ Header :  >Ap3181_1/1_1.000_241  }
-{ Header :  >Th2014_1/1_1.000_720  }
-{ Header :  >Ac2440_1/1_1.000_756  }
-{ Header :  >Am5518_1/1_1.000_298  }
-{ Header :  >Th6483_1/1_1.000_684  }
+[ Header : >Th2271_1/1_1.000_624 ]
+[ Header : >Ap3181_1/1_1.000_241 ]
+[ Header : >Th2014_1/1_1.000_720 ]
+[ Header : >Ac2440_1/1_1.000_756 ]
+[ Header : >Am5518_1/1_1.000_298 ]
+[ Header : >Th6483_1/1_1.000_684 ]
 
 *** Orthogroup with 5 sequences ***
-{ Header :  >Ap2835_1/1_1.000_241  }
-{ Header :  >Am167_1/1_1.000_252  }
-{ Header :  >Ac6368_1/1_1.000_546  }
-{ Header :  >Ap3973_1/1_1.000_555  }
-{ Header :  >Th3037_1/1_1.000_684  }
+[ Header : >Ap2835_1/1_1.000_241 ]
+[ Header : >Am167_1/1_1.000_252 ]
+[ Header : >Ac6368_1/1_1.000_546 ]
+[ Header : >Ap3973_1/1_1.000_555 ]
+[ Header : >Th3037_1/1_1.000_684 ]
 
 *** Orthogroup with 6 sequences ***
-{ Header :  >Am4090_1/1_1.000_387  }
-{ Header :  >Ac103_1/1_1.000_315  }
-{ Header :  >Th5831_1/1_1.000_1251  }
-{ Header :  >Ap6145_1/1_1.000_672  }
-{ Header :  >Am2181_1/1_1.000_483  }
-{ Header :  >Ap1893_1/1_1.000_262  }
+[ Header : >Am4090_1/1_1.000_387 ]
+[ Header : >Ac103_1/1_1.000_315 ]
+[ Header : >Th5831_1/1_1.000_1251 ]
+[ Header : >Ap6145_1/1_1.000_672 ]
+[ Header : >Am2181_1/1_1.000_483 ]
+[ Header : >Ap1893_1/1_1.000_262 ]
 
 *** Orthogroup with 6 sequences ***
-{ Header :  >Ap1854_1/1_1.000_367  }
-{ Header :  >Ac3770_1/1_1.000_239  }
-{ Header :  >Ap3399_1/1_1.000_292  }
-{ Header :  >Am6451_1/1_1.000_306  }
-{ Header :  >Ac1245_1/1_1.000_215  }
-{ Header :  >Th5116_1/1_1.000_274  }
+[ Header : >Ap1854_1/1_1.000_367 ]
+[ Header : >Ac3770_1/1_1.000_239 ]
+[ Header : >Ap3399_1/1_1.000_292 ]
+[ Header : >Am6451_1/1_1.000_306 ]
+[ Header : >Ac1245_1/1_1.000_215 ]
+[ Header : >Th5116_1/1_1.000_274 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Th2549_1/1_1.000_212  }
-{ Header :  >Ap4740_1/1_1.000_447  }
-{ Header :  >Ac5618_1/1_1.000_325  }
-{ Header :  >Am3537_1/1_1.000_431  }
+[ Header : >Th2549_1/1_1.000_212 ]
+[ Header : >Ap4740_1/1_1.000_447 ]
+[ Header : >Ac5618_1/1_1.000_325 ]
+[ Header : >Am3537_1/1_1.000_431 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Th2042_1/1_1.000_159  }
-{ Header :  >Ac2641_1/1_1.000_999  }
-{ Header :  >Ap711_1/1_1.000_375  }
-{ Header :  >Am499_1/1_1.000_846  }
+[ Header : >Th2042_1/1_1.000_159 ]
+[ Header : >Ac2641_1/1_1.000_999 ]
+[ Header : >Ap711_1/1_1.000_375 ]
+[ Header : >Am499_1/1_1.000_846 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ac3134_1/1_1.000_228  }
-{ Header :  >Am4426_1/1_1.000_294  }
-{ Header :  >Ap488_1/1_1.000_260  }
-{ Header :  >Th5471_1/1_1.000_288  }
+[ Header : >Ac3134_1/1_1.000_228 ]
+[ Header : >Am4426_1/1_1.000_294 ]
+[ Header : >Ap488_1/1_1.000_260 ]
+[ Header : >Th5471_1/1_1.000_288 ]
 
 *** Orthogroup with 7 sequences ***
-{ Header :  >Ac6660_1/1_1.000_453  }
-{ Header :  >Ap3184_1/1_1.000_594  }
-{ Header :  >Th6583_1/1_1.000_295  }
-{ Header :  >Ac4220_1/1_1.000_331  }
-{ Header :  >Am7501_1/1_1.000_513  }
-{ Header :  >Th1255_1/1_1.000_570  }
-{ Header :  >Ap2649_1/1_1.000_291  }
+[ Header : >Ac6660_1/1_1.000_453 ]
+[ Header : >Ap3184_1/1_1.000_594 ]
+[ Header : >Th6583_1/1_1.000_295 ]
+[ Header : >Ac4220_1/1_1.000_331 ]
+[ Header : >Am7501_1/1_1.000_513 ]
+[ Header : >Th1255_1/1_1.000_570 ]
+[ Header : >Ap2649_1/1_1.000_291 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ac6225_1/1_1.000_330  }
-{ Header :  >Am6273_1/1_1.000_401  }
-{ Header :  >Ap346_1/1_1.000_211  }
-{ Header :  >Ap6020_1/1_1.000_518  }
+[ Header : >Ac6225_1/1_1.000_330 ]
+[ Header : >Am6273_1/1_1.000_401 ]
+[ Header : >Ap346_1/1_1.000_211 ]
+[ Header : >Ap6020_1/1_1.000_518 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Th747_1/1_1.000_807  }
-{ Header :  >Am556_1/1_1.000_1036  }
-{ Header :  >Ac7321_1/1_1.000_232  }
-{ Header :  >Ac5207_1/1_1.000_862  }
+[ Header : >Th747_1/1_1.000_807 ]
+[ Header : >Am556_1/1_1.000_1036 ]
+[ Header : >Ac7321_1/1_1.000_232 ]
+[ Header : >Ac5207_1/1_1.000_862 ]
 
 *** Orthogroup with 5 sequences ***
-{ Header :  >Am1184_1/1_1.000_522  }
-{ Header :  >Ac6719_1/1_1.000_582  }
-{ Header :  >Th432_1/1_1.000_708  }
-{ Header :  >Ap915_1/1_1.000_666  }
-{ Header :  >Ac2209_1/1_1.000_576  }
+[ Header : >Am1184_1/1_1.000_522 ]
+[ Header : >Ac6719_1/1_1.000_582 ]
+[ Header : >Th432_1/1_1.000_708 ]
+[ Header : >Ap915_1/1_1.000_666 ]
+[ Header : >Ac2209_1/1_1.000_576 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ac5873_1/1_1.000_323  }
-{ Header :  >Th2320_1/1_1.000_270  }
-{ Header :  >Ap5875_1/1_1.000_217  }
-{ Header :  >Am1531_1/1_1.000_679  }
+[ Header : >Ac5873_1/1_1.000_323 ]
+[ Header : >Th2320_1/1_1.000_270 ]
+[ Header : >Ap5875_1/1_1.000_217 ]
+[ Header : >Am1531_1/1_1.000_679 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ap5999_1/1_1.000_417  }
-{ Header :  >Am3335_1/1_1.000_277  }
-{ Header :  >Ap6011_1/1_1.000_545  }
-{ Header :  >Ac1426_1/1_1.000_555  }
+[ Header : >Ap5999_1/1_1.000_417 ]
+[ Header : >Am3335_1/1_1.000_277 ]
+[ Header : >Ap6011_1/1_1.000_545 ]
+[ Header : >Ac1426_1/1_1.000_555 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ac402_1/1_1.000_513  }
-{ Header :  >Am1951_1/1_1.000_489  }
-{ Header :  >Th3293_1/1_1.000_279  }
-{ Header :  >Am4370_1/1_1.000_252  }
+[ Header : >Ac402_1/1_1.000_513 ]
+[ Header : >Am1951_1/1_1.000_489 ]
+[ Header : >Th3293_1/1_1.000_279 ]
+[ Header : >Am4370_1/1_1.000_252 ]
 
 *** Orthogroup with 6 sequences ***
-{ Header :  >Ac586_1/1_1.000_265  }
-{ Header :  >Am5261_1/1_1.000_343  }
-{ Header :  >Th361_1/1_1.000_243  }
-{ Header :  >Th1917_1/1_1.000_248  }
-{ Header :  >Am6585_1/1_1.000_620  }
-{ Header :  >Ap3427_1/1_1.000_214  }
+[ Header : >Ac586_1/1_1.000_265 ]
+[ Header : >Am5261_1/1_1.000_343 ]
+[ Header : >Th361_1/1_1.000_243 ]
+[ Header : >Th1917_1/1_1.000_248 ]
+[ Header : >Am6585_1/1_1.000_620 ]
+[ Header : >Ap3427_1/1_1.000_214 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Am1148_1/1_1.000_1260  }
-{ Header :  >Ac6644_1/1_1.000_313  }
-{ Header :  >Ap5085_1/1_1.000_532  }
-{ Header :  >Th5328_1/1_1.000_2073  }
+[ Header : >Am1148_1/1_1.000_1260 ]
+[ Header : >Ac6644_1/1_1.000_313 ]
+[ Header : >Ap5085_1/1_1.000_532 ]
+[ Header : >Th5328_1/1_1.000_2073 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ac1519_1/1_1.000_480  }
-{ Header :  >Ap6002_1/1_1.000_417  }
-{ Header :  >Th3882_1/1_1.000_242  }
-{ Header :  >Am5428_1/1_1.000_321  }
+[ Header : >Ac1519_1/1_1.000_480 ]
+[ Header : >Ap6002_1/1_1.000_417 ]
+[ Header : >Th3882_1/1_1.000_242 ]
+[ Header : >Am5428_1/1_1.000_321 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Am3378_1/1_1.000_456  }
-{ Header :  >Ap986_1/1_1.000_417  }
-{ Header :  >Ac2583_1/1_1.000_423  }
-{ Header :  >Ap5304_1/1_1.000_417  }
+[ Header : >Am3378_1/1_1.000_456 ]
+[ Header : >Ap986_1/1_1.000_417 ]
+[ Header : >Ac2583_1/1_1.000_423 ]
+[ Header : >Ap5304_1/1_1.000_417 ]
 
 *** Orthogroup with 6 sequences ***
-{ Header :  >Am4952_1/1_1.000_501  }
-{ Header :  >Ap928_1/1_1.000_527  }
-{ Header :  >Ap3902_1/1_1.000_430  }
-{ Header :  >Am7394_1/1_1.000_381  }
-{ Header :  >Th6682_1/1_1.000_532  }
-{ Header :  >Ac7445_1/1_1.000_637  }
+[ Header : >Am4952_1/1_1.000_501 ]
+[ Header : >Ap928_1/1_1.000_527 ]
+[ Header : >Ap3902_1/1_1.000_430 ]
+[ Header : >Am7394_1/1_1.000_381 ]
+[ Header : >Th6682_1/1_1.000_532 ]
+[ Header : >Ac7445_1/1_1.000_637 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ac3198_1/1_1.000_357  }
-{ Header :  >Th278_1/1_1.000_1349  }
-{ Header :  >Am7637_1/1_1.000_277  }
-{ Header :  >Ap1097_1/1_1.000_260  }
+[ Header : >Ac3198_1/1_1.000_357 ]
+[ Header : >Th278_1/1_1.000_1349 ]
+[ Header : >Am7637_1/1_1.000_277 ]
+[ Header : >Ap1097_1/1_1.000_260 ]
 
 *** Orthogroup with 6 sequences ***
-{ Header :  >Ap1333_1/1_1.000_561  }
-{ Header :  >Am5923_1/1_1.000_493  }
-{ Header :  >Th2744_1/1_1.000_648  }
-{ Header :  >Ac4410_1/1_1.000_651  }
-{ Header :  >Ap6200_1/1_1.000_681  }
-{ Header :  >Ap388_1/1_1.000_398  }
+[ Header : >Ap1333_1/1_1.000_561 ]
+[ Header : >Am5923_1/1_1.000_493 ]
+[ Header : >Th2744_1/1_1.000_648 ]
+[ Header : >Ac4410_1/1_1.000_651 ]
+[ Header : >Ap6200_1/1_1.000_681 ]
+[ Header : >Ap388_1/1_1.000_398 ]
 
 *** Orthogroup with 5 sequences ***
-{ Header :  >Ac1116_1/1_1.000_555  }
-{ Header :  >Ap6059_1/1_1.000_588  }
-{ Header :  >Ac4168_1/1_1.000_540  }
-{ Header :  >Th982_1/1_1.000_711  }
-{ Header :  >Am7334_1/1_1.000_301  }
+[ Header : >Ac1116_1/1_1.000_555 ]
+[ Header : >Ap6059_1/1_1.000_588 ]
+[ Header : >Ac4168_1/1_1.000_540 ]
+[ Header : >Th982_1/1_1.000_711 ]
+[ Header : >Am7334_1/1_1.000_301 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ac2692_1/1_1.000_468  }
-{ Header :  >Th3497_1/1_1.000_393  }
-{ Header :  >Am6923_1/1_1.000_303  }
-{ Header :  >Ap1875_1/1_1.000_426  }
+[ Header : >Ac2692_1/1_1.000_468 ]
+[ Header : >Th3497_1/1_1.000_393 ]
+[ Header : >Am6923_1/1_1.000_303 ]
+[ Header : >Ap1875_1/1_1.000_426 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Am6222_1/1_1.000_412  }
-{ Header :  >Ap3287_1/1_1.000_480  }
-{ Header :  >Ac2063_1/1_1.000_588  }
-{ Header :  >Ap6584_1/1_1.000_897  }
+[ Header : >Am6222_1/1_1.000_412 ]
+[ Header : >Ap3287_1/1_1.000_480 ]
+[ Header : >Ac2063_1/1_1.000_588 ]
+[ Header : >Ap6584_1/1_1.000_897 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ac6682_1/1_1.000_1506  }
-{ Header :  >Th7499_1/1_1.000_748  }
-{ Header :  >Ap5051_1/1_1.000_1271  }
-{ Header :  >Am223_1/1_1.000_239  }
+[ Header : >Ac6682_1/1_1.000_1506 ]
+[ Header : >Th7499_1/1_1.000_748 ]
+[ Header : >Ap5051_1/1_1.000_1271 ]
+[ Header : >Am223_1/1_1.000_239 ]
 
 *** Orthogroup with 6 sequences ***
-{ Header :  >Ac7297_1/1_1.000_807  }
-{ Header :  >Th6741_1/1_1.000_735  }
-{ Header :  >Ap3968_1/1_1.000_437  }
-{ Header :  >Ac6737_1/1_1.000_470  }
-{ Header :  >Ac541_1/1_1.000_540  }
-{ Header :  >Am874_1/1_1.000_810  }
+[ Header : >Ac7297_1/1_1.000_807 ]
+[ Header : >Th6741_1/1_1.000_735 ]
+[ Header : >Ap3968_1/1_1.000_437 ]
+[ Header : >Ac6737_1/1_1.000_470 ]
+[ Header : >Ac541_1/1_1.000_540 ]
+[ Header : >Am874_1/1_1.000_810 ]
 
 *** Orthogroup with 9 sequences ***
-{ Header :  >Am3384_1/1_1.000_408  }
-{ Header :  >Am1571_1/1_1.000_529  }
-{ Header :  >Am6421_1/1_1.000_237  }
-{ Header :  >Ac7646_1/1_1.000_313  }
-{ Header :  >Th4111_1/1_1.000_613  }
-{ Header :  >Ap1651_1/1_1.000_219  }
-{ Header :  >Th7211_1/1_1.000_426  }
-{ Header :  >Am6931_1/1_1.000_359  }
-{ Header :  >Ap3164_1/1_1.000_313  }
+[ Header : >Am3384_1/1_1.000_408 ]
+[ Header : >Am1571_1/1_1.000_529 ]
+[ Header : >Am6421_1/1_1.000_237 ]
+[ Header : >Ac7646_1/1_1.000_313 ]
+[ Header : >Th4111_1/1_1.000_613 ]
+[ Header : >Ap1651_1/1_1.000_219 ]
+[ Header : >Th7211_1/1_1.000_426 ]
+[ Header : >Am6931_1/1_1.000_359 ]
+[ Header : >Ap3164_1/1_1.000_313 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ac7529_1/1_1.000_577  }
-{ Header :  >Ac3796_1/1_1.000_401  }
-{ Header :  >Am2381_1/1_1.000_171  }
-{ Header :  >Th6681_1/1_1.000_1347  }
+[ Header : >Ac7529_1/1_1.000_577 ]
+[ Header : >Ac3796_1/1_1.000_401 ]
+[ Header : >Am2381_1/1_1.000_171 ]
+[ Header : >Th6681_1/1_1.000_1347 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Am4267_1/1_1.000_412  }
-{ Header :  >Th6487_1/1_1.000_1419  }
-{ Header :  >Ap1953_1/1_1.000_273  }
-{ Header :  >Ac6445_1/1_1.000_343  }
+[ Header : >Am4267_1/1_1.000_412 ]
+[ Header : >Th6487_1/1_1.000_1419 ]
+[ Header : >Ap1953_1/1_1.000_273 ]
+[ Header : >Ac6445_1/1_1.000_343 ]
 
 *** Orthogroup with 5 sequences ***
-{ Header :  >Am340_1/1_1.000_303  }
-{ Header :  >Ap6100_1/1_1.000_349  }
-{ Header :  >Th2486_1/1_1.000_412  }
-{ Header :  >Ap2497_1/1_1.000_717  }
-{ Header :  >Ac4334_1/1_1.000_756  }
+[ Header : >Am340_1/1_1.000_303 ]
+[ Header : >Ap6100_1/1_1.000_349 ]
+[ Header : >Th2486_1/1_1.000_412 ]
+[ Header : >Ap2497_1/1_1.000_717 ]
+[ Header : >Ac4334_1/1_1.000_756 ]
 
 *** Orthogroup with 5 sequences ***
-{ Header :  >Am4501_1/1_1.000_582  }
-{ Header :  >Th3843_1/1_1.000_409  }
-{ Header :  >Th802_1/1_1.000_456  }
-{ Header :  >Ap5253_1/1_1.000_653  }
-{ Header :  >Ac1502_1/1_1.000_369  }
+[ Header : >Am4501_1/1_1.000_582 ]
+[ Header : >Th3843_1/1_1.000_409 ]
+[ Header : >Th802_1/1_1.000_456 ]
+[ Header : >Ap5253_1/1_1.000_653 ]
+[ Header : >Ac1502_1/1_1.000_369 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ac6733_1/1_1.000_225  }
-{ Header :  >Th4817_1/1_1.000_223  }
-{ Header :  >Ap3789_1/1_1.000_210  }
-{ Header :  >Am503_1/1_1.000_260  }
+[ Header : >Ac6733_1/1_1.000_225 ]
+[ Header : >Th4817_1/1_1.000_223 ]
+[ Header : >Ap3789_1/1_1.000_210 ]
+[ Header : >Am503_1/1_1.000_260 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Am6407_1/1_1.000_620  }
-{ Header :  >Ac6211_1/1_1.000_858  }
-{ Header :  >Th1175_1/1_1.000_219  }
-{ Header :  >Ap3117_1/1_1.000_855  }
+[ Header : >Am6407_1/1_1.000_620 ]
+[ Header : >Ac6211_1/1_1.000_858 ]
+[ Header : >Th1175_1/1_1.000_219 ]
+[ Header : >Ap3117_1/1_1.000_855 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ap5186_1/1_1.000_624  }
-{ Header :  >Ac6379_1/1_1.000_624  }
-{ Header :  >Am6538_1/1_1.000_632  }
-{ Header :  >Th3053_1/1_1.000_591  }
+[ Header : >Ap5186_1/1_1.000_624 ]
+[ Header : >Ac6379_1/1_1.000_624 ]
+[ Header : >Am6538_1/1_1.000_632 ]
+[ Header : >Th3053_1/1_1.000_591 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ap4245_1/1_1.000_924  }
-{ Header :  >Am416_1/1_1.000_429  }
-{ Header :  >Ac7626_1/1_1.000_453  }
-{ Header :  >Th4576_1/1_1.000_540  }
+[ Header : >Ap4245_1/1_1.000_924 ]
+[ Header : >Am416_1/1_1.000_429 ]
+[ Header : >Ac7626_1/1_1.000_453 ]
+[ Header : >Th4576_1/1_1.000_540 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Am1007_1/1_1.000_277  }
-{ Header :  >Ac3236_1/1_1.000_289  }
-{ Header :  >Ap981_1/1_1.000_485  }
-{ Header :  >Am6537_1/1_1.000_975  }
+[ Header : >Am1007_1/1_1.000_277 ]
+[ Header : >Ac3236_1/1_1.000_289 ]
+[ Header : >Ap981_1/1_1.000_485 ]
+[ Header : >Am6537_1/1_1.000_975 ]
 
 *** Orthogroup with 5 sequences ***
-{ Header :  >Am4808_1/1_1.000_1083  }
-{ Header :  >Th4363_1/1_1.000_235  }
-{ Header :  >Ac7138_1/1_1.000_293  }
-{ Header :  >Ap4907_1/1_1.000_335  }
-{ Header :  >Am4794_1/1_1.000_209  }
+[ Header : >Am4808_1/1_1.000_1083 ]
+[ Header : >Th4363_1/1_1.000_235 ]
+[ Header : >Ac7138_1/1_1.000_293 ]
+[ Header : >Ap4907_1/1_1.000_335 ]
+[ Header : >Am4794_1/1_1.000_209 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Am1524_1/1_1.000_233  }
-{ Header :  >Th2566_1/1_1.000_318  }
-{ Header :  >Ac4320_1/1_1.000_750  }
-{ Header :  >Ap5022_1/1_1.000_1002  }
+[ Header : >Am1524_1/1_1.000_233 ]
+[ Header : >Th2566_1/1_1.000_318 ]
+[ Header : >Ac4320_1/1_1.000_750 ]
+[ Header : >Ap5022_1/1_1.000_1002 ]
 
 *** Orthogroup with 5 sequences ***
-{ Header :  >Am3069_1/1_1.000_227  }
-{ Header :  >Ac951_1/1_1.000_1281  }
-{ Header :  >Ap6582_1/1_1.000_318  }
-{ Header :  >Th221_1/1_1.000_745  }
-{ Header :  >Ap2976_1/1_1.000_393  }
+[ Header : >Am3069_1/1_1.000_227 ]
+[ Header : >Ac951_1/1_1.000_1281 ]
+[ Header : >Ap6582_1/1_1.000_318 ]
+[ Header : >Th221_1/1_1.000_745 ]
+[ Header : >Ap2976_1/1_1.000_393 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Th5588_1/1_1.000_417  }
-{ Header :  >Ac7528_1/1_1.000_629  }
-{ Header :  >Am495_1/1_1.000_428  }
-{ Header :  >Ap187_1/1_1.000_395  }
+[ Header : >Th5588_1/1_1.000_417 ]
+[ Header : >Ac7528_1/1_1.000_629 ]
+[ Header : >Am495_1/1_1.000_428 ]
+[ Header : >Ap187_1/1_1.000_395 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ac1237_1/1_1.000_354  }
-{ Header :  >Th1983_1/1_1.000_603  }
-{ Header :  >Am6193_1/1_1.000_363  }
-{ Header :  >Ap3820_1/1_1.000_219  }
+[ Header : >Ac1237_1/1_1.000_354 ]
+[ Header : >Th1983_1/1_1.000_603 ]
+[ Header : >Am6193_1/1_1.000_363 ]
+[ Header : >Ap3820_1/1_1.000_219 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ap229_1/1_1.000_310  }
-{ Header :  >Ac4491_1/1_1.000_777  }
-{ Header :  >Th1976_1/1_1.000_801  }
-{ Header :  >Am5528_1/1_1.000_235  }
+[ Header : >Ap229_1/1_1.000_310 ]
+[ Header : >Ac4491_1/1_1.000_777 ]
+[ Header : >Th1976_1/1_1.000_801 ]
+[ Header : >Am5528_1/1_1.000_235 ]
 
 *** Orthogroup with 5 sequences ***
-{ Header :  >Th2126_1/1_1.000_1267  }
-{ Header :  >Ac5951_1/1_1.000_491  }
-{ Header :  >Ap4244_1/1_1.000_1338  }
-{ Header :  >Am1158_1/1_1.000_407  }
-{ Header :  >Ac398_1/1_1.000_1919  }
+[ Header : >Th2126_1/1_1.000_1267 ]
+[ Header : >Ac5951_1/1_1.000_491 ]
+[ Header : >Ap4244_1/1_1.000_1338 ]
+[ Header : >Am1158_1/1_1.000_407 ]
+[ Header : >Ac398_1/1_1.000_1919 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ap6242_1/1_1.000_562  }
-{ Header :  >Am7932_1/1_1.000_234  }
-{ Header :  >Am5473_1/1_1.000_304  }
-{ Header :  >Ac6831_1/1_1.000_1281  }
+[ Header : >Ap6242_1/1_1.000_562 ]
+[ Header : >Am7932_1/1_1.000_234 ]
+[ Header : >Am5473_1/1_1.000_304 ]
+[ Header : >Ac6831_1/1_1.000_1281 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Am7546_1/1_1.000_675  }
-{ Header :  >Ac6228_1/1_1.000_283  }
-{ Header :  >Am7777_1/1_1.000_241  }
-{ Header :  >Th3374_1/1_1.000_600  }
+[ Header : >Am7546_1/1_1.000_675 ]
+[ Header : >Ac6228_1/1_1.000_283 ]
+[ Header : >Am7777_1/1_1.000_241 ]
+[ Header : >Th3374_1/1_1.000_600 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Th491_1/1_1.000_1029  }
-{ Header :  >Ac4583_1/1_1.000_1584  }
-{ Header :  >Ap5711_1/1_1.000_399  }
-{ Header :  >Am4320_1/1_1.000_1851  }
+[ Header : >Th491_1/1_1.000_1029 ]
+[ Header : >Ac4583_1/1_1.000_1584 ]
+[ Header : >Ap5711_1/1_1.000_399 ]
+[ Header : >Am4320_1/1_1.000_1851 ]
 
 *** Orthogroup with 5 sequences ***
-{ Header :  >Ac4664_1/1_1.000_627  }
-{ Header :  >Am2003_1/1_1.000_627  }
-{ Header :  >Ap5644_1/1_1.000_342  }
-{ Header :  >Th3955_1/1_1.000_304  }
-{ Header :  >Ap6596_1/1_1.000_669  }
+[ Header : >Ac4664_1/1_1.000_627 ]
+[ Header : >Am2003_1/1_1.000_627 ]
+[ Header : >Ap5644_1/1_1.000_342 ]
+[ Header : >Th3955_1/1_1.000_304 ]
+[ Header : >Ap6596_1/1_1.000_669 ]
 
 *** Orthogroup with 5 sequences ***
-{ Header :  >Th7366_1/1_1.000_684  }
-{ Header :  >Am2213_1/1_1.000_1698  }
-{ Header :  >Ap216_1/1_1.000_642  }
-{ Header :  >Ac4696_1/1_1.000_620  }
-{ Header :  >Am6254_1/1_1.000_265  }
+[ Header : >Th7366_1/1_1.000_684 ]
+[ Header : >Am2213_1/1_1.000_1698 ]
+[ Header : >Ap216_1/1_1.000_642 ]
+[ Header : >Ac4696_1/1_1.000_620 ]
+[ Header : >Am6254_1/1_1.000_265 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Am596_1/1_1.000_577  }
-{ Header :  >Ac4795_1/1_1.000_298  }
-{ Header :  >Am3358_1/1_1.000_249  }
-{ Header :  >Ap2353_1/1_1.000_987  }
+[ Header : >Am596_1/1_1.000_577 ]
+[ Header : >Ac4795_1/1_1.000_298 ]
+[ Header : >Am3358_1/1_1.000_249 ]
+[ Header : >Ap2353_1/1_1.000_987 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Th3006_1/1_1.000_438  }
-{ Header :  >Am6515_1/1_1.000_495  }
-{ Header :  >Th5377_1/1_1.000_403  }
-{ Header :  >Ac957_1/1_1.000_448  }
+[ Header : >Th3006_1/1_1.000_438 ]
+[ Header : >Am6515_1/1_1.000_495 ]
+[ Header : >Th5377_1/1_1.000_403 ]
+[ Header : >Ac957_1/1_1.000_448 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Th436_1/1_1.000_999  }
-{ Header :  >Am6825_1/1_1.000_369  }
-{ Header :  >Ac6826_1/1_1.000_777  }
-{ Header :  >Am3754_1/1_1.000_282  }
+[ Header : >Th436_1/1_1.000_999 ]
+[ Header : >Am6825_1/1_1.000_369 ]
+[ Header : >Ac6826_1/1_1.000_777 ]
+[ Header : >Am3754_1/1_1.000_282 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ap1526_1/1_1.000_282  }
-{ Header :  >Th2592_1/1_1.000_247  }
-{ Header :  >Ap1423_1/1_1.000_393  }
-{ Header :  >Ac1308_1/1_1.000_1479  }
+[ Header : >Ap1526_1/1_1.000_282 ]
+[ Header : >Th2592_1/1_1.000_247 ]
+[ Header : >Ap1423_1/1_1.000_393 ]
+[ Header : >Ac1308_1/1_1.000_1479 ]
 
 *** Orthogroup with 7 sequences ***
-{ Header :  >Ac6296_1/1_1.000_115  }
-{ Header :  >Th4052_1/1_1.000_243  }
-{ Header :  >Am7830_1/1_1.000_237  }
-{ Header :  >Ap2597_1/1_1.000_393  }
-{ Header :  >Ap751_1/1_1.000_244  }
-{ Header :  >Ac112_1/1_1.000_235  }
-{ Header :  >Th6280_1/1_1.000_273  }
+[ Header : >Ac6296_1/1_1.000_115 ]
+[ Header : >Th4052_1/1_1.000_243 ]
+[ Header : >Am7830_1/1_1.000_237 ]
+[ Header : >Ap2597_1/1_1.000_393 ]
+[ Header : >Ap751_1/1_1.000_244 ]
+[ Header : >Ac112_1/1_1.000_235 ]
+[ Header : >Th6280_1/1_1.000_273 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Th2922_1/1_1.000_345  }
-{ Header :  >Ap969_1/1_1.000_285  }
-{ Header :  >Ac1702_1/1_1.000_404  }
-{ Header :  >Ap4263_1/1_1.000_202  }
+[ Header : >Th2922_1/1_1.000_345 ]
+[ Header : >Ap969_1/1_1.000_285 ]
+[ Header : >Ac1702_1/1_1.000_404 ]
+[ Header : >Ap4263_1/1_1.000_202 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ap1902_1/1_1.000_222  }
-{ Header :  >Ac2466_1/1_1.000_753  }
-{ Header :  >Ap2563_1/1_1.000_719  }
-{ Header :  >Th7029_1/1_1.000_230  }
+[ Header : >Ap1902_1/1_1.000_222 ]
+[ Header : >Ac2466_1/1_1.000_753 ]
+[ Header : >Ap2563_1/1_1.000_719 ]
+[ Header : >Th7029_1/1_1.000_230 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ap4007_1/1_1.000_459  }
-{ Header :  >Ac2182_1/1_1.000_900  }
-{ Header :  >Th7023_1/1_1.000_268  }
-{ Header :  >Ap2440_1/1_1.000_326  }
+[ Header : >Ap4007_1/1_1.000_459 ]
+[ Header : >Ac2182_1/1_1.000_900 ]
+[ Header : >Th7023_1/1_1.000_268 ]
+[ Header : >Ap2440_1/1_1.000_326 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Th4356_1/1_1.000_1659  }
-{ Header :  >Ac666_1/1_1.000_522  }
-{ Header :  >Ap4257_1/1_1.000_282  }
-{ Header :  >Ap3601_1/1_1.000_673  }
+[ Header : >Th4356_1/1_1.000_1659 ]
+[ Header : >Ac666_1/1_1.000_522 ]
+[ Header : >Ap4257_1/1_1.000_282 ]
+[ Header : >Ap3601_1/1_1.000_673 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ap5958_1/1_1.000_421  }
-{ Header :  >Ac3414_1/1_1.000_489  }
-{ Header :  >Th3028_1/1_1.000_1410  }
-{ Header :  >Ap1754_1/1_1.000_563  }
+[ Header : >Ap5958_1/1_1.000_421 ]
+[ Header : >Ac3414_1/1_1.000_489 ]
+[ Header : >Th3028_1/1_1.000_1410 ]
+[ Header : >Ap1754_1/1_1.000_563 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ac6837_1/1_1.000_669  }
-{ Header :  >Ap631_1/1_1.000_270  }
-{ Header :  >Th6911_1/1_1.000_1278  }
-{ Header :  >Ac4887_1/1_1.000_333  }
+[ Header : >Ac6837_1/1_1.000_669 ]
+[ Header : >Ap631_1/1_1.000_270 ]
+[ Header : >Th6911_1/1_1.000_1278 ]
+[ Header : >Ac4887_1/1_1.000_333 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ac2977_1/1_1.000_243  }
-{ Header :  >Th7278_1/1_1.000_399  }
-{ Header :  >Ap6323_1/1_1.000_180  }
-{ Header :  >Ap887_1/1_1.000_306  }
+[ Header : >Ac2977_1/1_1.000_243 ]
+[ Header : >Th7278_1/1_1.000_399 ]
+[ Header : >Ap6323_1/1_1.000_180 ]
+[ Header : >Ap887_1/1_1.000_306 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ac3806_1/1_1.000_294  }
-{ Header :  >Ap1322_1/1_1.000_183  }
-{ Header :  >Ac4608_1/1_1.000_514  }
-{ Header :  >Th744_1/1_1.000_223  }
+[ Header : >Ac3806_1/1_1.000_294 ]
+[ Header : >Ap1322_1/1_1.000_183 ]
+[ Header : >Ac4608_1/1_1.000_514 ]
+[ Header : >Th744_1/1_1.000_223 ]
 
 *** Orthogroup with 5 sequences ***
-{ Header :  >Ac2532_1/1_1.000_392  }
-{ Header :  >Ap4224_1/1_1.000_917  }
-{ Header :  >Ap3964_1/1_1.000_494  }
-{ Header :  >Th1475_1/1_1.000_220  }
-{ Header :  >Am5682_1/1_1.000_306  }
+[ Header : >Ac2532_1/1_1.000_392 ]
+[ Header : >Ap4224_1/1_1.000_917 ]
+[ Header : >Ap3964_1/1_1.000_494 ]
+[ Header : >Th1475_1/1_1.000_220 ]
+[ Header : >Am5682_1/1_1.000_306 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ac2145_1/1_1.000_291  }
-{ Header :  >Ap31_1/1_1.000_257  }
-{ Header :  >Ap998_1/1_1.000_265  }
-{ Header :  >Th7256_1/1_1.000_1140  }
+[ Header : >Ac2145_1/1_1.000_291 ]
+[ Header : >Ap31_1/1_1.000_257 ]
+[ Header : >Ap998_1/1_1.000_265 ]
+[ Header : >Th7256_1/1_1.000_1140 ]
 
 *** Orthogroup with 5 sequences ***
-{ Header :  >Ap3301_1/1_1.000_233  }
-{ Header :  >Ap721_1/1_1.000_205  }
-{ Header :  >Am6802_1/1_1.000_240  }
-{ Header :  >Ac3633_1/1_1.000_371  }
-{ Header :  >Th6751_1/1_1.000_1353  }
+[ Header : >Ap3301_1/1_1.000_233 ]
+[ Header : >Ap721_1/1_1.000_205 ]
+[ Header : >Am6802_1/1_1.000_240 ]
+[ Header : >Ac3633_1/1_1.000_371 ]
+[ Header : >Th6751_1/1_1.000_1353 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Th2840_1/1_1.000_726  }
-{ Header :  >Ap509_1/1_1.000_195  }
-{ Header :  >Ac4040_1/1_1.000_684  }
-{ Header :  >Ap4300_1/1_1.000_411  }
+[ Header : >Th2840_1/1_1.000_726 ]
+[ Header : >Ap509_1/1_1.000_195 ]
+[ Header : >Ac4040_1/1_1.000_684 ]
+[ Header : >Ap4300_1/1_1.000_411 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ap4960_1/1_1.000_237  }
-{ Header :  >Th6566_1/1_1.000_519  }
-{ Header :  >Ac7443_1/1_1.000_411  }
-{ Header :  >Th5285_1/1_1.000_417  }
+[ Header : >Ap4960_1/1_1.000_237 ]
+[ Header : >Th6566_1/1_1.000_519 ]
+[ Header : >Ac7443_1/1_1.000_411 ]
+[ Header : >Th5285_1/1_1.000_417 ]
 
 *** Orthogroup with 5 sequences ***
-{ Header :  >Am6327_1/1_1.000_641  }
-{ Header :  >Th4914_1/1_1.000_258  }
-{ Header :  >Ap6560_1/1_1.000_2295  }
-{ Header :  >Ac4299_1/1_1.000_362  }
-{ Header :  >Th4015_1/1_1.000_217  }
+[ Header : >Am6327_1/1_1.000_641 ]
+[ Header : >Th4914_1/1_1.000_258 ]
+[ Header : >Ap6560_1/1_1.000_2295 ]
+[ Header : >Ac4299_1/1_1.000_362 ]
+[ Header : >Th4015_1/1_1.000_217 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Am4640_1/1_1.000_242  }
-{ Header :  >Ac4725_1/1_1.000_351  }
-{ Header :  >Th1971_1/1_1.000_324  }
-{ Header :  >Ap2110_1/1_1.000_267  }
+[ Header : >Am4640_1/1_1.000_242 ]
+[ Header : >Ac4725_1/1_1.000_351 ]
+[ Header : >Th1971_1/1_1.000_324 ]
+[ Header : >Ap2110_1/1_1.000_267 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Th6803_1/1_1.000_627  }
-{ Header :  >Ac812_1/1_1.000_406  }
-{ Header :  >Ap2283_1/1_1.000_468  }
-{ Header :  >Ap5501_1/1_1.000_524  }
+[ Header : >Th6803_1/1_1.000_627 ]
+[ Header : >Ac812_1/1_1.000_406 ]
+[ Header : >Ap2283_1/1_1.000_468 ]
+[ Header : >Ap5501_1/1_1.000_524 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ap2631_1/1_1.000_383  }
-{ Header :  >Th331_1/1_1.000_459  }
-{ Header :  >Ac5890_1/1_1.000_724  }
-{ Header :  >Ac1597_1/1_1.000_360  }
+[ Header : >Ap2631_1/1_1.000_383 ]
+[ Header : >Th331_1/1_1.000_459 ]
+[ Header : >Ac5890_1/1_1.000_724 ]
+[ Header : >Ac1597_1/1_1.000_360 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Th324_1/1_1.000_693  }
-{ Header :  >Ap2795_1/1_1.000_364  }
-{ Header :  >Am2196_1/1_1.000_441  }
-{ Header :  >Ac3192_1/1_1.000_329  }
+[ Header : >Th324_1/1_1.000_693 ]
+[ Header : >Ap2795_1/1_1.000_364 ]
+[ Header : >Am2196_1/1_1.000_441 ]
+[ Header : >Ac3192_1/1_1.000_329 ]
 
 *** Orthogroup with 5 sequences ***
-{ Header :  >Am3262_1/1_1.000_381  }
-{ Header :  >Th745_1/1_1.000_3315  }
-{ Header :  >Ac1626_1/1_1.000_303  }
-{ Header :  >Ap2451_1/1_1.000_269  }
-{ Header :  >Ac1149_1/1_1.000_221  }
+[ Header : >Am3262_1/1_1.000_381 ]
+[ Header : >Th745_1/1_1.000_3315 ]
+[ Header : >Ac1626_1/1_1.000_303 ]
+[ Header : >Ap2451_1/1_1.000_269 ]
+[ Header : >Ac1149_1/1_1.000_221 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ap3311_1/1_1.000_229  }
-{ Header :  >Ac2272_1/1_1.000_291  }
-{ Header :  >Th3016_1/1_1.000_1644  }
-{ Header :  >Ac5489_1/1_1.000_808  }
+[ Header : >Ap3311_1/1_1.000_229 ]
+[ Header : >Ac2272_1/1_1.000_291 ]
+[ Header : >Th3016_1/1_1.000_1644 ]
+[ Header : >Ac5489_1/1_1.000_808 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ac7342_1/1_1.000_1212  }
-{ Header :  >Ap1248_1/1_1.000_663  }
-{ Header :  >Ap1509_1/1_1.000_306  }
-{ Header :  >Th6683_1/1_1.000_493  }
+[ Header : >Ac7342_1/1_1.000_1212 ]
+[ Header : >Ap1248_1/1_1.000_663 ]
+[ Header : >Ap1509_1/1_1.000_306 ]
+[ Header : >Th6683_1/1_1.000_493 ]
 
 *** Orthogroup with 5 sequences ***
-{ Header :  >Th4993_1/1_1.000_3318  }
-{ Header :  >Ac7035_1/1_1.000_217  }
-{ Header :  >Ac3065_1/1_1.000_484  }
-{ Header :  >Ap884_1/1_1.000_294  }
-{ Header :  >Am1038_1/1_1.000_678  }
+[ Header : >Th4993_1/1_1.000_3318 ]
+[ Header : >Ac7035_1/1_1.000_217 ]
+[ Header : >Ac3065_1/1_1.000_484 ]
+[ Header : >Ap884_1/1_1.000_294 ]
+[ Header : >Am1038_1/1_1.000_678 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ap6547_1/1_1.000_929  }
-{ Header :  >Ap4117_1/1_1.000_210  }
-{ Header :  >Ac788_1/1_1.000_999  }
-{ Header :  >Th253_1/1_1.000_909  }
+[ Header : >Ap6547_1/1_1.000_929 ]
+[ Header : >Ap4117_1/1_1.000_210 ]
+[ Header : >Ac788_1/1_1.000_999 ]
+[ Header : >Th253_1/1_1.000_909 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ac5130_1/1_1.000_216  }
-{ Header :  >Ap1490_1/1_1.000_631  }
-{ Header :  >Th6882_1/1_1.000_231  }
-{ Header :  >Am6244_1/1_1.000_355  }
+[ Header : >Ac5130_1/1_1.000_216 ]
+[ Header : >Ap1490_1/1_1.000_631 ]
+[ Header : >Th6882_1/1_1.000_231 ]
+[ Header : >Am6244_1/1_1.000_355 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ac2671_1/1_1.000_201  }
-{ Header :  >Ap4998_1/1_1.000_927  }
-{ Header :  >Ap2885_1/1_1.000_437  }
-{ Header :  >Th6694_1/1_1.000_716  }
+[ Header : >Ac2671_1/1_1.000_201 ]
+[ Header : >Ap4998_1/1_1.000_927 ]
+[ Header : >Ap2885_1/1_1.000_437 ]
+[ Header : >Th6694_1/1_1.000_716 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ac1417_1/1_1.000_1236  }
-{ Header :  >Th4779_1/1_1.000_269  }
-{ Header :  >Ap4895_1/1_1.000_1068  }
-{ Header :  >Ap3757_1/1_1.000_322  }
+[ Header : >Ac1417_1/1_1.000_1236 ]
+[ Header : >Th4779_1/1_1.000_269 ]
+[ Header : >Ap4895_1/1_1.000_1068 ]
+[ Header : >Ap3757_1/1_1.000_322 ]
 
 *** Orthogroup with 5 sequences ***
-{ Header :  >Th6668_1/1_1.000_447  }
-{ Header :  >Ap2881_1/1_1.000_460  }
-{ Header :  >Ac6302_1/1_1.000_567  }
-{ Header :  >Th7188_1/1_1.000_834  }
-{ Header :  >Ap2468_1/1_1.000_453  }
+[ Header : >Th6668_1/1_1.000_447 ]
+[ Header : >Ap2881_1/1_1.000_460 ]
+[ Header : >Ac6302_1/1_1.000_567 ]
+[ Header : >Th7188_1/1_1.000_834 ]
+[ Header : >Ap2468_1/1_1.000_453 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ac4761_1/1_1.000_267  }
-{ Header :  >Th7182_1/1_1.000_1010  }
-{ Header :  >Am532_1/1_1.000_574  }
-{ Header :  >Ap5694_1/1_1.000_500  }
+[ Header : >Ac4761_1/1_1.000_267 ]
+[ Header : >Th7182_1/1_1.000_1010 ]
+[ Header : >Am532_1/1_1.000_574 ]
+[ Header : >Ap5694_1/1_1.000_500 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Am4172_1/1_1.000_256  }
-{ Header :  >Ap4255_1/1_1.000_277  }
-{ Header :  >Th7152_1/1_1.000_356  }
-{ Header :  >Ac1051_1/1_1.000_573  }
+[ Header : >Am4172_1/1_1.000_256 ]
+[ Header : >Ap4255_1/1_1.000_277 ]
+[ Header : >Th7152_1/1_1.000_356 ]
+[ Header : >Ac1051_1/1_1.000_573 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Th6281_1/1_1.000_961  }
-{ Header :  >Am5112_1/1_1.000_303  }
-{ Header :  >Ap3713_1/1_1.000_207  }
-{ Header :  >Ap1691_1/1_1.000_2337  }
+[ Header : >Th6281_1/1_1.000_961 ]
+[ Header : >Am5112_1/1_1.000_303 ]
+[ Header : >Ap3713_1/1_1.000_207 ]
+[ Header : >Ap1691_1/1_1.000_2337 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Th5257_1/1_1.000_1152  }
-{ Header :  >Am6001_1/1_1.000_1017  }
-{ Header :  >Ap6119_1/1_1.000_1599  }
-{ Header :  >Th6785_1/1_1.000_291  }
+[ Header : >Th5257_1/1_1.000_1152 ]
+[ Header : >Am6001_1/1_1.000_1017 ]
+[ Header : >Ap6119_1/1_1.000_1599 ]
+[ Header : >Th6785_1/1_1.000_291 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Am2180_1/1_1.000_1266  }
-{ Header :  >Th2434_1/1_1.000_249  }
-{ Header :  >Ap5482_1/1_1.000_1950  }
-{ Header :  >Th3370_1/1_1.000_350  }
+[ Header : >Am2180_1/1_1.000_1266 ]
+[ Header : >Th2434_1/1_1.000_249 ]
+[ Header : >Ap5482_1/1_1.000_1950 ]
+[ Header : >Th3370_1/1_1.000_350 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Th3783_1/1_1.000_2532  }
-{ Header :  >Ap4289_1/1_1.000_256  }
-{ Header :  >Am916_1/1_1.000_208  }
-{ Header :  >Ac1797_1/1_1.000_282  }
+[ Header : >Th3783_1/1_1.000_2532 ]
+[ Header : >Ap4289_1/1_1.000_256 ]
+[ Header : >Am916_1/1_1.000_208 ]
+[ Header : >Ac1797_1/1_1.000_282 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Ac2820_1/1_1.000_279  }
-{ Header :  >Am7894_1/1_1.000_480  }
-{ Header :  >Ap5910_1/1_1.000_590  }
-{ Header :  >Th3656_1/1_1.000_747  }
+[ Header : >Ac2820_1/1_1.000_279 ]
+[ Header : >Am7894_1/1_1.000_480 ]
+[ Header : >Ap5910_1/1_1.000_590 ]
+[ Header : >Th3656_1/1_1.000_747 ]
 
 *** Orthogroup with 4 sequences ***
-{ Header :  >Th3195_1/1_1.000_1856  }
-{ Header :  >Am5222_1/1_1.000_214  }
-{ Header :  >Ac6910_1/1_1.000_322  }
-{ Header :  >Ap4738_1/1_1.000_586  }
+[ Header : >Th3195_1/1_1.000_1856 ]
+[ Header : >Am5222_1/1_1.000_214 ]
+[ Header : >Ac6910_1/1_1.000_322 ]
+[ Header : >Ap4738_1/1_1.000_586 ]
 
 134 orthogroups have been infered from 6 pairwise comparisons by RBH

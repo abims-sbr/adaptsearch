@@ -168,12 +168,17 @@ def main():
     parser.add_argument("-v", "--verbose", type=int, choices=[0,1,2], help="Content of orthogroups will be displayed on the screen")
     args = parser.parse_args()
 
+    print "*** pogs.py ***"
+    print "\nBuilding of orthogroups based on pairs of genes obtained by pairwise comparisons between pairs of species."
+    print "Genes are gathered in orthogroups based on the principle of transitivity between genes pairs."
+
     os.system("mkdir outputs")
     infiles = args.files
     listPairwiseFiles = str.split(infiles, ",")
-    print "Parsing input files ..."
+    print "\nParsing input files ..."
     list_Locus = getListPairwiseAll(listPairwiseFiles)
     print "Creating Orthogroups ..."
+    print "\n"
     nb_orthogroups = makeOrthogroups(list_Locus, args.minspec, args) # args must be passed as a parameter ; maybe not the best way to do it ?
     print "{} orthogroups have been infered from {} pairwise comparisons by RBH".format(nb_orthogroups, len(listPairwiseFiles))
 
