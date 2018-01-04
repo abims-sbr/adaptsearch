@@ -1,49 +1,16 @@
 #!/usr/bin/env python
-#argv[1] : txt file with orthogroups
-#argv[2] : minimal number of species to keep per group
+# Commandline : ./filter_orthofinder.py <Orthogroups.txt> <Nb_of_studied_species> <minimal_nb_species_per_group>
 
 ## This script takes an output file of OrthoFinder (Orthogroups.txt), which contains a set of orthogroups,
 ## and rewrite it to split each orthogroup into a single fasta file.
 ## Beta version
 
-""" The used output does not give the number of species per orthogroups, making filtering more difficult.
-    (it's in the summar y statistics in .csv format). Nethertheless, the format of sequences IDs in the 
-    AdaptSearch pipeline input files keep the record of the species : this will allow (later) the script 
-    fitler_orthofinder to do the same thing than filter_fastortho.
-
-    We could try to write a function able to read a csv file ...
-"""
-
-import os, sys, string, glob, csv
+import os, string, glob, csv, argparse
 from Bio import SeqIO # BioPython
 
 # **********************************************************************************************************************************
 
-## PART 1 : Make a dictionary of {IDs : sequence}
-
-""" Written for testing with the ExampleDataset of Orthofinder. Not deleted just in case.
-Make a fasta copy of .faa initial files (bioconductor SeqIO does not support .faa files) """
-def cpyAndRename(file):
-    name = file.split('.')
-    name = "%s_oneline.fasta" %name[0]
-    os.system("cp %s %s" %(file, name))
-
-""" Make the fasta copy as one sequence per line (with biopython).
-Also written for testing and not deleted, just in case we need it."""
-def seqOneLine(file):
-    n = file.split('.')    
-    name = "%s_oneline.fasta" %n[0]   
-    
-    new_file = open(name, "w")
-    with new_file:
-        for seq_record in SeqIO.parse(file, "fasta"):
-            gid = seq_record.id
-            gid = gid.split("(")
-            gid = gid[0]
-            new_file.write(gid)
-            new_file.write("\n")
-            new_file.write(str(seq_record.seq))
-            new_file.write("\n")    
+## PART 1 : Make a dictionary of {IDs : sequence}   
 
 """ Build a hash table with gene IDs and gene sequences from fasta made from input files """
 def hashSequences(path):
@@ -113,26 +80,26 @@ def writingOutputFiles(list_orthogroups, hashTable):
     i = 1
     for group in list_orthogroups :
         length = len(group)
-        name = "orthogroup_%d_%d_loci.fasta" %(i, length)
+        name = "orthogroup_{}_{}_loci.fasta".format(i, length)
         i += 1        
         result = open(name, "w")
         with result:
             for locus in group:                
-                result.write("%s\n" %locus) # write geneID. ">%s\n" before
-                result.write("%s\n" %hashTable[locus]) # write sequence        
+                result.write("{}\n".format(locus)) # write geneID. ">%s\n" before
+                result.write("{}\n".format(hashTable[locus])) # write sequence        
 
 # **********************************************************************************************************************************
 
 ## PART 3 : A short summary statistics
+# Improve with pandas ?
 
 # Return the right dimensions for a matrix
-def matrixDim(listOrthogroups):
-    linesNbLoci = 0
-    columnsNbSpec = 9
+def matrixDim(listOrthogroups, nbspecies):
+    linesNbLoci = 0    
     for group in listOrthogroups:
         if len(group) > linesNbLoci:
             linesNbLoci = len(group)
-    matDim = [linesNbLoci, columnsNbSpec]
+    matDim = [linesNbLoci, nbspecies]
     return matDim
 
 # Builds a matrix using the computed dimensions
@@ -199,6 +166,12 @@ def writeTable(matrix, mini, filename):
 ## MAIN
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("files", help="Orthogroups.txt file from OrthoFinder")
+    parser.add_argument("nbspec", type=int, help="Number of studied species")
+    parser.add_argument("minspec", type=int, help="Minimal number of species to keep per group")
+    args = parser.parse_args()
+
     print "\n-This script works on the 'Orthogroups' file output of Orthofinder to split each orthogroup in a single fasta file."
     print "-It also gets rid of orthogroups with less sequences than the number specified by the user." 
 
@@ -209,15 +182,15 @@ def main():
 
     # Open txt file with orthogroups
     print "  Reading Orthogroups.txt ..."
-    print "    (Dropping orthogroups of less than " + sys.argv[2] +" loci.)\n"    
-    list_orthogroups = formatAndFilter(sys.argv[1], int(sys.argv[2])) # DEF4
+    print "    (Dropping orthogroups of less than {} loci.)\n".format(args.minspec)
+    list_orthogroups = formatAndFilter(args.files, args.minspec) # DEF4
 
     # Print summary
     print "  Writing summary ...\n"
-    dim = matrixDim(list_orthogroups)
+    dim = matrixDim(list_orthogroups, args.nbspec)
     mat = matrixConstruction(dim)    
     matrixFilling(mat, list_orthogroups)    
-    writeTable(mat, int(sys.argv[2]), "summary_orthogroups.csv")
+    writeTable(mat, args.minspec, "summary_orthogroups.csv")
     
     # Create orthogroups files
     print "  Writing output files ...\n"
@@ -227,7 +200,7 @@ def main():
     os.system("mkdir filtered_orthogroups")
     path = glob.glob("orthogroup*")
     for file in path:
-        os.system("mv %s filtered_orthogroups" %file)
+        os.system("mv {} filtered_orthogroups".format(file))
 
     print "\t**** Results ****\n"
     printCounts(mat)

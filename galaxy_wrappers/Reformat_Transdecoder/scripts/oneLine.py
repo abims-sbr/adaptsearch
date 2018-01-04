@@ -1,1 +1,0 @@
-../../../scripts/Reformat_Transdecoder/oneLine.py
