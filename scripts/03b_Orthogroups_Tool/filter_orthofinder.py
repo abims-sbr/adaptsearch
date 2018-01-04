@@ -6,7 +6,7 @@
 ## Beta version
 
 import os, string, glob, csv, argparse
-from Bio import SeqIO # BioPython
+#from Bio import SeqIO # BioPython
 
 # **********************************************************************************************************************************
 
