@@ -8,9 +8,6 @@ What it does:
     - pogs.py parses output files from the "pairwise" tool of the AdaptSearch suite and proceeds to gather genes in orthogroups (using transitivity).
     - A minimal number of species per group can be set.
 
-Improvments to do :
-    - Paralogous filtering /removal is still to do
-
 Errors corrected (need to test a bit more to be sure)
     - In makeOrthogroups
         - ERROR 1
@@ -52,13 +49,12 @@ class Locus:
     def getTag(self):
         return self.tagged
 
-    def prettyPrint(self, verbosity):
+    def prettyPrint(self): 
         # Used for debugging : print "{ Header : ", self.header[0:-1], "Tag : ", self.tagged, " }"
-        # No need to assert if 1 > verbose > 3 : argparse does it
-        if verbosity == 1 :
-            print "[ Header : {header} ]".format(header=self.header[0:-1])
-        elif verbosity == 2 :
-            print "[ Header : {header} Sequence : {sequence} ]".format(header=self.header[0:-1], sequence=self.sequence[0:-1])    
+        print "[ Header : {header} ]".format(header=self.header[0:-1])
+
+    def prettyPrint2(self):
+        print "[ Header : {header} Sequence : {sequence} ]".format(header=self.header[0:-1], sequence=self.sequence[0:-1])
 
 """ Applies the getPairwiseCouple() function to a list of files and return a big list with ALL pairwises couples 
     Returns a list of sets (2 items per set) """
@@ -95,30 +91,34 @@ def getListPairwiseAll(listPairwiseFiles):
     Iterates over the orthogroups list and tag to 'True' the pairwise couple already gathered in a group to avoid
     redondancy. Writes each orthogroup in a fasta file
     Returns an integer (a list length) """
-def makeOrthogroups(list_pairwises_allsp, minspec, nbspecs, verbose):
+def makeOrthogroups(list_pairwises_allsp, minspec, nbspecs, verbose, paralogs):
     # Sub-funtions
 
     """ Check if a locus/group has already been treated in makeOrthogroups()
         Returns a boolean """
-    def checkIfTagged(pair):        
+    def checkIfTagged(pair):
         tag = True
-        for element in pair:        
+        for element in pair:
             if not element.getTag() and tag: # use a list comprehension maybe ?
                 tag = False
         return tag
 
     """ True means a locus/group has already been treated in makeOrthogroups()
         A stronger code would be to implement a method inside the class Locus """
-    def tagGroup(pair):        
+    def tagGroup(pair):
         for element in pair:
             element.tagged = True
 
     """ Write an orthogroup in a file """
-    def writeOutputFile(orthogroup, number):        
-        name = "orthogroup_{}_with_{}_sequences.fasta".format(number, len(orthogroup))
+    def writeOutputFile(orthogroup, number, naming):
+        name = ""
+        if naming:
+            name = "orthogroup_{}_with_{}_sequences_withParalogs.fasta".format(number, len(orthogroup))
+        else :
+            name = "orthogroup_{}_with_{}_sequences.fasta".format(number, len(orthogroup))
         result = open(name, "w")
         with result:
-            for locus in orthogroup:            
+            for locus in orthogroup:
                 if locus.getHeader()[-1] == "\n":
                     result.write("%s" % locus.getHeader())  # write geneID
                 else :
@@ -127,7 +127,10 @@ def makeOrthogroups(list_pairwises_allsp, minspec, nbspecs, verbose):
                     result.write("%s" % locus.getSequence())  # write sequence
                 else :
                     result.write("%s\n" % locus.getSequence())  # write sequence
-        os.system("mv {} outputs/".format(name))
+        if naming:
+            os.system("mv {} outputs_withParalogs/".format(name))
+        else :
+            os.system("mv {} outputs/".format(name))
 
     """ Builds a 2D array for a summary
         Returns a numpy 2D array """
@@ -185,42 +188,53 @@ def makeOrthogroups(list_pairwises_allsp, minspec, nbspecs, verbose):
             if len(orthogroup) > 2:
                 tagGroup(ortho_pair1) # potentially useless ?
                 if len(orthogroup) >= minspec:
-                    list_orthogroups.append(orthogroup)                
-                    writeOutputFile(orthogroup, i)
-                    # print groups in the log file
-                    if verbose > 0:
-                        print "*** Orthogroup {} with {} sequences ***".format(i, len(orthogroup))
-                        for locus in orthogroup:                            
-                            locus.prettyPrint(verbose)                            
-                        print ""                    
-                    i += 1
+                    list_orthogroups.append(orthogroup)
+                    if paralogs:
+                        writeOutputFile(orthogroup, i, True)
+                    i += 1                    
+
+    # Paralogs filtering (keeps the first encountered)
+    # Quite messy ...
+    list_orthogroups_format = []
+    j = 1
+    for nofilter_group in list_orthogroups:
+        new_group = []
+        species = {}
+        for loci in nofilter_group:
+            species[loci.getHeader()[1:3]] = False
+        for loci in nofilter_group:
+            if not species[loci.getHeader()[1:3]]:
+                new_group.append(loci)
+                species[loci.getHeader()[1:3]] = True
+
+        if len(new_group) >= minspec: # Drop too small orthogroups            
+            list_orthogroups_format.append(new_group)
+            writeOutputFile(new_group, j, False)
+            j += 1    
     
-    # print groups in the log file
-    """
-    if verbose > 0:
-        for group in list_orthogroups:
-            print "*** Orthogroup with {} sequences ***".format(len(group))
-            for locus in group:
-                if verbose == 1 :
-                    locus.prettyPrint()
-                elif verbose == 2 :
-                    locus.prettyPrint2()
-            print ""
-    """
     # print summary table. I could also try to implement a more complex code which build and fill the frame
     # as the same time as the orthogroups are build, which would avoid to parse several times the groups list
-    frame = countings(list_orthogroups, nbspecs)
-    df = asFrame(frame)
-    print df
+    if verbose :
+        frame = countings(list_orthogroups, nbspecs)
+        df = asFrame(frame)
+        print "  Summary before paralogous filtering : \n"
+        print df, "\n"
 
-    return len(list_orthogroups)
+    frame2 = countings(list_orthogroups_format, nbspecs)    
+    df2 = asFrame(frame2)
+    print "  Summary after paralogous filtering : \n"
+    print df2
+
+    #return len(list_orthogroups)
+    return len(list_orthogroups_format)
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("files", help="Input files separated by commas. Each file contains all the reciprocical best hits between a pair of species")
     parser.add_argument("minspec", help="Only keep Orthogroups with at least this number of species", type=int)
     parser.add_argument("nbspec", help="The total number of studied species", type=int)
-    parser.add_argument("-v", "--verbose", type=int, choices=[0,1,2], help="Content of orthogroups will be displayed on the screen, with or without the sequences")
+    parser.add_argument("-v", "--verbose", type=int, choices=[0,1,2,3], help="Content of orthogroups will be displayed on the screen, with or without the sequences")
+    parser.add_argument("-p", "--paralogs", action="store_true", help="Proceeds to write orthogroups also before paralogous filtering")
     args = parser.parse_args()
 
     print "*** pogs.py ***"
@@ -228,14 +242,16 @@ def main():
     print "Genes are gathered in orthogroups based on the principle of transitivity between genes pairs."
 
     os.system("mkdir outputs")
+    if args.paralogs: os.system("mkdir outputs_withParalogs")
     infiles = args.files
     listPairwiseFiles = str.split(infiles, ",")
     print "\nParsing input files ..."
     list_Locus = getListPairwiseAll(listPairwiseFiles)
     print "Creating Orthogroups ..."
     print "\n"
-    nb_orthogroups = makeOrthogroups(list_Locus, args.minspec, args.nbspec, args.verbose)
+    nb_orthogroups = makeOrthogroups(list_Locus, args.minspec, args.nbspec, args.verbose, args.paralogs)
     print "\n{} orthogroups have been infered from {} pairwise comparisons by RBH\n".format(nb_orthogroups, len(listPairwiseFiles))
 
 if __name__ == "__main__":
     main()
+
