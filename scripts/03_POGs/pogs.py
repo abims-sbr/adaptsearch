@@ -12,7 +12,7 @@ Improvments to do :
     - Paralogous filtering /removal is still to do
 
 Errors corrected (need to test a bit more to be sure)
-    - makeOrthogroups is still incorrect
+    - In makeOrthogroups
         - ERROR 1
             - Pour peu qu'une paire soit associee au groupe grace a une paire qui sera parcourue après elle, cette premiere paire n'est pas ajoutee
             - PAS SUR QUE CA MARCHE dans tous les cas : pb regle en faisant la boucle deux fois de suite        
@@ -23,9 +23,11 @@ Errors corrected (need to test a bit more to be sure)
 """
 
 import os, argparse
+import numpy as np
+import pandas as pd
 
-class Locus:
-    """ Definition of a locus : header + sequence """
+""" Definition of a locus : header + sequence + a tag (hidden to the user) """
+class Locus:    
 
     def __init__(self, header, sequence):
         self.header = header
@@ -50,19 +52,23 @@ class Locus:
     def getTag(self):
         return self.tagged
 
-    def prettyPrint(self):
+    def prettyPrint(self, verbosity):
         # Used for debugging : print "{ Header : ", self.header[0:-1], "Tag : ", self.tagged, " }"
-        print "[ Header : {header} ]".format(header=self.header[0:-1])
+        # No need to assert if 1 > verbose > 3 : argparse does it
+        if verbosity == 1 :
+            print "[ Header : {header} ]".format(header=self.header[0:-1])
+        elif verbosity == 2 :
+            print "[ Header : {header} Sequence : {sequence} ]".format(header=self.header[0:-1], sequence=self.sequence[0:-1])    
 
-    def prettyPrint2(self):        
-        print "[ Header : {header} Sequence : {sequence} ]".format(header=self.header[0:-1], sequence=self.sequence[0:-1])
-
-def getListPairwiseAll(listPairwiseFiles):
-    """ Applies the getPairwiseCouple() function to a list of files and return a big list with ALL pairwises couples """
+""" Applies the getPairwiseCouple() function to a list of files and return a big list with ALL pairwises couples 
+    Returns a list of sets (2 items per set) """
+def getListPairwiseAll(listPairwiseFiles):    
     
     # Sub-Function
-    def getPairwiseCouple(pairwiseFile):
-        """ Reads an output file from the 'Pairwise' tool (AdaptSearch suite) and returns its content into a list """
+
+    """ Reads an output file from the 'Pairwise' tool (AdaptSearch suite) and returns its content into a list 
+        Returns a list of sets (2 items per set) """
+    def getPairwiseCouple(pairwiseFile):        
         list_pairwises_2sp = []
         with open(pairwiseFile, "r") as file:
             while (1):  # Ugly !
@@ -82,31 +88,33 @@ def getListPairwiseAll(listPairwiseFiles):
     for file in listPairwiseFiles:
         listPairwises = getPairwiseCouple(file)
         for pairwise in listPairwises:
-            list_pairwises_allsp.append(pairwise)  # all pairwises in the same list
+            list_pairwises_allsp.append(pairwise)  # all pairwises in the same 1D list
     return list_pairwises_allsp
 
-def makeOrthogroups(list_pairwises_allsp, minspec, args):
-    """ Proceeds to create orthogroups by putting together pairwise couples sharing a locus.
-     Iterates over the orthogroups list and tag to 'True' the pairwise couple already gathered in a group to avoid
-     redondancy. Writes each orthogroup in a fasta file"""
-
+""" Proceeds to create orthogroups by putting together pairwise couples sharing a locus.
+    Iterates over the orthogroups list and tag to 'True' the pairwise couple already gathered in a group to avoid
+    redondancy. Writes each orthogroup in a fasta file
+    Returns an integer (a list length) """
+def makeOrthogroups(list_pairwises_allsp, minspec, nbspecs, verbose):
     # Sub-funtions
-    def checkIfTagged(pair):
-        """ Check if a locus/group has already been treated in makeOrthogroups()"""
+
+    """ Check if a locus/group has already been treated in makeOrthogroups()
+        Returns a boolean """
+    def checkIfTagged(pair):        
         tag = True
         for element in pair:        
             if not element.getTag() and tag: # use a list comprehension maybe ?
                 tag = False
         return tag
 
-    def tagGroup(pair):
-        """ True means a locus/group has already been treated in makeOrthogroups()
-         A stronger code would be to implement a method inside the class Locus"""
+    """ True means a locus/group has already been treated in makeOrthogroups()
+        A stronger code would be to implement a method inside the class Locus """
+    def tagGroup(pair):        
         for element in pair:
             element.tagged = True
 
-    def writeOutputFile(orthogroup, number):
-        """ Write an orthogroup in a file """
+    """ Write an orthogroup in a file """
+    def writeOutputFile(orthogroup, number):        
         name = "orthogroup_{}_with_{}_sequences.fasta".format(number, len(orthogroup))
         result = open(name, "w")
         with result:
@@ -120,6 +128,39 @@ def makeOrthogroups(list_pairwises_allsp, minspec, args):
                 else :
                     result.write("%s\n" % locus.getSequence())  # write sequence
         os.system("mv {} outputs/".format(name))
+
+    """ Builds a 2D array for a summary
+        Returns a numpy 2D array """
+    def countings(listOrthogroups, nbcols):
+        #listOrthogroups.sort().reverse()
+        #nblines = len(listOrthogroups[0])
+        nblines = 0    
+        for group in listOrthogroups:
+            if len(group) > nblines:
+                nblines = len(group)
+        matrix = np.array([[0]*nbcols]*nblines)
+        # empty lines are avoided : first line of the frame is the line for minimal number of sequences in a group (>=mini)
+        # for now, this feature diseappear when using numpy arrays and pandas :/
+
+        for group in listOrthogroups:
+            listSpecs = []
+            for loci in group:
+                if loci.getHeader()[1:3] not in listSpecs:
+                    listSpecs.append(loci.getHeader()[1:3])
+            matrix[len(group)-1][len(listSpecs)-1] += 1
+
+        return matrix
+
+    """ numpy 2D array in a nice dataframe 
+        Returns a pandas 2D dataframe """
+    def asFrame(matrix) :
+        index = [0]*len(matrix)
+        colnames = [0]*len(matrix[0])
+        index = [str(i+1)+" seqs" for i in range(len(matrix))]
+        colnames = [str(i+1)+" sps" for i in range(len(matrix[0]))]
+        df = pd.DataFrame(matrix, index=index, columns=colnames)
+        return df # Mettre une selection pour ne renvoyer que les lignes et les colonnes qui somment > 0
+        #return df.loc['4 seqs':'9 seqs'].loc[:,colnames[3:]]
 
     # Function
     list_orthogroups = []
@@ -146,26 +187,40 @@ def makeOrthogroups(list_pairwises_allsp, minspec, args):
                 if len(orthogroup) >= minspec:
                     list_orthogroups.append(orthogroup)                
                     writeOutputFile(orthogroup, i)
+                    # print groups in the log file
+                    if verbose > 0:
+                        print "*** Orthogroup {} with {} sequences ***".format(i, len(orthogroup))
+                        for locus in orthogroup:                            
+                            locus.prettyPrint(verbose)                            
+                        print ""                    
                     i += 1
     
     # print groups in the log file
-    if args.verbose > 0:
+    """
+    if verbose > 0:
         for group in list_orthogroups:
             print "*** Orthogroup with {} sequences ***".format(len(group))
             for locus in group:
-                if args.verbose == 1 :
+                if verbose == 1 :
                     locus.prettyPrint()
-                elif args.verbose == 2 :
+                elif verbose == 2 :
                     locus.prettyPrint2()
             print ""
-    
+    """
+    # print summary table. I could also try to implement a more complex code which build and fill the frame
+    # as the same time as the orthogroups are build, which would avoid to parse several times the groups list
+    frame = countings(list_orthogroups, nbspecs)
+    df = asFrame(frame)
+    print df
+
     return len(list_orthogroups)
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("files", help="Input files separated by commas. Each file contains all the reciprocical best hits between a pair of species")
     parser.add_argument("minspec", help="Only keep Orthogroups with at least this number of species", type=int)
-    parser.add_argument("-v", "--verbose", type=int, choices=[0,1,2], help="Content of orthogroups will be displayed on the screen")
+    parser.add_argument("nbspec", help="The total number of studied species", type=int)
+    parser.add_argument("-v", "--verbose", type=int, choices=[0,1,2], help="Content of orthogroups will be displayed on the screen, with or without the sequences")
     args = parser.parse_args()
 
     print "*** pogs.py ***"
@@ -179,8 +234,8 @@ def main():
     list_Locus = getListPairwiseAll(listPairwiseFiles)
     print "Creating Orthogroups ..."
     print "\n"
-    nb_orthogroups = makeOrthogroups(list_Locus, args.minspec, args) # args must be passed as a parameter ; maybe not the best way to do it ?
-    print "{} orthogroups have been infered from {} pairwise comparisons by RBH".format(nb_orthogroups, len(listPairwiseFiles))
+    nb_orthogroups = makeOrthogroups(list_Locus, args.minspec, args.nbspec, args.verbose)
+    print "\n{} orthogroups have been infered from {} pairwise comparisons by RBH\n".format(nb_orthogroups, len(listPairwiseFiles))
 
 if __name__ == "__main__":
     main()
