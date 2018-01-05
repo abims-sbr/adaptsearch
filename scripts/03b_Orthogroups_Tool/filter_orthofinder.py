@@ -11,7 +11,8 @@ import pandas as pd
 
 ## PART 1 : Make a dictionary of {IDs : sequence}   
 
-""" Build a hash table with gene IDs and gene sequences from fasta made from input files """
+""" Build a hash table with gene IDs and gene sequences from fasta made from input files 
+    Returns a dictionnary """
 def hashSequences(path):
     hashTable = {}
     # Sequences are expected to be on one line    
@@ -32,13 +33,14 @@ def hashSequences(path):
 
 ## PART 2 : Create orthogroups file (one file per orthogroup)
 
-""" Takes a file.txt of orthogroups as parameter and return a list of list of
-    orthogroups where there are at least argv[2] loci; WARNING : sequences names within 
-    the groups must the same as IDs in fasta files from Filter_Assemblies. if not, the 
-    dictionnary will be false. That's is why the script "format_transdecoder_headers is for."""
-def formatAndFilter(orthogroups, mini, nbspecs, hashTable, args):
+""" Takes a file.txt of orthogroups as parameter and keeps the orthogroups where there are at least args.minspec loci
+    WARNING : sequences names within the groups must the same as IDs in fasta files from Filter_Assemblies. if not, the 
+    dictionnary will be false. That's is why the script "format_transdecoder_headers is for.
+    Returns a 2D list (each list being a list of loci) """
+def formatAndFilter(orthogroups, mini, nbspecs, hashTable, verbose, paralogs):
 
-    """ Builds a 2D array for a summary """
+    """ Builds a 2D array for a summary
+        Returns a numpy 2D array """
     def countings(listOrthogroups, nbcols):
         #listOrthogroups.sort().reverse()
         #nblines = len(listOrthogroups[0])
@@ -59,7 +61,8 @@ def formatAndFilter(orthogroups, mini, nbspecs, hashTable, args):
 
         return matrix
 
-    """ numpy 2D array in a nice dataframe """
+    """ numpy 2D array in a nice dataframe 
+        Returns a pandas 2D dataframe """
     def asFrame(matrix) :
         index = [0]*len(matrix)
         colnames = [0]*len(matrix[0])
@@ -70,12 +73,16 @@ def formatAndFilter(orthogroups, mini, nbspecs, hashTable, args):
         #return df.loc['4 seqs':'9 seqs'].loc[:,colnames[3:]]
         
     """ Writes each orthogroup in a fasta file. Retrieves sequences with a hash table """
-    def writeOutputFile(orthogroup, hashTable, i):
+    def writeOutputFile(orthogroup, hashTable, i, naming):
         length = len(orthogroup)
-        name = "orthogroup_{}_{}_loci.fasta".format(i, length)                   
+        name =""
+        if naming: 
+            name="orthogroup_{}_{}_loci_withParalogs.fasta".format(i, length) 
+        else :
+            name = "orthogroup_{}_{}_loci.fasta".format(i, length)                   
         result = open(name, "w")
         with result:
-            for locus in group:                
+            for locus in orthogroup:                
                 result.write("{}\n".format(locus)) # write geneID. ">%s\n" before
                 result.write("{}\n".format(hashTable[locus])) # write sequence
 
@@ -94,17 +101,19 @@ def formatAndFilter(orthogroups, mini, nbspecs, hashTable, args):
                 list_orthogroups.append(group)    
     
     # STEP 2 - Paralogous filtering -----------------------------------------------
-    if args.verbose :
+    if verbose or paralogs:
         list_orthogroups_withpara = []
     list_orthogroups_format = []
 
-    i = 1
-    for group in list_orthogroups:
+    i,j = 1,1
+    for group in list_orthogroups:        
         group = string.split(group, " ") # list of lists
-        group.sort()
-        if args.verbose:
+        group.sort()        
+        if verbose or paralogs:
             if len(group) >= mini:
-                list_orthogroups_withpara.append(group)            
+                list_orthogroups_withpara.append(group)
+                writeOutputFile(group, hashTable, j, True)
+                j += 1       
         new_group = []
         rang=-1
         # Keep only one paralogs per species (1st encounter)
@@ -116,13 +125,13 @@ def formatAndFilter(orthogroups, mini, nbspecs, hashTable, args):
                 new_group.append(loci)
                 rang +=1
 
-        if len(new_group) >= mini: # Drop too small orthogroups
+        if len(new_group) >= mini: # Drop too small orthogroups            
             list_orthogroups_format.append(new_group)
-            writeOutputFile(new_group, hashTable, i)
+            writeOutputFile(new_group, hashTable, i, False)
             i += 1
     
     # STEP 3 - Print summaries ----------------------------------------------------
-    if args.verbose:
+    if verbose:
         print "  Summary before paralogous filtering : \n"
         frame1 = asFrame(countings(list_orthogroups_withpara, nbspecs))
         print frame1
@@ -131,7 +140,7 @@ def formatAndFilter(orthogroups, mini, nbspecs, hashTable, args):
     frame2= asFrame(countings(list_orthogroups_format, nbspecs))    
     print frame2
 
-    return list_orthogroups_format #list_orthogroups_no_para
+    return len(list_orthogroups_format) #list_orthogroups_no_para
 
 ## MAIN
 
@@ -141,6 +150,7 @@ def main():
     parser.add_argument("nbspec", type=int, help="Number of studied species")
     parser.add_argument("minspec", type=int, help="Minimal number of species to keep per group")
     parser.add_argument("-v", "--verbose", action="store_true", help="Add another summary table : countings before paralogous genes filtering")
+    parser.add_argument("-p", "--paralogs", action="store_true", help="Proceeds to write orthogroups also before paralogous filtering")
     args = parser.parse_args()
 
     print "\n-This script works on the 'Orthogroups' file output of Orthofinder to split each orthogroup in a single fasta file."
@@ -154,16 +164,23 @@ def main():
     # Open txt file with orthogroups
     print "  Reading Orthogroups.txt and wrting orthogroups to separated files..."
     print "    (Dropping orthogroups of less than {} loci.)\n".format(args.minspec)
-    list_orthogroups = formatAndFilter(args.files, args.minspec, args.nbspec, hashTable, args) # DEF4
+    list_orthogroups = formatAndFilter(args.files, args.minspec, args.nbspec, hashTable, args.verbose, args.paralogs)
+    print "\n{} filtered orthogroups have been written in separated files".format(list_orthogroups)
 
     # Move output files in a new directory
+    if args.paralogs:
+        os.system("mkdir orthogroups_withParalogs")
+        path=glob.glob("*_withParalogs.fasta")
+        for file in path:
+            os.system("mv {} orthogroups_withParalogs".format(file))
+
     os.system("mkdir filtered_orthogroups")
-    path = glob.glob("orthogroup*")
+    path = glob.glob("*_loci.fasta")
     for file in path:
         os.system("mv {} filtered_orthogroups".format(file))
     
-    print "  \nOrthogroups files are written in the directory 'filtered_orthogroups'"
-    print "  Countings are written in the file 'summary_orthogroups.csv'\n"    
+    print "  \nFiltered orthogroups are written in the directory 'filtered_orthogroups'"
+    print "  \nFull orthogroups files are written in the directory 'orthogroups_withParalogs'\n"
 
 if __name__ == "__main__":
     main()
