@@ -77,9 +77,9 @@ def formatAndFilter(orthogroups, mini, nbspecs, hashTable, verbose, paralogs):
         length = len(orthogroup)
         name =""
         if naming: 
-            name="orthogroup_{}_{}_loci_withParalogs.fasta".format(i, length) 
+            name="orthogroup_{}_{}_sequences_withParalogs.fasta".format(i, length) 
         else :
-            name = "orthogroup_{}_{}_loci.fasta".format(i, length)                   
+            name = "orthogroup_{}_{}_sequences.fasta".format(i, length)                   
         result = open(name, "w")
         with result:
             for locus in orthogroup:                
@@ -175,7 +175,7 @@ def main():
             os.system("mv {} orthogroups_withParalogs".format(file))
 
     os.system("mkdir filtered_orthogroups")
-    path = glob.glob("*_loci.fasta")
+    path = glob.glob("*_sequences.fasta")
     for file in path:
         os.system("mv {} filtered_orthogroups".format(file))
     
@@ -184,3 +184,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
