@@ -1,29 +1,42 @@
 #!/usr/bin/env python
 # coding: utf8
 # September 2017 - Author : Victor Mataigne (Station Biologique de Roscoff - ABiMS)
-# Command line : ./pogsPOO.py <list_of_input_files_separated_by_commas> <minimal number of species per group>
+# Command line : ./pogsPOO.py <list_of_input_files_separated_by_commas> <minimal number of species per group> <total_number_of_studied_species> [-v) [-p]
 
 """
 What it does:
     - pogs.py parses output files from the "pairwise" tool of the AdaptSearch suite and proceeds to gather genes in orthogroups (using transitivity).
-    - A minimal number of species per group can be set.
+    - A minimal number of species per group has to be set.
 
-Errors corrected (need to test a bit more to be sure)
-    - In makeOrthogroups
+BETA VERSION :
+
+Errors corrected / spotted (need to test more to be sure) :
+
+    - In makeOrthogroups()
+
         - ERROR 1
-            - Pour peu qu'une paire soit associee au groupe grace a une paire qui sera parcourue après elle, cette premiere paire n'est pas ajoutee
-            - PAS SUR QUE CA MARCHE dans tous les cas : pb regle en faisant la boucle deux fois de suite        
-        - ERROR 2         
-            - Comportement bugue de intersection : 
-                La longueur de l'intersect est parfois nulle alors qu'on a bien un loci1.getHeader() == loci2.getHeader() à True (j'ai teste chaque paire)
-                On dirait qu'il faut créer une classe Orthogroup qui hérite de set et redéfinir la méthode intersection ...
+
+            - Some groups can be splitted :
+            During the llop, if we have an orthogroup like this :
+                (seq1, seq2, seq3, seq4)
+            And two pairs to analyze like this :
+                (seq5, seq6)
+                (seq4, seq6)
+            Then the the pair (seq5, seq6) won't be added to the orthogroup if it is parsed before the pair (seq4, seq6)
+            
+            - The problem is solved by running the loop a second time, but we need more testing to know if two loops are enought for all cases 
+              or if we have to build a stronger code.
+        
+        - ERROR 2
+            - With one reduced datatest, the 'intersection' native set method did not work when comparing pairs with two identical headers. 
+            - Strangely, the same comparison did not happen with a bigger dataset
 """
 
 import os, argparse
 import numpy as np
 import pandas as pd
 
-""" Definition of a locus : header + sequence + a tag (hidden to the user) """
+""" Definition of a locus : header + sequence + a tag """
 class Locus:    
 
     def __init__(self, header, sequence):
@@ -91,7 +104,7 @@ def getListPairwiseAll(listPairwiseFiles):
     Iterates over the orthogroups list and tag to 'True' the pairwise couple already gathered in a group to avoid
     redondancy. Writes each orthogroup in a fasta file
     Returns an integer (a list length) """
-def makeOrthogroups(list_pairwises_allsp, minspec, nbspecs, verbose, paralogs):
+def makeOrthogroups(list_pairwises_allsp, minspec, nb_rbh, verbose, paralogs):
     # Sub-funtions
 
     """ Check if a locus/group has already been treated in makeOrthogroups()
@@ -134,14 +147,32 @@ def makeOrthogroups(list_pairwises_allsp, minspec, nbspecs, verbose, paralogs):
 
     """ Builds a 2D array for a summary
         Returns a numpy 2D array """
-    def countings(listOrthogroups, nbcols):
+    def countings(listOrthogroups, nb_rbh):
+
+        """ Compute the number of species from the number of RBH comparisons
+            Returns an integer """
+        def compute_nbspec(nb_rbh):
+    
+            def sum_factorielle(x):
+                n = 1
+                s = 0
+                while n <= x:
+                    s += n
+                    n += 1
+                return s
+            
+            x = 2    
+            nb_specs = 0
+            while x*x - sum_factorielle(x) < nb_rbh:
+                x += 1 
+            return x
         #listOrthogroups.sort().reverse()
         #nblines = len(listOrthogroups[0])
         nblines = 0    
         for group in listOrthogroups:
             if len(group) > nblines:
                 nblines = len(group)
-        matrix = np.array([[0]*nbcols]*nblines)
+        matrix = np.array([[0]*compute_nbspec(nb_rbh)]*nblines)
         # empty lines are avoided : first line of the frame is the line for minimal number of sequences in a group (>=mini)
         # for now, this feature diseappear when using numpy arrays and pandas :/
 
@@ -166,7 +197,7 @@ def makeOrthogroups(list_pairwises_allsp, minspec, nbspecs, verbose, paralogs):
         #return df.loc['4 seqs':'9 seqs'].loc[:,colnames[3:]]
 
     # Function
-    list_orthogroups = []
+    list_orthogroups = [] # That will be the orthogroup list with paralogs
     i = 1  # i is for the number of the orthogroup in its output filename
     for ortho_pair1 in list_pairwises_allsp[0:-1]:
         
@@ -186,15 +217,17 @@ def makeOrthogroups(list_pairwises_allsp, minspec, nbspecs, verbose, paralogs):
                     tagGroup(ortho_pair2)
 
             if len(orthogroup) > 2:
-                tagGroup(ortho_pair1) # potentially useless ?
+                tagGroup(ortho_pair1) # potentially useless ?                
                 if len(orthogroup) >= minspec:
                     list_orthogroups.append(orthogroup)
                     if paralogs:
+                        # Write orthogroup txt file with paralogs
                         writeOutputFile(orthogroup, i, True)
                     i += 1                    
 
     # Paralogs filtering (keeps the first encountered)
     # Quite messy ...
+    # I could try to implement the paralogs filtering in the first loop to reduce computation
     list_orthogroups_format = []
     j = 1
     for nofilter_group in list_orthogroups:
@@ -215,12 +248,12 @@ def makeOrthogroups(list_pairwises_allsp, minspec, nbspecs, verbose, paralogs):
     # print summary table. I could also try to implement a more complex code which build and fill the frame
     # as the same time as the orthogroups are build, which would avoid to parse several times the groups list
     if verbose :
-        frame = countings(list_orthogroups, nbspecs)
+        frame = countings(list_orthogroups, nb_rbh)
         df = asFrame(frame)
         print "  Summary before paralogous filtering : \n"
         print df, "\n"
 
-    frame2 = countings(list_orthogroups_format, nbspecs)    
+    frame2 = countings(list_orthogroups_format, nb_rbh)    
     df2 = asFrame(frame2)
     print "  Summary after paralogous filtering : \n"
     print df2
@@ -232,8 +265,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("files", help="Input files separated by commas. Each file contains all the reciprocical best hits between a pair of species")
     parser.add_argument("minspec", help="Only keep Orthogroups with at least this number of species", type=int)
-    parser.add_argument("nbspec", help="The total number of studied species", type=int)
-    parser.add_argument("-v", "--verbose", type=int, choices=[0,1,2,3], help="Content of orthogroups will be displayed on the screen, with or without the sequences")
+    parser.add_argument("-v", "--verbose", action="store_true", help="A supplemental summary table of orthogroups before paralogs filtering will be returned")
     parser.add_argument("-p", "--paralogs", action="store_true", help="Proceeds to write orthogroups also before paralogous filtering")
     args = parser.parse_args()
 
@@ -249,9 +281,8 @@ def main():
     list_Locus = getListPairwiseAll(listPairwiseFiles)
     print "Creating Orthogroups ..."
     print "\n"
-    nb_orthogroups = makeOrthogroups(list_Locus, args.minspec, args.nbspec, args.verbose, args.paralogs)
+    nb_orthogroups = makeOrthogroups(list_Locus, args.minspec, len(listPairwiseFiles), args.verbose, args.paralogs)
     print "\n{} orthogroups have been infered from {} pairwise comparisons by RBH\n".format(nb_orthogroups, len(listPairwiseFiles))
 
 if __name__ == "__main__":
     main()
-
