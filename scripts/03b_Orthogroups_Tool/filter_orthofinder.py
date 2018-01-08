@@ -1,9 +1,8 @@
 #!/usr/bin/env python
-# Commandline : ./filter_orthofinder.py <Orthogroups.txt> <Nb_of_studied_species> <minimal_nb_species_per_group>
+# Commandline : ./filter_orthofinder.py <Orthogroups.txt> <Nb_of_studied_species> <minimal_nb_species_per_group> [-v] [-p]
 
 ## This script takes an output file of OrthoFinder (Orthogroups.txt), which contains a set of orthogroups,
 ## and rewrite it to split each orthogroup into a single fasta file.
-## Beta version
 
 import os, string, glob, argparse, csv
 import numpy as np
@@ -15,13 +14,13 @@ import pandas as pd
     Returns a dictionnary """
 def hashSequences(path):
     hashTable = {}
-    # Sequences are expected to be on one line    
+    # WARNING : sequences are expected to be on one line. If not, biopython can do it
     for file in path:        
         originFile = open(file, "r")
         gene = ""
         sequence = ""
         with originFile:
-            while (1): # Ugly code       
+            while (1): # Not the best way to do     
                 gene = originFile.readline()
                 if not gene:
                     break
@@ -184,4 +183,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

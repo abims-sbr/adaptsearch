@@ -1,0 +1,33 @@
+
+-This script works on the 'Orthogroups' file output of Orthofinder to split each orthogroup in a single fasta file.
+-It also gets rid of orthogroups with less sequences than the number specified by the user.
+  Building hashTable IDs/sequences ...
+
+  Reading Orthogroups.txt and wrting orthogroups to separated files...
+    (Dropping orthogroups of less than 2 loci.)
+
+  Summary before paralogous filtering : 
+
+        1 sps  2 sps  3 sps  4 sps
+1 seqs      0      0      0      0
+2 seqs      0      1      0      0
+3 seqs      0      1      3      0
+4 seqs      0      0      0      0
+5 seqs      0      0      0      1
+6 seqs      0      0      0      0
+7 seqs      0      0      0      0
+8 seqs      0      0      1      0
+  Summary after paralogous filtering : 
+
+        1 sps  2 sps  3 sps  4 sps
+1 seqs      0      0      0      0
+2 seqs      0      2      0      0
+3 seqs      0      0      4      0
+4 seqs      0      0      0      1
+
+7 filtered orthogroups have been written in separated files
+  
+Filtered orthogroups are written in the directory 'filtered_orthogroups'
+  
+Full orthogroups files are written in the directory 'orthogroups_withParalogs'
+
