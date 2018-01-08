@@ -149,11 +149,9 @@ def makeOrthogroups(list_pairwises_allsp, minspec, nb_rbh, verbose, paralogs):
         Returns a numpy 2D array """
     def countings(listOrthogroups, nb_rbh):
 
-        """ Compute the number of species from the number of RBH comparisons
-            Returns an integer """
         def compute_nbspec(nb_rbh):
     
-            def sum_factorielle(x):
+            def factorielle(x):
                 n = 1
                 s = 0
                 while n <= x:
@@ -163,7 +161,7 @@ def makeOrthogroups(list_pairwises_allsp, minspec, nb_rbh, verbose, paralogs):
             
             x = 2    
             nb_specs = 0
-            while x*x - sum_factorielle(x) < nb_rbh:
+            while x*x - factorielle(x) < nb_rbh:
                 x += 1 
             return x
         #listOrthogroups.sort().reverse()
@@ -264,7 +262,7 @@ def makeOrthogroups(list_pairwises_allsp, minspec, nb_rbh, verbose, paralogs):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("files", help="Input files separated by commas. Each file contains all the reciprocical best hits between a pair of species")
-    parser.add_argument("minspec", help="Only keep Orthogroups with at least this number of species", type=int)
+    parser.add_argument("minspec", help="Only keep Orthogroups with at least this number of species", type=int)    
     parser.add_argument("-v", "--verbose", action="store_true", help="A supplemental summary table of orthogroups before paralogs filtering will be returned")
     parser.add_argument("-p", "--paralogs", action="store_true", help="Proceeds to write orthogroups also before paralogous filtering")
     args = parser.parse_args()
