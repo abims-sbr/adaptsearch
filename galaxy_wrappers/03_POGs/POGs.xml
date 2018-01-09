@@ -40,8 +40,8 @@
  	<inputs>
         <param name="inputs_from_paiwise_prot" type="data" format="fasta" multiple="true" label="Input files from Pairwise Prot" />
 		<param name="minspec" type="integer" value="3" label="Drop orthogroups with less than n species" />	
-        <param name="verbose" type="boolean" checked="True" label="Verbose" help="Display a summary table of orthogroups before paralogs filtering"/>
-        <param name="paralogs" type="boolean" checked="False" label="Paralogs" help="Return also orthogroups without paralogs filtering"/>
+        <param name="verbose" type="boolean" checked="True" truevalue="T" falsevalue="F" label="Verbose" help="Display a summary table of orthogroups before paralogs filtering"/>
+        <param name="paralogs" type="boolean" checked="False" truevalue="T" falsevalue="F" label="Paralogs" help="Return also orthogroups without paralogs filtering"/>
 	</inputs>
 
 	<outputs>
@@ -71,19 +71,19 @@
                 <element name="orthogroup_6_with_5_sequences" value="outputs/orthogroup_6_with_5_sequences.fasta" />
                 <element name="orthogroup_7_with_3_sequences" value="outputs/orthogroup_7_with_3_sequences.fasta" />
                 <element name="orthogroup_8_with_4_sequences" value="outputs/orthogroup_8_with_4_sequences.fasta" />
-                <element name="orthogroup_9_with_4_sequences" value="outputs/orthogroup_9_with_4_sequences.fasta" />
+                <element name="orthogroup_9_with_4_sequences" value="outputs/orthogroup_9_with_5_sequences.fasta" />
                 <element name="orthogroup_10_with_3_sequences" value="outputs/orthogroup_10_with_3_sequences.fasta" />
             </output_collection>
             <output_collection name="outputPara" type="list">
-                <element name="orthogroup_1_with_17_sequences" value="outputs_withParalogs/orthogroup_1_with_17_sequences.fasta" />
-                <element name="orthogroup_2_with_14_sequences" value="outputs_withParalogs/orthogroup_2_with_14_sequences.fasta" />
+                <element name="orthogroup_1_with_17_sequences" value="outputs_withParalogs/orthogroup_1_with_18_sequences.fasta" />
+                <element name="orthogroup_2_with_14_sequences" value="outputs_withParalogs/orthogroup_2_with_21_sequences.fasta" />
                 <element name="orthogroup_3_with_6_sequences" value="outputs_withParalogs/orthogroup_3_with_6_sequences.fasta" />
-                <element name="orthogroup_4_with_13_sequences" value="outputs_withParalogs/orthogroup_4_with_13_sequences.fasta" />
+                <element name="orthogroup_4_with_13_sequences" value="outputs_withParalogs/orthogroup_4_with_14_sequences.fasta" />
                 <element name="orthogroup_5_with_3_sequences" value="outputs_withParalogs/orthogroup_5_with_3_sequences.fasta" />
-                <element name="orthogroup_6_with_3_sequences" value="outputs_withParalogs/orthogroup_6_with_3_sequences.fasta" />
+                <element name="orthogroup_6_with_3_sequences" value="outputs_withParalogs/orthogroup_6_with_6_sequences.fasta" />
                 <element name="orthogroup_7_with_3_sequences" value="outputs_withParalogs/orthogroup_7_with_3_sequences.fasta" />
                 <element name="orthogroup_8_with_6_sequences" value="outputs_withParalogs/orthogroup_8_with_6_sequences.fasta" />
-                <element name="orthogroup_9_with_6_sequences" value="outputs_withParalogs/orthogroup_9_with_6_sequences.fasta" />
+                <element name="orthogroup_9_with_6_sequences" value="outputs_withParalogs/orthogroup_9_with_9_sequences.fasta" />
                 <element name="orthogroup_10_with_4_sequences" value="outputs_withParalogs/orthogroup_10_with_4_sequences.fasta" />
             </output_collection>
 		</test>
