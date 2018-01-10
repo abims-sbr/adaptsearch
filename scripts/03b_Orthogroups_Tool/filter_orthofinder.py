@@ -8,7 +8,7 @@ import os, string, glob, argparse, csv
 import numpy as np
 import pandas as pd
 
-## PART 1 : Make a dictionary of {IDs : sequence}   
+## PART 1 : Make a dictionary of {IDs : sequence}
 
 """ Build a hash table with gene IDs and gene sequences from fasta made from input files 
     Returns a dictionnary """
@@ -20,14 +20,14 @@ def hashSequences(path):
         gene = ""
         sequence = ""
         with originFile:
-            while (1): # Not the best way to do     
+            while (1): # Not the best way to do
                 gene = originFile.readline()
                 if not gene:
                     break
-                gene = gene[:-1]            
+                gene = gene[:-1]
                 sequence = originFile.readline()
-                sequence = sequence[:-1]           
-                hashTable[gene] = sequence      
+                sequence = sequence[:-1]
+                hashTable[gene] = sequence
     return hashTable
 
 ## PART 2 : Create orthogroups file (one file per orthogroup)
@@ -78,10 +78,10 @@ def formatAndFilter(orthogroups, mini, nbspecs, hashTable, verbose, paralogs):
         if naming: 
             name="orthogroup_{}_{}_sequences_withParalogs.fasta".format(i, length) 
         else :
-            name = "orthogroup_{}_{}_sequences.fasta".format(i, length)                   
+            name = "orthogroup_{}_{}_sequences.fasta".format(i, length)
         result = open(name, "w")
         with result:
-            for locus in orthogroup:                
+            for locus in orthogroup:
                 result.write("{}\n".format(locus)) # write geneID. ">%s\n" before
                 result.write("{}\n".format(hashTable[locus])) # write sequence
 
@@ -105,7 +105,7 @@ def formatAndFilter(orthogroups, mini, nbspecs, hashTable, verbose, paralogs):
     list_orthogroups_format = []
 
     i,j = 1,1
-    for group in list_orthogroups:        
+    for group in list_orthogroups:
         group = string.split(group, " ") # list of lists
         group.sort()        
         if verbose or paralogs:
@@ -124,7 +124,7 @@ def formatAndFilter(orthogroups, mini, nbspecs, hashTable, verbose, paralogs):
                 new_group.append(loci)
                 rang +=1
 
-        if len(new_group) >= mini: # Drop too small orthogroups            
+        if len(new_group) >= mini: # Drop too small orthogroups
             list_orthogroups_format.append(new_group)
             writeOutputFile(new_group, hashTable, i, False)
             i += 1
@@ -136,7 +136,7 @@ def formatAndFilter(orthogroups, mini, nbspecs, hashTable, verbose, paralogs):
         print frame1
         #print "  Summary before paralogous filtering : \n",countings(list_orthogroups_withpara, nbspecs),"\n"
     print "  Summary after paralogous filtering : \n"
-    frame2= asFrame(countings(list_orthogroups_format, nbspecs))    
+    frame2= asFrame(countings(list_orthogroups_format, nbspecs))
     print frame2
 
     return len(list_orthogroups_format) #list_orthogroups_no_para
