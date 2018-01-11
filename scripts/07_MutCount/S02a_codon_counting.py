@@ -58,9 +58,9 @@ def substrcountings(table,pvalues):
   numbers=[]
   stats=['pvalues']
   for f in table:
-    names.append('	%s' % f)
-    numbers.append('	%f' % table[f])
-    stats.append('	%f' % pvalues[f])
+    names.append(',%s' % f)
+    numbers.append(',%f' % table[f])
+    stats.append(',%f' % pvalues[f])
   names.append('\n')
   numbers.append('\n')
   stats.append('\n')
@@ -76,9 +76,9 @@ def substrbiases(table,pvalues):
   stats=['pvalues']
   for f in table:
     for g in table[f]:
-      names.append('	%s>%s' % (g,f))
-      numbers.append('	%f' % table[f][g])
-      stats.append('	%f' % pvalues[f][g])
+      names.append(',%s>%s' % (g,f))
+      numbers.append(',%f' % table[f][g])
+      stats.append(',%f' % pvalues[f][g])
   names.append('\n')
   numbers.append('\n')
   stats.append('\n')  
@@ -92,7 +92,7 @@ def strcountings(codons, aa, classif,codonspvalues,aapvalues,classifpvalues,GC3,
   subaa=subcodons+['\noccurence of amino_acids\n']+substrcountings(aa,aapvalues)
   subclassif=subaa+['\noccurence of amino_acid types\n']+substrcountings(classif,classifpvalues)
 
-  string=subclassif+[('\nGC3	GC12	IVYWREL	EK/QH	PAYRE/SDGM	Purine_load	CvP\n%f	%f	%f	%f	%f	%f	%f\n' % (GC3, GC12, IVYWREL, EKQH, PAYRESDGM, purineload, CvP))]
+  string=subclassif+[('\nGC3	GC12	IVYWREL	EK/QH	PAYRE/SDGM	Purine_load	CvP\n%f,%f,%f,%f,%f,%f,%f\n' % (GC3, GC12, IVYWREL, EKQH, PAYRESDGM, purineload, CvP))]
 
   return string
 
@@ -439,10 +439,10 @@ aatypes_counts = open("aatypes_counts.csv", "w")
 gc_counts = open("gc_counts.csv", "w")
 
 # ou bien utiliser le reversecode plus bas
-column_index_codons = "Species\ttat\ttgt\ttct\tttt\ttgc\ttgg\ttac\tttc\ttcg\ttta\tttg\ttcc\ttca\tgca\tgta\tgcc\tgtc\tgcg\tgtg\tcaa\tgtt\tgct\tacc\tggt\tcga\tcgc\tgat\taag\tcgg\tact\tggg\tgga\tggc\tgag\taaa\tgac\tcgt\tgaa\tctt\tatg\taca\tacg\tatc\taac\tata\tagg\tcct\tagc\taga\tcat\taat\tatt\tctg\tcta\tctc\tcac\tccg\tagt\tcag\tcca\tccc\n"
-column_index_aa = "Species\tcys\tasn\this\tile\tser\tgln\tlys\tmet\tpro\tthr\tphe\tala\tgly\tval\tleu\tasp\targ\ttrp\tglu\ttyr\n"
-column_index_aatypes = "Species\taromatics\tpolar\tunpolar\tcharged\n"
-column_index_gc = "Species\tGC3\tGC12\tIVYWREL\tEKQH\tPAYRESDGM\tpurineload\tCvP\n"
+column_index_codons = "Species,tat,tgt,tct,ttt,tgc,tgg,tac,ttc,tcg,tta,ttg,tcc,tca,gca,gta,gcc,gtc,gcg,gtg,caa,gtt,gct,acc,ggt,cga,cgc,gat,aag,cgg,act,ggg,gga,ggc,gag,aaa,gac,cgt,gaa,ctt,atg,aca,acg,atc,aac,ata,agg,cct,agc,aga,cat,aat,att,ctg,cta,ctc,cac,ccg,agt,cag,cca,ccc\n"
+column_index_aa = "Species,cys,asn,his,ile,ser,gln,lys,met,pro,thr,phe,ala,gly,val,leu,asp,arg,trp,glu,tyr\n"
+column_index_aatypes = "Species,aromatics,polar,unpolar,charged\n"
+column_index_gc = "Species,GC3,GC12,IVYWREL,EKQH,PAYRESDGM,purineload,CvP\n"
 
 codons_counts.write(column_index_codons)
 aa_counts.write(column_index_aa)
@@ -452,8 +452,8 @@ gc_counts.write(column_index_gc)
 aa_transitions = open("aa_transitions.csv", "w")
 aatypes_transitions = open("aatypes_transitions.csv", "w")
 
-column_index_aa_transitions = "Species\tcys>cys\tasn>cys\this>cys\tile>cys\tser>cys\tgln>cys\tlys>cys\tmet>cys\tpro>cys\tthr>cys\tphe>cys\tala>cys\tgly>cys\tval>cys\tleu>cys\tasp>cys\targ>cys\ttrp>cys\tglu>cys\ttyr>cys\tcys>asn\tasn>asn\this>asn\tile>asn\tser>asn\tgln>asn\tlys>asn\tmet>asn\tpro>asn\tthr>asn\tphe>asn\tala>asn\tgly>asn\tval>asn\tleu>asn\tasp>asn\targ>asn\ttrp>asn\tglu>asn\ttyr>asn\tcys>his\tasn>his\this>his\tile>his\tser>his\tgln>his\tlys>his\tmet>his\tpro>his\tthr>his\tphe>his\tala>his\tgly>his\tval>his\tleu>his\tasp>his\targ>his\ttrp>his\tglu>his\ttyr>his\tcys>ile\tasn>ile\this>ile\tile>ile\tser>ile\tgln>ile\tlys>ile\tmet>ile\tpro>ile\tthr>ile\tphe>ile\tala>ile\tgly>ile\tval>ile\tleu>ile\tasp>ile\targ>ile\ttrp>ile\tglu>ile\ttyr>ile\tcys>ser\tasn>ser\this>ser\tile>ser\tser>ser\tgln>ser\tlys>ser\tmet>ser\tpro>ser\tthr>ser\tphe>ser\tala>ser\tgly>ser\tval>ser\tleu>ser\tasp>ser\targ>ser\ttrp>ser\tglu>ser\ttyr>ser\tcys>gln\tasn>gln\this>gln\tile>gln\tser>gln\tgln>gln\tlys>gln\tmet>gln\tpro>gln\tthr>gln\tphe>gln\tala>gln\tgly>gln\tval>gln\tleu>gln\tasp>gln\targ>gln\ttrp>gln\tglu>gln\ttyr>gln\tcys>lys\tasn>lys\this>lys\tile>lys\tser>lys\tgln>lys\tlys>lys\tmet>lys\tpro>lys\tthr>lys\tphe>lys\tala>lys\tgly>lys\tval>lys\tleu>lys\tasp>lys\targ>lys\ttrp>lys\tglu>lys\ttyr>lys\tcys>met\tasn>met\this>met\tile>met\tser>met\tgln>met\tlys>met\tmet>met\tpro>met\tthr>met\tphe>met\tala>met\tgly>met\tval>met\tleu>met\tasp>met\targ>met\ttrp>met\tglu>met\ttyr>met\tcys>pro\tasn>pro\this>pro\tile>pro\tser>pro\tgln>pro\tlys>pro\tmet>pro\tpro>pro\tthr>pro\tphe>pro\tala>pro\tgly>pro\tval>pro\tleu>pro\tasp>pro\targ>pro\ttrp>pro\tglu>pro\ttyr>pro\tcys>thr\tasn>thr\this>thr\tile>thr\tser>thr\tgln>thr\tlys>thr\tmet>thr\tpro>thr\tthr>thr\tphe>thr\tala>thr\tgly>thr\tval>thr\tleu>thr\tasp>thr\targ>thr\ttrp>thr\tglu>thr\ttyr>thr\tcys>phe\tasn>phe\this>phe\tile>phe\tser>phe\tgln>phe\tlys>phe\tmet>phe\tpro>phe\tthr>phe\tphe>phe\tala>phe\tgly>phe\tval>phe\tleu>phe\tasp>phe\targ>phe\ttrp>phe\tglu>phe\ttyr>phe\tcys>ala\tasn>ala\this>ala\tile>ala\tser>ala\tgln>ala\tlys>ala\tmet>ala\tpro>ala\tthr>ala\tphe>ala\tala>ala\tgly>ala\tval>ala\tleu>ala\tasp>ala\targ>ala\ttrp>ala\tglu>ala\ttyr>ala\tcys>gly\tasn>gly\this>gly\tile>gly\tser>gly\tgln>gly\tlys>gly\tmet>gly\tpro>gly\tthr>gly\tphe>gly\tala>gly\tgly>gly\tval>gly\tleu>gly\tasp>gly\targ>gly\ttrp>gly\tglu>gly\ttyr>gly\tcys>val\tasn>val\this>val\tile>val\tser>val\tgln>val\tlys>val\tmet>val\tpro>val\tthr>val\tphe>val\tala>val\tgly>val\tval>val\tleu>val\tasp>val\targ>val\ttrp>val\tglu>val\ttyr>val\tcys>leu\tasn>leu\this>leu\tile>leu\tser>leu\tgln>leu\tlys>leu\tmet>leu\tpro>leu\tthr>leu\tphe>leu\tala>leu\tgly>leu\tval>leu\tleu>leu\tasp>leu\targ>leu\ttrp>leu\tglu>leu\ttyr>leu\tcys>asp\tasn>asp\this>asp\tile>asp\tser>asp\tgln>asp\tlys>asp\tmet>asp\tpro>asp\tthr>asp\tphe>asp\tala>asp\tgly>asp\tval>asp\tleu>asp\tasp>asp\targ>asp\ttrp>asp\tglu>asp\ttyr>asp\tcys>arg\tasn>arg\this>arg\tile>arg\tser>arg\tgln>arg\tlys>arg\tmet>arg\tpro>arg\tthr>arg\tphe>arg\tala>arg\tgly>arg\tval>arg\tleu>arg\tasp>arg\targ>arg\ttrp>arg\tglu>arg\ttyr>arg\tcys>trp\tasn>trp\this>trp\tile>trp\tser>trp\tgln>trp\tlys>trp\tmet>trp\tpro>trp\tthr>trp\tphe>trp\tala>trp\tgly>trp\tval>trp\tleu>trp\tasp>trp\targ>trp\ttrp>trp\tglu>trp\ttyr>trp\tcys>glu\tasn>glu\this>glu\tile>glu\tser>glu\tgln>glu\tlys>glu\tmet>glu\tpro>glu\tthr>glu\tphe>glu\tala>glu\tgly>glu\tval>glu\tleu>glu\tasp>glu\targ>glu\ttrp>glu\tglu>glu\ttyr>glu\tcys>tyr\tasn>tyr\this>tyr\tile>tyr\tser>tyr\tgln>tyr\tlys>tyr\tmet>tyr\tpro>tyr\tthr>tyr\tphe>tyr\tala>tyr\tgly>tyr\tval>tyr\tleu>tyr\tasp>tyr\targ>tyr\ttrp>tyr\tglu>tyr\ttyr>tyr\n"
-column_index_aatypes_transitions = "Species\taromatics>aromatics\tpolar>aromatics\tunpolar>aromatics\tcharged>aromatics\taromatics>polar\tpolar>polar\tunpolar>polar\tcharged>polar\taromatics>unpolar\tpolar>unpolar\tunpolar>unpolar\tcharged>unpolar\taromatics>charged\tpolar>charged\tunpolar>charged\tcharged>charged\n"
+column_index_aa_transitions = "Species,cys>cys,asn>cys,his>cys,ile>cys,ser>cys,gln>cys,lys>cys,met>cys,pro>cys,thr>cys,phe>cys,ala>cys,gly>cys,val>cys,leu>cys,asp>cys,arg>cys,trp>cys,glu>cys,tyr>cys,cys>asn,asn>asn,his>asn,ile>asn,ser>asn,gln>asn,lys>asn,met>asn,pro>asn,thr>asn,phe>asn,ala>asn,gly>asn,val>asn,leu>asn,asp>asn,arg>asn,trp>asn,glu>asn,tyr>asn,cys>his,asn>his,his>his,ile>his,ser>his,gln>his,lys>his,met>his,pro>his,thr>his,phe>his,ala>his,gly>his,val>his,leu>his,asp>his,arg>his,trp>his,glu>his,tyr>his,cys>ile,asn>ile,his>ile,ile>ile,ser>ile,gln>ile,lys>ile,met>ile,pro>ile,thr>ile,phe>ile,ala>ile,gly>ile,val>ile,leu>ile,asp>ile,arg>ile,trp>ile,glu>ile,tyr>ile,cys>ser,asn>ser,his>ser,ile>ser,ser>ser,gln>ser,lys>ser,met>ser,pro>ser,thr>ser,phe>ser,ala>ser,gly>ser,val>ser,leu>ser,asp>ser,arg>ser,trp>ser,glu>ser,tyr>ser,cys>gln,asn>gln,his>gln,ile>gln,ser>gln,gln>gln,lys>gln,met>gln,pro>gln,thr>gln,phe>gln,ala>gln,gly>gln,val>gln,leu>gln,asp>gln,arg>gln,trp>gln,glu>gln,tyr>gln,cys>lys,asn>lys,his>lys,ile>lys,ser>lys,gln>lys,lys>lys,met>lys,pro>lys,thr>lys,phe>lys,ala>lys,gly>lys,val>lys,leu>lys,asp>lys,arg>lys,trp>lys,glu>lys,tyr>lys,cys>met,asn>met,his>met,ile>met,ser>met,gln>met,lys>met,met>met,pro>met,thr>met,phe>met,ala>met,gly>met,val>met,leu>met,asp>met,arg>met,trp>met,glu>met,tyr>met,cys>pro,asn>pro,his>pro,ile>pro,ser>pro,gln>pro,lys>pro,met>pro,pro>pro,thr>pro,phe>pro,ala>pro,gly>pro,val>pro,leu>pro,asp>pro,arg>pro,trp>pro,glu>pro,tyr>pro,cys>thr,asn>thr,his>thr,ile>thr,ser>thr,gln>thr,lys>thr,met>thr,pro>thr,thr>thr,phe>thr,ala>thr,gly>thr,val>thr,leu>thr,asp>thr,arg>thr,trp>thr,glu>thr,tyr>thr,cys>phe,asn>phe,his>phe,ile>phe,ser>phe,gln>phe,lys>phe,met>phe,pro>phe,thr>phe,phe>phe,ala>phe,gly>phe,val>phe,leu>phe,asp>phe,arg>phe,trp>phe,glu>phe,tyr>phe,cys>ala,asn>ala,his>ala,ile>ala,ser>ala,gln>ala,lys>ala,met>ala,pro>ala,thr>ala,phe>ala,ala>ala,gly>ala,val>ala,leu>ala,asp>ala,arg>ala,trp>ala,glu>ala,tyr>ala,cys>gly,asn>gly,his>gly,ile>gly,ser>gly,gln>gly,lys>gly,met>gly,pro>gly,thr>gly,phe>gly,ala>gly,gly>gly,val>gly,leu>gly,asp>gly,arg>gly,trp>gly,glu>gly,tyr>gly,cys>val,asn>val,his>val,ile>val,ser>val,gln>val,lys>val,met>val,pro>val,thr>val,phe>val,ala>val,gly>val,val>val,leu>val,asp>val,arg>val,trp>val,glu>val,tyr>val,cys>leu,asn>leu,his>leu,ile>leu,ser>leu,gln>leu,lys>leu,met>leu,pro>leu,thr>leu,phe>leu,ala>leu,gly>leu,val>leu,leu>leu,asp>leu,arg>leu,trp>leu,glu>leu,tyr>leu,cys>asp,asn>asp,his>asp,ile>asp,ser>asp,gln>asp,lys>asp,met>asp,pro>asp,thr>asp,phe>asp,ala>asp,gly>asp,val>asp,leu>asp,asp>asp,arg>asp,trp>asp,glu>asp,tyr>asp,cys>arg,asn>arg,his>arg,ile>arg,ser>arg,gln>arg,lys>arg,met>arg,pro>arg,thr>arg,phe>arg,ala>arg,gly>arg,val>arg,leu>arg,asp>arg,arg>arg,trp>arg,glu>arg,tyr>arg,cys>trp,asn>trp,his>trp,ile>trp,ser>trp,gln>trp,lys>trp,met>trp,pro>trp,thr>trp,phe>trp,ala>trp,gly>trp,val>trp,leu>trp,asp>trp,arg>trp,trp>trp,glu>trp,tyr>trp,cys>glu,asn>glu,his>glu,ile>glu,ser>glu,gln>glu,lys>glu,met>glu,pro>glu,thr>glu,phe>glu,ala>glu,gly>glu,val>glu,leu>glu,asp>glu,arg>glu,trp>glu,glu>glu,tyr>glu,cys>tyr,asn>tyr,his>tyr,ile>tyr,ser>tyr,gln>tyr,lys>tyr,met>tyr,pro>tyr,thr>tyr,phe>tyr,ala>tyr,gly>tyr,val>tyr,leu>tyr,asp>tyr,arg>tyr,trp>tyr,glu>tyr,tyr>tyr\n"
+column_index_aatypes_transitions = "Species,aromatics>aromatics,polar>aromatics,unpolar>aromatics,charged>aromatics,aromatics>polar,polar>polar,unpolar>polar,charged>polar,aromatics>unpolar,polar>unpolar,unpolar>unpolar,charged>unpolar,aromatics>charged,polar>charged,unpolar>charged,charged>charged\n"
 
 aa_transitions.write(column_index_aa_transitions)
 aatypes_transitions.write(column_index_aatypes_transitions)
@@ -564,45 +564,44 @@ for p in pairlist: #pairs analysis
     ## Writing countings into separated output files ##
 
     codons_counts.write(p[0]) # Species name
-    codons_counts.write("\t") # next cell
+    codons_counts.write(",") # next cell
     for value in codonscount.values():
-      codons_counts.write(str(value) + "\t") # write codons_counts line for the species
-    codons_counts.write("\t\n") # next line
+      codons_counts.write(str(value) + ",") # write codons_counts line for the species
+    codons_counts.write("\n") # next line
 
     codons_counts.write(p[0])
-    codons_counts.write("_pvalue\t") # Same species, but line for computed pvalues
+    codons_counts.write("_pvalue,") # Same species, but line for computed pvalues
     for value in codonscountpvalue.values():
-      codons_counts.write(str(value) + "\t") # write pvalues line for the species
-    codons_counts.write("\t\n")
+      codons_counts.write(str(value) + ",") # write pvalues line for the species
+    codons_counts.write("\n")
 
     aa_counts.write(p[0]) # Same method as above
-    aa_counts.write("\t")
+    aa_counts.write(",")
     for value in aacount.values():
-      aa_counts.write(str(value) + "\t")
-    aa_counts.write("\t\n")
+      aa_counts.write(str(value) + ",")
+    aa_counts.write("\n")
 
     aa_counts.write(p[0])
-    aa_counts.write("_pvalue\t")
+    aa_counts.write("_pvalue,")
     for value in aacountpvalue.values():
-      aa_counts.write(str(value) + "\t")
-    aa_counts.write("\t\n")
+      aa_counts.write(str(value) + ",")
+    aa_counts.write("\n")
 
     aatypes_counts.write(p[0])
-    aatypes_counts.write("\t")
+    aatypes_counts.write(",")
     for value in aaclassifcount.values():
-      aatypes_counts.write(str(value) + "\t")
-    aatypes_counts.write("\t\n")
+      aatypes_counts.write(str(value) + ",")
+    aatypes_counts.write("\n")
 
     aatypes_counts.write(p[0])
-    aatypes_counts.write("_pvalue\t")
+    aatypes_counts.write("_pvalue,")
     for value in aaclassifcountpvalue.values():
-      aatypes_counts.write(str(value) + "\t")
-    aatypes_counts.write("\t\n")
+      aatypes_counts.write(str(value) + ",")
+    aatypes_counts.write("\n")
 
     gc_counts.write(p[0])
-    gc_counts.write("\t")
-    gc_counts.write(str(GC3)+"\t"+str(GC12)+"\t"+str(IVYWREL)+"\t"+str(EKQH)+"\t"+str(PAYRESDGM)+"\t"+str(purineload)+"\t"+str(CvP))
-    gc_counts.write("\t\n")
+    gc_counts.write(",")
+    gc_counts.write(str(GC3)+","+str(GC12)+","+str(IVYWREL)+","+str(EKQH)+","+str(PAYRESDGM)+","+str(purineload)+","+str(CvP)+"\n")    
 
     """ IMPROVMENT BELOW :
     Countings was not done on the last species of the list. It is now compute when the loop reaches the last iteration, thanks to the countings()
@@ -631,44 +630,44 @@ for p in pairlist: #pairs analysis
         aaclassifcountpvalue2[f]=testpvalue(aaclassifcountboot[f],aaclassifcount[f],iterration)
 
       codons_counts.write(p[1]) # second species of the couple, the last one to be written in the file
-      codons_counts.write("\t") # next line
+      codons_counts.write(",") # next line
       for value in codonscount2.values():
-        codons_counts.write(str(value) + "\t")
-      codons_counts.write("\t\n")
+        codons_counts.write(str(value) + ",")
+      codons_counts.write("\n")
 
       codons_counts.write(p[1])
-      codons_counts.write("_pvalue\t") # Same species, but line for computed pvalues
+      codons_counts.write("_pvalue,") # Same species, but line for computed pvalues
       for value in codonscountpvalue2.values():
-        codons_counts.write(str(value) + "\t") # write pvalues line for the species
-      codons_counts.write("\t\n")
+        codons_counts.write(str(value) + ",") # write pvalues line for the species
+      codons_counts.write("\n")
 
       aa_counts.write(p[1])
-      aa_counts.write("\t")
+      aa_counts.write(",")
       for value in aacount2.values():
-        aa_counts.write(str(value) + "\t")
-      aa_counts.write("\t\n")
+        aa_counts.write(str(value) + ",")
+      aa_counts.write("\n")
 
       aa_counts.write(p[1])
-      aa_counts.write("_pvalue\t") # Same species, but line for computed pvalues
+      aa_counts.write("_pvalue,") # Same species, but line for computed pvalues
       for value in aacountpvalue2.values():
-        aa_counts.write(str(value) + "\t") # write pvalues line for the species
-      aa_counts.write("\t\n")
+        aa_counts.write(str(value) + ",") # write pvalues line for the species
+      aa_counts.write("\n")
 
       aatypes_counts.write(p[1])
-      aatypes_counts.write("\t")
+      aatypes_counts.write(",")
       for value in aaclassifcount2.values():
-        aatypes_counts.write(str(value) + "\t")
-      aatypes_counts.write("\t\n")
+        aatypes_counts.write(str(value) + ",")
+      aatypes_counts.write("\n")
 
       aatypes_counts.write(p[1])
-      aatypes_counts.write("_pvalue\t") # Same species, but line for computed pvalues
+      aatypes_counts.write("_pvalue,") # Same species, but line for computed pvalues
       for value in aaclassifcountpvalue2.values():
-        aatypes_counts.write(str(value) + "\t") # write pvalues line for the species
-      aatypes_counts.write("\t\n")
+        aatypes_counts.write(str(value) + ",") # write pvalues line for the species
+      aatypes_counts.write("\n")
 
       gc_counts.write(p[1])
-      gc_counts.write("\t")
-      gc_counts.write(str(GC3_b)+"\t"+str(GC12_b)+"\t"+str(IVYWREL_b)+"\t"+str(EKQH_b)+"\t"+str(PAYRESDGM_b)+"\t"+str(purineload_b)+"\t"+str(CvP_b))
+      gc_counts.write(",")
+      gc_counts.write(str(GC3_b)+","+str(GC12_b)+","+str(IVYWREL_b)+","+str(EKQH_b)+","+str(PAYRESDGM_b)+","+str(purineload_b)+","+str(CvP_b))
 
     # end writing
     
