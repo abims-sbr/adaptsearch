@@ -105,185 +105,45 @@
 
 	<help>
 
-@HELP_AUTHORS@
+ @HELPAUTHORS@
+ 
+<![CDATA[
+---------
 
-============
-What it does
-============
+**Description**
 
-| This tool takes a 'data collection list' containing nucleic fasta sequence files and searches different homologous genes from pairwise comparaisons.
-| There are 3 outputs.
-|
-
+This tool searches for different homologous genes from pairwise comparisons between a set of fasta files (one file per species).
+ 
 --------
 
-==========
-Parameters
-==========
-
-The choice of parameters is possible :
-
-**-e** :
-	|  is the option for the choice of the e-value.
-	| By default it's 10.
-	|
-
---------
-
-=======
-Outputs
-=======
-
-This tool, produces the following files :
-
-**Pairwise**:
-	| is the general output. It gives the information about what the tool is doing (for each pairwise).
-	|
-
-**Pairwise DNA**:
-	| is the output wich contains nucleic sequences (of the pairwise) that are homologues. The sequences are with nucleotides. Shows:
-	| the name of the query sequence
-	| the part of the sequence in nucleotides
-	| the name of the match sequence
-	| the part of the sequence in nucleotides
-	|
-
-**Pairwise PROT**:
-	| is the output wich contains proteic sequences (of the pairwise) that are homologues. The sequences are with protein. Shows:
-	| the name of the query sequence (the name of the sequence || the position (Start and End) of the homologous sequences || divergence || number of gaps || real divergence || the length of the homologous sequence)
-	| the part of the sequence in protein
-	| the name of the match sequence (the name of the sequence || the position (Start and End) of the homologous sequences || divergence || number of gaps || real divergence || the length of the homologous sequence)
-	| the part of the sequence in protein
-
---------
-
-===============
-Working Example
-===============
-
----------------------------
-The input files and options
----------------------------
-
-**Input files**
-	| 3 files with 200 nucleic sequences each : Ap.fasta, Ac.fasta et Pp.fasta
-	|
 **Parameters**
-	| e-value = 1e-20
-	|
 
-----------------
-The output files
-----------------
+    - 'Input files' : a collection of fasta files (one file per species)
+    - 'e_value' : the blast e-value. By default it's 1e-5.
 
-**Pairwise**
+--------
 
-| -------------------- Pairwise Pp_Ap --------------------
-|
-| database :  Pp.fasta
-| query file :  Ap.fasta
-|
-| ***** START run BLAST *****
-| ***** END run BLAST *****
-|
-|
-| database :  Ap.fasta
-| query file : only the sequences of Pp.fasta who matched during the last BLAST
-|
-| ***** START run BLAST *****
-| ***** END run BLAST *****
-|
-| [3/5] Get pairs of sequences ...
-| Get list of fasta name involved in RBH
-| Number of pairwises parsed = 15
-| Get subset of Alvinella db
-| Get subset of Paralvinella db
-|
-| -------------------- Pairwise Pp_Ac --------------------
-|
-| database :  Pp.fasta
-| query file :  Ac.fasta
-|
-| ***** START run BLAST *****
-| ***** END run BLAST *****
-|
-|
-| database :  Ac.fasta
-| query file : only the sequences of Pp.fasta who matched during the last BLAST
-|
-| ***** START run BLAST *****
-| ***** END run BLAST *****
-|
-| [3/5] Get pairs of sequences ...
-| Get list of fasta name involved in RBH
-| Number of pairwises parsed = 13
-| Get subset of Alvinella db
-| Get subset of Paralvinella db
-|
-|
-| -------------------- Pairwise Ap_Ac --------------------
-|
-| database :  Ap.fasta
-| query file :  Ac.fasta
-| 
-| ***** START run BLAST *****
-| ***** END run BLAST *****
-|
-|
-| database :  Ac.fasta
-| query file : only the sequences of Ap.fasta who matched during the last BLAST
-|
-| ***** START run BLAST *****
-| ***** END run BLAST *****
-|
-| [3/5] Get pairs of sequences ...
-| Get list of fasta name involved in RBH
-| Number of pairwises parsed = 24
-| Get subset of Alvinella db
-| Get subset of Paralvinella db
-|
-|
+**Outputs**
 
-**Pairwise_output_file_PROT**
+    - 'Pairwise' : the general output. It gives the information about what the tool has done for each pairwise.
 
-| For example the 4 last sequences of the file 19_ReciprocalBestHits_Pp_Ap.fasta
-|
-| &gt;Ap123_1/1_1.000_748||254...478||[[1/1]][[1/6]]||29.3333333333||0||29.3333333333||75.0
-| FVRITVGDEMSRRPKFAMITWVGPEVSPMKRAKVSTDKAFVKQIFQNFAKEIQTSERSELEEEYVRQEVMKAGGA
-| &gt;Pp_146_1/2_1.000_713||259...483||[[1/1]][[1/6]]||29.3333333333||0||29.3333333333||75.0
-| FAYIRCTNEESKRSKFAMITWIGQGVEAMKRAKVSMDKQFLKEIFQNFAREFQTSEKSELDEVCIKHALAIDDGA
-| &gt;Ap66_1/1_1.000_400||192...398||[[1/1]][[1/6]]||21.7391304348||0||21.7391304348||69.0
-| LSTSLLNWRKHTLCF*GMKLILIILLISFIIPAILFLLSIFTTMRMPESREKFRPYECGFDPNHSARTP
-| &gt;Pp_201_2/2_1.000_691||14...220||[[1/1]][[1/6]]||21.7391304348||0||21.7391304348||69.0
-| LSTSLLN*RKQPFASEEMKLLILLLFISALIPRILIILSIFTSIRTPKNREKSSPYECGFDPNHSARTP
-|
-|
+    - 'Pairwise_DNA' : the output which contains nucleic sequences (of the pairwise) that are homologous. The sequences are with nucleotides. It shows for both the query and match :
+        the name        
+        the sequence in nucleotides
+   
+    - 'Pairwise_PROT' : the output which contains proteic sequences (of the pairwise) that are homologous. The sequences are with protein. It shows :
+        Name, position, length, and part of the sequence in protein for query and match sequences
+        Divergence
+        Number of gaps 
+        Real divergence
 
-**Pairwise_output_file_DNA**
+--------
 
-| For example the 4 last sequences of the file 25_DNAalignement_corresponding_to_protein_from_19_RBH_Pp_Ap.fasta
-|
-| &gt;Ap123_1/1_1.000_748
-| CCAGTAACAAGCCGCCACGGGTCCGTCGTGTCTTCTCTTCAAGGAAAGGTTGACAGATTCTCGTACGCTAGACGTCGCCACCTACTCGTCCTGGACTCCGGTGCCGTAGGTGGCGCCACCTGCTTTCATCACTTCCTGCCTA
-| ACGTACTCCTCTTCTAGCTCCGATCTCTCGCTCGTCTGGATCTCTTTGGCAAAGTTCTGGAATATCTGCTTGACGAACGCCTTGTCCGTGCTGACTTTGGCGCGCTTCATTGGGCTCACTTCCGGTCCGACCCACGTGATCA
-| TGGCGAACTTCGGTCTTCTGCTCATTTCGTCCCCGACGGTAATACGGACAAAGGCGAACGCCCGCTGGTCATCTTGTAGTTTTGATAACAGATCCTCGTATTCGGTTCCTGTAGAGTCCAGTATAATATTGTCGCCATCATA
-| CGTCACAAACGCCCAGTTTGTCTCCGTCGCGTCGCTCCTGACGTCTTCGTAAGCCTGTCCGATAGCCTCTCTGTCGATGTCTGCCATGCTGCTGGTCCCGCTCTCGACGCTAATGAGCCAATCACGACTTCTGACAGACGAG
-| TAGACATGCAGACAGCCAGACGGACTGACGGACTGACG
-| &gt;Pp_146_1/2_1.000_713
-| CATTAATTGTGTGTCTGGTTGTGGGTGTGTGTTATAAGAGACATCACTTAGTGTATACTGATGTCCACGTGGTAGTTGACCAGCATGTCGAATATGGATAGGGACTCGATCTTGAATGGCTATGAGGAGGTTCGCAACGACGA
-| CTCGGACATTAACTGGGCTTTCGTAACGTATTCACCTGACAACAAACTAGTACTTGATTCAACTGGCACAGACTACTTCCAGCTCCAGGAGAAATATCAAGATGATATGCGAGGATTTGCTTACATCCGGTGCACTAACGAGG
-| AGAGTAAACGTTCTAAATTTGCCATGATTACCTGGATTGGACAAGGAGTGGAAGCAATGAAGCGTGCCAAGGTCAGCATGGACAAACAGTTCCTAAAGGAAATCTTCCAGAATTTCGCAAGAGAATTTCAGACGAGTGAAAAG
-| TCAGAGCTTGATGAGGTCTGTATTAAACACGCGCTTGCCATTGACGATGGAGCTGGTTGCAAAGTGGAAAGCGAGGACACGAGAAAAGGGGCCTTTCTCAGGAAAGAGGATGACACTGAAGTGGAAAGGGAAACTAATGTCAA
-| CAATGTCTCCGGTGTCGTGGAAGAAGATGATGACGCAAAAAATGCAAATGATTTTAATTACGAAGAGGACTGTAACAATGAATAGGTGCATGTCGATGATTTATATAGAGAACTAGACTTCGCACTCGCTAGGTGGTTGAT
-| &gt;Ap66_1/1_1.000_400
-| TGATCGTCTTATAAACCTAACTTGAAAAACCTTCCTACCATTTAGGGCTAGCAGCCCTATTAATTATCACACCTATCGCAGCGCTCTCACTATAATTATAAGTATTGCGCCGGGTTTGAACGGATAGCTCTGATGCTGCTAATT
-| ACGGGACCTAATAATCCCCAATACTTTATCCTTAGAGAGCTGTACCTCTTAGCACCAGTCTTTTAAACTGGCGAAAGCACACTTTATGCTTCTAAGGAATGAAACTAATTCTTATAATCCTACTAATCTCTTTTATCATCCCCG
-| CCATTCTATTTTTACTCTCGATCTTTACTACTATGCGCATGCCAGAGAGCCGTGAAAAATTTAGGCCCTACGAGTGCGGGTTTGACCCCAATCACTCGGCCCGAACCCCATT
-| &gt;Pp_201_2/2_1.000_691
-| ATCGTAGGGAAAAAGGTGTTCGTGCAGAATGATTGGGGTCAAATCCACATTCGTAGGGGCTAGATTTTTCACGGTTTTTAGGTGTACGAATAGAGGTGAAGATTGATAGGATGATTAAAATTCTTGGGATTAATGCTGAAATAAA
-| GAGAAGTAGGATTAAAAGTTTCATTTCCTCAGAAGCAAAGGGTTGCTTTCGTCAGTTTAAAAGACTGGTGCTAAGTAGGTACAGCTCTCTAAGGG
+**The AdaptSearch Pipeline**
 
----------------------------------------------------
+.. image:: ../../adaptsearch_picture_helps.png :heigth: 593 :width: 852
+
+---------
 
 Changelog
 ---------
@@ -295,10 +155,11 @@ Changelog
 
 **Version 1.0 - 13/04/2017**
 
- - TEST: Add funtional test with planemo
+ - TEST: Add functional test with planemo
 
  - IMPROVEMENT: Use conda dependencies for blast, samtools and python
 
+    ]]>
     </help>
 
     <expand macro="citations" />

@@ -95,7 +95,7 @@
 
 -------------------------------------------
 
-**OrthoGroups**
+**Description**
 
 This tool takes Orthogroups found by OrthoFinder and proceeds to retrieve nucleic sequences back, then write each orthogroups in its own fasta file.
 
@@ -133,6 +133,18 @@ Our tool focus on the orthogroups.txt file created before gene trees.The script 
 - Dataset collection of fasta files : each file represents an orthogroup, each gene within tthe group has the couple ID-nucleic sequence.
 - If the --paralogs option is checked : another dataset collection of fasta files with all the paralogous genes.
 - The tool log.
+
+---------
+
+**The AdaptSearch Pipeline**
+
+.. image:: ../../adaptsearch_picture_helps.png :heigth: 593 :width: 852
+
+Changelog
+---------
+
+**Version 1.0 - 11/01/2018**
+
 ]]>
     </help>
 

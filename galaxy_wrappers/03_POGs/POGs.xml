@@ -91,40 +91,50 @@
 
 	<help>
 
-@HELP_AUTHORS@
+@HELP_AUTHORS@    
 
-============
-What it does
-============
+<![CDATA[
 
-| This tool parses homologous sequences obtained by pairwise and gather sequences into groups of orthologous sequences.
+**Last Version** : Victor Mataigne and Gildas Le Corguillé
 
---------
+**Description**
 
-======
-Inputs
-======
-| A dataset collection with the the pairwise with the homologous sequences (obtained from the tool "Pairwise").
+This tool parses homologous sequences obtained by pairwise and gather sequences into groups of orthologous sequences.
 
 --------
 
-=======
-Outputs
-=======
+**Inputs**
+
+The output (nucleic format) of the tool 'Pairwise' (AdaptSearch suite), which consists in lists of homologous sequences between pairs of species obtained by RBH comparisons.
+
+--------
+
+**Parameters**
+
+** Species minimum ** : drop orthogroups with less than n species : orthogroups with less than n species within won't be recorded.
+** verbose ** : check 'Yes' if you want a supplementary table : countings of orthogroups before the paralogous sequences removal
+** paralogs ** : check 'yes' if you also want to retrieve the orthogroups before the paralogous sequences removal
+
+.. class:: warningmark
+The minimum number of species per group only applies to the main output files. In the case of the 'paralogs' option, this parameter is more likely the minimum amount of sequences to keep.
+
+--------
+
+**Outputs**
 
 This tool, produces the following files :
 
-**POGs** :
+- POGs : the general output, displaying countings tables of orthogroups.
 
-| is the general output. It gives the number of sequences at each filtering step and then count
-| the number of groups.
+- POGs_unaligned : a dataset collection which contains the groups of orthologous sequences (one group per file) in nucleic format, with paralogous sequences removed (only one sequence is kept per species and per group)
 
-**POGs_locus_orthologs_unaligned** :
+- POGs_withParalogs_unaligned : a similar dataset colelction in where paralogous sequences are kept. This output is available if you check 'Yes' to the 'paralogous' option.
 
-| is the output which contains the groups of orthologous sequences,
-| one file corresponding to one group.
+---------
 
-the sequences of each group are in nucleic format.
+**The AdaptSearch Pipeline**
+
+.. image:: ../../adaptsearch_picture_helps.png :heigth: 593 :width: 852
 
 Changelog
 ---------
@@ -132,6 +142,7 @@ Changelog
 **Version 2.1 - 04/01/2018**
 
   - Rewritten with improved results and better code
+  - Added options verbose and paralogs
 
 **Version 2.0 - 11/07/2017**
 
@@ -146,6 +157,8 @@ Changelog
 
  - TEST: Add funtional test with planemo
  - IMPROVEMENT: Use conda dependencies for python
+
+    ]]>
 
 	</help>
 

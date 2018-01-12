@@ -282,318 +282,120 @@
 
 	<help>
 
-@HELP_AUTHORS@
+@HELPAUTHORS@
 
-============
-What it does
-============
+<![CDATA[
 
-| This tool takes a 'dataset collection list'  containing nucleic fasta sequence files and searches different homologous genes from pairwise comparisons.
+..class:: infomark
 
---------
+**Authors**
+The run RAxML was written by Alexandros Stamatakis.
+The script was written by Eric Fontanillas.
 
-==========
-Parameters
-==========
+..class:: infomark
 
-| The choice of the format sequences is possible : **proteic** or **nucleic**
-|
-
-The choice of parameters for the RAxML run is possible :
-
-**-m** :
-	| is the option for the choice of the substitution model.
-	| By default it's GTRGAMMA.
-	|
-
-**-N** :
-	| is the option for the choice of the number of run
-	| by default it's 100
-	|
-
-**rapid bootstrapping** :
-	| is the option to have, in addition to the best tree search, the rapid bootstrapping
-	| this translates by : -x 12345 -f a
-	| by default, this option is choosen
-	|
-
-.. class:: warningmark
-| RAxML has some incompatible parameters. 
-| The search algorithm compatible with boostrapping and giving a besttree file is the one set by default:
-| -f a
-
-| The search algorithm compatible with boostrapping and NOT giving a besttree file are:
-| -f d
-| -f o
-| -f t
---------
-
-======
-Inputs
-======
+**Galaxy integration** by Julie Baffard and ABiMS team.
 
 --------
 
-=======
-Outputs
-=======
+**Description**
+
+This tool takes files containing fasta sequences (from the CDS_Search in the AdaptSearch suite) and run RAxML to build a phylogeny.
+
+..class:: infomark
+
+full RAxML manual here_
+
+.. _here: https://sco.h-its.org/exelixis/resource/download/NewManual.pdf
+
+--------
+
+**Parameters**
+
+ - The choice of the format sequences is possible : **proteic** or **nucleic**
+
+- Several RAxML parameters can be set :
+
+    - Substitution model (-m) : Model of Binary (Morphological), Nucleotide, Multi-state, or Amino-Acid substitution
+        Default : GTRGAMMA (nucleic), PROTCAT (proteic).
+
+    - Matrix : AA substitution model (when proteic inputs)
+        Default : DAYHOFF
+
+    - random seed : Specifies a random number seed for the parsimony inferences. For all options/algorithms  in RAxML  that require some  sort of randomization,  this option must be specified. Make sure to pass different random number seeds to RAxML and not only 12345.
+     
+    - Number of runs (-N) : Specifies the number of alternative runs.         
+        By default it's an integer of value 100.
+
+    - Use bootstopping criteria for number of runs :
+        If selected, overxwrites the number of runs to use bootstopping criteria.
+
+    - Algorithm to execute (-f) : allows to choose what kind of algorithme RAxML shall execute.
+        Default : Rapid bootsrap and best ML tree search (-f a).
+
+    - Multiple model assignement t oalignment partitions (-q) : an optional parameter. Permits to specify the file name which contains the assignment of models to alignment partitions for multiple models of substitution. For the syntax of this file please consult the manual.
+        This option allows you to specify the regions of your alignment for which an individual model of nucleotide substitution should be estimated. This will typically be useful to infer trees for long multi-gene alignments.
+
+    - Rapid bootstrapping random seed (-x) : Specify an integer number (random seed) and turn on rapid bootstrapping.
+        In addition to the best tree search.
+        By default, this option is choosen.    
+
+--------
+
+**Inputs**
+
+    - Files from Filter Assemblies : a set of fasta files (one file per species), e.g. the outputs of the first tool of the AdaptSearch suite.
+        Used to retrieve all the species names.
+
+    - Alignment files without indels : a set of fasta files with aligned sequences (with the same species than into the previous parameter), e.g the outputs of the CDS_Search tool of the AdaptSearch suite.
+
+--------
+
+**Outputs**
 
 This tool, produces the following files :
 
-**Phylogeny** :
-	| is the general output. It gives the information about the concatenation (statistics) and the RAxML run.
-	|
+    - Phylogeny :
+        the general output. It gives the information about the concatenation (statistics) and the RAxML run.
 
-**Phylogeny_concatenation_fasta_aa** :
-	| is the output which contains the sequences concatenated in fasta format when you choose the option proteic
-	|
+    - Phylogeny_concatenation_fasta_aa :
+        contains the sequences concatenated in fasta format when you choose the option proteic.
 
-**Phylogeny_concatenation_phylip_aa** :
-	| is the output which contains the sequences concatenated in phylip format when you choose the option proteic
-	|
+    - Phylogeny_concatenation_phylip_aa :
+        contains the sequences concatenated in phylip format when you choose the option proteic.
 
-**Phylogeny_concatenation_nexus_aa** :
-	| is the output which contains the sequences concatenated in nexus format when you choose the option proteic
-	|
+    - Phylogeny_concatenation_nexus_aa :
+        contains the sequences concatenated in nexus format when you choose the option proteic.
 
-**Phylogeny_concatenation_fasta_nuc** :
-	| is the output which contains the sequences concatenated in fasta format when you choose the option nucleic
-	|
+    - Phylogeny_concatenation_fasta_nuc :
+        contains the sequences concatenated in fasta format when you choose the option nucleic.
 
-**Phylogeny_concatenation_phylip_nuc** :
-	| is the output which contains the sequences concatenated in phylip format when you choose the option nucleic
-	| it's this output which is used for the RAxML run
-	|
+    - Phylogeny_concatenation_phylip_nuc :
+        contains the sequences concatenated in phylip format when you choose the option nucleic.
+        it's this output which is used for the RAxML run.
 
-**Phylogeny_concatenation_nexus_nuc** :
-	| is the output which contains the sequences concatenated in nexus format when you choose the option nucleic
-	|
+    - Phylogeny_concatenation_nexus_nuc :
+        contains the sequences concatenated in nexus format when you choose the option nucleic.
 
-**Phylogeny_RAxML_BestTree** :
-	| is the output of RAxML run which contains the Best Tree found
-	|
+    - Phylogeny_RAxML_BestTree** :
+        the output of RAxML run which contains the Best Tree found.
 
-**Phylogeny_RAxML_BiPartitionBranchLabel** :
-	| is the output of RAxML run which contains the Best Tree found with supported values as branch labels
-	|
+    - Phylogeny_RAxML_BiPartitionBranchLabel :
+        the output of RAxML run which contains the Best Tree found with supported values as branch labels.
 
-**Phylogeny_RAxML_BiPartition** :
-	| is the output of RAxML run which contains the Best Tree found with supported values
-	|
+    - Phylogeny_RAxML_BiPartition :
+        the output of RAxML run which contains the Best Tree found with supported values.
 
-**Phylogeny_RAxML_BootStrap** :
-	| is the output of RAxML run which contains all the boostrapped trees
-	| the number of boostraped trees depending of the option -N (number of run)
-	|
+    - Phylogeny_RAxML_BootStrap :
+        the output of RAxML run which contains all the boostrapped trees. The number of boostraped trees depending of the option -N (number of run).
 
---------
+---------
 
-===============
-Working Example
-===============
+**The AdaptSearch Pipeline**
 
----------------------------
-The input files and options
----------------------------
+.. image:: ../../adaptsearch_picture_helps.png :heigth: 593 :width: 852
 
-**Input files**
-	| 6 files with 200 nucleic sequences each
-	| a 'dataset collection list' containing 2 locus aligned without indel (in nucleic format)
-	|
-**Parameters**
-	| option : nucleic
-	| no option for the RAxML run, so by default it's : -m GTRGAMMA -N 100 -f a -x 12345
-	|
-
-----------------
-The output files
-----------------
-
-**Phylogeny** :
-
-| ******************** CONCATENATION ********************
-|
-| Process nucleotides concatenation:
-| Number of taxa aligned = 6
-| Number of loci concatenated = 2
-|
-| Total length of the concatenated sequences [All codon positions] = 504
-| Total length of the concatenated sequences [Codon positions 1 and 2] = 336
-| Total length of the concatenated sequences [Codon position 3] = 168
-|
-|
-| 
-| ******************** RAxML RUN ********************
-| 
-
-the informations of the RAxML run
-
-| 
-
-**Phylogeny_concatenation_fasta_nuc** :
-
-| &gt;Ps
-
-cgcagttcctcggtgaggcgttgtagttcggcgttcagacggtcagctctctcctcggctgccctgcgagcattcagtgcctcatccatgtcagcttgcatggcggcaatgtctccctccatacggcgcttatctccagtcaaagtggtcacggtgatgttcagctcgttaacacgggatacagcatcgtgcagttcgttttcggcattcttacgagctctctcagatgtctcca
-gaagagatcgaacgtcctccagctccgtttgtagagcgatcctcttcctctcgagtacggtaaccgccgaacgggcttcctcagcactacggcgctcctcctcaatggcaatctccagctccttgaccttggcactgagtcccttgttggccttagatagttcgttgtttgccctcaatgtctcgaccataatccttaacaacaacacactacagccaacaaccttccttgctt
-taccctctttgtctatcttgcataatccagcccat
-
-| Ac
-
-cgcagttcctcggtgacgcggtgcagctcggcggcgaggcggtctgccctctcctcggccgccctgcgggcgttcagggcctcgtccagatcggcctgcatggcggcgatgtcgccctccatgcggcgcttgtcgccagtcagcgtcgtcaccgtgatgttcagctcgttgacgcgagccgtggcgtcgtgcaactcgttctcggcattcttacgagctcgttcggc
-ggtctccagtagagatctaacatcctccagctctgtttgcaatgcaatcctcttcctctcgagtacagttacagcggaacgggcttcctcagcactgcggtgctcctcctcaatggcaatttccagctccttgaccttggcactaagtcccttgttggccttggacagctcgttgttggctctaagtgtctccacc---------------------------------------------------------
-------------------------
-
-| &gt;Pp
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-| ------------------------------------------------------------------------------------------------ataatccttgacgaccacacactgcatccaacaacttttctggccttgccttccttgtctattttacacaaaccagcccat
-
-| &gt;Ap
-
-cgcagctcctcggtgacgcggtgcagctcggcggcgaggcgatcggctctctcctcggctgccctgcgggcgttcagggcctcatcaaggtcggcctgcatggcggcgatgtcgccctccatgcggcgcttgtcgccggtcagagtcgtcaccgtgatgttcagctcgttgacgcgagccgtggcgtcgtgtagctcgttctcggcattcttacgagctcgttcggc
-ggtctccagtagggatctaacatcctccagctccgtttgcaatgcaatcctcttcctctcgagtacagttacagcggaacgggcttcctcagcactgcggcgctcctcctcaatggcaatttccagctccttgaccttcgcactaagtcccttgttggccttggacagttcgttgttggctctaagtgtctccactataatccttaacaacaacacactgcaaccaacaacctt
-ccgggccttgccttccttgtctatcttgcaaagaccagcccat
-
-| &gt;Pf
-
-ctgagctcctcggtgaggcgctggagctcggagttcaggcggtcggctcgttcctcggcggcgcggcgagcgttcagcgcctcgtccatgtcggcctgcatggcggcgatgtccgcttccatgcggcgcttgtcgcccgtcagagtggtgaccgtgatgttcagctcgttgacacgggccacggcgtcgtgcagctcgttctcggcgttcttgcgagctctctccga
-cgtctccagaagagatcggacgtcctcgagttccgtctgcagggcgatcctcttcctctcgagcacggtaacagcagaacgggcttcctcggcgctacggcgctcttcctcgatggcgatctccagttccttgacctttgcactgagtcccttgttggccttggatagttcgttgttagccctcagtgtctccaccataatccttaacaacaacacactacagccgacaac
-cttccttgctttcccttctttgtcaatcttgcataatccggcccat
-
-| &gt;Pg
-
-cgcagctcctcggtgagacgctgcagttcggaattcaggcggtccgccctctcttcggcagccctgcgggcgttcagcgcctcgtccatgtcggcctgcatggcggcgatgtcgccctccatgcggcgcttgtcgccggtcagcgtggtcacggtgatgttcagctcgttgacgcgagaaacggcgtcgtgcatctcgttttcggcattcttgcgagctctctccgacg
-tctcaagaagggatcgtacatcctcgagttctgtctggagggcgatcctctttctctcaagcatggtaaccgcggagcgggcttcctcgccactgcggcgttcttcctcgatggtgatctccagttccttaaccttagtactcagtcccttgttggctttggacagttcgttgttcgctcttagtgtctccactataatccttaaccacaacacactacaaccaacaacctttcttgc
-cttgccttccttgtctatcttacacaagccagcccat
-
-.. class:: infomark
-
-| If you choose the option proteic : you obtain a file with proteic sequences
-|
-| 
-
-
-**Phylogeny_concatenation_phylip_nuc** :
-
-|    6 504
-| Ps
-
-cgcagttcctcggtgaggcgttgtagttcggcgttcagacggtcagctctctcctcggctgccctgcgagcattcagtgcctcatccatgtcagcttgcatggcggcaatgtctccctccatacggcgcttatctccagtcaaagtggtcacggtgatgttcagctcgttaacacgggatacagcatcgtgcagttcgttttcggcattcttacgagctctctcagatgtctcca
-gaagagatcgaacgtcctccagctccgtttgtagagcgatcctcttcctctcgagtacggtaaccgccgaacgggcttcctcagcactacggcgctcctcctcaatggcaatctccagctccttgaccttggcactgagtcccttgttggccttagatagttcgttgtttgccctcaatgtctcgaccataatccttaacaacaacacactacagccaacaaccttccttgctt
-taccctctttgtctatcttgcataatccagcccat
-
-| Ac
-
-cgcagttcctcggtgacgcggtgcagctcggcggcgaggcggtctgccctctcctcggccgccctgcgggcgttcagggcctcgtccagatcggcctgcatggcggcgatgtcgccctccatgcggcgcttgtcgccagtcagcgtcgtcaccgtgatgttcagctcgttgacgcgagccgtggcgtcgtgcaactcgttctcggcattcttacgagctcgttcggc
-ggtctccagtagagatctaacatcctccagctctgtttgcaatgcaatcctcttcctctcgagtacagttacagcggaacgggcttcctcagcactgcggtgctcctcctcaatggcaatttccagctccttgaccttggcactaagtcccttgttggccttggacagctcgttgttggctctaagtgtctccacc---------------------------------------------------------
-------------------------
-
-| Pp
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-| ------------------------------------------------------------------------------------------------ataatccttgacgaccacacactgcatccaacaacttttctggccttgccttccttgtctattttacacaaaccagcccat
-|
-| Ap
-
-cgcagctcctcggtgacgcggtgcagctcggcggcgaggcgatcggctctctcctcggctgccctgcgggcgttcagggcctcatcaaggtcggcctgcatggcggcgatgtcgccctccatgcggcgcttgtcgccggtcagagtcgtcaccgtgatgttcagctcgttgacgcgagccgtggcgtcgtgtagctcgttctcggcattcttacgagctcgttcggc
-ggtctccagtagggatctaacatcctccagctccgtttgcaatgcaatcctcttcctctcgagtacagttacagcggaacgggcttcctcagcactgcggcgctcctcctcaatggcaatttccagctccttgaccttcgcactaagtcccttgttggccttggacagttcgttgttggctctaagtgtctccactataatccttaacaacaacacactgcaaccaacaacctt
-ccgggccttgccttccttgtctatcttgcaaagaccagcccat
-
-Pf
-ctgagctcctcggtgaggcgctggagctcggagttcaggcggtcggctcgttcctcggcggcgcggcgagcgttcagcgcctcgtccatgtcggcctgcatggcggcgatgtccgcttccatgcggcgcttgtcgcccgtcagagtggtgaccgtgatgttcagctcgttgacacgggccacggcgtcgtgcagctcgttctcggcgttcttgcgagctctctccga
-cgtctccagaagagatcggacgtcctcgagttccgtctgcagggcgatcctcttcctctcgagcacggtaacagcagaacgggcttcctcggcgctacggcgctcttcctcgatggcgatctccagttccttgacctttgcactgagtcccttgttggccttggatagttcgttgttagccctcagtgtctccaccataatccttaacaacaacacactacagccgacaac
-cttccttgctttcccttctttgtcaatcttgcataatccggcccat
-
-Pg
-cgcagctcctcggtgagacgctgcagttcggaattcaggcggtccgccctctcttcggcagccctgcgggcgttcagcgcctcgtccatgtcggcctgcatggcggcgatgtcgccctccatgcggcgcttgtcgccggtcagcgtggtcacggtgatgttcagctcgttgacgcgagaaacggcgtcgtgcatctcgttttcggcattcttgcgagctctctccgacg
-tctcaagaagggatcgtacatcctcgagttctgtctggagggcgatcctctttctctcaagcatggtaaccgcggagcgggcttcctcgccactgcggcgttcttcctcgatggtgatctccagttccttaaccttagtactcagtcccttgttggctttggacagttcgttgttcgctcttagtgtctccactataatccttaaccacaacacactacaaccaacaacctttcttgc
-cttgccttccttgtctatcttacacaagccagcccat
-
-.. class:: infomark
-
-| If you choose the option proteic : you obtain a file with proteic sequences
-|
-| 
-
-**Phylogeny_concatenation_nexus_nuc** :
-
-#NEXUS
-
-| Begin data;
-| Dimensions ntax=6 nchar=504;
-| Format datatype=dna gap=-;
-
-Matrix
-
-Ps      cgcagttcctcggtgaggcgttgtagttcggcgttcagacggtcagctctctcctcggctgccctgcgagcattcagtgcctcatccatgtcagcttgcatggcggcaatgtctccctccatacggcgcttatctccagtcaaagtggtcacggtgatgttcagctcgttaacacgggatacagcatcgtgcagttcgttttcggcattcttacgagctctctcagatgtct
-ccagaagagatcgaacgtcctccagctccgtttgtagagcgatcctcttcctctcgagtacggtaaccgccgaacgggcttcctcagcactacggcgctcctcctcaatggcaatctccagctccttgaccttggcactgagtcccttgttggccttagatagttcgttgtttgccctcaatgtctcgaccataatccttaacaacaacacactacagccaacaaccttcct
-tgctttaccctctttgtctatcttgcataatccagcccat
-
-Ac      cgcagttcctcggtgacgcggtgcagctcggcggcgaggcggtctgccctctcctcggccgccctgcgggcgttcagggcctcgtccagatcggcctgcatggcggcgatgtcgccctccatgcggcgcttgtcgccagtcagcgtcgtcaccgtgatgttcagctcgttgacgcgagccgtggcgtcgtgcaactcgttctcggcattcttacgagctcgttc
-ggcggtctccagtagagatctaacatcctccagctctgtttgcaatgcaatcctcttcctctcgagtacagttacagcggaacgggcttcctcagcactgcggtgctcctcctcaatggcaatttccagctccttgaccttggcactaagtcccttgttggccttggacagctcgttgttggctctaagtgtctccacc---------------------------------------------------
-------------------------------
-
-Pp      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------ataatccttgacgaccacacactgcatccaacaacttttctggccttgccttccttgtctattttacacaaaccagcccat
-
-Ap      cgcagctcctcggtgacgcggtgcagctcggcggcgaggcgatcggctctctcctcggctgccctgcgggcgttcagggcctcatcaaggtcggcctgcatggcggcgatgtcgccctccatgcggcgcttgtcgccggtcagagtcgtcaccgtgatgttcagctcgttgacgcgagccgtggcgtcgtgtagctcgttctcggcattcttacgagctcgttc
-ggcggtctccagtagggatctaacatcctccagctccgtttgcaatgcaatcctcttcctctcgagtacagttacagcggaacgggcttcctcagcactgcggcgctcctcctcaatggcaatttccagctccttgaccttcgcactaagtcccttgttggccttggacagttcgttgttggctctaagtgtctccactataatccttaacaacaacacactgcaaccaacaa
-ccttccgggccttgccttccttgtctatcttgcaaagaccagcccat
-
-Pf      ctgagctcctcggtgaggcgctggagctcggagttcaggcggtcggctcgttcctcggcggcgcggcgagcgttcagcgcctcgtccatgtcggcctgcatggcggcgatgtccgcttccatgcggcgcttgtcgcccgtcagagtggtgaccgtgatgttcagctcgttgacacgggccacggcgtcgtgcagctcgttctcggcgttcttgcgagctctctcc
-gacgtctccagaagagatcggacgtcctcgagttccgtctgcagggcgatcctcttcctctcgagcacggtaacagcagaacgggcttcctcggcgctacggcgctcttcctcgatggcgatctccagttccttgacctttgcactgagtcccttgttggccttggatagttcgttgttagccctcagtgtctccaccataatccttaacaacaacacactacagccgaca
-accttccttgctttcccttctttgtcaatcttgcataatccggcccat
-
-Pg      cgcagctcctcggtgagacgctgcagttcggaattcaggcggtccgccctctcttcggcagccctgcgggcgttcagcgcctcgtccatgtcggcctgcatggcggcgatgtcgccctccatgcggcgcttgtcgccggtcagcgtggtcacggtgatgttcagctcgttgacgcgagaaacggcgtcgtgcatctcgttttcggcattcttgcgagctctctccg
-acgtctcaagaagggatcgtacatcctcgagttctgtctggagggcgatcctctttctctcaagcatggtaaccgcggagcgggcttcctcgccactgcggcgttcttcctcgatggtgatctccagttccttaaccttagtactcagtcccttgttggctttggacagttcgttgttcgctcttagtgtctccactataatccttaaccacaacacactacaaccaacaacctttc
-ttgccttgccttccttgtctatcttacacaagccagcccat
-
-| 	;
-| End;
-|
-
-.. class:: infomark
-
-| If you choose the option proteic : you obtain a file with proteic sequences
-|
-| 
-
-**Phylogeny_RAxML_BestTree** :
-
-| ((Ac:0.02889451913999640381,Ap:0.01674414484251282934):0.17730049470177636217,
-| ((Pp:0.23405795780876006984,Pg:0.02012322210145659623):0.14429203507314311561,Pf:0.09977363663005259231):0.04320803212100913365,Ps:0.08351583721596630983):0.0;
-|
-| 
-
-
-**Phylogeny_RAxML_BiPartitionBranchLabel** :
-
-| (Pg:0.02012322210145659623,(Pf:0.09977363663005259231,(Ps:0.08351583721596630983,
-| (Ac:0.02889451913999640381,Ap:0.01674414484251282934):0.17730049470177636217[89]):0.04320803212100913365[42]):0.14429203507314311561[70],Pp:0.23405795780876006984);
-|
-|
-
-
-**Phylogeny_RAxML_BiPartition** :
-
-(Pg:0.02012322210145659623,(Pf:0.09977363663005259231,(Ps:0.08351583721596630983,
-(Ac:0.02889451913999640381,Ap:0.01674414484251282934)89:0.17730049470177636217)42:0.04320803212100913365)70:0.14429203507314311561,Pp:0.23405795780876006984);
-
-|
-|
-
-**Phylogeny_RAxML_BootStrap** :
-
-| ((Ap,Ac),((Pp,Pg),Pf),Ps);
-| ((Ap,Ac),((Pp,Pg),Pf),Ps);
-| (Pf,((Ap,Ac),(Pp,Pg)),Ps);
-| ((Ap,Ac),((Pp,Pg),Pf),Ps);
-| ((Ap,Ac),((Pp,Pg),Pf),Ps);
-| ((Ap,Ac),((Pp,Pg),Pf),Ps);
-| ((Pp,Pg),(Pf,(Ap,Ac)),Ps);
-
-...
-
----------------------------------------------------
+---------
 
 Changelog
 ---------
@@ -601,16 +403,14 @@ Changelog
 **Version 2.0 - 06/07/2017**
 
  - NEW: Replace the zip between tools by Dataset Collection
- - Corrected bug : output files were empty due to errors in the command section (incompatible parameters set by default instead of the ones mentioned in the help)
-
 
 **Version 1.0 - 13/04/2017**
 
  - Add funtional test with planemo
-
  - Planemo test with conda dependencies for raxml and python
-
  - Scripts renamed + symlinks to the directory 'scripts'
+
+    ]]>
 
 	</help>
 
