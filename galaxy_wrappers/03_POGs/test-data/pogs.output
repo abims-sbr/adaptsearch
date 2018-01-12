@@ -1,22 +1,34 @@
+*** pogs.py ***
 
-Number of locus before removeRedondancy = 11
+Building of orthogroups based on pairs of genes obtained by pairwise comparisons between pairs of species.
+Genes are gathered in orthogroups based on the principle of transitivity between genes pairs.
 
+Parsing input files ...
+Creating Orthogroups ...
 
-Number of locus = 11
+    Summary before paralogous filtering : 
 
+         2 sps  3 sps  4 sps
+2 seqs    1394      0      0
+3 seqs       0    163      0
+4 seqs       0     26     33
+5 seqs       0      3     17
+6 seqs       0      0     17
+7 seqs       0      0      7
+8 seqs       0      0      2
+11 seqs      0      0      1
+13 seqs      0      0      1 
 
-NUMBER OF REMAINING LOCUS AFTER INTRA LOCUS TREATMENT [PARALOGS NAIVE FILTERING] = 11
-NUMBER OF REMAINING LOCUS AFTER 2ND TREATMENT [INTER LOCUS] = 11
+Writing orthogroups with paralogs files ...
 
+Filtering paralogous sequences and writing final orthogroups files ...
+    (Dropping Orthogroups with less than 3 species)
 
-REMOVAL OF LOCUS WITH LESS THAN 2 SEQUENCES
+    Summary after paralogous filtering : 
 
-Number of species in the locus : 4
-	Number of locus : 0
+        3 sps  4 sps
+3 seqs    192      0
+4 seqs      0     78
 
-Number of species in the locus : 3
-	Number of locus : 1
-
-Number of species in the locus : 2
-	Number of locus : 10
+270 orthogroups have been infered from 6 pairwise comparisons by RBH
 
