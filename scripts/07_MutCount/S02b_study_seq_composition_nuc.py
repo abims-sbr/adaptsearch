@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 ## Author: Eric FONTANILLAS
 ## Date: 21.12.10
+## Last Version : 12/2017 by Victor Mataigne
 ## Object: Test for compositional bias in genome and proteome as marker of thermal adaptation (comparison between 2 "hot" species: Ap and Ps and one "cold" species: Pg)
-
 
 import sys,os,shutil,subprocess, string
 from functions import simplify_fasta_name, dico
@@ -153,21 +153,28 @@ fileOUT_Purine_Load.write("\n")
 for locus in Lloci_NUC:
     print locus
     path_locus = "%s/%s" %(Path_IN_loci_NUC, locus)
-    bash = dico(path_locus,LT)
+    bash = dico(path_locus,LT) 
 
     fileOUT_NUC.write("%s," %locus)
     fileOUT_percent_GC.write("%s," %locus)
     fileOUT_percent_purine.write("%s," %locus)
     fileOUT_Purine_Load.write("%s," %locus)
-    
-    if taxa in bash.keys():
-            seq = bash[taxa]
-            percent_GC, percent_purine,prop_A, prop_T, prop_C, prop_G = base_composition(seq)   ### DEF2 ###
-            TOTAL, DIFF_GC, DIFF_AT,PLI_GC,PLI_AT,PLI_GC_1000,PLI_AT_1000 = purine_loading(seq) ### DEF3 ###
-            fileOUT_NUC.write("%.5f,%.5f,%.5f,%.5f," %(prop_A,prop_T,prop_C,prop_G))
-            fileOUT_percent_GC.write("%.5f," %percent_GC)
-            fileOUT_percent_purine.write("%.5f," %percent_purine)
-            fileOUT_Purine_Load.write("%d,%d,%d,%.5f,%.5f," %(TOTAL, DIFF_GC, DIFF_AT,PLI_GC_1000, PLI_AT_1000))
+
+    for taxa in LT:    
+      if taxa in bash.keys():        
+        seq = bash[taxa]            
+        percent_GC, percent_purine,prop_A, prop_T, prop_C, prop_G = base_composition(seq)   ### DEF2 ###
+        TOTAL, DIFF_GC, DIFF_AT,PLI_GC,PLI_AT,PLI_GC_1000,PLI_AT_1000 = purine_loading(seq) ### DEF3 ###
+        fileOUT_NUC.write("%.5f,%.5f,%.5f,%.5f," %(prop_A,prop_T,prop_C,prop_G))
+        fileOUT_percent_GC.write("%.5f," %percent_GC)
+        fileOUT_percent_purine.write("%.5f," %percent_purine)
+        fileOUT_Purine_Load.write("%d,%d,%d,%.5f,%.5f," %(TOTAL, DIFF_GC, DIFF_AT,PLI_GC_1000, PLI_AT_1000))
+      else:
+        fileOUT_NUC.write("%s,%s,%s,%s," %("n.a","n.a","n.a","n.a"))
+        fileOUT_percent_GC.write("%s," %"n.a")
+        fileOUT_percent_purine.write("%s," %"n.a")
+        fileOUT_Purine_Load.write("%s,%s,%s,%s,%s," %("n.a","n.a","n.a","n.a","n.a"))
+        
     fileOUT_NUC.write("\n")
     fileOUT_percent_GC.write("\n")
     fileOUT_percent_purine.write("\n")
@@ -176,4 +183,3 @@ fileOUT_NUC.close()
 fileOUT_percent_GC.close()
 fileOUT_percent_purine.close()
 fileOUT_Purine_Load.close()
-

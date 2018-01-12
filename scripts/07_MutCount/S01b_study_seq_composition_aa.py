@@ -2,7 +2,9 @@
 # -*- coding: ascii -*-
 ## Author: Eric FONTANILLAS
 ## Date: 21.12.10
+## Last Version : 12/2017 by Victor Mataigne
 ## Object: Test for compositional bias in genome and proteome as marker of thermal adaptation (comparison between 2 "hot" species: Ap and Ps and two "cold" species: Pg, Pp)
+
 import sys,os,shutil,subprocess,string
 from functions import simplify_fasta_name, dico
 
@@ -542,6 +544,20 @@ for locus in Lloci_AA:
             fileOUT_TotalResidueVolume.write("%.5f," %Total_Residue_Volume)
             fileOUT_TotalPartialSpecificVolume.write("%.5f," %(Total_Partial_Specific_Volume))
             fileOUT_TotalHydratation.write("%.5f," % Total_Hydration)
+        else:
+            fileOUT_PROT_ALL.write("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s," %("n.a","n.a","n.a","n.a","n.a","n.a","n.a","n.a","n.a","n.a","n.a","n.a","n.a","n.a","n.a","n.a","n.a","n.a","n.a","n.a"))
+            fileOUT_IVYWREL.write("%s,%s," %("n.a", "n.a"))
+            fileOUT_ERK_DNQTSH.write("%s,%s,%s,%s,%s," %("n.a","n.a","n.a","n.a","n.a"))
+            fileOUT_EK_QH.write("%s,%s,%s,%s,%s," %("n.a","n.a","n.a","n.a","n.a"))
+            fileOUT_FYMINK_GARP.write("%s,%s,%s,%s," %("n.a","n.a","n.a","n.a"))
+            fileOUT_AVLIMFYW.write("%s,%s,%s,%s,%s,%s," %("n.a","n.a","n.a","n.a","n.a","n.a"))
+            fileOUT_STNQ.write("%s,%s," %("n.a","n.a"))
+            fileOUT_RHKDE.write("%s,%s,%s,%s,%s,%s,"%("n.a","n.a","n.a","n.a","n.a","n.a"))
+            fileOUT_PAYRE.write("%s,%s,%s,%s,%s,%s,%s,%s," %("n.a","n.a","n.a","n.a","n.a","n.a","n.a","n.a"))
+            fileOUT_TotalResidueWeight.write("%s," %"n.a")
+            fileOUT_TotalResidueVolume.write("%s," %"n.a")
+            fileOUT_TotalPartialSpecificVolume.write("%s," %"n.a")
+            fileOUT_TotalHydratation.write("%s," %"n.a")
         
     ## END LINE
     fileOUT_PROT_ALL.write("\n")
@@ -557,8 +573,4 @@ for locus in Lloci_AA:
     fileOUT_TotalResidueVolume.write("\n")
     fileOUT_TotalPartialSpecificVolume.write("\n")
     fileOUT_TotalHydratation.write("\n")
-
-    
-    
-
 
