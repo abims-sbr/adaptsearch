@@ -1,8 +1,13 @@
 Changelog
+---------
 
-Version 1.0 - 03/05/2017
+**Version 2.0 - 08/01/2017**
 
-  - New tool for orthologous gene search
-  - Uses Orthofinder and comes after TransDecoder (uses TransDecoder outputs) 
-  - Add functional test with planemo
-  - Planemo test with conda dependencies for orthofinder and python
+ - Adapted to new TransDecoder headers
+ - Using numpy and pandas
+ - Improved algorithm and added options
+
+**Version 1.0 - 13/04/2017**
+
+ - Functional tests with planemo
+ - beta version
