@@ -186,352 +186,97 @@
 	</tests>
 	<help>
 
-@HELP_AUTHORS@
+@HELPAUTHORS@
 
-============
-What it does
-============
-
-| This tool takes **'dataset collection list' containing fasta files with nucleic aligned sequences** and search the ORF and the CDS
+<![CDATA[
 
 --------
 
-==========
-Parameters
-==========
+**Description**
 
-The choice of several parameters is possible.
-
-**min_length_seq**
-	| minimal length of the sequence in the proteic format
-	| when the removal of the indel is done, the minimal length equals :previous length less20
-	| for example if you choose 50 for the minimal length, the actual length equals 30
-	|
-
-**min_length_subseq**
-	| minimal length of the subsequence in the proteic format
-	| subsequence means the part of the original sequence between 2 sets of indels
-	| an indel set is composed by more than 2 indels, if not the set is considered as unknown amino acid
-	|
-
-**min_length_nuc**
-	| Minimal length of the sequence in the nucleic format
-	|
+This tool takes files containing nucleic aligned sequences and search the ORF and the CDS.
 
 --------
 
-======
-Inputs
-======
+**Inputs**
 
-option **universal code** :
-
-| the input must have the extension .txt
-| It's the file which will serve for the translation of nucleotides to amino acids
-| if there are "U"s in this file, they will be automatically transform into "T"s
-| for example :
-| UUU Phe F
-| UCU Ser S
-| UAU Tyr Y
-| UGU Cys C
-| UUC Phe F
-| UCC Ser S
-| UAC Tyr Y
-| UGC Cys C
-| UUA Leu L
-| UCA Ser S
-| UAA Stop *
-| ...
-
+Input files : (multiple) fasta files with nucleic aligned sequences.
 
 --------
-
-=======
-Outputs
-=======
-
-This tool, produces the following files :
-
-**ORF_Search**
-	| is the output with important informations (mainly statistics about the tools).
-	|
-
-**ORF_Search_Best_ORF_aa**
-	| is the output with the best ORF in the proteic format.
-	|
-
-**ORF_Search_Best_ORF_nuc**
-	| is the output with the best ORF in the nucleic format.
-	|
-
-**ORF_Search_CDS_aa**
-	| is the output with the CDS (regardless the Methionine) in the proteic format.
-	|
-
-**ORF_Search_CDS_nuc**
-	| is the output with the CDS (regardless the Methionine) in the nucleic format.
-	|
-
-**ORF_Search_CDS_with_M_aa**
-	| is the output with the CDS (considering the Methionine) in proteic format.
-	| the rule : they must have a methionine before the minimale length of the sequence.
-	| for example before the 30 last amino acid.
-	|
-
-**ORF_Search_CDS_with_M_nuc**
-	| is the output with the CDS (considering the Methionine) in nucleic format.
-	| the rule : they must have a methionine before the minimale length of the sequence.
-	| for example before the 30 last amino acid.
-	|
-
-**ORF_Search_CDS_without_indel_aa**
-	| is the output with the CDS without indel in proteic format.
-	| considering the Methionine or not : according to the option chosen.
-	|
-
-**ORF_Search_CDS_without_indel_nuc**
-	| is the output with the CDS without indel in proteic format.
-	| considering the Methionine or not : according to the option chosen.
-
-
---------
-
-===============
-Working Example
-===============
-
-------------------------------
-The input file and its options
-------------------------------
-
-**ORF_Search**
-
-| a 'dataset collection list' containing 47 files with 1, 2 or 3 sequences inside
-| for example the file : locus5_sp3.fasta which contains 3 species :
-|
-
-| &gt;Ac533/40375
-
-----------gccccctagcgagtgacgacaaactcg----------------------------------------aacatgttggctgctgggctaagaactctaaaaagccttgcccctcggggttgcgtagcgtggtcgtgtacttcggtgcatgccaagcataccctaccagacttaccatatgattacaatgccctggagccacacatcagtgctgaaatcatgctgctgcatca
-caccaagcatcaccagacgtatgtcaacaacctgaatgttgcagaggagaagtttcatgaggctacagagaaaggtgatgtaaccacagcagtatcactgatgccagccctaagatttaatggtggtggacacatcaaccatactatattttggaagaacatgtcaccaaatggtggtggagagccatctggcgaactgatggaggccatcaaacgtgac
-tttggctcatttgaaaacatgaagaacatgttgagtacatcaaccactgcagtgcaaggctctggctggggatggcttgggtacaataaaaagatgaagaaactagaaattgccacctgtgccaaccaagatccattagagggcactacaggtctcgtcccgttgtttggcatagatgtctgggaacatgcctattacttgcagtacaagaatgttcgtccagact
-atgtaaaggctatttggaatgtggccaactgggatgacatcatggaacgttacaacaatgccagaaaataaactgttaaacaaataattaatatattaatgtgttgcaatt-tttgtcaattggtacatacacaattttgttcataaagaaaat--tgtgattactttctg-gcaactagttcccagtgaatacagcaattgttctgccaaggatgcatttggattgagaaggc
-acccagaatgggttatccgtgaatgtctattggaatgtggcaccatacgatgtttactgtattagttacaattaaaa-------------------
-
-&gt;Ap401/11000
-ctgatgtgtggccccctagcgagtgaagacaaactcgatagcacccagacagttctgttggttagataaaagggagaaacatgctggctgctgggctaagaactctaaaaagccttgctcctcgtggtggtctagcttggtcttgtacctcggtacatgccaaacacacactgccagacttgccgtatgattataatgctctggagccacacatcagtgctgaaa
-tcatgttgctgcatcacacaaaacatcaccagacgtatgtgaacaacctgaatattgcagaggagaagtttcatgaggctaccgagaaaggcgatgtgaccacagcagtatcactgatgccagccctaagatttaatggtggtggacatatcaaccatactatattttggaagaacatgtcaccaaatggtggtggagaaccatctggcgaactgatggag
-gccatcaaacgtgactttggttcatttgaaaacatgaagaacatgctgagtacagcaaccactgcagtacaaggctctggctggggatggcttgggtacaataaaaagatgaagaaactagaaattgccacctgtgccaaccaagatccattagagggcactacaggtcttgtcccactgtttggtatcgatgtctgggaacatgcctattatttacagtacaa
-gaatgttcgtccagactatgtaaaggctatttggaatgtggctaactgggatgatatcatggagcgttacaacaatgccagaaaataaac--ttaaatacatcattatttagttaatgtgcgacttttgtttgttaatcagttcacacaccattctattcacaaagaaaatggtgtatttgctttctgttcaactggttcccggtgaatacagcagttgttctgccaaggatgtattt
-ggattgagaaggcaccaagaatgggctgtcactgaatgtcaattggaatgtagcctca----atgtttactgtattacctacaattaaaatgattatgatataaccaag
-
-| &gt;Pf2011/1100
-
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------tgccagatttaccatatgattataatgccttggaaccacacatcagtgctgaaataatgctccttcatcatacaaagcatcaccagacatatgtgaacaatctgaatgt
-agctgaagaaaagtttcatgaagccacggagaaaggtgatgtcactacagctgtgtcgctaatgccagcactaagatttaatggcggaggacacatcaatcacaccattttctggaagaacatgtctcctaatggcggaggagagccttctggcgagttgatggaagccattaaacgtgattttggttcatttgagaatatgaaaaacatgttaagtacagcta
-caacagctgtccaaggatctggctggggatggcttggttataacaaaaagatgaaaaagctcgagatagccacttgtgccaaccaggatccactggaaggaacaacaggattaattccactgtttggtattgacgtctgggagcatgcttactatctgcaatataaaaatgtacgtccagattatgttaaagctatctggaatgtggccaactgggatgatatta
-cagagcgctacaacaatgc-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 **Parameters**
 
-| option : Methionine is considerated
-| no option for the CDS's length. So, by default it's min_length_seq : 50, min_length_subseq : 15, min_length_nuc : 50
+    - methionine : choose to consider the methionine in the search of CDS.
+        yes/no.
 
-----------------
-The output files
-----------------
+    - 'Minimal number of species in each locus'        
+        Default : 10 (integer).
 
+    - 'min_length_seq' :
+        minimal length of the sequence (in amino acids).        
+        when the removal of the indel is done, the minimal length equals : previous length - 20.
+        for example if you choose 50 for the minimal length, the actual length equals 30.
+        Default : 50 (integer).
 
-**ORF_Search_Best_ORF_aa**
+    - 'min_length_subseq' :
+        minimal length of the subsequence (in amino acids).
+        subsequence means the part of the original sequence between 2 sets of indels.
+        an indel set is composed by more than 2 indels, if not the set is considered as unknown amino acid.
+        Default : 15 (integer).
 
-|
-| *************** CDS detection ***************
-|
-| Files processed: 47
-|
-| Files with CDS: 32
-| Files with CDS plus M (codon start): 20
-| Files without CDS: 15
-|
-| In locus with CDS considering Methionine :
-|
-| *************** 1st filter : selection of the locus ***************
-|
+    - 'min_length_nuc' :
+        Minimal length of the sequence in the nucleic format, without indels.
+        Default : 50 (integer).
 
-Total number of locus recorded  = 20
+    - others parameters allowing to choose which outputs you desire :
+        - outputs with best ORFs.
+        - outputs with CDS, with or without indels.
+        - in proteic or nucleic format.
 
-| Number of locus with 1 species : 1
-| Number of locus with 2 species : 16
-| Number of locus with 3 species : 3
-|
-| Number of locus excluded (exclude if not at least 3 species in the alignment)= 17
-| 
-| *************** 2nd Filter : removal of the indel ***************
-| 
-| Total number of locus recorded  = 3
-|
+--------
 
-Total number of locus with no indels (SAVED) = 3
+**Outputs**
 
-Total number of locus with indels (EXCLUDED) = 0
+    - ORF_Search
+        the log file (mainly statistics about the tool).
 
-|
+    - ORF_Search_Best_ORF_aa
+        the output with the best ORF in the proteic format.
 
-**ORF_Search_Best_ORF_aa**
+    - ORF_Search_Best_ORF_nuc
+        the output with the best ORF in the nucleic format.
 
-| &gt;Pf2011/1100
+    - ORF_Search_CDS_aa
+        the output with the CDS (regardless the Methionine) in the proteic format.
 
-?????????????????????????????????????????????????????????PDLPYDYNALEPHISAEIMLLHHTKHHQTYVNNLNVAEEKFHEATEKGDVTTAVSLMPALRFNGGGHINHTIFWKNMSPNGGGEPSGELMEAIKRDFGSFENMKNMLSTATTAVQ
-GSGWGWLGYNKKMKKLEIATCANQDPLEGTTGLIPLFGIDVWEHAYYLQYKNVRPDYVKAIWNVANWDDITERYNN??????????????????????????????????????????????????????????????????????????????????????????
+    - ORF_Search_CDS_nuc
+        the output with the CDS (regardless the Methionine) in the nucleic format.
 
-| &gt;Ap401/11000
+    - ORF_Search_CDS_with_M_aa
+        the output with the CDS (considering the Methionine) in proteic format.
+        the rule : they must have a methionine before the minimal length of the sequence.
+        for example before the 30 last amino acid.
 
-DVWPPSE*RQTR*HPDSSVG*IKGRNMLAAGLRTLKSLAPRGGLAWSCTSVHAKHTLPDLPYDYNALEPHISAEIMLLHHTKHHQTYVNNLNIAEEKFHEATEKGDVTTAVSLMPALRFNGGGHINHTIFWKNMSPNGGGEPSGELMEAIKRDFGSFENMKNMLS
-TATTAVQGSGWGWLGYNKKMKKLEIATCANQDPLEGTTGLVPLFGIDVWEHAYYLQYKNVRPDYVKAIWNVANWDDIMERYNNARK*??KYIII*LMCDFCLLISSHTILFTKKMVYLLSVQLVPGEYSSCSAKDVFGLRRHQEWAVTECQLECSL??CLLYYLQLK*
-L*YNQ
+    - ORF_Search_CDS_with_M_nuc
+        the output with the CDS (considering the Methionine) in nucleic format.
+        the rule : they must have a methionine before the minimale length of the sequence.
+        for example before the 30 last amino acid.
 
-| &gt;Ac533/40375
+    - ORF_Search_CDS_without_indel_aa
+        is the output with the CDS without indel in proteic format.
+        considering the Methionine or not : according to the option chosen.
 
-???PPSE*RQT??????????????NMLAAGLRTLKSLAPRGCVAWSCTSVHAKHTLPDLPYDYNALEPHISAEIMLLHHTKHHQTYVNNLNVAEEKFHEATEKGDVTTAVSLMPALRFNGGGHINHTIFWKNMSPNGGGEPSGELMEAIKRDFGSFENMKNMLSTS
-TTAVQGSGWGWLGYNKKMKKLEIATCANQDPLEGTTGLVPLFGIDVWEHAYYLQYKNVRPDYVKAIWNVANWDDIMERYNNARK*TVKQIINILMCCN?LSIGTYTILFIKK??*LLS?QLVPSEYSNCSAKDAFGLRRHPEWVIRECLLECGTIRCLLY*LQLK??????
+    - ORF_Search_CDS_without_indel_nuc
+        is the output with the CDS without indel in proteic format.
+        considering the Methionine or not : according to the option chosen.
 
-.. class:: infomark
+---------
 
-| for example : locus5_sp3.fasta
-| 
+**The AdaptSearch Pipeline**
 
-**ORF_Search_Best_ORF_nuc**
+.. image:: ../../adaptsearch_picture_helps.png :heigth: 593 :width: 852
 
-| &gt;Pf2011/1100
-
--------------------------------------------------------------------------------------------------------------------------------------------------------------------------tgccagatttaccatatgattataatgccttggaaccacacatcagtgctgaaataatgctccttcatcatacaaagcatcaccagacatatgtgaacaatctgaatgta
-gctgaagaaaagtttcatgaagccacggagaaaggtgatgtcactacagctgtgtcgctaatgccagcactaagatttaatggcggaggacacatcaatcacaccattttctggaagaacatgtctcctaatggcggaggagagccttctggcgagttgatggaagccattaaacgtgattttggttcatttgagaatatgaaaaacatgttaagtacagctac
-aacagctgtccaaggatctggctggggatggcttggttataacaaaaagatgaaaaagctcgagatagccacttgtgccaaccaggatccactggaaggaacaacaggattaattccactgtttggtattgacgtctgggagcatgcttactatctgcaatataaaaatgtacgtccagattatgttaaagctatctggaatgtggccaactgggatgatattac
-agagcgctacaacaatgc----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-| &gt;Ap401/11000
-
-gatgtgtggccccctagcgagtgaagacaaactcgatagcacccagacagttctgttggttagataaaagggagaaacatgctggctgctgggctaagaactctaaaaagccttgctcctcgtggtggtctagcttggtcttgtacctcggtacatgccaaacacacactgccagacttgccgtatgattataatgctctggagccacacatcagtgctgaaatc
-atgttgctgcatcacacaaaacatcaccagacgtatgtgaacaacctgaatattgcagaggagaagtttcatgaggctaccgagaaaggcgatgtgaccacagcagtatcactgatgccagccctaagatttaatggtggtggacatatcaaccatactatattttggaagaacatgtcaccaaatggtggtggagaaccatctggcgaactgatggaggc
-catcaaacgtgactttggttcatttgaaaacatgaagaacatgctgagtacagcaaccactgcagtacaaggctctggctggggatggcttgggtacaataaaaagatgaagaaactagaaattgccacctgtgccaaccaagatccattagagggcactacaggtcttgtcccactgtttggtatcgatgtctgggaacatgcctattatttacagtacaagaa
-tgttcgtccagactatgtaaaggctatttggaatgtggctaactgggatgatatcatggagcgttacaacaatgccagaaaataaac--ttaaatacatcattatttagttaatgtgcgacttttgtttgttaatcagttcacacaccattctattcacaaagaaaatggtgtatttgctttctgttcaactggttcccggtgaatacagcagttgttctgccaaggatgtatttggat
-tgagaaggcaccaagaatgggctgtcactgaatgtcaattggaatgtagcctca----atgtttactgtattacctacaattaaaatgattatgatataaccaa
-
-| &gt;Ac533/40375
-
---------gccccctagcgagtgacgacaaactcg----------------------------------------aacatgttggctgctgggctaagaactctaaaaagccttgcccctcggggttgcgtagcgtggtcgtgtacttcggtgcatgccaagcataccctaccagacttaccatatgattacaatgccctggagccacacatcagtgctgaaatcatgctgctgcatcac
-accaagcatcaccagacgtatgtcaacaacctgaatgttgcagaggagaagtttcatgaggctacagagaaaggtgatgtaaccacagcagtatcactgatgccagccctaagatttaatggtggtggacacatcaaccatactatattttggaagaacatgtcaccaaatggtggtggagagccatctggcgaactgatggaggccatcaaacgtgact
-ttggctcatttgaaaacatgaagaacatgttgagtacatcaaccactgcagtgcaaggctctggctggggatggcttgggtacaataaaaagatgaagaaactagaaattgccacctgtgccaaccaagatccattagagggcactacaggtctcgtcccgttgtttggcatagatgtctgggaacatgcctattacttgcagtacaagaatgttcgtccagacta
-tgtaaaggctatttggaatgtggccaactgggatgacatcatggaacgttacaacaatgccagaaaataaactgttaaacaaataattaatatattaatgtgttgcaatt-tttgtcaattggtacatacacaattttgttcataaagaaaat--tgtgattactttctg-gcaactagttcccagtgaatacagcaattgttctgccaaggatgcatttggattgagaaggca
-cccagaatgggttatccgtgaatgtctattggaatgtggcaccatacgatgtttactgtattagttacaattaaaa------------------
-
-.. class:: infomark
-
-| for example : locus5_sp3.fasta
-|
-
-**ORF_Search_CDS_with_M_aa**
-
-| &gt;Pf2011/1100
-
-????????????????????????????????????PDLPYDYNALEPHISAEIMLLHHTKHHQTYVNNLNVAEEKFHEATEKGDVTTAVSLMPALRFNGGGHINHTIFWKNMSPNGGGEPSGELMEAIKRDFGSFENMKNMLSTATTAVQGSGWGWLGYNKKMKK
-LEIATCANQDPLEGTTGLIPLFGIDVWEHAYYLQYKNVRPDYVKAIWNVANWDDITERYNN???
-
-| &gt;Ap401/11000
-
-IKGRNMLAAGLRTLKSLAPRGGLAWSCTSVHAKHTLPDLPYDYNALEPHISAEIMLLHHTKHHQTYVNNLNIAEEKFHEATEKGDVTTAVSLMPALRFNGGGHINHTIFWKNMSPNGGGEPSGELMEAIKRDFGSFENMKNMLSTATTAVQGSGWGWLGYNK
-KMKKLEIATCANQDPLEGTTGLVPLFGIDVWEHAYYLQYKNVRPDYVKAIWNVANWDDIMERYNNARK
-
-| &gt;Ac533/40375
-
-????NMLAAGLRTLKSLAPRGCVAWSCTSVHAKHTLPDLPYDYNALEPHISAEIMLLHHTKHHQTYVNNLNVAEEKFHEATEKGDVTTAVSLMPALRFNGGGHINHTIFWKNMSPNGGGEPSGELMEAIKRDFGSFENMKNMLSTSTTAVQGSGWGWLGYNK
-KMKKLEIATCANQDPLEGTTGLVPLFGIDVWEHAYYLQYKNVRPDYVKAIWNVANWDDIMERYNNARK
-
-.. class:: infomark
-
-| for example : locus5_sp3.fasta
-
-| It's the same for the option : regardless Methionine
-|
-
-**ORF_Search_CDS_with_M_nuc**
-
-| &gt;Pf2011/1100
-
-----------------------------------------------------------------------------------------------------------tgccagatttaccatatgattataatgccttggaaccacacatcagtgctgaaataatgctccttcatcatacaaagcatcaccagacatatgtgaacaatctgaatgtagctgaagaaaagtttcatgaagccacggagaaaggtgatg
-tcactacagctgtgtcgctaatgccagcactaagatttaatggcggaggacacatcaatcacaccattttctggaagaacatgtctcctaatggcggaggagagccttctggcgagttgatggaagccattaaacgtgattttggttcatttgagaatatgaaaaacatgttaagtacagctacaacagctgtccaaggatctggctggggatggcttggttataa
-caaaaagatgaaaaagctcgagatagccacttgtgccaaccaggatccactggaaggaacaacaggattaattccactgtttggtattgacgtctgggagcatgcttactatctgcaatataaaaatgtacgtccagattatgttaaagctatctggaatgtggccaactgggatgatattacagagcgctacaacaatgc-------
-
-| &gt;Ap401/11000
-
-ataaaagggagaaacatgctggctgctgggctaagaactctaaaaagccttgctcctcgtggtggtctagcttggtcttgtacctcggtacatgccaaacacacactgccagacttgccgtatgattataatgctctggagccacacatcagtgctgaaatcatgttgctgcatcacacaaaacatcaccagacgtatgtgaacaacctgaatattgcagagga
-gaagtttcatgaggctaccgagaaaggcgatgtgaccacagcagtatcactgatgccagccctaagatttaatggtggtggacatatcaaccatactatattttggaagaacatgtcaccaaatggtggtggagaaccatctggcgaactgatggaggccatcaaacgtgactttggttcatttgaaaacatgaagaacatgctgagtacagcaaccactg
-cagtacaaggctctggctggggatggcttgggtacaataaaaagatgaagaaactagaaattgccacctgtgccaaccaagatccattagagggcactacaggtcttgtcccactgtttggtatcgatgtctgggaacatgcctattatttacagtacaagaatgttcgtccagactatgtaaaggctatttggaatgtggctaactgggatgatatcatggagcg
-ttacaacaatgccagaaaa
-
-| &gt;Ac533/40375
-
-------------aacatgttggctgctgggctaagaactctaaaaagccttgcccctcggggttgcgtagcgtggtcgtgtacttcggtgcatgccaagcataccctaccagacttaccatatgattacaatgccctggagccacacatcagtgctgaaatcatgctgctgcatcacaccaagcatcaccagacgtatgtcaacaacctgaatgttgcagaggagaa
-gtttcatgaggctacagagaaaggtgatgtaaccacagcagtatcactgatgccagccctaagatttaatggtggtggacacatcaaccatactatattttggaagaacatgtcaccaaatggtggtggagagccatctggcgaactgatggaggccatcaaacgtgactttggctcatttgaaaacatgaagaacatgttgagtacatcaaccactgcagt
-gcaaggctctggctggggatggcttgggtacaataaaaagatgaagaaactagaaattgccacctgtgccaaccaagatccattagagggcactacaggtctcgtcccgttgtttggcatagatgtctgggaacatgcctattacttgcagtacaagaatgttcgtccagactatgtaaaggctatttggaatgtggccaactgggatgacatcatggaacgtt
-acaacaatgccagaaaa
-
-.. class:: infomark
-
-| for example : locus5_sp3.fasta
-|
- 
-| It's the same for the option : regardless Methionine
-|
-
-**ORF_Search_CDS_without_indel_aa**
-
-| &gt;Pf2011/1100
-
-PDLPYDYNALEPHISAEIMLLHHTKHHQTYVNNLNVAEEKFHEATEKGDVTTAVSLMPALRFNGGGHINHTIFWKNMSPNGGGEPSGELMEAIKRDFGSFENMKNMLSTATTAVQGSGWGWLGYNKKMKKLEIATCANQDPLEGTTGLIPLFGIDVWEHAYYLQ
-YKNVRPDYVKAIWNVANWDDITERYNN
-
-| &gt;Ap401/11000
-
-PDLPYDYNALEPHISAEIMLLHHTKHHQTYVNNLNIAEEKFHEATEKGDVTTAVSLMPALRFNGGGHINHTIFWKNMSPNGGGEPSGELMEAIKRDFGSFENMKNMLSTATTAVQGSGWGWLGYNKKMKKLEIATCANQDPLEGTTGLVPLFGIDVWEHAYYLQ
-YKNVRPDYVKAIWNVANWDDIMERYNN
-
-| &gt;Ac533/40375
-
-PDLPYDYNALEPHISAEIMLLHHTKHHQTYVNNLNVAEEKFHEATEKGDVTTAVSLMPALRFNGGGHINHTIFWKNMSPNGGGEPSGELMEAIKRDFGSFENMKNMLSTSTTAVQGSGWGWLGYNKKMKKLEIATCANQDPLEGTTGLVPLFGIDVWEHAYYLQ
-YKNVRPDYVKAIWNVANWDDIMERYNN
-
-.. class:: infomark
-
-| for example locus5_sp3_sp3.fasta
-||
-
-**ORF_Search_CDS_without_indel_nuc**
-
-| &gt;Pf2011/1100
-
-ccagatttaccatatgattataatgccttggaaccacacatcagtgctgaaataatgctccttcatcatacaaagcatcaccagacatatgtgaacaatctgaatgtagctgaagaaaagtttcatgaagccacggagaaaggtgatgtcactacagctgtgtcgctaatgccagcactaagatttaatggcggaggacacatcaatcacaccattttctggaa
-gaacatgtctcctaatggcggaggagagccttctggcgagttgatggaagccattaaacgtgattttggttcatttgagaatatgaaaaacatgttaagtacagctacaacagctgtccaaggatctggctggggatggcttggttataacaaaaagatgaaaaagctcgagatagccacttgtgccaaccaggatccactggaaggaacaacaggatta
-attccactgtttggtattgacgtctgggagcatgcttactatctgcaatataaaaatgtacgtccagattatgttaaagctatctggaatgtggccaactgggatgatattacagagcgctacaacaat
-
-| &gt;Ap401/11000
-
-ccagacttgccgtatgattataatgctctggagccacacatcagtgctgaaatcatgttgctgcatcacacaaaacatcaccagacgtatgtgaacaacctgaatattgcagaggagaagtttcatgaggctaccgagaaaggcgatgtgaccacagcagtatcactgatgccagccctaagatttaatggtggtggacatatcaaccatactatattttgga
-agaacatgtcaccaaatggtggtggagaaccatctggcgaactgatggaggccatcaaacgtgactttggttcatttgaaaacatgaagaacatgctgagtacagcaaccactgcagtacaaggctctggctggggatggcttgggtacaataaaaagatgaagaaactagaaattgccacctgtgccaaccaagatccattagagggcactacag
-gtcttgtcccactgtttggtatcgatgtctgggaacatgcctattatttacagtacaagaatgttcgtccagactatgtaaaggctatttggaatgtggctaactgggatgatatcatggagcgttacaacaat
-
-| &gt;Ac533/40375
-
-ccagacttaccatatgattacaatgccctggagccacacatcagtgctgaaatcatgctgctgcatcacaccaagcatcaccagacgtatgtcaacaacctgaatgttgcagaggagaagtttcatgaggctacagagaaaggtgatgtaaccacagcagtatcactgatgccagccctaagatttaatggtggtggacacatcaaccatactatattttgg
-aagaacatgtcaccaaatggtggtggagagccatctggcgaactgatggaggccatcaaacgtgactttggctcatttgaaaacatgaagaacatgttgagtacatcaaccactgcagtgcaaggctctggctggggatggcttgggtacaataaaaagatgaagaaactagaaattgccacctgtgccaaccaagatccattagagggcactaca
-ggtctcgtcccgttgtttggcatagatgtctgggaacatgcctattacttgcagtacaagaatgttcgtccagactatgtaaaggctatttggaatgtggccaactgggatgacatcatggaacgttacaacaat
-
-.. class:: infomark
-
-| for example : locus5_sp3_sp3.fasta
-|
-
----------------------------------------------------
+---------
 
 Changelog
 ---------
@@ -540,15 +285,13 @@ Changelog
 
  - NEW: Replace the zip between tools by Dataset Collection
 
-
 **Version 1.0 - 13/04/2017**
 
- - Add funtional test with planemo
-
+ - Added functional test with planemo
  - planemo test with conda dependency for python
-
  - Scripts renamed + symlinks to the directory 'scripts'
 
+    ]]>
 
 	</help>
 
