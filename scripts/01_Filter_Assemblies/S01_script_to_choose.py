@@ -5,30 +5,9 @@
 ## LAST VERSION: 10.2017 by Victor Mataigne
 
 import glob, sys, string, os
-from Bio import SeqIO # BioPython
-
-# Improvments to do:
-    # code factoring if possible
-    # simplify the method (too many intermediate files with weird names)
     
-def seqOneLine(file):
-    n = file.split('.')    
-    name = "%s_oneline.fasta" %n[0]   
-    
-    new_file = open(name, "w")
-    with new_file:
-        for seq_record in SeqIO.parse(file, "fasta"):
-            gid = seq_record.id
-            gid = gid.split("(")
-            gid = gid[0]
-            new_file.write(">")
-            new_file.write(gid)
-            new_file.write("\n")
-            new_file.write(str(seq_record.seq))
-            new_file.write("\n")
-
 def nameFormatting(name, script_path, prefix):
-    f = open(name, "r")    
+    f = open(name, "r")
     f1 = f.readline() # Only need to check first line to know the assembler which has been used
     f.close()
     name_find_orf_input = ""
@@ -55,22 +34,11 @@ def main():
     percent_identity = sys.argv[3]
     overlap_length = sys.argv[4]
 
-    #for name in str.split(sys.argv[1], ","):
-        #seqOneLine(name)
-
-    #path = glob.glob('*_oneline.fasta')    
-
-    #for name in path:
     for name in str.split(sys.argv[1], ","):         
         prefix=name[0:2]
-
-        #debut modif
         name_fasta_formatter = "01%s" %name
         os.system("cat '%s' | fasta_formatter -w 0 -o '%s'" % (name, name_fasta_formatter))
         name_find_orf_input = nameFormatting(name_fasta_formatter, script_path, prefix)
-        # fin modif
-
-        #name_find_orf_input = nameFormatting(name, script_path, prefix)
         #Pierre guillaume find_orf script for keeping the longuest ORF
         name_find_orf = "05%s"% name
         os.system("python S04_find_orf.py %s %s" %(name_find_orf_input, name_find_orf))
@@ -81,12 +49,6 @@ def main():
         #Apply pgbrun script filter script TODO length parameter
         name_filter = "%s%s"%(prefix, name)
         os.system("python S05_filter.py %s %s outputs/%s" %(prefix, length_seq_max, name_filter))
-
-        #path = glob.glob('outputs/*_oneline.fasta')
-        
-    #for name in path:
-        #name_new = name.split("_oneline.")[0]
-        #os.system("mv %s %s.fasta" %(name, name_new))
 
 if __name__ == "__main__":
     main()
