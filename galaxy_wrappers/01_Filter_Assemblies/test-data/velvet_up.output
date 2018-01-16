@@ -1,4 +1,4 @@
-Number of segment pairs = 4422; number of pairwise comparisons = 1
+Number of segment pairs = 4032; number of pairwise comparisons = 0
 '+' means given segment; '-' means reverse complement
 
 Overlaps            Containments  No. of Constraints Supporting Overlap
@@ -12,7 +12,7 @@ Overlaps            Containments  No. of Constraints Supporting Overlap
 
 
 DETAILED DISPLAY OF CONTIGS
-Number of segment pairs = 4032; number of pairwise comparisons = 0
+Number of segment pairs = 4422; number of pairwise comparisons = 1
 '+' means given segment; '-' means reverse complement
 
 Overlaps            Containments  No. of Constraints Supporting Overlap

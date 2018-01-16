@@ -55,15 +55,22 @@ def main():
     percent_identity = sys.argv[3]
     overlap_length = sys.argv[4]
 
-    for name in str.split(sys.argv[1], ","):
-        seqOneLine(name)
+    #for name in str.split(sys.argv[1], ","):
+        #seqOneLine(name)
 
-    path = glob.glob('*_oneline.fasta')
+    #path = glob.glob('*_oneline.fasta')    
 
-    for name in path:
-             
+    #for name in path:
+    for name in str.split(sys.argv[1], ","):         
         prefix=name[0:2]
-        name_find_orf_input = nameFormatting(name, script_path, prefix)
+
+        #debut modif
+        name_fasta_formatter = "01%s" %name
+        os.system("cat '%s' | fasta_formatter -w 0 -o '%s'" % (name, name_fasta_formatter))
+        name_find_orf_input = nameFormatting(name_fasta_formatter, script_path, prefix)
+        # fin modif
+
+        #name_find_orf_input = nameFormatting(name, script_path, prefix)
         #Pierre guillaume find_orf script for keeping the longuest ORF
         name_find_orf = "05%s"% name
         os.system("python S04_find_orf.py %s %s" %(name_find_orf_input, name_find_orf))
@@ -75,11 +82,11 @@ def main():
         name_filter = "%s%s"%(prefix, name)
         os.system("python S05_filter.py %s %s outputs/%s" %(prefix, length_seq_max, name_filter))
 
-        path = glob.glob('outputs/*_oneline.fasta')
+        #path = glob.glob('outputs/*_oneline.fasta')
         
-    for name in path:
-        name_new = name.split("_oneline.")[0]
-        os.system("mv %s %s.fasta" %(name, name_new))
+    #for name in path:
+        #name_new = name.split("_oneline.")[0]
+        #os.system("mv %s %s.fasta" %(name, name_new))
 
 if __name__ == "__main__":
     main()
