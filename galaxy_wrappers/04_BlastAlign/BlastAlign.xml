@@ -34,9 +34,9 @@
         #end if
         &&
         ln -s '$input.element_identifier'".fasta.phy" out.phy &&
-        ln -s '$input.element_identifier'".fasta.nxs" out.nxs &&
+        ln -s '$input.element_identifier'".fasta.nxs" out.nxs
         #if $fasta_out.value == True
-            python $__tool_directory__/scripts/S01_phylip2fasta.py out.phy out.fasta
+            && python $__tool_directory__/scripts/S01_phylip2fasta.py out.phy out.fasta
         #end if
 
     ]]></command>
@@ -55,9 +55,9 @@
     </inputs>
 
     <outputs>
-        <data format="phy" name="phy" from_work_dir="out.phy" label="Alignment of ${input.name} in phylip" />
-        <data format="nxs" name="nxs" from_work_dir="out.nxs" label="Alignment of ${input.name} in nexus" />
-        <data format="fasta" name="fasta" from_work_dir="out.fasta" label="Alignment of ${input.name} in fasta">
+        <data format="phylip" name="phy" from_work_dir="out.phy" label="Alignment of ${input.name} in phylip" hidden="True"/>
+        <data format="nexus" name="nxs" from_work_dir="out.nxs" label="Alignment of ${input.name} in nexus" hidden="True"/>
+        <data format="fasta" name="fasta" from_work_dir="out.fasta" label="Alignment of ${input.name} in fasta" hidden="True">
             <filter>fasta_out == True</filter>
         </data>
     </outputs>
@@ -90,6 +90,33 @@
             <output name="phy" value="outputs/locus1_sp3.phy" />
             <output name="nxs" value="outputs/locus1_sp3.nxs" />
             <output name="fasta" value="outputs/locus1_sp3.fasta" />
+        </test>
+        <test>
+            <param name="input" ftype="fasta" value="inputs/locus3_sp2.fasta" />
+            <section name="advanced_option">
+                <param name="m" value="95" />
+                <param name="r" value="" />
+                <param name="x" value="" />
+                <param name="n" value="False" />
+                <param name="s" value="0" />
+            </section>
+            <param name="fasta_out" value="False" />
+            <output name="phy" value="outputs/locus3_sp2.phy" />
+            <output name="nxs" value="outputs/locus3_sp2.nxs" />
+        </test>
+        <test>
+            <param name="input" ftype="fasta" value="inputs/locus8_sp2.fasta" />
+            <section name="advanced_option">
+                <param name="m" value="95" />
+                <param name="r" value="" />
+                <param name="x" value="" />
+                <param name="n" value="False" />
+                <param name="s" value="0" />
+            </section>
+            <param name="fasta_out" value="True" />
+            <output name="phy" value="outputs/locus8_sp2.phy" />
+            <output name="nxs" value="outputs/locus8_sp2.nxs" />
+            <output name="fasta" value="outputs/locus8_sp2.fasta" />
         </test>
 
         <!--locus10_sp2.fasta    locus1_sp3.fasta  locus2_sp2.fasta  locus3_sp2.fasta  locus4_sp2.fasta  locus5_sp2.fasta  locus6_sp2.fasta  locus7_sp2.fasta  locus8_sp2.fasta  locus9_sp2.fasta-->
@@ -146,10 +173,56 @@ The choice of several parameters for the blast is possible.
 
 --------
 
+<<<<<<< HEAD
 **Outputs**
  
     - 'Alignment_{input.name}_phylip' :
         the aligned sequences in Phylip format.
+=======
+===============
+Working Example
+===============
+
+------------------------------
+The input file and its options
+------------------------------
+
+**Input file**
+
+| &gt;Pf210_1/1_1.000_920
+| CCGGTGGCCATTTTCTGCACCTCGTGGGTTATTGAGCTGAAAGTGGTTCAGCTCACTGTCTGTTAACAGCCGTGTCGGTCTGAGGGTATCACAGTTAATATAATGAATCAAGAGAAGTTGAAGCAGCTCCAGGCCCAAGTCCGCATCGGAGGAAAGGG
+| CACAGCAAGAAGAAAGAAGAAGGTGATTCACAGAACAGCAACAACAGATGACAAGAAACTGCAAAGTACACTGAAGAAATTGGCAGTAAATAATATTCCGGGTATAGAAGAGGTTAACATGATAAAGGATGACGGGCAAGTAATACATTTTACCAATCCGA
+| AGGTGCAGGCTTCTCTTCAGTCAAACACATTTGCCATTAATGGCCAAGCCGAAACGAAACAAATCACTGACTTGCTACCCGGTATATTAAATCAGCTGGGGGCTGAAAGTTTAACAAACTTGAAGAAGCTGGCTAAATCTGTGACTGCTGGAGTTGATTC
+| TGATAACAAGCAGGATGCAGCAGATATTGATGAAGATGATGATGATGTCCCAGAACTGGTTGAAAACTTTGACGAAGCATCGAAGAATGAGGGGACGTAATTCTTCTCCCACTTTATGCCATGGTAGCATCAATCGTTTTGCTGATGATGGCGTGTTTATAC
+| CTACCACCCAGTGTAGATTTGTCCAGACCTGGCTTGTTTGACATTGCTTGTTGGATTTTGCAACAATATCATGATTAGACTGCCTGGCTTTGTGGCCTAAATACTGTATTAAAGTGTCTGTAAAAGGGAAGCAATTTTTCTATTAAGAAGTTATCCACTAGCAT
+| ATTGACAGTTTTGCATGTTTGATTTTGTTCCTCGTGCAGGTCAGAACACTGATTGTACAGTGGCTGATTACAGAAAAATTGTATTCAGAGTTAAATAAACACATTATTATCCAAA
+| &gt;Pp_17_1/1_1.000_930
+| CCGGTGGCCATTTTCTGCACCTCGTGGGTATCTTGGGTTCGATTTGTATCAGCTCCCTATGTAAAATTAAACAAACTTATAACATAGATTGCAGCTGACAATACAATGAACCAAGAAAAATTAAAACAACTCCAAGCCCAGGTGCGCATTGGAGGCAAGGG
+| TACAGCAAGAAGAAAGAAGAAGGTCATTCATAGAACAGCAACAACAGATGATAAAAAACTGCAGAGTACATTAAAAAAACTAGCAGTAAATAATATTCCAGGTATAGAAGAGGTTAATATGATAAAAGATGATGGACAGGTAATACATTTTACCAATCCAAAA
+| GTACAGGCTTCTCTACAGTCAAACACATTTGCTATTAATGGGCAAGCTGAGACAAAACAAATCACCGAATTGTTGCCTGGTATATTAAATCAGCTGGGAGCAGAAAGTTTAACAAATCTGAAGAAACTGGCTACATCCGTGACTGGTGGAGTTGATTCTGAT
+| AACAAGCCAGAAACAGCAGAAATTGATGAAGACGATGATGATGTTCCAGATTTGGTTGAAAACTTTGACGAGGCATCCAAGAATGAAGGAACGTAATTTGTCATTGGTAGATCCTCCCATAGCCTGATTCTTGTGGCTGGCGACAGCTTGTTTATATTTTAC
+
+CCAGTGTAGATTTGTTCAAGAAGGTGTGCTGGCGTTGTTTGAATTTTGTAATAGTACCATGATTTAAATACCCGGTTAACGGCCTACCTGTTATGTAGAAATTGTAGAGAAAAAATTAAATCAATTTTGTATGAACTATAAGCAGCAGCTAATATATTTGCAGTTT
+TACATGTTTATCTGTTCATCAGCATGGGTCAGAGAATGACCGTACTTTGCTGGTGATAGAATGCTTGTATTCAAAGTTTAATAAATGGTTGTAAGCCATTTAAAAAAAAAAAAAAA
+
+----------------
+The output files
+----------------
+
+**BlastAlign**
+
+************************  BlastAlign  ************************
+
+|
+| This program takes nucleotide sequences in fasta format and returns a multiple alignment (in Nexus and Phylip formats) using BLASTN
+|
+| Input file locus_2_sp_8.fasta has 2 sequences and is 1894 bytes
+| (maximum number of sequences that will be used to search for the reference sequence is 770)
+|
+|
+| BlastAlign finished: it has produced a multiple alignment of 2 sequences and length 720 by aligning to sequence Pf2101/11000920 (proportion of gaps in each sequence is less than 0.95)
+| 
+>>>>>>> blastalign bug fix but with no file renaming
 
     - 'Alignment_{input.name}_nexus' :
        the aligned sequences in Nexus format.
@@ -178,3 +251,4 @@ Changelog
     <expand macro="citations" />
 
 </tool>
+
