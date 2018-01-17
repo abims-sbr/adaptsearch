@@ -9,5 +9,6 @@
     <repository name="blastalign" owner="abims-sbr"/>
     <repository name="cds_search" owner="abims-sbr"/>
     <repository name="concatphyl" owner="abims-sbr"/>
-    <repository name="mutcount" owner="abims-sbr" />
+    <repository name="mutcount" owner="abims-sbr"/>
+    <repository name="codeml" owner="iuc"/>
 </repositories>
