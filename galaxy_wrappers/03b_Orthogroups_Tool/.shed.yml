@@ -1,8 +1,6 @@
-categories: [Phylogenetics, RNA, Transcriptomics]
+categories: [Phylogenetics,RNA,Transcriptomics]
 description: writing orthogroups of orthofinder in separated files
-long_description: this tool parse the Orthogroups.txt file of OrthoFinder and write 
-each orthogroup in an individual file, with headers and sequences. The sequences are 
-retrieved with the output files of filter_assembles
+long_description: this tool parse the Orthogroups.txt file of OrthoFinder and write each orthogroup in an individual file, with headers and sequences. The sequences are retrieved with the output files of filter_assembles
 name: orthogroups_tool
 owner: abims-sbr
 remote_repository_url: htpps://github.com/abims-sbr/adaptearch
