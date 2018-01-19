@@ -4,7 +4,7 @@
 ## This script takes an output file of OrthoFinder (Orthogroups.txt), which contains a set of orthogroups,
 ## and rewrite it to split each orthogroup into a single fasta file.
 
-import os, string, glob, argparse, csv
+import os, string, glob, argparse, csv, itertools
 import numpy as np
 import pandas as pd
 
@@ -15,18 +15,13 @@ import pandas as pd
 def hashSequences(path):
     hashTable = {}
     # WARNING : sequences are expected to be on one line. If not, biopython can do it
-    for file in path:        
-        originFile = open(file, "r")
+    for file in path:
         gene = ""
         sequence = ""
-        with originFile:
-            while (1): # Not the best way to do
-                gene = originFile.readline()
-                if not gene:
-                    break
-                gene = gene[:-1]
-                sequence = originFile.readline()
-                sequence = sequence[:-1]
+        with open(file, "r") as origin:
+            for line1,line2 in itertools.izip_longest(*[origin]*2):
+                gene=line1.strip("\r\n ")
+                sequence=line2.strip(" \r\n ")
                 hashTable[gene] = sequence
     return hashTable
 
@@ -107,12 +102,12 @@ def formatAndFilter(orthogroups, mini, nbspecs, hashTable, verbose, paralogs):
     i,j = 1,1
     for group in list_orthogroups:
         group = string.split(group, " ") # list of lists
-        group.sort()        
-        if verbose or paralogs:
-            if len(group) >= mini:
-                list_orthogroups_withpara.append(group)
-                writeOutputFile(group, hashTable, j, True)
-                j += 1       
+        group.sort()
+        if verbose and len(group) >= mini:
+            list_orthogroups_withpara.append(group)
+        if paralogs and len(group) >= mini:
+            writeOutputFile(group, hashTable, j, True)
+        j += 1
         new_group = []
         rang=-1
         # Keep only one paralogs per species (1st encounter)
@@ -157,7 +152,7 @@ def main():
 
     # Build hashtable
     print "  Building hashTable IDs/sequences ...\n"
-    path = glob.glob('*.fasta')    
+    path = glob.glob('*.fasta')
     hashTable = hashSequences(path)
 
     # Open txt file with orthogroups
@@ -179,7 +174,8 @@ def main():
         os.system("mv {} filtered_orthogroups".format(file))
     
     print "  \nFiltered orthogroups are written in the directory 'filtered_orthogroups'"
-    print "  \nFull orthogroups files are written in the directory 'orthogroups_withParalogs'\n"
+    if args.paralogs:
+        print "  \nFull orthogroups files are written in the directory 'orthogroups_withParalogs'\n"
 
 if __name__ == "__main__":
     main()
