@@ -136,6 +136,7 @@ def testpvalue(bootstrap,value,iterration): #computes where the observed value i
   maxval=iterration-1
   minval=0
   testval=(maxval+minval)/2
+  print bootstrap[testval]
   while maxval-minval > 1:
     if value > bootstrap[testval]:
       minval=testval
@@ -673,9 +674,10 @@ for p in pairlist: #pairs analysis
       gc_counts.write(",")
       gc_counts.write(str(GC3_b)+","+str(GC12_b)+","+str(IVYWREL_b)+","+str(EKQH_b)+","+str(PAYRESDGM_b)+","+str(purineload_b)+","+str(CvP_b))
 
-    # end writing
+    # end writing    
     
     stringcounts=stringcounts[:-1]+[''.join([stringcounts[-1],("counting of %s\n\n" % p[0])+''.join(strcountings(codonscount, aacount, aaclassifcount,codonscountpvalue,aacountpvalue,aaclassifcountpvalue,GC3,GC12,IVYWREL,EKQH,PAYRESDGM,purineload,CvP))+'\n\n'])]
+  
   else:
     towrite=1
   # -----------------------------

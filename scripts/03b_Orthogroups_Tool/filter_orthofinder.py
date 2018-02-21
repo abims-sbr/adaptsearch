@@ -21,7 +21,7 @@ def hashSequences(path):
         with open(file, "r") as origin:
             for line1,line2 in itertools.izip_longest(*[origin]*2):
                 gene=line1.strip("\r\n ")
-                sequence=line2.strip(" \r\n ")
+                sequence=line2.strip("\r\n ")
                 hashTable[gene] = sequence
     return hashTable
 
