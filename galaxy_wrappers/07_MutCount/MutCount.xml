@@ -89,7 +89,7 @@
         <data format="csv" name="aatypes_counts" label="aatypes_counts.csv" from_work_dir="aatypes_counts.csv" >
             <filter>(method['method_run']=='concat')</filter>
         </data>
-        <data format="csv" name="gc_counts" label="codons_counts.csv" from_work_dir="gc_counts.csv" >
+        <data format="csv" name="gc_counts" label="gc_counts.csv" from_work_dir="gc_counts.csv" >
             <filter>(method['method_run']=='concat')</filter>
         </data>
         <data format="csv" name="aa_transitions" label="aa_transitions.csv" from_work_dir="aa_transitions.csv" >
