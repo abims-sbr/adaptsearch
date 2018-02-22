@@ -38,7 +38,7 @@
   	</command>
 
  	<inputs>
-        <param name="inputs_from_paiwise_prot" type="data" format="fasta" multiple="true" label="Input files from Pairwise Prot" />
+        <param name="inputs_from_paiwise_dna" type="data" format="fasta" multiple="true" label="Input files from Pairwise DNA" />
 		<param name="minspec" type="integer" value="3" label="Drop orthogroups with less than n species" />	
         <param name="verbose" type="boolean" checked="True" truevalue="T" falsevalue="F" label="Verbose" help="Display a summary table of orthogroups before paralogs filtering"/>
         <param name="paralogs" type="boolean" checked="False" truevalue="T" falsevalue="F" label="Paralogs" help="Return also orthogroups without paralogs filtering"/>
@@ -105,7 +105,7 @@ This tool parses homologous sequences obtained by pairwise and gather sequences 
 
 **Inputs**
 
-The output (nucleic format) of the tool 'Pairwise' (AdaptSearch suite), which consists in lists of homologous sequences between pairs of species obtained by RBH comparisons.
+The output of the tool 'Pairwise' (pairwise_DNA, nucleic format) (AdaptSearch suite), which consists in lists of homologous sequences between pairs of species obtained by RBH comparisons.
 
 --------
 

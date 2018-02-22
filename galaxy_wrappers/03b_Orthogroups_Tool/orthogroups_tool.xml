@@ -18,7 +18,7 @@
     <![CDATA[        
         #set $infiles = ""
         #for $input in $inputs_fasta
-            ln -s '$input' '$input.element_identifier';
+            ln -s '$input' '$input.element_identifier'.fasta;
             #set $infiles = $infiles + $input.element_identifier + ","
         #end for
         #set $infiles = $infiles[:-1]
