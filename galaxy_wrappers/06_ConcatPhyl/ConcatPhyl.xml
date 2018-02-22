@@ -1,4 +1,4 @@
-<tool name="ConcatPhyl" id="concatphyl" version="2.0">
+<tool name="ConcatPhyl" id="concatphyl" version="2.0.1">
 
 	<description>
 		Concatenation and phylogeny
@@ -282,7 +282,7 @@
 
 	<help>
 
-@HELPAUTHORS@
+@HELP_AUTHORS@
 
 <![CDATA[
 

@@ -1,0 +1,32 @@
+*** pogs.py ***
+
+Building of orthogroups based on pairs of genes obtained by pairwise comparisons between pairs of species.
+Genes are gathered in orthogroups based on the principle of transitivity between genes pairs.
+
+Parsing input files ...
+Creating Orthogroups ...
+
+    Summary before paralogous filtering : 
+
+         2 sps  3 sps  4 sps
+2 seqs    1394      0      0
+3 seqs       0    163      0
+4 seqs       0     26     33
+5 seqs       0      3     17
+6 seqs       0      0     17
+7 seqs       0      0      7
+8 seqs       0      0      2
+11 seqs      0      0      1
+13 seqs      0      0      1 
+
+Filtering paralogous sequences and writing final orthogroups files ...
+    (Dropping Orthogroups with less than 3 species)
+
+    Summary after paralogous filtering : 
+
+        3 sps  4 sps
+3 seqs    192      0
+4 seqs      0     78
+
+270 orthogroups have been infered from 6 pairwise comparisons by RBH
+

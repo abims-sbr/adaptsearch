@@ -1,4 +1,4 @@
-<tool name="Filter assemblies" id="filter_assemblies" version="2.0">
+<tool name="Filter assemblies" id="filter_assemblies" version="2.0.1">
 
     <description>
         Filter the outputs of Velvet or Trinity assemblies
@@ -100,7 +100,7 @@
 
 	<help>
 
-@HELPAUTHORS@
+@HELP_AUTHORS@
 
 <![CDATA[
 

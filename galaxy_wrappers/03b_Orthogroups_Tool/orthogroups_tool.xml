@@ -26,10 +26,10 @@
         $__tool_directory__/scripts/format_transdecoder_headers.sh '$orthogroups' tmp_orthogroups.txt
         &&
         python $__tool_directory__/scripts/filter_orthofinder.py tmp_orthogroups.txt $nbspec $nbseq               
-        #if '$verbosity':
+        #if $verbosity=="T":
             -v
         #end if
-        #if '$paralogs':
+        #if $paralogs=="T":
             -p
         #end if
 

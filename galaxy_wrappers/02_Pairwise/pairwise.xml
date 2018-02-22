@@ -1,4 +1,4 @@
-<tool name="Pairwise" id="pairwise" version="2.0">
+<tool name="Pairwise" id="pairwise" version="2.0.1">
 
 	<description>
 		Run reciproque tblastx pairwise
@@ -105,7 +105,7 @@
 
 	<help>
 
- @HELPAUTHORS@
+ @HELP_AUTHORS@
  
 <![CDATA[
 ---------
