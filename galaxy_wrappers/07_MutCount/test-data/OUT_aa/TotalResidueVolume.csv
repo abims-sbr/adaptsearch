@@ -1,4 +1,4 @@
 LOCUS,Ac_Total_Residue_Volume,Pu_Total_Residue_Volume,Am_Total_Residue_Volume,Ap_Total_Residue_Volume,Pf_Total_Residue_Volume,Pg_Total_Residue_Volume,Ph_Total_Residue_Volume,Ps_Total_Residue_Volume,Pp_Total_Residue_Volume,Pa_Total_Residue_Volume,
-locus2_sp6_sp6.fasta,6575.00000,6593.00000,n.a,6587.00000,n.a,6645.00000,6631.00000,n.a,n.a,6645.00000,
-locus1_sp6_sp6.fasta,8265.00000,8257.00000,n.a,n.a,8305.00000,8257.00000,8277.00000,n.a,n.a,8257.00000,
-locus1_sp8_sp8.fasta,0.00000,7671.00000,n.a,n.a,7642.00000,7493.00000,7561.00000,0.00000,6633.00000,7519.00000,
+locus2_sp6_sp6.fasta,6575.00000,6593.00000,NA,6587.00000,NA,6645.00000,6631.00000,NA,NA,6645.00000,
+locus1_sp6_sp6.fasta,8265.00000,8257.00000,NA,NA,8305.00000,8257.00000,8277.00000,NA,NA,8257.00000,
+locus1_sp8_sp8.fasta,0.00000,7671.00000,NA,NA,7642.00000,7493.00000,7561.00000,0.00000,6633.00000,7519.00000,
