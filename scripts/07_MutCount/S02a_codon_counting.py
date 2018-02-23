@@ -92,6 +92,8 @@ def computeAllCountingsAndFreqs(seq, list_codons, init_dict_codons, init_dict_aa
             codon (dict) : codons (keys) and their occurences (values) in the sequence        
         """ 
 
+        # BUG REPORT WARNING : codons stop can be present. It's weird because they should not
+
         codons = copy.deepcopy(init_dict_codons)
 
         l = len(seq)
