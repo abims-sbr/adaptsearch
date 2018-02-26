@@ -406,97 +406,106 @@ Lloci_AA = os.listdir(Path_IN_loci_AA)
 ## 3.1 ## PROT composition
 fileOUT_PROT_ALL=open("./OUT/prot_compositions_All_AA.csv","w")
 fileOUT_PROT_ALL.write("LOCUS,")
-for taxa in LT:
+for taxa in LT[0:-1]:
     fileOUT_PROT_ALL.write("%s_prop_K,%s_prop_R,%s_prop_A,%s_prop_F,%s_prop_I,%s_prop_L,%s_prop_M,%s_prop_V,%s_prop_W,%s_prop_N,%s_prop_Q,%s_prop_S,%s_prop_T,%s_prop_H,%s_prop_Y,%s_prop_C,%s_prop_D,%s_prop_E,%s_prop_P,%s_prop_G," %(taxa,taxa,taxa,taxa,taxa,taxa,taxa,taxa,taxa,taxa,taxa,taxa,taxa,taxa,taxa,taxa,taxa,taxa,taxa,taxa))
+fileOUT_PROT_ALL.write("%s_prop_K,%s_prop_R,%s_prop_A,%s_prop_F,%s_prop_I,%s_prop_L,%s_prop_M,%s_prop_V,%s_prop_W,%s_prop_N,%s_prop_Q,%s_prop_S,%s_prop_T,%s_prop_H,%s_prop_Y,%s_prop_C,%s_prop_D,%s_prop_E,%s_prop_P,%s_prop_G" %(LT[-1],LT[-1],LT[-1],LT[-1],LT[-1],LT[-1],LT[-1],LT[-1],LT[-1],LT[-1],LT[-1],LT[-1],LT[-1],LT[-1],LT[-1],LT[-1],LT[-1],LT[-1],LT[-1],LT[-1]))
 fileOUT_PROT_ALL.write("\n")
 
 ## 3.2 ## PROT IVYWREL
 fileOUT_IVYWREL=open("./OUT/IVYWREL.csv","w")
 fileOUT_IVYWREL.write("LOCUS,")
-for taxa in LT:
+for taxa in LT[0:-1]:
     fileOUT_IVYWREL.write("%s_count_IVYWREL,%s_prop_IVYWREL," %(taxa,taxa))
+fileOUT_IVYWREL.write("%s_count_IVYWREL,%s_prop_IVYWREL" %(LT[-1],LT[-1]))
 fileOUT_IVYWREL.write("\n")
-
 
 ## 3.3 ## PROT ERK_DNQTSHA
 fileOUT_ERK_DNQTSH=open("./OUT/ERK_DNQTSH.csv","w")
 fileOUT_ERK_DNQTSH.write("LOCUS,")
-for taxa in LT:
+for taxa in LT[0:-1]:
     fileOUT_ERK_DNQTSH.write("%s_count_ERK,%s_prop_ERK,%s_count_DNQTSH,%s_prop_DNQTSH,%s_ratio_ERK_vs_DNQTSH," %(taxa,taxa,taxa,taxa,taxa))
+fileOUT_ERK_DNQTSH.write("%s_count_ERK,%s_prop_ERK,%s_count_DNQTSH,%s_prop_DNQTSH,%s_ratio_ERK_vs_DNQTSH" %(LT[-1],LT[-1],LT[-1],LT[-1],LT[-1]))
 fileOUT_ERK_DNQTSH.write("\n")
 
 ## 3.4 ## PROT EK_QH
 fileOUT_EK_QH=open("./OUT/EK_QH.csv","w")
 fileOUT_EK_QH.write("LOCUS,")
-for taxa in LT:
+for taxa in LT[0:-1]:
     fileOUT_EK_QH.write("%s_count_EK,%s_prop_EK,%s_count_QH,%s_prop_QH,%s_ratio_EK_vs_QH," %(taxa,taxa,taxa,taxa,taxa))
+fileOUT_EK_QH.write("%s_count_EK,%s_prop_EK,%s_count_QH,%s_prop_QH,%s_ratio_EK_vs_QH" %(LT[-1],LT[-1],LT[-1],LT[-1],LT[-1]))
 fileOUT_EK_QH.write("\n")
-
 
 ## 3.5 ## PROT FYMINK_GARP
 fileOUT_FYMINK_GARP=open("./OUT/FYMINK_GARP.csv","w")
 fileOUT_FYMINK_GARP.write("LOCUS,")
-for taxa in LT:
+for taxa in LT[0:-1]:
     fileOUT_FYMINK_GARP.write("%s_count_FYMINK,%s_prop_FYMINK,%s_count_GARP,%s_prop_GARP," %(taxa,taxa,taxa,taxa))
+fileOUT_FYMINK_GARP.write("%s_count_FYMINK,%s_prop_FYMINK,%s_count_GARP,%s_prop_GARP" %(LT[-1],LT[-1],LT[-1],LT[-1]))
 fileOUT_FYMINK_GARP.write("\n")
-
 
 ## 3.6 ## PROT AVLIMFYW
 fileOUT_AVLIMFYW=open("./OUT/AVLIMFYW.csv","w")
 fileOUT_AVLIMFYW.write("LOCUS,")
-for taxa in LT:
+for taxa in LT[0:-1]:
     fileOUT_AVLIMFYW.write("%s_count_AVLIMFYW,%s_prop_AVLIMFYW,%s_count_AVLIM,%s_prop_AVLIM,%s_count_FYW,%s_prop_FYW," %(taxa,taxa,taxa,taxa,taxa,taxa))
+fileOUT_AVLIMFYW.write("%s_count_AVLIMFYW,%s_prop_AVLIMFYW,%s_count_AVLIM,%s_prop_AVLIM,%s_count_FYW,%s_prop_FYW" %(LT[-1],LT[-1],LT[-1],LT[-1],LT[-1],LT[-1]))
 fileOUT_AVLIMFYW.write("\n")
 
 ## 3.7 ## PROT STNQ
 fileOUT_STNQ=open("./OUT/STNQ.csv","w")
 fileOUT_STNQ.write("LOCUS,")
-for taxa in LT:
+for taxa in LT[0:-1]:
     fileOUT_STNQ.write("%s_count_STNQ,%s_prop_STNQ," %(taxa,taxa))
+fileOUT_STNQ.write("%s_count_STNQ,%s_prop_STNQ" %(LT[-1],LT[-1]))
 fileOUT_STNQ.write("\n")
 
 ## 3.8 ## PROT RHKDE
 fileOUT_RHKDE=open("./OUT/RHKDE.csv","w")
 fileOUT_RHKDE.write("LOCUS,")
-for taxa in LT:
+for taxa in LT[0:-1]:
     fileOUT_RHKDE.write("%s_count_RHKDE,%s_prop_RHKDE,%s_count_RHK,%s_prop_RHK,%s_count_DE,%s_prop_DE," %(taxa,taxa,taxa,taxa,taxa,taxa))
+fileOUT_RHKDE.write("%s_count_RHKDE,%s_prop_RHKDE,%s_count_RHK,%s_prop_RHK,%s_count_DE,%s_prop_DE" %(LT[-1],LT[-1],LT[-1],LT[-1],LT[-1],LT[-1]))
 fileOUT_RHKDE.write("\n")
 
 ## 3.9 ## PROT DIDER CRITERIA
 fileOUT_PAYRE=open("./OUT/PAYRE-MVGDS.csv","w")
 fileOUT_PAYRE.write("LOCUS,")
-for taxa in LT:
+for taxa in LT[0:-1]:
     fileOUT_PAYRE.write("%s_count_PAYRE,%s_prop_PAYRE,%s_count_AC,%s_prop_AC,%s_count_MVGDS,%s_prop_MVGDS,%s_ratio_PAYRE_vs_MVGDS,%s_ratio_AC_vs_MVGDS," %(taxa,taxa,taxa,taxa,taxa,taxa,taxa,taxa))
+fileOUT_PAYRE.write("%s_count_PAYRE,%s_prop_PAYRE,%s_count_AC,%s_prop_AC,%s_count_MVGDS,%s_prop_MVGDS,%s_ratio_PAYRE_vs_MVGDS,%s_ratio_AC_vs_MVGDS" %(LT[-1],LT[-1],LT[-1],LT[-1],LT[-1],LT[-1],LT[-1],LT[-1]))
 fileOUT_PAYRE.write("\n")
 
 ## 3.10 ## PROT Total residue weight
 fileOUT_TotalResidueWeight=open("./OUT/TotalResidueWeight.csv","w")
 fileOUT_TotalResidueWeight.write("LOCUS,")
-for taxa in LT:
+for taxa in LT[0:-1]:
     fileOUT_TotalResidueWeight.write("%s_Total_Residue_Weight," %taxa)
+fileOUT_TotalResidueWeight.write("%s_Total_Residue_Weight" %LT[-1])
 fileOUT_TotalResidueWeight.write("\n")
 
 ## 3.11 ## PROT Total residue volume
 fileOUT_TotalResidueVolume=open("./OUT/TotalResidueVolume.csv","w")
 fileOUT_TotalResidueVolume.write("LOCUS,")
-for taxa in LT:
+for taxa in LT[0:-1]:
     fileOUT_TotalResidueVolume.write("%s_Total_Residue_Volume," %taxa)
+fileOUT_TotalResidueVolume.write("%s_Total_Residue_Volume" %LT[-1])
 fileOUT_TotalResidueVolume.write("\n")
 
 ## 3.12 ## PROT Total partial specific volume
 fileOUT_TotalPartialSpecificVolume=open("./OUT/TotalPartialSpecificVolume.csv","w")
 fileOUT_TotalPartialSpecificVolume.write("LOCUS,")
-for taxa in LT:
+for taxa in LT[0:-1]:
     fileOUT_TotalPartialSpecificVolume.write("%s_Total_Partial_Specific_Volume," %taxa)
+fileOUT_TotalPartialSpecificVolume.write("%s_Total_Partial_Specific_Volume" %LT[-1])
 fileOUT_TotalPartialSpecificVolume.write("\n")
 
 ## 3.13 ## PROT Total hydratation
 fileOUT_TotalHydratation=open("./OUT/TotalHydratation.csv","w")
 fileOUT_TotalHydratation.write("LOCUS,")
-for taxa in LT:
+for taxa in LT[0:-1]:
     fileOUT_TotalHydratation.write("%s_Total_Hydratation," %taxa)
+fileOUT_TotalHydratation.write("%s_Total_Hydratation" %LT[-1])
 fileOUT_TotalHydratation.write("\n")
-
 
 #####################
 ## 4 ## Process Loci
@@ -524,7 +533,7 @@ for locus in Lloci_AA:
     fileOUT_TotalPartialSpecificVolume.write("%s," %locus)
     fileOUT_TotalHydratation.write("%s," %locus)
     
-    for taxa in LT:
+    for taxa in LT[0:-1]:
         if taxa in bash.keys():
             seq = bash[taxa]
             prop_K,prop_R,prop_A,prop_F,prop_I,prop_L,prop_M,prop_V,prop_W,prop_N,prop_Q,prop_S,prop_T,prop_H,prop_Y,prop_C,prop_D,prop_E,prop_P,prop_G = aa_composition1(seq)   ### DEF3 ###
@@ -558,7 +567,41 @@ for locus in Lloci_AA:
             fileOUT_TotalResidueVolume.write("%s," %"NA")
             fileOUT_TotalPartialSpecificVolume.write("%s," %"NA")
             fileOUT_TotalHydratation.write("%s," %"NA")
-        
+
+    if LT[-1] in bash.keys():
+        seq = bash[LT[-1]]            
+        prop_K,prop_R,prop_A,prop_F,prop_I,prop_L,prop_M,prop_V,prop_W,prop_N,prop_Q,prop_S,prop_T,prop_H,prop_Y,prop_C,prop_D,prop_E,prop_P,prop_G = aa_composition1(seq)   ### DEF3 ###
+        count_IVYWREL,prop_IVYWREL,count_ERK,prop_ERK,count_DNQTSH,prop_DNQTSH,ratio_ERK_vs_DNQTSH,count_EK,prop_EK,count_QH,prop_QH,ratio_EK_vs_QH,count_FYMINK,prop_FYMINK,count_GARP,prop_GARP,count_AVLIMFYW,prop_AVLIMFYW,count_AVLIM,prop_AVLIM,count_FYW,prop_FYW,count_STNQ,prop_STNQ, count_MVGDS,prop_MVGDS, count_PAYRE,prop_PAYRE, count_AC,prop_AC, ratio_PAYRE_vs_MVGDS, ratio_AC_vs_MVGDS,count_RHKDE,prop_RHKDE,count_RHK,prop_RHK,count_DE,prop_DE = aa_composition2(seq)   ### DEF4 ###
+        Total_Residue_Weight,Total_Residue_Volume,Total_Partial_Specific_Volume,Total_Hydration = sequence_properties_from_aa_properties(seq, bash_aa_properties)   ### DEF6 ###
+    
+        fileOUT_PROT_ALL.write("%.5f,%.5f,%.5f,%.5f,%.5f,%.5f,%.5f,%.5f,%.5f,%.5f,%.5f,%.5f,%.5f,%.5f,%.5f,%.5f,%.5f,%.5f,%.5f,%.5f" %(prop_K,prop_R,prop_A,prop_F,prop_I,prop_L,prop_M,prop_V,prop_W,prop_N,prop_Q,prop_S,prop_T,prop_H,prop_Y,prop_C,prop_D,prop_E,prop_P,prop_G))
+        fileOUT_IVYWREL.write("%.5f,%.5f" %(count_IVYWREL, prop_IVYWREL))
+        fileOUT_ERK_DNQTSH.write("%.5f,%.5f,%.5f,%.5f,%.5f" %(count_ERK,prop_ERK,count_DNQTSH,prop_DNQTSH,ratio_ERK_vs_DNQTSH))
+        fileOUT_EK_QH.write("%.5f,%.5f,%.5f,%.5f,%.5f" %(count_EK,prop_EK,count_QH,prop_QH,ratio_EK_vs_QH))
+        fileOUT_FYMINK_GARP.write("%.5f,%.5f,%.5f,%.5f" %(count_FYMINK,prop_FYMINK,count_GARP,prop_GARP))
+        fileOUT_AVLIMFYW.write("%.5f,%.5f,%.5f,%.5f,%.5f,%.5f" %(count_AVLIMFYW,prop_AVLIMFYW,count_AVLIM,prop_AVLIM,count_FYW,prop_FYW))
+        fileOUT_STNQ.write("%.5f,%.5f" %(count_STNQ,prop_STNQ))
+        fileOUT_RHKDE.write("%.5f,%.5f,%.5f,%.5f,%.5f,%.5f"%(count_RHKDE,prop_RHKDE,count_RHK,prop_RHK,count_DE,prop_DE))
+        fileOUT_PAYRE.write("%.5f,%.5f,%.5f,%.5f,%.5f,%.5f,%.5f,%.5f" %(count_PAYRE,prop_PAYRE,count_AC,prop_AC,count_MVGDS,prop_MVGDS,ratio_PAYRE_vs_MVGDS,ratio_AC_vs_MVGDS))
+        fileOUT_TotalResidueWeight.write("%.5f" %Total_Residue_Weight)
+        fileOUT_TotalResidueVolume.write("%.5f" %Total_Residue_Volume)
+        fileOUT_TotalPartialSpecificVolume.write("%.5f" %(Total_Partial_Specific_Volume))
+        fileOUT_TotalHydratation.write("%.5f" % Total_Hydration)
+    else:
+        fileOUT_PROT_ALL.write("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s" %("NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA"))
+        fileOUT_IVYWREL.write("%s,%s" %("NA", "NA"))
+        fileOUT_ERK_DNQTSH.write("%s,%s,%s,%s,%s" %("NA","NA","NA","NA","NA"))
+        fileOUT_EK_QH.write("%s,%s,%s,%s,%s" %("NA","NA","NA","NA","NA"))
+        fileOUT_FYMINK_GARP.write("%s,%s,%s,%s" %("NA","NA","NA","NA"))
+        fileOUT_AVLIMFYW.write("%s,%s,%s,%s,%s,%s" %("NA","NA","NA","NA","NA","NA"))
+        fileOUT_STNQ.write("%s,%s" %("NA","NA"))
+        fileOUT_RHKDE.write("%s,%s,%s,%s,%s,%s"%("NA","NA","NA","NA","NA","NA"))
+        fileOUT_PAYRE.write("%s,%s,%s,%s,%s,%s,%s,%s" %("NA","NA","NA","NA","NA","NA","NA","NA"))
+        fileOUT_TotalResidueWeight.write("%s" %"NA")
+        fileOUT_TotalResidueVolume.write("%s" %"NA")
+        fileOUT_TotalPartialSpecificVolume.write("%s" %"NA")
+        fileOUT_TotalHydratation.write("%s" %"NA")
+    
     ## END LINE
     fileOUT_PROT_ALL.write("\n")
     fileOUT_IVYWREL.write("\n")

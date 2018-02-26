@@ -1,4 +1,4 @@
-LOCUS,Ac_Total_Residue_Weight,Pu_Total_Residue_Weight,Am_Total_Residue_Weight,Ap_Total_Residue_Weight,Pf_Total_Residue_Weight,Pg_Total_Residue_Weight,Ph_Total_Residue_Weight,Ps_Total_Residue_Weight,Pp_Total_Residue_Weight,Pa_Total_Residue_Weight,
-locus2_sp6_sp6.fasta,6981.51000,6977.50000,NA,6961.51000,NA,6990.69000,7005.54000,NA,NA,6990.69000,
-locus1_sp6_sp6.fasta,8981.54000,8937.66000,NA,NA,9023.69000,8989.64000,8985.64000,NA,NA,8989.64000,
-locus1_sp8_sp8.fasta,0.00000,8270.91000,NA,NA,8248.86000,8082.66000,8213.63000,0.00000,7124.55000,8112.69000,
+LOCUS,Ac_Total_Residue_Weight,Pu_Total_Residue_Weight,Am_Total_Residue_Weight,Ap_Total_Residue_Weight,Pf_Total_Residue_Weight,Pg_Total_Residue_Weight,Ph_Total_Residue_Weight,Ps_Total_Residue_Weight,Pp_Total_Residue_Weight,Pa_Total_Residue_Weight
+locus1_sp8_sp8.fasta,0.00000,8270.91000,NA,NA,8248.86000,8082.66000,8213.63000,0.00000,7124.55000,8112.69000
+locus1_sp6_sp6.fasta,8981.54000,8937.66000,NA,NA,9023.69000,8989.64000,8985.64000,NA,NA,8989.64000
+locus2_sp6_sp6.fasta,6981.51000,6977.50000,NA,6961.51000,NA,6990.69000,7005.54000,NA,NA,6990.69000

@@ -122,29 +122,33 @@ Lloci_NUC = os.listdir(Path_IN_loci_NUC)
 ## 3.1 ## NUC composition
 fileOUT_NUC=open("./OUT/nuc_compositions.csv","w")
 fileOUT_NUC.write("LOCUS,")
-for taxa in LT:
+for taxa in LT[0:-1]:
     fileOUT_NUC.write("%s_prop_A,%s_prop_T,%s_prop_C,%s_prop_G," %(taxa,taxa,taxa,taxa))
+fileOUT_NUC.write("%s_prop_A,%s_prop_T,%s_prop_C,%s_prop_G" %(LT[-1],LT[-1],LT[-1],LT[-1]))
 fileOUT_NUC.write("\n")
 
 ## 3.2 ## NUC percent_GC
 fileOUT_percent_GC=open("./OUT/percent_GC.csv","w")
 fileOUT_percent_GC.write("LOCUS,")
-for taxa in LT:
+for taxa in LT[0:-1]:
     fileOUT_percent_GC.write("%s_percent_GC," %(taxa))
+fileOUT_percent_GC.write("%s_percentGC" %(LT[-1]))
 fileOUT_percent_GC.write("\n")
 
 ## 3.3 ## NUC percent_purine
 fileOUT_percent_purine=open("./OUT/percent_purine.csv","w")
 fileOUT_percent_purine.write("LOCUS,")
-for taxa in LT:
+for taxa in LT[0:-1]:
     fileOUT_percent_purine.write("%s_percent_purine," %(taxa))
+fileOUT_percent_purine.write("%s_percent_purine" %(LT[-1]))
 fileOUT_percent_purine.write("\n")
 
 ## 3.4 ## Purine Load
 fileOUT_Purine_Load=open("./OUT/Purine_Load_Indice.csv", "w")
 fileOUT_Purine_Load.write("LOCUS,")
-for taxa in LT:
+for taxa in LT[0:-1]:
     fileOUT_Purine_Load.write("%s_TOTAL,%s_DIFF_GC,%s_DIFF_AT,%s_PLI_GC1000,%s_PLI_AT1000," %(taxa,taxa,taxa,taxa,taxa))
+fileOUT_Purine_Load.write("%s_TOTAL,%s_DIFF_GC,%s_DIFF_AT,%s_PLI_GC1000,%s_PLI_AT1000" %(LT[-1],LT[-1],LT[-1],LT[-1],LT[-1]))
 fileOUT_Purine_Load.write("\n")
 
 #####################
@@ -160,7 +164,7 @@ for locus in Lloci_NUC:
     fileOUT_percent_purine.write("%s," %locus)
     fileOUT_Purine_Load.write("%s," %locus)
 
-    for taxa in LT:    
+    for taxa in LT[0:-1]:    
       if taxa in bash.keys():        
         seq = bash[taxa]            
         percent_GC, percent_purine,prop_A, prop_T, prop_C, prop_G = base_composition(seq)   ### DEF2 ###
@@ -175,6 +179,21 @@ for locus in Lloci_NUC:
         fileOUT_percent_purine.write("%s," %"NA")
         fileOUT_Purine_Load.write("%s,%s,%s,%s,%s," %("NA","NA","NA","NA","NA"))
         
+    if LT[-1] in bash.keys():
+      seq = bash[LT[-1]]            
+      percent_GC, percent_purine,prop_A, prop_T, prop_C, prop_G = base_composition(seq)   ### DEF2 ###
+      TOTAL, DIFF_GC, DIFF_AT,PLI_GC,PLI_AT,PLI_GC_1000,PLI_AT_1000 = purine_loading(seq) ### DEF3 ###
+      fileOUT_NUC.write("%.5f,%.5f,%.5f,%.5f" %(prop_A,prop_T,prop_C,prop_G))
+      fileOUT_percent_GC.write("%.5f" %percent_GC)
+      fileOUT_percent_purine.write("%.5f" %percent_purine)
+      fileOUT_Purine_Load.write("%d,%d,%d,%.5f,%.5f" %(TOTAL, DIFF_GC, DIFF_AT,PLI_GC_1000, PLI_AT_1000))
+    else:
+      fileOUT_NUC.write("%s,%s,%s,%s" %("NA","NA","NA","NA"))
+      fileOUT_percent_GC.write("%s" %"NA")
+      fileOUT_percent_purine.write("%s" %"NA")
+      fileOUT_Purine_Load.write("%s,%s,%s,%s,%s" %("NA","NA","NA","NA","NA"))
+
+
     fileOUT_NUC.write("\n")
     fileOUT_percent_GC.write("\n")
     fileOUT_percent_purine.write("\n")
