@@ -170,10 +170,10 @@ for locus in Lloci_NUC:
         fileOUT_percent_purine.write("%.5f," %percent_purine)
         fileOUT_Purine_Load.write("%d,%d,%d,%.5f,%.5f," %(TOTAL, DIFF_GC, DIFF_AT,PLI_GC_1000, PLI_AT_1000))
       else:
-        fileOUT_NUC.write("%s,%s,%s,%s," %("n.a","n.a","n.a","n.a"))
-        fileOUT_percent_GC.write("%s," %"n.a")
-        fileOUT_percent_purine.write("%s," %"n.a")
-        fileOUT_Purine_Load.write("%s,%s,%s,%s,%s," %("n.a","n.a","n.a","n.a","n.a"))
+        fileOUT_NUC.write("%s,%s,%s,%s," %("NA","NA","NA","NA"))
+        fileOUT_percent_GC.write("%s," %"NA")
+        fileOUT_percent_purine.write("%s," %"NA")
+        fileOUT_Purine_Load.write("%s,%s,%s,%s,%s," %("NA","NA","NA","NA","NA"))
         
     fileOUT_NUC.write("\n")
     fileOUT_percent_GC.write("\n")

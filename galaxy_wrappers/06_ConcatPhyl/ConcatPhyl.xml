@@ -1,4 +1,4 @@
-<tool name="ConcatPhyl" id="concatphyl" version="2.0">
+<tool name="ConcatPhyl" id="concatphyl" version="2.0.1">
 
 	<description>
 		Concatenation and phylogeny
@@ -282,7 +282,7 @@
 
 	<help>
 
-@HELPAUTHORS@
+@HELP_AUTHORS@
 
 <![CDATA[
 
@@ -393,7 +393,7 @@ This tool, produces the following files :
 
 **The AdaptSearch Pipeline**
 
-.. image:: ../../adaptsearch_picture_helps.png :heigth: 593 :width: 852
+.. image:: adaptsearch_picture_helps.png :heigth: 593 :width: 852
 
 ---------
 

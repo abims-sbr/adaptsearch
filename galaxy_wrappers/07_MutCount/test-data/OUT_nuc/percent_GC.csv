@@ -1,4 +1,4 @@
 LOCUS,Ac_percent_GC,Pu_percent_GC,Am_percent_GC,Ap_percent_GC,Pf_percent_GC,Pg_percent_GC,Ph_percent_GC,Ps_percent_GC,Pp_percent_GC,Pa_percent_GC,
-locus2_sp6_sp6.fasta,45.83333,42.70833,n.a,45.31250,n.a,42.70833,45.83333,n.a,n.a,42.70833,
-locus1_sp6_sp6.fasta,44.44444,51.28205,n.a,n.a,48.71795,47.00855,46.15385,n.a,n.a,46.58120,
-locus1_sp8_sp8.fasta,43.43434,43.29004,n.a,n.a,43.29004,44.58874,40.25974,0.00000,38.38384,44.58874,
+locus2_sp6_sp6.fasta,45.83333,42.70833,NA,45.31250,NA,42.70833,45.83333,NA,NA,42.70833,
+locus1_sp6_sp6.fasta,44.44444,51.28205,NA,NA,48.71795,47.00855,46.15385,NA,NA,46.58120,
+locus1_sp8_sp8.fasta,43.43434,43.29004,NA,NA,43.29004,44.58874,40.25974,0.00000,38.38384,44.58874,
