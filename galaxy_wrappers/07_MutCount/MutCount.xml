@@ -180,10 +180,26 @@
                 <param name="sep_file" ftype="fasta" value="sep_nuc/locus1_sp6_sp6.fasta,sep_nuc/locus1_sp8_sp8.fasta,sep_nuc/locus2_sp6_sp6.fasta" />
                 <param name="concat_phy" ftype="fasta" value="phylogeny_concat.fasta" />
             </conditional>
-            <output name="nuc_comp" value="OUT_nuc/nuc_compositions.csv" lines_diff="2"/>
-            <output name="percent_gc" value="OUT_nuc/percent_GC.csv" lines_diff="2"/>
-            <output name="percent_pur" value="OUT_nuc/percent_purine.csv" lines_diff="2"/>
-            <output name="purine_load" value="OUT_nuc/Purine_Load_Indice.csv" lines_diff="2"/>            
+            <output name="nuc_comp">
+                <assert_contents>
+                    <has_line line="locus2_sp6_sp6.fasta,0.30208,0.23958,0.19792,0.26042,0.29688,0.27604,0.18229,0.24479,NA,NA,NA,NA,0.30208,0.24479,0.19792,0.25521,NA,NA,NA,NA,0.31250,0.26042,0.17188,0.25521,0.32292,0.21875,0.20312,0.25521,NA,NA,NA,NA,NA,NA,NA,NA,0.31771,0.25521,0.17708,0.25000"/>
+                </assert_contents>
+            </output>
+            <output name="percent_gc">
+                <assert_contents>
+                    <has_line line="locus2_sp6_sp6.fasta,45.83333,42.70833,NA,45.31250,NA,42.70833,45.83333,NA,NA,42.70833" />
+                </assert_contents>
+            </output>
+            <output name="percent_pur">
+                <assert_contents>
+                    <has_line line="locus2_sp6_sp6.fasta,56.25000,54.16667,NA,55.72917,NA,56.77083,57.81250,NA,NA,56.77083" />
+                </assert_contents>
+            </output>
+            <output name="purine_load">
+                <assert_contents>
+                    <has_line line="locus2_sp6_sp6.fasta,192,12,12,62.50000,62.50000,192,12,4,62.50000,20.83333,NA,NA,NA,NA,NA,192,11,11,57.29167,57.29167,NA,NA,NA,NA,NA,192,16,10,83.33333,52.08333,192,10,20,52.08333,104.16667,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,192,14,12,72.91667,62.50000" />
+                </assert_contents>
+            </output>
         </test>
 
         <test>
@@ -193,10 +209,26 @@
                 <param name="sep_file" ftype="fasta" value="sep_aa/locus1_sp6_sp6.fasta,sep_aa/locus1_sp8_sp8.fasta,sep_aa/locus2_sp6_sp6.fasta" />
                 <param name="concat_phy" ftype="fasta" value="phylogeny_concat.fasta" />
             </conditional>            
-            <output name="ivywrel" value="OUT_aa/IVYWREL.csv" lines_diff="2"/>
-            <output name="rhkde" value="OUT_aa/RHKDE.csv" lines_diff="2"/>
-            <output name="payre_mvgds" value="OUT_aa/PAYRE-MVGDS.csv" lines_diff="2"/>
-            <output name="avlimfyw" value="OUT_aa/AVLIMFYW.csv" lines_diff="2"/>            
+            <output name="ivywrel">
+                <assert_contents>
+                    <has_line line="locus2_sp6_sp6.fasta,21.00000,0.32812,23.00000,0.35938,NA,NA,23.00000,0.35938,NA,NA,22.00000,0.34375,23.00000,0.35938,NA,NA,NA,NA,22.00000,0.34375" />
+                </assert_contents>
+            </output>
+            <output name="rhkde">
+                <assert_contents>
+                    <has_line line="locus1_sp8_sp8.fasta,0.00000,0.00000,0.00000,0.00000,0.00000,0.00000,14.00000,0.18182,4.00000,0.05195,10.00000,0.12987,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,16.00000,0.20779,5.00000,0.06494,11.00000,0.14286,15.00000,0.19481,4.00000,0.05195,11.00000,0.14286,14.00000,0.18182,2.00000,0.02597,12.00000,0.15584,0.00000,0.00000,0.00000,0.00000,0.00000,0.00000,13.00000,0.19697,2.00000,0.03030,11.00000,0.16667,15.00000,0.19481,4.00000,0.05195,11.00000,0.14286"/>
+                </assert_contents>
+            </output>
+            <output name="payre_mvgds">
+                <assert_contents>
+                    <has_line line="locus2_sp6_sp6.fasta,18.00000,0.28125,6.00000,0.09375,20.00000,0.31250,0.90000,0.30000,18.00000,0.28125,6.00000,0.09375,21.00000,0.32812,0.85714,0.28571,NA,NA,NA,NA,NA,NA,NA,NA,18.00000,0.28125,6.00000,0.09375,20.00000,0.31250,0.90000,0.30000,NA,NA,NA,NA,NA,NA,NA,NA,17.00000,0.26562,6.00000,0.09375,20.00000,0.31250,0.85000,0.30000,20.00000,0.31250,8.00000,0.12500,19.00000,0.29688,1.05263,0.42105,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,17.00000,0.26562,6.00000,0.09375,20.00000,0.31250,0.85000,0.30000"/>
+                </assert_contents>
+            </output>
+            <output name="avlimfyw">
+                <assert_contents>
+                    <has_line line="locus2_sp6_sp6.fasta,27.00000,0.42188,21.00000,0.32812,6.00000,0.09375,28.00000,0.43750,22.00000,0.34375,6.00000,0.09375,NA,NA,NA,NA,NA,NA,28.00000,0.43750,22.00000,0.34375,6.00000,0.09375,NA,NA,NA,NA,NA,NA,28.00000,0.43750,22.00000,0.34375,6.00000,0.09375,30.00000,0.46875,24.00000,0.37500,6.00000,0.09375,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,28.00000,0.43750,22.00000,0.34375,6.00000,0.09375"/>
+                </assert_contents>
+            </output>           
         </test>
     </tests>
 
