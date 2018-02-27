@@ -1,4 +1,4 @@
-<tool name="BlastAlign" id="blastalign" version="2.0">
+<tool name="BlastAlign" id="blastalign" version="2.1">
 
     <description>
         Align the nucleic acid sequences using BLASTN
@@ -35,7 +35,7 @@
         &&
         ln -s '$input.element_identifier'".fasta.phy" out.phy &&
         ln -s '$input.element_identifier'".fasta.nxs" out.nxs
-        #if $fasta_out.value == True
+        #if $output_format.value == "fasta"
             && python $__tool_directory__/scripts/S01_phylip2fasta.py out.phy out.fasta
         #end if
 
@@ -50,15 +50,23 @@
             <param argument="-n" type="boolean" checked="true" truevalue="T" falsevalue="F" label="Retain original names in output files" help="option F is to output the 15 character name abbreviations (stripped of potentially problematic characters) that is used in the program" />
             <param argument="-s" type="integer" value="0" min="0" label="Number of sequences to be used in initial search for reference sequence" help="default (= 0) is to find the reference sequence by blasting all sequences against all sequences, only randomly subsampling when it thinks the blast output file might be too large" />
         </section>
-
-        <param name="fasta_out" type="boolean" checked="true" label="Do you want to convert the output phylip in fasta format ? " />
+        
+        <param name="output_format" type="select" label="Output format" help="phylip, nexus, or fasta." >
+            <option value="fasta">fasta</option>
+            <option value="phylip">phylip</option>
+            <option value="nexus">nexus</option>
+        </param>            
     </inputs>
 
     <outputs>
-        <data format="phylip" name="phy" from_work_dir="out.phy" label="Alignment of ${input.name} in phylip" hidden="True"/>
-        <data format="nexus" name="nxs" from_work_dir="out.nxs" label="Alignment of ${input.name} in nexus" hidden="True"/>
-        <data format="fasta" name="fasta" from_work_dir="out.fasta" label="Alignment of ${input.name} in fasta" hidden="True">
-            <filter>fasta_out == True</filter>
+        <data format="phylip" name="phy" from_work_dir="out.phy" label="Blastalign on ${input.name} in phylip">
+            <filter>output_format == "phylip"</filter>
+        </data>
+        <data format="nexus" name="nxs" from_work_dir="out.nxs" label="Blastalign on ${input.name} in nexus">
+            <filter>output_format == "nexus"</filter>
+        </data>
+        <data format="fasta" name="fasta" from_work_dir="out.fasta" label="Blastalign on ${input.name} in fasta">
+            <filter>output_format == "fasta"</filter>
         </data>
     </outputs>
 
@@ -72,9 +80,7 @@
                 <param name="n" value="False" />
                 <param name="s" value="0" />
             </section>
-            <param name="fasta_out" value="True" />
-            <output name="phy" value="outputs/locus1_sp2.phy" />
-            <output name="nxs" value="outputs/locus1_sp2.nxs" />
+            <param name="output_format" value="fasta" />            
             <output name="fasta" value="outputs/locus1_sp2.fasta" />
         </test>
         <test>
@@ -86,10 +92,8 @@
                 <param name="n" value="False" />
                 <param name="s" value="0" />
             </section>
-            <param name="fasta_out" value="True" />
-            <output name="phy" value="outputs/locus1_sp3.phy" />
-            <output name="nxs" value="outputs/locus1_sp3.nxs" />
-            <output name="fasta" value="outputs/locus1_sp3.fasta" />
+            <param name="output_format" value="phylip" />
+            <output name="phy" value="outputs/locus1_sp3.phy" />            
         </test>
         <test>
             <param name="input" ftype="fasta" value="inputs/locus3_sp2.fasta" />
@@ -100,8 +104,7 @@
                 <param name="n" value="False" />
                 <param name="s" value="0" />
             </section>
-            <param name="fasta_out" value="False" />
-            <output name="phy" value="outputs/locus3_sp2.phy" />
+            <param name="output_format" value="nexus" />            
             <output name="nxs" value="outputs/locus3_sp2.nxs" />
         </test>
         <test>
@@ -113,10 +116,20 @@
                 <param name="n" value="False" />
                 <param name="s" value="0" />
             </section>
-            <param name="fasta_out" value="True" />
-            <output name="phy" value="outputs/locus8_sp2.phy" />
-            <output name="nxs" value="outputs/locus8_sp2.nxs" />
-            <output name="fasta" value="outputs/locus8_sp2.fasta" />
+            <param name="output_format" value="phylip" />
+            <output name="phy" value="outputs/locus8_sp2.phy" />            
+        </test>
+        <test>
+            <param name="input" ftype="fasta" value="inputs/locus8_sp2.fasta" />
+            <section name="advanced_option">
+                <param name="m" value="95" />
+                <param name="r" value="" />
+                <param name="x" value="" />
+                <param name="n" value="False" />
+                <param name="s" value="0" />
+            </section>
+            <param name="output_format" value="fasta" />
+            <output name="phy" value="outputs/locus8_sp2.fasta" />            
         </test>
 
         <!--locus10_sp2.fasta    locus1_sp3.fasta  locus2_sp2.fasta  locus3_sp2.fasta  locus4_sp2.fasta  locus5_sp2.fasta  locus6_sp2.fasta  locus7_sp2.fasta  locus8_sp2.fasta  locus9_sp2.fasta-->
@@ -171,17 +184,21 @@ The choice of several parameters for the blast is possible.
     Default : 0
     Default is finding the reference sequence by blasting all sequences against all sequences, only randomly subsampling when it thinks the blast output file might be too large.
 
+** Output format :**
+    The user have the choice between three format (only one is returned per run) : fasta, phylip, and nexus.
 --------
 
 **Outputs**
+
+The output format is 
  
-    - 'Alignment_{input.name}_phylip' :
+    - 'Blastalign_on_{input.name}_phylip' :
         the aligned sequences in Phylip format.
 
-    - 'Alignment_{input.name}_nexus' :
+    - 'Blastalign_on_{input.name}_nexus' :
        the aligned sequences in Nexus format.
 
-    - 'Alignment_{input_file}_fasta' :
+    - 'Blastalign_on_{input_file}_fasta' :
         the aligned sequences in Fasta format if the option "fasta format" is checked.
 
 ---------
@@ -191,6 +208,7 @@ Changelog
 
 **Version 2.1 - 17/01/2018**
 
+  - New parameter "output format"
   - Applied some bugfixes and minor improvments
 
 **Version 2.0 - 21/04/2017**
