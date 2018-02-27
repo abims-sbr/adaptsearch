@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<tool name="MutCount" id="mutcount" version="2.0">
+<tool name="MutCount" id="mutcount" version="2.1">
     <description>
         This tool proceeds to count codons, amino acids on each species of a set of species, and then proceeds to permutation tests.
     </description>
@@ -11,6 +11,8 @@
 
     <requirements>
         <expand macro="python_required" />
+        <requirement type="package" version="0.20.0">pandas</requirement>
+        <requirement type="package" version="1.12.0">numpy</requirement>
     </requirements>
 
     <command>
@@ -18,10 +20,8 @@
     
         ln -s $__tool_directory__/scripts/functions.py . &&
         
-        #if str($method.method_run) == "concat" :
-            python '$__tool_directory__/scripts/S01a_mutcount_pairs.py' $method.num_sampled $method.num_iter $method.list_species
-            &&
-            python '$__tool_directory__/scripts/S02a_codon_counting.py' ${method.concat_nuc} 
+        #if str($method.method_run) == "concat" :            
+            python '$__tool_directory__/scripts/S01a_codons_counting.py' ${method.concat_nuc} '$method.list_species' '$method.list_species_boot' $method.num_iter $method.num_sampled > ${log}
         #end if
         
         #if str($method.method_run) == "separated" :
@@ -42,6 +42,7 @@
                 python '$__tool_directory__/scripts/S01b_study_seq_composition_aa.py' '$infiles' ${method.concat_phy}
             #end if
         #end if
+        
     ]]>
     </command>
 
@@ -54,9 +55,10 @@
 
             <when value="concat">
                 <param name="concat_nuc" type="data" format="fasta" label="Choose your fasta file in nucleic format" help="It must contain the concatenated file in NUCLEIC format from Phylogeny tool" />
-                <param name="num_sampled" type="integer" value="100" min="0" label="Number of iterations"/>
-                <param name="num_iter" type="integer" value="100" min="0" label="Number of sampled codons"/>
-                <param name="list_species" type="text" size="100" label="List of species" help="List the species separated with a comma (for e.g Ap,As,Ct,Gt,Yu)" />
+                <param name="list_species" type="text" size="100" label="List of species for countings" help="List the species separated with a comma (for e.g Ap,As,Ct,Gt,Yu)" />
+                <param name="list_species_boot" type="text" size="100" label="List of species used for resampling" help="List the species separated with a comma (for e.g Ap,As,Ct,Gt,Yu)" />
+                <param name="num_iter" type="integer" value="1000" min="0" label="Number of sampled codons" help="Sets the length (in codons) of the resampled sequences"/>
+                <param name="num_sampled" type="integer" value="1000" min="0" label="Number of iterations" help="Sets the number of resampled sequences"/>
             </when>
 
             <when value="separated">
@@ -72,30 +74,26 @@
 
     <outputs>
         <!-- output concat -->
-        <!--
-        <data format="txt" name="output1" label="counts.txt" from_work_dir="counts.txt" >
+        <data format="txt" name="log" label="MutCount_concat_log.output" />
+        <data format="csv" name="codons_freqs" label="codons_freqs.csv" from_work_dir="codons_freqs.csv" >
             <filter>(method['method_run']=='concat')</filter>
         </data>
-        <data format="txt" name="output2" label="biases.txt" from_work_dir="biases.txt" >
+        <data format="csv" name="aa_freqs" label="aa_freqs.csv" from_work_dir="aa_freqs.csv" >
             <filter>(method['method_run']=='concat')</filter>
         </data>
-        -->
-        <data format="csv" name="codons_counts" label="codons_counts.csv" from_work_dir="codons_counts.csv" >
+        <data format="csv" name="aatypes_freqs" label="aatypes_freqs.csv" from_work_dir="aatypes_freqs.csv" >
             <filter>(method['method_run']=='concat')</filter>
         </data>
-        <data format="csv" name="aa_counts" label="aa_counts.csv" from_work_dir="aa_counts.csv" >
+        <data format="csv" name="gc_and_others_freqs" label="gc_and_others_freqs.csv" from_work_dir="gc_and_others_freqs.csv" >
             <filter>(method['method_run']=='concat')</filter>
         </data>
-        <data format="csv" name="aatypes_counts" label="aatypes_counts.csv" from_work_dir="aatypes_counts.csv" >
+        <data format="csv" name="codons_transitions_freqs" label="codons_transitions_freqs" from_work_dir="codons_transitions_freqs.csv" >
             <filter>(method['method_run']=='concat')</filter>
         </data>
-        <data format="csv" name="gc_counts" label="gc_counts.csv" from_work_dir="gc_counts.csv" >
+        <data format="csv" name="aa_transitions_freqs" label="aa_transitions_freqs.csv" from_work_dir="aa_transitions_freqs.csv" >
             <filter>(method['method_run']=='concat')</filter>
         </data>
-        <data format="csv" name="aa_transitions" label="aa_transitions.csv" from_work_dir="aa_transitions.csv" >
-            <filter>(method['method_run']=='concat')</filter>
-        </data>
-        <data format="csv" name="aatypes_transitions" label="aatypes_transitions.csv" from_work_dir="aatypes_transitions.csv" >
+        <data format="csv" name="aatypes_transitions_freqs" label="aatypes_transitions.csv" from_work_dir="aatypes_transitions_freqs.csv" >
             <filter>(method['method_run']=='concat')</filter>
         </data>
 
@@ -156,21 +154,24 @@
         
     </outputs>
 
-    <tests>
+    <tests>        
         <test>
             <conditional name="method" >
                 <param name="method_run" value="concat" />
-                <param name="concat_nuc" ftype="fasta" value="test_07_output_phylogeny_concatenation.fasta" />
-                <param name="num_sampled" value="100" />
-                <param name="num_iter" value="100" />
-                <param name="list_species" ftype="text" value="Ac,Am,Ap,Pu" />
-            </conditional>            
-            <output name="codons_counts" value="OUT_concat/codons_counts.csv" lines_diff="8"/>
-            <output name="aa_counts" value="OUT_concat/aa_counts.csv" lines_diff="8"/>
-            <output name="aatypes_counts" value="OUT_concat/aatypes_counts.csv" lines_diff="8"/>
-            <output name="gc_counts" value="OUT_concat/gc_counts.csv"/>
-            <output name="aa_transitions" value="OUT_concat/aa_transitions.csv" lines_diff="14"/>
-            <output name="aatypes_transitions" value="OUT_concat/aatypes_transitions.csv" lines_diff="14"/>
+                <param name="concat_nuc" ftype="fasta" value="concatenation.fasta" />
+                <param name="list_species" ftype="text" value="Ps,Pp,Pu,Ac,Ap,Pf,Pg,Ph,Pi" />
+                <param name="list_species_boot" ftype="text" value="Ps,Pp,Pu,Pf" />
+                <param name="num_iter" value="200" />
+                <param name="num_sampled" value="200" /> 
+            </conditional>
+            <output name="log" value="OUT_concat/MutCount_concat_log.output" lines_diff="2"/>
+            <output name="codons_freqs" value="OUT_concat/codons_freqs.csv" lines_diff="18"/>
+            <output name="aa_freqs" value="OUT_concat/aa_freqs.csv" lines_diff="18"/>
+            <output name="aatypes_freqs" value="OUT_concat/aatypes_freqs.csv" lines_diff="18"/>
+            <output name="gc_and_others_freqs" value="OUT_concat/gc_and_others_freqs.csv"/>            
+            <output name="codons_transitions_freqs" value="OUT_concat/codons_transitions_freqs.csv" lines_diff="72"/>
+            <output name="aa_transitions_freqs" value="OUT_concat/aa_transitions_freqs.csv" lines_diff="72"/>
+            <output name="aatypes_transitions_freqs" value="OUT_concat/aatypes_transitions_freqs.csv" lines_diff="72"/>
         </test>
 
         <test>
@@ -207,6 +208,7 @@
 <![CDATA[
 
 **Last Version** : Victor Mataigne and Gildas Le Corguillé
+
 --------
 
 **Description**
@@ -237,11 +239,13 @@ If you choose the separated method, there are two input files :
 
 There are parameters only for the "Concatenated" method :
 
+- The list of species for **countings**, separated by commas and without space (e.g : sp1,sp2,sp3,sp4). You can run the tool on subgroup of species, not only on the total number of species present in the previous tools.
+
+- The list of species for **resampling**, separated by commas and without space (e.g : sp1,sp2,sp3,sp4). You can run the tool on subgroup of species, not only on the total number of species present in the previous tools. 
+
 - The number of iterations : the number of alignments that will be generated (effect on the resolution of the gaussian distribution). Shouldn't be lower than 1000 to have a relatively smooth gaussian distribution.
 
 - The number of sampled codons : the number of pairs of codons in each generated alignments (effect on the robustness on the countings performed on this alignement). Shouldn't be lower than 1000 to detect codons with relatively low occurence (<1%).
-
-- The list of species, separated by commas and without space (e.g : sp1,sp2,sp3,sp4). You can run the tool on subgroup of species, not only on the total number of species present in the previous tools. You can also write 'all' to include every species.
 
 --------
 
@@ -263,8 +267,8 @@ Many outputs in .csv format , varying according to the chosen method and format 
 Changelog
 ---------
 
-**Version 2.1 - 10/01/2017**
-
+**Version 2.1 - 26/02/2017**
+- Fully re-written the concat method : fixed mistakes + cleaner code
 - Splitted output of concatenated method in several csv files.
 - Bug corrected in output files of separated method.
 
