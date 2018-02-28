@@ -17,20 +17,18 @@
 
 def code_universel(F1):
     bash_codeUniversel = {}
-    while 1:
-        next = F1.readline()
-        if not next: break
-        L1 = string.split(next, " ")
-        length1 = len(L1)
-        if length1 == 3:
-            key = L1[0]
-            value = L1[2][:-1]
-            bash_codeUniversel[key] = value
-        else:
-            key =  L1[0]
-            value = L1[2]
-            bash_codeUniversel[key] = value
-    F1.close()
+    with open(F1, "r") as file:
+        for line in file.readlines():
+            L1 = string.split(line, " ")
+            length1 = len(L1)
+            if length1 == 3:
+                key = L1[0]
+                value = L1[2][:-1]
+                bash_codeUniversel[key] = value
+            else:
+                key = L1[0]
+                value = L1[2]
+                bash_codeUniversel[key] = value
     return(bash_codeUniversel)
 ###########################################################
 
@@ -329,9 +327,7 @@ MINIMAL_CDS_LENGTH = int(sys.argv[3])  ## in aa number
 list_file = str.split(infiles,",")
 
 ### Get Universal Code
-F2 = open(sys.argv[2], 'r')
-bash_codeUniversel = code_universel(F2)  ### DEF2 ###
-F2.close()
+bash_codeUniversel = code_universel(sys.argv[2])  ### DEF2 ###
 
 os.mkdir("04_BEST_ORF_nuc")
 Path_OUT1 = "04_BEST_ORF_nuc"

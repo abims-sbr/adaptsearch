@@ -9,42 +9,33 @@
 ##### DEF1_modified : Get Pairs(only fasta names, not squences) #####
 #####################################################################
 def get_pairs_modified(fasta_file_path):
-    F2 = open(fasta_file_path, "r")
+
     list_pairwises = []
     list_query = []
     list_match= []
-
     h = 0
-    while 1:
-        next2 = F2.readline()
-        if not next2:
-            break
-        if next2[0] == ">":
-            ## Read 1 pairwise
-            fasta_name_query = next2[1:-1]
-            next3 = F2.readline()
-            fasta_seq_query = next3[:-1]
-            next3 = F2.readline()    ## jump one empty line (if any after the sequence)
-            fasta_name_match = next3[1:-1]
-            next3 = F2.readline()
-            fasta_seq_match = next3[:-1]
-            h = h+1
+    with open(fasta_file_path, "r") as F2:
+        for name, query, name2, query2 in itertools.izip_longest(*[F2]*4):            
+            if name[0] == ">":
+                ## Read 1 pairwise
+                fasta_name_query = name[1:-1]
+                fasta_seq_query = query[:-1]
+                fasta_name_match = name2[1:-1]
+                fasta_seq_match = query2[:-1]
+                h = h+1
 
-            ## Format shorter names
-            S1 = string.split(fasta_name_query, "||")
-            short_fasta_name_query = S1[0]
+                ## Format shorter names
+                S1 = string.split(fasta_name_query, "||")
+                short_fasta_name_query = S1[0]
 
-            S2 = string.split(fasta_name_match, "||")
-            short_fasta_name_match = S2[0]
+                S2 = string.split(fasta_name_match, "||")
+                short_fasta_name_match = S2[0]
 
-            ## create and record pairwise (in list format)
-            pairwise = [short_fasta_name_query,short_fasta_name_match]
-            list_pairwises.append(pairwise)
-            list_query.append(short_fasta_name_query)
-            list_match.append(short_fasta_name_match)
-
-
-    F2.close()
+                ## create and record pairwise (in list format)
+                pairwise = [short_fasta_name_query,short_fasta_name_match]
+                list_pairwises.append(pairwise)
+                list_query.append(short_fasta_name_query)
+                list_match.append(short_fasta_name_match)
 
     print "Number of pairwises parsed = %d \n\n\n" %h
     return(list_pairwises, list_query, list_match)
@@ -55,26 +46,14 @@ def get_pairs_modified(fasta_file_path):
 ###### DEF2 ######
 ##################
 def get_dico_seq_subset(path, list_fastaNames):
-    F1 = open(path, "r")
-
-    nb_line_treated = 0
-
     bash_subset = {}
-
-    while 1:
-        nextline = F1.readline()
-
-        nb_line_treated = nb_line_treated + 1
-
-        if not nextline :
-            break
-
-        if nextline[0] == ">":
-            if nextline[1:-1] in list_fastaNames:
-                name = nextline[1:-1]
-                sequence = F1.readline()
-                sequence = sequence[:-1]
-                bash_subset[name] = sequence
+    with open(path, "r") as F1:
+        for header, seq in itertools.izip_longest(*[F1]*2):
+            if header[0] == ">":
+                if header[1:-1] in list_fastaNames:
+                    name = header[1:-1]
+                    sequence = seq[:-1]
+                    bash_subset[name] = sequence
     return(bash_subset)
 #####################################
 
