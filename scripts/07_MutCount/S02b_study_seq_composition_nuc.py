@@ -4,7 +4,7 @@
 ## Last Version : 12/2017 by Victor Mataigne
 ## Object: Test for compositional bias in genome and proteome as marker of thermal adaptation (comparison between 2 "hot" species: Ap and Ps and one "cold" species: Pg)
 
-import sys,os,shutil,subprocess, string
+import sys,os,shutil,subprocess, string, itertools
 from functions import simplify_fasta_name, dico
 
 ##################

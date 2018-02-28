@@ -17,25 +17,14 @@ SPLIT = "||"
 ## key = fasta name; value = sequence (WITH GAP, IF ANY, REMOVED IN THIS FUNCTION)
 def dico(fasta_file):
     count_fastaName=0
-    F1 = open(fasta_file, "r")
     bash1 = {}
-
-    w=0
-    while 1:
-        nextline = F1.readline()
-        if not nextline:
-            break        
-        w = w+1
-        
-        if nextline[0] == ">":
-            count_fastaName = count_fastaName + 1
-            fasta_name = nextline[1:-1]
-            nextline = F1.readline()
-            sequence = nextline[:-1]
-
-            bash1[fasta_name] = sequence
-
-    F1.close()
+    with open(fasta_file, "r") as F1:        
+        for line, line2 in itertools.izip_longest(*[F1]*2):            
+            if line[0] == ">":
+                count_fastaName = count_fastaName + 1
+                fasta_name = line[1:-1]                
+                sequence = line2[:-1]
+                bash1[fasta_name] = sequence
     return(bash1, count_fastaName)
 #####################################
 
@@ -85,7 +74,7 @@ def get_sequences(list_fasta_names, bash2):
 #####################
 #### RUN RUN RUN ####
 #####################
-import string, os, sys
+import string, os, sys, itertools
 
 ## 1 ## INPUT/OUTPUT
 SHORT_FILE = sys.argv[2] #short-name-query_short-name-db

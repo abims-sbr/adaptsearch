@@ -123,14 +123,11 @@ path_OUT2 = "08_CDS_nuc_MINIMUM_MISSING_SEQUENCES"
 
 
 for file in L_IN1:
-    file_INaa = open("%s/%s" %(path_IN1, file), "r")
-    file_INnuc = open("%s/%s" %(path_IN2, file), "r")
+    file_INaa = "%s/%s" %(path_IN1, file)
+    file_INnuc = "%s/%s" %(path_IN2, file)
 
     dico_aa = dico(file_INaa)   ### DEF 1 ###
     dico_nuc = dico(file_INnuc)   ### DEF 1 ###
-    
-    file_INaa.close()
-    file_INnuc.close()
 
     if len(dico_aa) < MIN_SPECIES_NB :
 	list_file.append(file)
@@ -140,8 +137,8 @@ if list_file == lenght :
 
 
 for file in L_IN1 :
-    file_INaa = open("%s/%s" %(path_IN1, file), "r")
-    file_INnuc = open("%s/%s" %(path_IN2, file), "r")
+    file_INaa = "%s/%s" %(path_IN1, file)
+    file_INnuc = "%s/%s" %(path_IN2, file)
 
     dico_aa = dico(file_INaa)   ### DEF 1 ###
     dico_nuc = dico(file_INnuc)   ### DEF 1 ###
@@ -155,10 +152,6 @@ for file in L_IN1 :
         k0 = k[0]
         seq0 = filtered_bash_nuc[k0]
         new_leng_nuc = len(seq0)
-
-    ## 4.2 ## Close INPUT
-    file_INaa.close()
-    file_INnuc.close()
 
     ## 4.3 ## Change file name for output, depending the number of species remaining in the alignment
     LS = string.split(file, "_NEW")

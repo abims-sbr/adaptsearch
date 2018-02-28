@@ -15,26 +15,18 @@ MIN_LENGTH = 1
 ############################
 ##### DEF1 : Get Pairs #####
 ############################
-def get_pairs(fasta_file_path):
-    F2 = open(fasta_file_path, "r")
+def get_pairs(fasta_file):
     list_pairwises = []
-    while 1:
-        next2 = F2.readline()
-        if not next2:
-            break
-        if next2[0] == ">":
-            fasta_name_query = next2[1:-1]
-            next3 = F2.readline()
-            fasta_seq_query = next3[:-1]
-            next3 = F2.readline()    ## jump one empty line (if any after the sequence)
-            fasta_name_match = next3[1:-1]
-            next3 = F2.readline()
-            fasta_seq_match = next3[:-1]
-            pairwise = [fasta_name_query,fasta_seq_query,fasta_name_match,fasta_seq_match]
-            
-            ## ADD pairwise with condition
-            list_pairwises.append(pairwise)
-    F2.close()
+    with open(fasta_file, "r") as F2:
+        for name, query, name2, query2 in itertools.izip_longest(*[F2]*4):
+            if name[0] == ">":
+                fasta_name_query = name[1:-1]
+                fasta_seq_query = query[:-1]
+                fasta_name_match = name2[1:-1]
+                fasta_seq_match = query2[:-1]            
+                pairwise = [fasta_name_query,fasta_seq_query,fasta_name_match,fasta_seq_match]                
+                ## ADD pairwise with condition
+                list_pairwises.append(pairwise)
     return(list_pairwises)
 #########################################################
 
@@ -58,7 +50,7 @@ def get_short_name(long_name):
 ### RUN RUN RUN ###
 ###################
 
-import string, os, sys
+import string, os, sys, itertools
 
 ### 1 ### INPUT/OUTPUT
 SHORT_FILE = sys.argv[1] ## short-name-query_short-name-db

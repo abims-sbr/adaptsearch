@@ -1,4 +1,4 @@
-import string
+import string, itertools
 
 # Used in S05 and
 def split_file(path_in, keyword):
@@ -165,27 +165,19 @@ def get_information_on_matches(list_of_line):
     return(list_informations)
 
 # Used in S06, S09, S11
-def get_pairs(fasta_file_path):
-    F2 = open(fasta_file_path, "r")
+def get_pairs(fasta_file_path):    
     list_pairwises = []
-    while 1:
-        next2 = F2.readline()
-        if not next2:
-            break
-        if next2[0] == ">":
-            fasta_name_query = next2[:-1]
-            next3 = F2.readline()
-            fasta_seq_query = next3[:-1]
-            next3 = F2.readline()    ## jump one empty line (if any after the sequence)
-            fasta_name_match = next3[:-1]
-            next3 = F2.readline()
-            fasta_seq_match = next3[:-1]
-            pairwise = [fasta_name_query,fasta_seq_query,fasta_name_match,fasta_seq_match]
-            
-            ## ADD pairwise with condition
-            list_pairwises.append(pairwise)
-    F2.close()
-    
+    with open(fasta_file_path, "r") as F2:
+        for name, sequence, name2, sequence2 in itertools.izip_longest(*[F2]*4):            
+            if name[0] == ">":
+                fasta_name_query = name[:-1]                
+                fasta_seq_query = sequence[:-1]                
+                fasta_name_match = name2[:-1]                
+                fasta_seq_match = sequence2[:-1]
+                pairwise = [fasta_name_query,fasta_seq_query,fasta_name_match,fasta_seq_match]
+                
+                ## ADD pairwise with condition
+                list_pairwises.append(pairwise)
     return(list_pairwises)
 
 def extract_length(length_string):   # format length string = 57...902

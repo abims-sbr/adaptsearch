@@ -3,24 +3,22 @@
 ## Last modification: 17/06/2011
 ## Subject: find and remove indels
 
-
 ###############################
 ##### DEF 0 : Dico fasta  #####
 ###############################
 def dico(F2):
     dicoco = {}
-    while 1:
-        next2 = F2.readline()
-        if not next2:
-            break
-        if next2[0] == ">":
-            fasta_name_query = next2[:-1]
-            Sn = string.split(fasta_name_query, "||")
-            fasta_name_query = Sn[0]
-            next3 = F2.readline()
-            fasta_seq_query = next3[:-1]
-            dicoco[fasta_name_query]=fasta_seq_query
-    return(dicoco)
+    with open(F2, "r") as file:
+        for name, query in itertools.izip_longest(*[file]*2):
+            if not name:
+                break
+            if name[0] == ">":
+                fasta_name_query = name[:-1]
+                Sn = string.split(fasta_name_query, "||")
+                fasta_name_query = Sn[0]
+                fasta_seq_query = query[:-1]
+                dicoco[fasta_name_query]=fasta_seq_query
+    return dicoco
 ###################################################################################
 
 
@@ -45,10 +43,8 @@ def concatenate(L_IN, SPECIES_ID_LIST):
     for file in L_IN:
         nb_locus=nb_locus+1
 
-        ## a ## Open alignments
-        file_IN = open(file, "r")
-        dico_seq = dico(file_IN)   ### DEF 0 ###
-        file_IN.close()
+        ## a ## Open alignments        
+        dico_seq = dico(file)   ### DEF 0 ###        
         ## b ## Get alignment length + genes positions for RAxML
         key0 = dico_seq.keys()[0]
         ln = len(dico_seq[key0])
@@ -123,7 +119,7 @@ def get_codon_position(seq_inORF):
 #######################
 ##### RUN RUN RUN #####
 #######################
-import string, os, time, re, sys, zipfile
+import string, os, time, re, sys, itertools
 
 list_species = []
 SPECIES_ID_LIST = []
