@@ -1,4 +1,4 @@
-<tool name="Pairwise" id="pairwise" version="2.0.1">
+<tool name="Pairwise" id="pairwise" version="2.0.2">
 
 	<description>
 		Run reciproque tblastx pairwise
@@ -108,7 +108,6 @@
  @HELP_AUTHORS@
  
 <![CDATA[
----------
 
 **Description**
 
@@ -141,7 +140,7 @@ This tool searches for different homologous genes from pairwise comparisons betw
 
 **The AdaptSearch Pipeline**
 
-.. image:: adaptsearch_picture_helps.png :heigth: 593 :width: 852
+.. image:: adaptsearch_picture_helps.png
 
 ---------
 

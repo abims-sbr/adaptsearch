@@ -1,4 +1,4 @@
-<tool name="CDS_search" id="cds_search" version="2.0.1">
+<tool name="CDS_search" id="cds_search" version="2.0.2">
 
 	<description>
 		ORF and CDS search
@@ -190,8 +190,6 @@
 
 <![CDATA[
 
---------
-
 **Description**
 
 This tool takes files containing nucleic aligned sequences and search the ORF and the CDS.
@@ -274,7 +272,7 @@ Input files : (multiple) fasta files with nucleic aligned sequences.
 
 **The AdaptSearch Pipeline**
 
-.. image:: adaptsearch_picture_helps.png :heigth: 593 :width: 852
+.. image:: adaptsearch_picture_helps.png
 
 ---------
 

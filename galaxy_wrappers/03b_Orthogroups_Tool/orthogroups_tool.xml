@@ -1,4 +1,4 @@
-<tool name="Orthogroups_Tool" id="orthogroups_tool" version="1.0.1">
+<tool name="Orthogroups_Tool" id="orthogroups_tool" version="1.0.2">
 
     <description>
         This tool takes Orthogroups found by OrthoFinder and proceeds to retrieve nucleic sequences back, then write each orthogroups in its own fasta file.
@@ -158,7 +158,7 @@ Our tool focus on the orthogroups.txt file created before gene trees.The script 
 
 **The AdaptSearch Pipeline**
 
-.. image:: adaptsearch_picture_helps.png :heigth: 593 :width: 852
+.. image:: adaptsearch_picture_helps.png
 
 Changelog
 ---------

@@ -1,4 +1,4 @@
-<tool name="Filter assemblies" id="filter_assemblies" version="2.0.1">
+<tool name="Filter assemblies" id="filter_assemblies" version="2.0.3">
 
     <description>
         Filter the outputs of Velvet or Trinity assemblies
@@ -104,8 +104,6 @@
 
 <![CDATA[
 
----------
-
 **Description**
 
 This tool reformats Velvet Oases or Trinity assemblies for the AdaptSearch galaxy suite and selects only one variant per gene according to its length and quality check.
@@ -137,7 +135,6 @@ This tool reformats Velvet Oases or Trinity assemblies for the AdaptSearch galax
 
 **Parameters**
 
-    - 'Assembler' : specifies which assembler was used on the input files.
     - 'Input files' : a collection of fasta files (one file per species).
     - 'Overlap percent identity cutoff' : cap3 -p parameter : minimum percent identity of an overlap.
         must be > 65 ; default : 100.
@@ -166,7 +163,7 @@ The tool:
 
 **The AdaptSearch Pipeline**
 
-.. image:: adaptsearch_picture_helps.png :heigth: 593 :width: 852
+.. image:: adaptsearch_picture_helps.png
 
 ---------
 

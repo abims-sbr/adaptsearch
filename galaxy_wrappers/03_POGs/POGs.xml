@@ -1,4 +1,4 @@
-<tool name="POGs" id="POGs" version="2.0">
+<tool name="POGs" id="POGs" version="2.0.1">
 
 	<description>
 		Find orthologous groups
@@ -136,7 +136,7 @@ The output of the tool 'Pairwise' (pairwise_DNA, nucleic format) (AdaptSearch su
 
 - paralogs : check 'Yes' if you also want to retrieve the orthogroups before the paralogous sequences removal.
 
-:: .. class:: warningmark
+.. class:: warningmark
 The minimum number of species per group only applies to the main output files. In the case of the 'paralogs' option, this parameter is more likely the minimum amount of sequences to keep.
 
 --------
@@ -155,7 +155,7 @@ This tool, produces the following files :
 
 **The AdaptSearch Pipeline**
 
-.. image:: adaptsearch_picture_helps.png :heigth: 593 :width: 852
+.. image:: adaptsearch_picture_helps.png
 
 Changelog
 ---------

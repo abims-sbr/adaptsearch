@@ -1,4 +1,4 @@
-<tool name="ConcatPhyl" id="concatphyl" version="2.0.1">
+<tool name="ConcatPhyl" id="concatphyl" version="2.0.2">
 
 	<description>
 		Concatenation and phylogeny
@@ -286,13 +286,13 @@
 
 <![CDATA[
 
-..class:: infomark
+.. class:: infomark
 
 **Authors**
 The run RAxML was written by Alexandros Stamatakis.
 The script was written by Eric Fontanillas.
 
-..class:: infomark
+.. class:: infomark
 
 **Galaxy integration** by Julie Baffard and ABiMS team.
 
@@ -302,7 +302,7 @@ The script was written by Eric Fontanillas.
 
 This tool takes files containing fasta sequences (from the CDS_Search in the AdaptSearch suite) and run RAxML to build a phylogeny.
 
-..class:: infomark
+.. class:: infomark
 
 full RAxML manual here_
 
@@ -393,7 +393,7 @@ This tool, produces the following files :
 
 **The AdaptSearch Pipeline**
 
-.. image:: adaptsearch_picture_helps.png :heigth: 593 :width: 852
+.. image:: adaptsearch_picture_helps.png
 
 ---------
 
