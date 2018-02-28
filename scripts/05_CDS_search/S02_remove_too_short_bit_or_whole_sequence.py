@@ -78,8 +78,8 @@ os.mkdir("07_CDS_nuc")
 path_OUT2 = "07_CDS_nuc"
 
 for file in L_IN1:
-    file_INaa = open("%s/%s" %(path_IN1, file), "r")
-    file_INnuc = open("%s/%s" %(path_IN2, file), "r")
+    file_INaa = "%s/%s" %(path_IN1, file)
+    file_INnuc = "%s/%s" %(path_IN2, file)
 
     dico_aa = dico(file_INaa)   ### DEF 0 ###
     dico_nuc = dico(file_INnuc)   ### DEF 0 ###
@@ -173,9 +173,6 @@ for file in L_IN1:
     else :
 	if nb not in list_sp and nb != "sp0" :
 	    list_sp.append(nb)
- 
-    file_INaa.close()
-    file_INnuc.close()
  
 # [FILTER 5]: check if the number of locus with the max number of species isn't 0
 #if it is : MIN_SPECIES_NB - 1

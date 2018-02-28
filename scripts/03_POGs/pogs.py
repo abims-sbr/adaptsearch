@@ -11,7 +11,7 @@ What it does:
 BETA VERSION
 """
 
-import os, argparse
+import os, argparse, itertools
 import numpy as np
 import pandas as pd
 
@@ -59,9 +59,7 @@ def getListPairwiseAll(listPairwiseFiles):
     def getPairwiseCouple(pairwiseFile):        
         list_pairwises_2sp = []
         with open(pairwiseFile, "r") as file:
-            while (1):  # Ugly !
-                name, sequence, name2, sequence2 = file.readline(), file.readline(), file.readline(), file.readline()
-                if not name: break # Use assert ?
+            for name, sequence, name2, sequence2 in itertools.izip_longest(*[file]*4):            
                 # One locus every two lines (one pairwise couple = 4 lines) : header + sequence
                 locus1 = Locus(name, sequence)
                 locus2 = Locus(name2, sequence2)

@@ -1,16 +1,13 @@
-import string
+import string, itertools
 
-def dico(F1):    
+def dico(F1):
     dicoco = {}
-    while 1:
-        next2 = F1.readline()
-        if not next2:
-            break
-        if next2[0] == ">":
-            fasta_name_query = next2[:-1]
-            Sn = string.split(fasta_name_query, "||")
-            fasta_name_query = Sn[0]
-            next3 = F1.readline()
-            fasta_seq_query = next3[:-1]
-            dicoco[fasta_name_query]=fasta_seq_query    
+    with open(F1, "r") as file:
+        for name, query in itertools.izip_longest(*[file]*2):
+            if name[0] == ">":
+                fasta_name_query = name[:-1]
+                Sn = string.split(fasta_name_query, "||")
+                fasta_name_query = Sn[0]                
+                fasta_seq_query = query[:-1]
+                dicoco[fasta_name_query] = fasta_seq_query    
     return(dicoco)

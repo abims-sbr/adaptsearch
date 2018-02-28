@@ -359,10 +359,8 @@ count_file_with_CDS_plus_M = 0
 
 for file in list_file:
     count_file_processed = count_file_processed + 1
-    fasta_file_path = "./%s" %file
-    fasta_file = open(fasta_file_path, "r")
-    bash_fasta = dico(fasta_file)   ### DEF 1 ###
-    fasta_file.close()
+    fasta_file_path = "./%s" %file    
+    bash_fasta = dico(fasta_file_path)   ### DEF 1 ###    
     BESTORF_nuc, BESTORF_nuc_CODING, BESTORF_nuc_CDS_with_M, BESTORF_aa, BESTORF_aa_CODING, BESTORF_aa_CDS_with_M  = find_good_ORF_criteria_3(bash_fasta, bash_codeUniversel)   ### DEF 4 - PART 2 - ###
 
     ## a ## OUTPUT BESTORF_nuc
