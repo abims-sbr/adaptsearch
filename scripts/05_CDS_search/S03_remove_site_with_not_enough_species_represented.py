@@ -106,7 +106,7 @@ good = 0
 list_new_file = []
 dicoco = {}
 list_file = []
-
+name_elems = ["Orthogroup", "0", "with", "0", "species.fasta"]
 
 ### 1 ### IN
 path_IN1 = "./07_CDS_aa/"
@@ -130,7 +130,7 @@ for file in L_IN1:
     dico_nuc = dico(file_INnuc)   ### DEF 1 ###
 
     if len(dico_aa) < MIN_SPECIES_NB :
-	list_file.append(file)
+    list_file.append(file)
 
 if list_file == lenght :
     MIN_SPECIES_NB == MIN_SPECIES_NB - 1
@@ -153,15 +153,11 @@ for file in L_IN1 :
         seq0 = filtered_bash_nuc[k0]
         new_leng_nuc = len(seq0)
 
-    ## 4.3 ## Change file name for output, depending the number of species remaining in the alignment
-    LS = string.split(file, "_NEW")
-    LS = "".join(LS)
-    LS = string.split(LS, "_")
-    ln_aa = len(filtered_bash_aa.keys())
-    nb = "sp%d" %ln_aa
-    new_name = LS[0] + "_" + nb + "_" + LS[1]
+    ## 4.3 ## Change file name for output, depending the number of species remaining in the alignment 
     n0+=1
-
+    name_elems[1] = str(n0)
+    name_elems[3] =  str(len(filtered_bash_aa.keys()))
+    new_name = "_".join(name_elems)    
     ## 4.5 ## Write filtered alignment in OUTPUTs
     ## aa
     if filtered_bash_aa != {} and new_leng_nuc >= MIN_LENGTH_FINAL_ALIGNMENT_NUC:
@@ -173,7 +169,7 @@ for file in L_IN1 :
         OUTaa.close()
     # nuc
     if filtered_bash_nuc != {} and new_leng_nuc >= MIN_LENGTH_FINAL_ALIGNMENT_NUC:
-	good+=1
+    good+=1
         OUTnuc=open("%s/%s" %(path_OUT2, new_name), "w")
         for fasta_name in filtered_bash_nuc.keys():
             seq_nuc = filtered_bash_nuc[fasta_name]
@@ -181,7 +177,7 @@ for file in L_IN1 :
             OUTnuc.write("%s\n" %seq_nuc)
         OUTnuc.close()
     else:
-	bad+=1
+    bad+=1
 
 
 ## 5 ## Print

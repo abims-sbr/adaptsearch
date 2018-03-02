@@ -58,6 +58,7 @@ n0 = 0
 e=0
 j=0
 i=1
+name_elems = ["Orthogroup", "0", "with", "0", "species.fasta"]
 
 ### 1 ### IN
 if sys.argv[2] == "oui" :
@@ -150,35 +151,27 @@ for file in L_IN1:
         if seq_empty_test != "":
             new_bash_nuc[fasta_name] = seq_gap_nuc
 
-    ## 4.6 ## Correct the nb of sequence in the output name, if necessary
-    sp_nb = len(new_bash_aa.keys())
-    lis = string.split(file, "_")
-    new_lis = string.split(lis[1], ".")       
-    nb = "sp%d" %  sp_nb
-
-    old_nb = new_lis[0]
-    max_old_nb = string.split(old_nb, "sp")
-    max_old_nb = "".join(max_old_nb)
-
-    if old_nb == nb:
-        new_file = lis[0] + "_" + nb + "." + new_lis[1]
-    else:
-        new_file = lis[0] + "_NEW_"+ nb + "." + new_lis[1]
-    list_new_file.append(new_file)
-    dico_dico[new_file] = [new_bash_aa, new_bash_nuc]
-    n0+=1 #number of locus traited
-
-    if list_sp == [] and nb!="sp0" :
-        list_sp.append(nb)
+    # 4.6 ## Correct the nb of sequence in the output name, if necessary
+    """
+    spl = string.split(file, "_")
+    if spl[3] != len(dico_nuc.keys()):
+        new_name = "%s_%s_%s_%d_%s" % (spl[0], spl[1], spl[2], len(dico_nuc.keys()), spl[4])
     else :
-	if nb not in list_sp and nb != "sp0" :
-	    list_sp.append(nb)
- 
+        new_name = str(file)
+    dico_dico[new_name] = [new_bash_aa, new_bash_nuc]
+    """    
+    n0 += 1
+    name_elems[1] = str(n0)
+    name_elems[3] = str(len(new_bash_nuc.keys()))
+    new_name = "_".join(name_elems)
+    dico_dico[new_name] = [new_bash_aa, new_bash_nuc]
+    list_new_file.append(new_name)
+
 # [FILTER 5]: check if the number of locus with the max number of species isn't 0
 #if it is : MIN_SPECIES_NB - 1
 if len(list_sp) < MIN_SPECIES_NB :
     MIN_SPECIES_NB = len(list_sp)
-
+print dico_dico.keys()
 ## [FILTER 6]: print output only if at least "MIN_SPECIES_NB" species remaining in the alignment
 for name in list_new_file :
     dicoo = dico_dico[name]
@@ -191,11 +184,11 @@ for name in list_new_file :
         file_OUTnuc = open("%s/%s" %(path_OUT2, name), "w")
 
         for fasta_name in dico_aa.keys() :
-	    seq_aa = dico_aa[fasta_name]
+        seq_aa = dico_aa[fasta_name]
             file_OUTaa.write("%s\n" %fasta_name)
             file_OUTaa.write("%s\n" %seq_aa)
-	for fasta_name in dico_nuc.keys() :
-	    seq_nuc = dico_nuc[fasta_name]
+    for fasta_name in dico_nuc.keys() :
+        seq_nuc = dico_nuc[fasta_name]
             file_OUTnuc.write("%s\n" %fasta_name)
             file_OUTnuc.write("%s\n" %seq_nuc)
 
@@ -220,13 +213,13 @@ for sp in list_sp :
     dicoco[sp] = []
     for files in list_new_file :
         nb_sp = string.split(files, "_NEW")
-	nb_sp = "".join(nb_sp)
-	nb_sp = string.split(nb_sp,'_')
-    	nb_sp = nb_sp[1]
+    nb_sp = "".join(nb_sp)
+    nb_sp = string.split(nb_sp,'_')
+        nb_sp = nb_sp[1]
         nb_sp = string.split(nb_sp, ".")
         nb_sp = nb_sp[0]
-    	if nb_sp == sp :
-	    dicoco[sp].append(files)
+        if nb_sp == sp :
+        dicoco[sp].append(files)
     new_sp = sp.split("sp")
     new_sp = int(new_sp[1])
     if new_sp == i :
