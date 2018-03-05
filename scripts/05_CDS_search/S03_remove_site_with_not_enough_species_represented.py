@@ -1,6 +1,8 @@
 #!/usr/bin/python
+# coding: utf8
 ## Author: Eric Fontanillas
-## Last modification: 03/09/14 by Julie BAFFARD
+## Modification: 03/09/14 by Julie BAFFARD
+## Last modification : 05/03/18 by Victor Mataigne
 
 ## Description : find and remove indels
 
@@ -93,7 +95,7 @@ def remove_position_with_too_much_missing_data(bash_aa, bash_nuc, MIN_SPECIES_NB
 #######################
 ##### RUN RUN RUN #####
 #######################
-import string, os, time, re, sys, zipfile
+import string, os, time, re, sys
 from dico import dico
 
 ### 0 ### PARAMETERS
@@ -106,7 +108,7 @@ good = 0
 list_new_file = []
 dicoco = {}
 list_file = []
-name_elems = ["Orthogroup", "0", "with", "0", "species.fasta"]
+name_elems = ["orthogroup", "0", "with", "0", "species.fasta"]
 
 ### 1 ### IN
 path_IN1 = "./07_CDS_aa/"
@@ -130,7 +132,7 @@ for file in L_IN1:
     dico_nuc = dico(file_INnuc)   ### DEF 1 ###
 
     if len(dico_aa) < MIN_SPECIES_NB :
-    list_file.append(file)
+        list_file.append(file)
 
 if list_file == lenght :
     MIN_SPECIES_NB == MIN_SPECIES_NB - 1
@@ -157,7 +159,8 @@ for file in L_IN1 :
     n0+=1
     name_elems[1] = str(n0)
     name_elems[3] =  str(len(filtered_bash_aa.keys()))
-    new_name = "_".join(name_elems)    
+    new_name = "_".join(name_elems)
+
     ## 4.5 ## Write filtered alignment in OUTPUTs
     ## aa
     if filtered_bash_aa != {} and new_leng_nuc >= MIN_LENGTH_FINAL_ALIGNMENT_NUC:
@@ -169,7 +172,7 @@ for file in L_IN1 :
         OUTaa.close()
     # nuc
     if filtered_bash_nuc != {} and new_leng_nuc >= MIN_LENGTH_FINAL_ALIGNMENT_NUC:
-    good+=1
+        good+=1
         OUTnuc=open("%s/%s" %(path_OUT2, new_name), "w")
         for fasta_name in filtered_bash_nuc.keys():
             seq_nuc = filtered_bash_nuc[fasta_name]
@@ -177,7 +180,7 @@ for file in L_IN1 :
             OUTnuc.write("%s\n" %seq_nuc)
         OUTnuc.close()
     else:
-    bad+=1
+        bad+=1
 
 
 ## 5 ## Print

@@ -1,6 +1,8 @@
 #!/usr/bin/python
+# coding: utf8
 ## Author: Eric Fontanillas
-## Last modification: 03/09/14 by Julie BAFFARD
+## Modification: 03/09/14 by Julie BAFFARD
+## Last modification : 05/03/18 by Victor Mataigne
 
 ## Description: Predict potential ORF on the basis of 2 criteria + 1 optional criteria
                 ## CRITERIA 1 ## Longest part of the alignment of sequence without codon stop "*", tested in the 3 potential ORF
@@ -294,24 +296,16 @@ def detect_Methionine(seq_aa, Ortho):
 ###################################
 
 
-
-
-
-
 ############################################################
 ###### DEF 7 : Reverse complement DNA sequence ######
 ###### Reference: http://crazyhottommy.blogspot.fr/2013/10/python-code-for-getting-reverse.html
 ############################################################
-
-
 def ReverseComplement2(seq):
     # too lazy to construct the dictionary manually, use a dict comprehension
     seq1 = 'ATCG-TAGC-atcg-tagc-'
     seq_dict = { seq1[i]:seq1[i+5] for i in range(20) if i < 5 or 10<=i<15 }
     return "".join([seq_dict[base] for base in reversed(seq)])
-
-###################################
-
+############################
 
 
 #######################
@@ -344,25 +338,35 @@ Path_OUT5 = "06_CDS_with_M_nuc"
 os.mkdir("06_CDS_with_M_aa")
 Path_OUT6 = "06_CDS_with_M_aa"
 
-
-
-
 ### Get the Bash corresponding to an alignment file in fasta format
 count_file_processed = 0
 count_file_with_CDS = 0
 count_file_without_CDS = 0
 count_file_with_CDS_plus_M = 0
 
+# ! : Currently, files are named "Orthogroup_x_y_sequences.fasta, where x is the number of the orthogroup (not important, juste here to make a distinct name),
+# and y is the number of sequences/species in the group. These files are outputs of blastalign, where species can be removed. y is then modified.
+
+name_elems = ["orthogroup", "0", "with", "0", "species.fasta"]
+
+# by fixing the counter here, there will be some "holes" in the outputs directories (missing numbers), but the groups between directories will correspond
+n0 = 0
 for file in list_file:
+    n0 += 1
+
     count_file_processed = count_file_processed + 1
     fasta_file_path = "./%s" %file    
     bash_fasta = dico(fasta_file_path)   ### DEF 1 ###    
     BESTORF_nuc, BESTORF_nuc_CODING, BESTORF_nuc_CDS_with_M, BESTORF_aa, BESTORF_aa_CODING, BESTORF_aa_CDS_with_M  = find_good_ORF_criteria_3(bash_fasta, bash_codeUniversel)   ### DEF 4 - PART 2 - ###
+    
+    name_elems[1] = str(n0)
 
     ## a ## OUTPUT BESTORF_nuc
     if BESTORF_nuc != {}:
+        name_elems[3] = str(len(BESTORF_nuc.keys()))
+        new_name = "_".join(name_elems)
         count_file_with_CDS = count_file_with_CDS +1
-        OUT1 = open("%s/%s" %(Path_OUT1,file), "w")
+        OUT1 = open("%s/%s" %(Path_OUT1,new_name), "w")
         for fasta_name in BESTORF_nuc.keys():
             seq = BESTORF_nuc[fasta_name]
             OUT1.write("%s\n" %fasta_name)
@@ -371,10 +375,11 @@ for file in list_file:
     else:
         count_file_without_CDS = count_file_without_CDS + 1
 
-
     ## b ## OUTPUT BESTORF_nuc_CODING  ===> THE MOST INTERESTING!!!
     if BESTORF_aa != {}:
-        OUT2 = open("%s/%s" %(Path_OUT2,file), "w")
+        name_elems[3] = str(len(BESTORF_aa.keys()))
+        new_name = "_".join(name_elems)
+        OUT2 = open("%s/%s" %(Path_OUT2,new_name), "w")
         for fasta_name in BESTORF_aa.keys():
             seq = BESTORF_aa[fasta_name]
             OUT2.write("%s\n" %fasta_name)
@@ -383,7 +388,9 @@ for file in list_file:
 
     ## c ## OUTPUT BESTORF_aa
     if BESTORF_nuc_CODING != {}:
-        OUT3 = open("%s/%s" %(Path_OUT3,file), "w")
+        name_elems[3] = str(len(BESTORF_nuc_CODING.keys()))
+        new_name = "_".join(name_elems)
+        OUT3 = open("%s/%s" %(Path_OUT3,new_name), "w")
         for fasta_name in BESTORF_nuc_CODING.keys():
             seq = BESTORF_nuc_CODING[fasta_name]
             OUT3.write("%s\n" %fasta_name)
@@ -392,7 +399,9 @@ for file in list_file:
 
     ## d ## OUTPUT BESTORF_aa_CODING
     if BESTORF_aa_CODING != {}:
-        OUT4 = open("%s/%s" %(Path_OUT4,file), "w")
+        name_elems[3] = str(len(BESTORF_aa_CODING.keys()))
+        new_name = "_".join(name_elems)
+        OUT4 = open("%s/%s" %(Path_OUT4,new_name), "w")
         for fasta_name in BESTORF_aa_CODING.keys():
             seq = BESTORF_aa_CODING[fasta_name]
             OUT4.write("%s\n" %fasta_name)
@@ -401,8 +410,10 @@ for file in list_file:
 
     ## e ## OUTPUT BESTORF_nuc_CDS_with_M
     if BESTORF_nuc_CDS_with_M != {}:
+        name_elems[3] = str(len(BESTORF_nuc_CDS_with_M.keys()))
+        new_name = "_".join(name_elems)
         count_file_with_CDS_plus_M = count_file_with_CDS_plus_M + 1
-        OUT5 = open("%s/%s" %(Path_OUT5,file), "w")
+        OUT5 = open("%s/%s" %(Path_OUT5,new_name), "w")
         for fasta_name in BESTORF_nuc_CDS_with_M.keys():
             seq = BESTORF_nuc_CDS_with_M[fasta_name]
             OUT5.write("%s\n" %fasta_name)
@@ -411,7 +422,9 @@ for file in list_file:
 
     ## f ## OUTPUT BESTORF_aa_CDS_with_M
     if BESTORF_aa_CDS_with_M != {}:
-        OUT6 = open("%s/%s" %(Path_OUT6,file), "w")
+        name_elems[3] = str(len(BESTORF_aa_CDS_with_M.keys()))
+        new_name = "_".join(name_elems)
+        OUT6 = open("%s/%s" %(Path_OUT6,new_name), "w")
         for fasta_name in BESTORF_aa_CDS_with_M.keys():
             seq = BESTORF_aa_CDS_with_M[fasta_name]
             OUT6.write("%s\n" %fasta_name)
