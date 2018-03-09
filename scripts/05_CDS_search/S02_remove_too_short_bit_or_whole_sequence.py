@@ -1,9 +1,10 @@
 #!/usr/bin/python
+# coding: utf8
 ## Author: Eric Fontanillas
-## Last modification: 03/09/14 by Julie BAFFARD
+## Modification: 03/09/14 by Julie BAFFARD
+## Last modification : 05/03/18 by Victor Mataigne
 
 ## Description : find and remove indels
-
 
 ###################
 ###### DEF 9 ######
@@ -35,8 +36,6 @@ def detect_short_indel(seq,MAX_LENGTH_SMALL_INDEL):
 ####################################
 
 
-
-
 #######################
 ##### RUN RUN RUN #####
 #######################
@@ -52,12 +51,12 @@ MIN_SPECIES_NB = int(sys.argv[1])
 MAX_sp = MIN_SPECIES_NB
 dicoco = {}
 dico_dico = {}
-list_sp = []
 list_new_file = []
 n0 = 0
 e=0
 j=0
 i=1
+name_elems = ["orthogroup", "0", "with", "0", "species.fasta"]
 
 ### 1 ### IN
 if sys.argv[2] == "oui" :
@@ -94,7 +93,6 @@ for file in L_IN1:
             seq = string.replace(seq, "?", "-")
         if "?" in seq_nuc:
             seq_nuc = string.replace(seq_nuc, "?", "-")
-
         
         ## 4.1 ## [FILTER 1] : Detect and Replace short internal indel symbole (= "-" as for other longer gaps) by a "?"
         ## aa
@@ -107,7 +105,6 @@ for file in L_IN1:
         for pos_short_indels in list_sublist_pos:
             for pos in pos_short_indels:
                 seq_nuc = seq_nuc[:pos] + "?" + seq_nuc[pos+1:]
-
         
         ## 4.2 ## [FILTER 2] : Remove short bits of sequence (<"MIN_LENGTH_BIT_OF_SEQUENCE_aa")
         LIST_sublist_aa=[]
@@ -116,7 +113,6 @@ for file in L_IN1:
             if len(element) > MIN_LENGTH_BIT_OF_SEQUENCE_aa:
                 LIST_sublist_aa.append(element)
 
-
         ## 4.3 ## [FILTER 3] : Remove all the sequence if the total length of all subsequences < "MIN_LENGTH_ALL_aa")
         seq_all = ""
         for bit_of_sequence in LIST_sublist_aa:
@@ -124,7 +120,6 @@ for file in L_IN1:
 
         if len(seq_all) < MIN_LENGTH_ALL_aa:
             LIST_sublist_aa = []
-
 
         ## 4.4 ## [FILTER 4] : Detect sublist position in the original sequence, and recreate the filtered sequence from these positions:
         seq_gap = "-" * len(seq)    ## 4.4.1 ## generate a sequence with only gaps inside
@@ -139,7 +134,6 @@ for file in L_IN1:
             START_nuc = START*3
             END_nuc = END*3
             seq_gap_nuc = seq_gap_nuc[:START_nuc] + seq_nuc[START_nuc:END_nuc] + seq_gap_nuc[END_nuc:]
-
         
         ## 4.5 ## Save new sequence in bash if not empty
         seq_empty_test = string.replace(seq_gap, "-", "")
@@ -150,34 +144,13 @@ for file in L_IN1:
         if seq_empty_test != "":
             new_bash_nuc[fasta_name] = seq_gap_nuc
 
-    ## 4.6 ## Correct the nb of sequence in the output name, if necessary
-    sp_nb = len(new_bash_aa.keys())
-    lis = string.split(file, "_")
-    new_lis = string.split(lis[1], ".")       
-    nb = "sp%d" %  sp_nb
-
-    old_nb = new_lis[0]
-    max_old_nb = string.split(old_nb, "sp")
-    max_old_nb = "".join(max_old_nb)
-
-    if old_nb == nb:
-        new_file = lis[0] + "_" + nb + "." + new_lis[1]
-    else:
-        new_file = lis[0] + "_NEW_"+ nb + "." + new_lis[1]
-    list_new_file.append(new_file)
-    dico_dico[new_file] = [new_bash_aa, new_bash_nuc]
-    n0+=1 #number of locus traited
-
-    if list_sp == [] and nb!="sp0" :
-        list_sp.append(nb)
-    else :
-	if nb not in list_sp and nb != "sp0" :
-	    list_sp.append(nb)
- 
-# [FILTER 5]: check if the number of locus with the max number of species isn't 0
-#if it is : MIN_SPECIES_NB - 1
-if len(list_sp) < MIN_SPECIES_NB :
-    MIN_SPECIES_NB = len(list_sp)
+    # 4.6 ## Correct the nb of sequence in the output name, if necessary    
+    n0 += 1
+    name_elems[1] = str(n0)
+    name_elems[3] = str(len(new_bash_nuc.keys()))
+    new_name = "_".join(name_elems)
+    dico_dico[new_name] = [new_bash_aa, new_bash_nuc]
+    list_new_file.append(new_name)
 
 ## [FILTER 6]: print output only if at least "MIN_SPECIES_NB" species remaining in the alignment
 for name in list_new_file :
@@ -191,11 +164,11 @@ for name in list_new_file :
         file_OUTnuc = open("%s/%s" %(path_OUT2, name), "w")
 
         for fasta_name in dico_aa.keys() :
-	    seq_aa = dico_aa[fasta_name]
+            seq_aa = dico_aa[fasta_name]
             file_OUTaa.write("%s\n" %fasta_name)
             file_OUTaa.write("%s\n" %seq_aa)
-	for fasta_name in dico_nuc.keys() :
-	    seq_nuc = dico_nuc[fasta_name]
+        for fasta_name in dico_nuc.keys() :
+            seq_nuc = dico_nuc[fasta_name]
             file_OUTnuc.write("%s\n" %fasta_name)
             file_OUTnuc.write("%s\n" %seq_nuc)
 
@@ -205,36 +178,10 @@ for name in list_new_file :
     else:
         e+=1
 
-
 ###Print
 if sys.argv[2] == "oui" :
     print "\nIn locus with CDS considering Methionine : \n"
 else :
     print "\nIn locus with CDS regardless of the Methionine : \n"
 
-print "*************** 1st filter : selection of the locus ***************"
-print "\nTotal number of locus recorded  = %d" %n0 
-
-list_sp.sort()
-for sp in list_sp :
-    dicoco[sp] = []
-    for files in list_new_file :
-        nb_sp = string.split(files, "_NEW")
-	nb_sp = "".join(nb_sp)
-	nb_sp = string.split(nb_sp,'_')
-    	nb_sp = nb_sp[1]
-        nb_sp = string.split(nb_sp, ".")
-        nb_sp = nb_sp[0]
-    	if nb_sp == sp :
-	    dicoco[sp].append(files)
-    new_sp = sp.split("sp")
-    new_sp = int(new_sp[1])
-    if new_sp == i :
-        print "\tNumber of locus with %d species : %d" %(i, len(dicoco[sp]))
-    elif i <= MAX_sp :
-        print "\tNumber of locus with %d species : 0" %i 
-    i+=1
-if len(list_sp) != int(MAX_sp) :
-    print "\tNumber of locus with %d species : 0" %int(MAX_sp)
-
-print "Number of locus excluded (exclude if not at least %d species in the alignment)= %d\n" %(MIN_SPECIES_NB,e)
+print "\nTotal number of locus recorded  = %d" %n0
