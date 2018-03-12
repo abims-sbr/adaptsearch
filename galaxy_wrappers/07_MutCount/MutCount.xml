@@ -74,7 +74,9 @@
 
     <outputs>
         <!-- output concat -->
-        <data format="txt" name="log" label="MutCount_concat_log.output" />
+        <data format="txt" name="log" label="MutCount_concat_log.output" >
+            <filter>(method['method_run']=='concat')</filter>
+        </data>
         <data format="csv" name="codons_freqs" label="codons_freqs.csv" from_work_dir="codons_freqs.csv" >
             <filter>(method['method_run']=='concat')</filter>
         </data>

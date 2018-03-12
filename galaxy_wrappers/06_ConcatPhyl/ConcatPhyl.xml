@@ -199,11 +199,11 @@
 			<filter>format['format_run'] == "nucleic" and out == "nexus"</filter>
 		</data>
 
-		<data name="out_raxml1" format="txt" label="Phylogeny_RAxML_BestTree" from_work_dir="RAxML_bestTree.galaxy_run">
+		<data name="out_raxml1" format="nhx" label="Phylogeny_RAxML_BestTree" from_work_dir="RAxML_bestTree.galaxy_run">
 			<filter>raxml1 == True</filter>
 		</data>
 
-		<data name="out_raxml3" format="txt" label="Phylogeny_RAxML_BiPartition" from_work_dir="RAxML_bipartitions.galaxy_run">
+		<data name="out_raxml3" format="nhx" label="Phylogeny_RAxML_BiPartition" from_work_dir="RAxML_bipartitions.galaxy_run">
 			<filter>raxml3 == True</filter>
 		</data>
 
@@ -255,8 +255,8 @@
             <param name="raxml1" value="True" />
             <param name="raxml3" value="True" />
             <param name="raxml4" value="True" />
-            <output name="out_raxml1" value="RAxML_bestTree"/>     
-            <output name="out_raxml3" value="RAxML_bipartitions"/>                
+            <output name="out_raxml1" value="RAxML_bestTree.nwk"/>     
+            <output name="out_raxml3" value="RAxML_bipartitions.nwk"/>                
         </test>
         
         <test>
@@ -275,8 +275,8 @@
             <param name="raxml1" value="True" />
             <param name="raxml3" value="True" />
             <param name="raxml4" value="True" />
-            <output name="out_raxml1" value="RAxML_bestTree_test3"/>     
-            <output name="out_raxml3" value="RAxML_bipartitions_test3"/>                
+            <output name="out_raxml1" value="RAxML_bestTree_test3.nwk"/>     
+            <output name="out_raxml3" value="RAxML_bipartitions_test3.nwk"/>                
         </test>
 	</tests>
 
