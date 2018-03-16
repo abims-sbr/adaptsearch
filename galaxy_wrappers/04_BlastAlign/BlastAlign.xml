@@ -107,6 +107,7 @@
             <param name="output_format" value="nexus" />            
             <output name="nxs" value="outputs/locus3_sp2.nxs" />
         </test>
+        <!--
         <test>
             <param name="input" ftype="fasta" value="inputs/locus8_sp2.fasta" />
             <section name="advanced_option">
@@ -119,6 +120,7 @@
             <param name="output_format" value="phylip" />
             <output name="phy" value="outputs/locus8_sp2.phy" />            
         </test>
+        -->
         <test>
             <param name="input" ftype="fasta" value="inputs/locus8_sp2.fasta" />
             <section name="advanced_option">
