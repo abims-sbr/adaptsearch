@@ -142,7 +142,7 @@ def formatAndFilter(orthogroups, mini, nbspecs, hashTable, verbose, paralogs):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("files", help="Orthogroups.txt file from OrthoFinder")
-    parser.add_argument("nbspec", type=int, help="Number of studied species")
+    parser.add_argument("infiles", help="fasta files used for OrthoFinder (after or before TransDecoder), separated by commas")
     parser.add_argument("minspec", type=int, help="Minimal number of species to keep per group")
     parser.add_argument("-v", "--verbose", action="store_true", help="Add another summary table : countings before paralogous genes filtering")
     parser.add_argument("-p", "--paralogs", action="store_true", help="Proceeds to write orthogroups also before paralogous filtering")
@@ -153,13 +153,15 @@ def main():
 
     # Build hashtable
     print "  Building hashTable IDs/sequences ...\n"
-    path = glob.glob('*.fasta')
-    hashTable = hashSequences(path)
+    infiles_good = str.split(args.infiles, ",")
+    nbspec = len(infiles_good)
+    #path = glob.glob('*.fasta')
+    hashTable = hashSequences(infiles_good)
 
     # Open txt file with orthogroups
     print "  Reading Orthogroups.txt and writing orthogroups to separated files..."
     print "    (Dropping orthogroups of less than {} loci.)\n".format(args.minspec)
-    list_orthogroups = formatAndFilter(args.files, args.minspec, args.nbspec, hashTable, args.verbose, args.paralogs)
+    list_orthogroups = formatAndFilter(args.files, args.minspec, nbspec, hashTable, args.verbose, args.paralogs)
     print "\n{} filtered orthogroups have been written in separated files".format(list_orthogroups)
 
     # Move output files in a new directory

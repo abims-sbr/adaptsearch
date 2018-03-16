@@ -18,14 +18,14 @@
     <![CDATA[        
         #set $infiles = ""
         #for $input in $inputs_fasta
-            ln -s '$input' '$input.element_identifier'.fasta;
+            ln -s '$input' '$input.element_identifier';
             #set $infiles = $infiles + $input.element_identifier + ","
         #end for
         #set $infiles = $infiles[:-1]
 
         $__tool_directory__/scripts/format_transdecoder_headers.sh '$orthogroups' tmp_orthogroups.txt
         &&
-        python $__tool_directory__/scripts/filter_orthofinder.py tmp_orthogroups.txt $nbspec $nbseq               
+        python $__tool_directory__/scripts/filter_orthofinder.py tmp_orthogroups.txt '$infiles' $nbseq               
         #if $verbosity=="T":
             -v
         #end if
@@ -40,7 +40,6 @@
     <inputs>
         <param name="orthogroups" type="data" format="txt" label="Select a file of Orthogroups" help="The output from OrthoFinder, 'Orthogroups.txt'."/>
         <param name="inputs_fasta" type="data" format="fasta" multiple="true" label="Outputs from Filter Assemblies" help="Contains the nucleic sequences to retrieve."/>
-        <param name="nbspec" type="integer" value="0" label="Number of studied species" help="Specifies the TOTAL (no less) number of species of the analysis"/>
         <param name="nbseq" type="integer" value="3" label="Minimal number of sequences per orthogroup" help="Drop orthogroups with less than x sequences :" />
         <param name="verbosity" type="boolean" checked="True" truevalue="T" falsevalue="F" label="verbosity" help="Turn on this paramater to display an additional summary table (computed before the pralogous filtering)" />
         <param name="paralogs" type="boolean" checked="False" truevalue="T" falsevalue="F" label="paralogs" help="Turn on this parameter to obtain an additional output (orthogroups files before paralogous filtering)" />
@@ -61,7 +60,6 @@
         <test>
             <param name="orthogroups" value="Orthogroups.txt"/>
             <param name="inputs_fasta" value="output_filterassemblies/AcAcaud_trinity.fasta,output_filterassemblies/AmAmphi_trinity.fasta,output_filterassemblies/ApApomp_trinity.fasta,output_filterassemblies/AsAsp1_trinity.fasta"/>
-            <param name="nbspec" value="4"/>
             <param name="nbseq" value="2"/>
             <param name="verbosity" value="True"/>
             <param name="paralogs" value="True"/>
@@ -88,7 +86,6 @@
         <test>
             <param name="orthogroups" value="Orthogroups.txt"/>
             <param name="inputs_fasta" value="output_filterassemblies/AcAcaud_trinity.fasta,output_filterassemblies/AmAmphi_trinity.fasta,output_filterassemblies/ApApomp_trinity.fasta,output_filterassemblies/AsAsp1_trinity.fasta"/>
-            <param name="nbspec" value="4"/>
             <param name="nbseq" value="2"/>
             <param name="verbosity" value="True"/>
             <param name="paralogs" value="False"/>
@@ -141,7 +138,6 @@ Our tool focus on the orthogroups.txt file created before gene trees.The script 
 
 - File of Orthogroups : the orthogroups.txt file from OrthoFinder.
 - Output from Filter_Assemblies (either as multiple datasets or dataset collection)
-- Total number of studied species on which the orthogroups have been built.
 - Minimal number of sequences : The orthogroups with less than the specified number won't be recorded.
 - Verbose : If 'Yes', a supplementary table will be displayed in the outputs (coutings of species and sequences in orthogroups before the removal of paralogs).
 - Paralogs : if 'Yes', there will be a supplementary output of orthogroups file, before the removal of paralogs.
