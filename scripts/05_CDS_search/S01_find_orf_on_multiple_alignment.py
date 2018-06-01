@@ -302,8 +302,8 @@ def detect_Methionine(seq_aa, Ortho):
 ############################################################
 def ReverseComplement2(seq):
     # too lazy to construct the dictionary manually, use a dict comprehension
-    seq1 = 'ATCG-TAGC-atcg-tagc-'
-    seq_dict = { seq1[i]:seq1[i+5] for i in range(20) if i < 5 or 10<=i<15 }
+    seq1 = 'ATCGN-TAGCN-atcgn-tagcn-'
+    seq_dict = { seq1[i]:seq1[i+6] for i in range(24) if i < 6 or 12<=i<16 }
     return "".join([seq_dict[base] for base in reversed(seq)])
 ############################
 
