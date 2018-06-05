@@ -311,17 +311,17 @@ def ReverseComplement2(seq):
 #######################
 ##### RUN RUN RUN #####
 #######################
-import string, os, time, re, zipfile, sys
+import string, os, time, re, zipfile, sys, glob
 from dico import dico
 
-infiles = sys.argv[1]
-MINIMAL_CDS_LENGTH = int(sys.argv[3])  ## in aa number
+#infiles = sys.argv[1]
+MINIMAL_CDS_LENGTH = int(sys.argv[2])  ## in aa number
 
 ## INPUT / OUTPUT
-list_file = str.split(infiles,",")
+#list_file = str.split(infiles,",")
 
 ### Get Universal Code
-bash_codeUniversel = code_universel(sys.argv[2])  ### DEF2 ###
+bash_codeUniversel = code_universel(sys.argv[1])  ### DEF2 ###
 
 os.mkdir("04_BEST_ORF_nuc")
 Path_OUT1 = "04_BEST_ORF_nuc"
@@ -348,18 +348,21 @@ count_file_with_CDS_plus_M = 0
 # and y is the number of sequences/species in the group. These files are outputs of blastalign, where species can be removed. y is then modified.
 
 name_elems = ["orthogroup", "0", "with", "0", "species.fasta"]
+path = glob.glob('*.fasta') # Use glob because list_file can be too long for the command_line interpretor
 
 # by fixing the counter here, there will be some "holes" in the outputs directories (missing numbers), but the groups between directories will correspond
-n0 = 0
-for file in list_file:
-    n0 += 1
+#n0 = 0
+#for file in list_file:
+for file in path:
+    #n0 += 1
 
     count_file_processed = count_file_processed + 1
+    nb_gp = file.split('_')[1] # Keep trace of the orthogroup number
     fasta_file_path = "./%s" %file    
     bash_fasta = dico(fasta_file_path)   ### DEF 1 ###    
     BESTORF_nuc, BESTORF_nuc_CODING, BESTORF_nuc_CDS_with_M, BESTORF_aa, BESTORF_aa_CODING, BESTORF_aa_CDS_with_M  = find_good_ORF_criteria_3(bash_fasta, bash_codeUniversel)   ### DEF 4 - PART 2 - ###
     
-    name_elems[1] = str(n0)
+    name_elems[1] = nb_gp
 
     ## a ## OUTPUT BESTORF_nuc
     if BESTORF_nuc != {}:
@@ -431,7 +434,7 @@ for file in list_file:
             OUT6.write("%s\n" %seq)
         OUT6.close()
 
-    os.system("rm -rf %s" %file)
+    #os.system("rm -rf %s" %file)
 
 ## Print
 print "*************** CDS detection ***************"

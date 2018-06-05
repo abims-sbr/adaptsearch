@@ -146,7 +146,8 @@ for file in L_IN1:
 
     # 4.6 ## Correct the nb of sequence in the output name, if necessary    
     n0 += 1
-    name_elems[1] = str(n0)
+    name_elems[1] = file.split('_')[1]
+    #name_elems[1] = str(n0)
     name_elems[3] = str(len(new_bash_nuc.keys()))
     new_name = "_".join(name_elems)
     dico_dico[new_name] = [new_bash_aa, new_bash_nuc]
