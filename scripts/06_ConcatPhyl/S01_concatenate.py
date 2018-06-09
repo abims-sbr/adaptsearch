@@ -139,6 +139,12 @@ for name in list_species :
     name = name[:2]
     SPECIES_ID_LIST.append(name)
 
+# import glob
+# path = glob.glob('*.fasta')
+# L_IN = []
+# for file in path:
+#     L_IN.append(file)
+
 ## add alignment files to L_IN
 L_IN = str.split(input_alignments,",")
 print(L_IN)

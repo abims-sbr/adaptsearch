@@ -379,6 +379,9 @@ outpath= "./OUT"
 os.makedirs(Path_IN_loci_NUC)
 os.makedirs(outpath)
 
+# import glob
+# infiles = glob.glob('.fasta')
+
 infiles = str.split(sys.argv[1], ",")
 for file in infiles:
     os.system("cp %s %s" %(file, Path_IN_loci_NUC))
