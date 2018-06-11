@@ -33,13 +33,13 @@
             #set $infiles = $infiles[:-1]
 
             #if str($method.format_run)== "nucleic" :
-                python '$__tool_directory__/scripts/S02b_study_seq_composition_nuc.py' '$infiles' ${method.concat_phy}
+                python '$__tool_directory__/scripts/S02b_study_seq_composition_nuc.py' ${method.concat_phy}
             #end if
 
             #if str($method.format_run)== "proteic" :
                 cp '$__tool_directory__/scripts/amino_acid_properties.csv' .
                 &&
-                python '$__tool_directory__/scripts/S01b_study_seq_composition_aa.py' '$infiles' ${method.concat_phy}
+                python '$__tool_directory__/scripts/S01b_study_seq_composition_aa.py' ${method.concat_phy}
             #end if
         #end if
         
@@ -157,7 +157,6 @@
     </outputs>
 
     <tests>
-   
         <test>
             <conditional name="method" >
                 <param name="method_run" value="concat" />
@@ -176,7 +175,7 @@
             <output name="aa_transitions_freqs" value="OUT_concat/aa_transitions_freqs.csv" lines_diff="72"/>
             <output name="aatypes_transitions_freqs" value="OUT_concat/aatypes_transitions_freqs.csv" lines_diff="72"/>
         </test>
-
+        <!--
         <test>
             <conditional name="method" >
                 <param name="method_run" value="separated" />
@@ -234,6 +233,7 @@
                 </assert_contents>
             </output>           
         </test>
+    -->
     </tests>
 
     <help>

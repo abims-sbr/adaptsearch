@@ -119,7 +119,7 @@ def get_codon_position(seq_inORF):
 #######################
 ##### RUN RUN RUN #####
 #######################
-import string, os, time, re, sys, itertools
+import string, os, time, re, sys, itertools, glob
 
 list_species = []
 SPECIES_ID_LIST = []
@@ -129,7 +129,7 @@ i=3
 ## Arguments
 infiles_filter_assemblies = sys.argv[1]
 format_run = sys.argv[2]
-input_alignments = sys.argv[3]
+#input_alignments = sys.argv[3]
 
 ## add file to list_species
 list_species = str.split(infiles_filter_assemblies,",")
@@ -139,14 +139,14 @@ for name in list_species :
     name = name[:2]
     SPECIES_ID_LIST.append(name)
 
-# import glob
-# path = glob.glob('*.fasta')
-# L_IN = []
-# for file in path:
-#     L_IN.append(file)
-
 ## add alignment files to L_IN
-L_IN = str.split(input_alignments,",")
+path = glob.glob('*.fasta')
+L_IN = []
+for file in path:
+    if file not in list_species:
+        L_IN.append(file)
+
+#L_IN = str.split(input_alignments,",")
 print(L_IN)
 
 ### 1 ### Proteic

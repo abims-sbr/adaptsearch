@@ -95,16 +95,19 @@ outpath= "./OUT"
 os.makedirs(Path_IN_loci_NUC)
 os.makedirs(outpath)
 
-# import glob
-# infiles = glob.glob('.fasta')
+import glob
 
-infiles = str.split(sys.argv[1], ",")
+os.system('mv %s concat_file.fa' %sys.argv[1])
+infiles = glob.glob('*.fasta')
+
+#infiles = str.split(sys.argv[1], ",")
 for file in infiles:
+    print file
     os.system("cp %s %s" %(file, Path_IN_loci_NUC))
 
 ## 1 ## List taxa
 LT=[]
-cmd="grep '>' %s" % sys.argv[2]
+cmd="grep '>' concat_file.fa"
 result = subprocess.check_output(cmd, shell=True)
 result=result.split('\n')
 for i in result:   

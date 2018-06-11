@@ -37,8 +37,7 @@
         #elif $format.format_run == "proteic" :
             proteic
         #end if
-
-        $infiles_alignments
+        
         > ${output};
 
         raxmlHPC -n galaxy_run
