@@ -140,11 +140,18 @@ for name in list_species :
     SPECIES_ID_LIST.append(name)
 
 ## add alignment files to L_IN
-path = glob.glob('*.fasta')
+list_files = []
+with open(sys.argv[3], 'r') as f:
+    for line in f.readlines():
+        list_files.append(line.strip('\n'))
+
+# path = glob.glob('*.fasta')
 L_IN = []
-for file in path:
-    if file not in list_species:
-        L_IN.append(file)
+for file in list_files:
+    L_IN.append(file)
+# for file in path:
+#     if file not in list_species:
+#         L_IN.append(file)
 
 #L_IN = str.split(input_alignments,",")
 print(L_IN)

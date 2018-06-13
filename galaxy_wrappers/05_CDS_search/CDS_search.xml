@@ -19,12 +19,15 @@
             #set $infiles = $infiles + $input.element_identifier + ","
         #end for
         #set $infiles = $infiles[:-1]
+
+        python $__tool_directory__/scripts/make_listfiles.py $infiles &&
         
         ln -s $__tool_directory__/scripts/dico.py . &&
 
         python $__tool_directory__/scripts/S01_find_orf_on_multiple_alignment.py
         $__tool_directory__/scripts/code_universel_modified.txt
         $length.min_length_seq
+        list_files
         > '$log' &&
 
         python $__tool_directory__/scripts/S02_remove_too_short_bit_or_whole_sequence.py

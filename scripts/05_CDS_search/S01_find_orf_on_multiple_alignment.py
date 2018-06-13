@@ -311,17 +311,20 @@ def ReverseComplement2(seq):
 #######################
 ##### RUN RUN RUN #####
 #######################
-import string, os, time, re, zipfile, sys, glob
+import string, os, time, re, zipfile, sys
 from dico import dico
 
 #infiles = sys.argv[1]
 MINIMAL_CDS_LENGTH = int(sys.argv[2])  ## in aa number
 
-## INPUT / OUTPUT
-#list_file = str.split(infiles,",")
-
 ### Get Universal Code
 bash_codeUniversel = code_universel(sys.argv[1])  ### DEF2 ###
+
+## INPUT from file containing list of species
+list_files = []
+with open(sys.argv[3], 'r') as f:
+    for line in f.readlines():
+        list_files.append(line.strip('\n'))
 
 os.mkdir("04_BEST_ORF_nuc")
 Path_OUT1 = "04_BEST_ORF_nuc"
@@ -348,12 +351,11 @@ count_file_with_CDS_plus_M = 0
 # and y is the number of sequences/species in the group. These files are outputs of blastalign, where species can be removed. y is then modified.
 
 name_elems = ["orthogroup", "0", "with", "0", "species.fasta"]
-path = glob.glob('*.fasta') # Use glob because list_file can be too long for the command_line interpretor
 
 # by fixing the counter here, there will be some "holes" in the outputs directories (missing numbers), but the groups between directories will correspond
 #n0 = 0
-#for file in list_file:
-for file in path:
+
+for file in list_files:
     #n0 += 1
 
     count_file_processed = count_file_processed + 1
