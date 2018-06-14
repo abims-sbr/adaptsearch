@@ -95,10 +95,10 @@ outpath= "./OUT"
 os.makedirs(Path_IN_loci_NUC)
 os.makedirs(outpath)
 
-import glob
+# import glob
 
-#os.system('mv %s concat_file.fa' %sys.argv[1])
-#infiles = glob.glob('*.fasta')
+# os.system('mv %s concat_file.fa' %sys.argv[1])
+# infiles = glob.glob('*.fasta')
 
 infiles = []
 with open(sys.argv[2], 'r') as f:
@@ -107,7 +107,6 @@ with open(sys.argv[2], 'r') as f:
 
 #infiles = str.split(sys.argv[1], ",")
 for file in infiles:
-    print file
     os.system("cp %s %s" %(file, Path_IN_loci_NUC))
 
 ## 1 ## List taxa

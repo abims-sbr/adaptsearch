@@ -923,13 +923,13 @@ def main():
 
     print "Writing dataframes to output files ...\n"
 
-    frame_codons.to_csv("codons_freqs.csv", sep=",", encoding="utf-8")
-    frame_aa.to_csv("aa_freqs.csv", sep=",", encoding="utf-8")
-    frame_aatypes.astype('object').to_csv("aatypes_freqs.csv", sep=",", encoding="utf-8")
-    frame_codons_transitions.to_csv("codons_transitions_freqs.csv", sep=",", encoding="utf-8")
-    frame_aa_transitions.to_csv("aa_transitions_freqs.csv", sep=",", encoding="utf-8")
-    frame_aatypes_transitions.to_csv("aatypes_transitions_freqs.csv", sep=",", encoding="utf-8")
-    frame_various.to_csv("gc_and_others_freqs.csv", sep=",", encoding="utf-8")
+    frame_codons.round(8).to_csv("codons_freqs.csv", sep=",", encoding="utf-8")
+    frame_aa.round(8).to_csv("aa_freqs.csv", sep=",", encoding="utf-8")
+    frame_aatypes.astype('object').round(8).to_csv("aatypes_freqs.csv", sep=",", encoding="utf-8")
+    frame_codons_transitions.round(8).to_csv("codons_transitions_freqs.csv", sep=",", encoding="utf-8")
+    frame_aa_transitions.round(8).to_csv("aa_transitions_freqs.csv", sep=",", encoding="utf-8")
+    frame_aatypes_transitions.round(8).to_csv("aatypes_transitions_freqs.csv", sep=",", encoding="utf-8")
+    frame_various.round(8).to_csv("gc_and_others_freqs.csv", sep=",", encoding="utf-8")
 
     print "Done."
 
