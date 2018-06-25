@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# This scripts writes a config file containing all the file names specified in the command line (one file per line)
+
 import sys
 
 lfiles = sys.argv[1].split(',')

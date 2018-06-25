@@ -314,7 +314,6 @@ def ReverseComplement2(seq):
 import string, os, time, re, zipfile, sys
 from dico import dico
 
-#infiles = sys.argv[1]
 MINIMAL_CDS_LENGTH = int(sys.argv[2])  ## in aa number
 
 ### Get Universal Code

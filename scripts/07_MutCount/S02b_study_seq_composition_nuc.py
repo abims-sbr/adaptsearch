@@ -95,11 +95,6 @@ outpath= "./OUT"
 os.makedirs(Path_IN_loci_NUC)
 os.makedirs(outpath)
 
-# import glob
-
-# os.system('mv %s concat_file.fa' %sys.argv[1])
-# infiles = glob.glob('*.fasta')
-
 infiles = []
 with open(sys.argv[2], 'r') as f:
     for line in f.readlines():
@@ -120,11 +115,7 @@ for i in result:
         LT.append(sp)
 print LT
 
-#LT = ["Ap", "Ac", "Pg"]
-#os.system("grep '>' %s" %(sys.argv[1]))
-
 ## 2 ## PathIN
-# fileIN_properties = open("01_AminoAcid_Properties2.csv", "r")
 Lloci_NUC = os.listdir(Path_IN_loci_NUC)
 
 

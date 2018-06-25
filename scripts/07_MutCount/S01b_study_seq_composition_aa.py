@@ -378,17 +378,11 @@ outpath= "./OUT"
 os.makedirs(Path_IN_loci_NUC)
 os.makedirs(outpath)
 
-# import glob
-
-# os.system('mv %s concat_file.fa' %sys.argv[1])
-# infiles = glob.glob('*.fasta')
-
 infiles = []
 with open(sys.argv[2], 'r') as f:
     for line in f.readlines():
         infiles.append(line.strip('\n'))
 
-#infiles = str.split(sys.argv[1], ",")
 for file in infiles:
     os.system("cp %s %s" %(file, Path_IN_loci_NUC))
 
