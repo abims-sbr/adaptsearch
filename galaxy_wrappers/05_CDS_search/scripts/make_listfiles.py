@@ -1,1 +1,1 @@
-../../../scripts/05_CDS_search/make_listfiles.py
+../../../scripts/others/make_listfiles.py

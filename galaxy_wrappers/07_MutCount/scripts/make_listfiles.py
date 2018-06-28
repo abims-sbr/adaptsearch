@@ -1,1 +1,1 @@
-../../../scripts/07_MutCount/make_listfiles.py
+../../../scripts/others/make_listfiles.py

@@ -1,1 +1,1 @@
-../../../scripts/06_ConcatPhyl/make_listfiles.py
+../../../scripts/others/make_listfiles.py
