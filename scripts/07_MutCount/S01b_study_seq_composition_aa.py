@@ -372,20 +372,23 @@ def sequence_properties_from_aa_properties(seq, bash_properties):
 ### RUN RUN RUN ###
 ###################
 
-
 ##Create specific folders
 Path_IN_loci_NUC = "./IN_AA"
 outpath= "./OUT"
 os.makedirs(Path_IN_loci_NUC)
 os.makedirs(outpath)
 
-infiles = str.split(sys.argv[1], ",")
+infiles = []
+with open(sys.argv[2], 'r') as f:
+    for line in f.readlines():
+        infiles.append(line.strip('\n'))
+
 for file in infiles:
     os.system("cp %s %s" %(file, Path_IN_loci_NUC))
 
 ## 1 ## List taxa
 LT=[]
-cmd="grep '>' %s" % sys.argv[2]
+cmd="grep '>' {}".format(sys.argv[1])
 result = subprocess.check_output(cmd, shell=True)
 result=result.split('\n')
 for i in result:   

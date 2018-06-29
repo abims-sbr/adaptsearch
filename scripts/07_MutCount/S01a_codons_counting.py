@@ -2,7 +2,7 @@
 # coding: utf-8
 # Author : Victor Mataigne
 
-import string, os, sys, re, random, itertools, argparse, copy
+import string, os, sys, re, random, itertools, argparse, copy, math
 import pandas as pd
 import numpy as np
 
@@ -497,6 +497,9 @@ def computeAllBiases(seq1, seq2, dico_codons_transi, dico_aa_transi, dico_aatype
                     aatypes_transi_freqs[key][key2] = 0
         return aatypes_transi_freqs
 
+    
+
+
     # ------ The function ------ #
 
     codons_transitions = codons_transitions(seq1, seq2, dico_codons_transi)
@@ -507,6 +510,35 @@ def computeAllBiases(seq1, seq2, dico_codons_transi, dico_aa_transi, dico_aatype
     aatypes_transitions_freqs = aatypes_transitions_freqs(aatypes_transitions)
     
     return codons_transitions, codons_transitions_freqs, aa_transitions, aa_transitions_freqs, aatypes_transitions, aatypes_transitions_freqs
+
+def all_sed(codons_c, aa_c, aat_c, codons_transitions, aa_transitions, aatypes_transitions, dico_codons_transi, dico_aa_transi, dico_aatypes_transi):
+
+    def compute_sed(transi, counts, dico):
+        """ Compute the substitution exchangeability disequilibrium (SED) from one species A to another B between codons/aa//aatypes couples
+
+        Args:
+            transi ; dict - dictionaries of all counts of transition from codon/aa/aatype X to Y from sp A to sp B
+            counts : dict - dictionaries of codons/aa/aatypes counts in species A
+            dico : dict - a dictionary (nested) with all values to 0
+
+        """
+        dict_sed = copy.deepcopy(dico)
+
+        for key in transi.keys():
+            for key2 in transi.keys():                
+                if counts[key] != 0 and float(transi[key2][key])/counts[key] != 0.0:
+                    x = (float(transi[key][key2])/counts[key]) / (float(transi[key2][key])/counts[key])
+                    dict_sed[key][key2] = - pow(2,1-x)+1
+                else :
+                    dict_sed[key][key2] = 'NA'
+
+        return dict_sed
+
+    codons_sed = compute_sed(codons_transitions, codons_c, dico_codons_transi)
+    aa_sed = compute_sed(aa_transitions, aa_c, dico_aa_transi)
+    aatypes_sed = compute_sed(aatypes_transitions, aat_c, dico_aatypes_transi)
+
+    return codons_sed, aa_sed, aatypes_sed
 
 # # # Function for random resampling --------------------------------------------------------------------------------------------
 
@@ -584,7 +616,7 @@ def sampling (dict_seq, nb_iter, len_sample, list_codons, genetic_code, aa_class
     
     return codons_lst, aa_lst, classif_lst, codons_transitions_lst, aa_transitions_lst, classif_transitions_lst
 
-def testPvalues(dict_counts, dict_resampling, nb_iter):
+def testPvalues(dict_counts, dict_resampling, nb_iter, method):
     """ Computes where the observed value is located in the expected counting distribution
 
     Args :
@@ -593,7 +625,33 @@ def testPvalues(dict_counts, dict_resampling, nb_iter):
     
     Return :
         pvalue (dict, dict of dicts) : the pvalues of all observed countings (dict) and transitions (dict of dicts)
+    
+
+    pnorm computes the pvalue to have a value inferior to the observed value under a normal distribution
+    One sided to left tail : 
+        p < 0.05 indicates significantly lower counts
+        p > 0.95 indicates significantly higher counts
     """
+
+
+    def p_resampling(obs, values, nb_iter):
+        """ The pvalue is the proportion of bootsrapped values smaller than the observed value
+        If p = 0.025 : 2.5% of the bootstrapped values are smaller than the observed value
+           p < 0.025 : the obs value is most likely significantly lower.        
+        If p = 0.975 : 97.5% of the bootstrapped values are smaller than the observed value
+           p > 0.975   the obs value is most likely significantly higher.        
+
+        Args :
+            obs : int or float - the observed value
+            values : list - values of resampling (int or floats)
+            nb_iter : int - the number of resampled values (=len(values))
+
+        Return :
+            pvalue (float)
+        """
+
+        num = len([x for x in values if x < obs])
+        return float(num + 1) / (nb_iter+1)
 
     def testPvalue(obs, exp, nb_iter):
         """ Compute a pvalue
@@ -631,11 +689,21 @@ def testPvalues(dict_counts, dict_resampling, nb_iter):
 
     for key in dict_resampling.keys():
         if type(dict_resampling.values()[1]) is not dict :
-            pvalues[key] = testPvalue(dict_counts[key], dict_resampling[key], nb_iter)
+            if method == 'origin':
+                pvalues[key] = testPvalue(dict_counts[key], dict_resampling[key], nb_iter)
+            elif method == 'pnorm':
+                pvalues[key] = scipy.stats.norm.cdf(dict_counts[key], np.mean(dict_resampling[key]), np.std(dict_resampling[key]))
+            elif method == 'p_resampling':
+                pvalues[key] = p_resampling(dict_counts[key], dict_resampling[key], nb_iter)
         else :
             pvalues[key] = {}
             for key2 in dict_resampling[key].keys():
-                pvalues[key][key2] = testPvalue(dict_counts[key][key2], dict_resampling[key][key2], nb_iter)
+                if method == 'origin':
+                    pvalues[key][key2] = testPvalue(dict_counts[key][key2], dict_resampling[key][key2], nb_iter)
+                elif method == 'pnorm':
+                    pvalues[key][key2] = scipy.stats.norm.cdf(dict_counts[key][key2], np.mean(dict_resampling[key][key2]), np.std(dict_resampling[key][key2]))
+                elif method == 'p_resampling':
+                    pvalues[key][key2] = p_resampling(dict_counts[key][key2], dict_resampling[key][key2], nb_iter)
 
     return pvalues
 
@@ -759,10 +827,11 @@ def main():
 
             p1_codons_counts, p1_codons_freqs, p1_aa_counts, p1_aa_freqs, p1_aatypes_counts, p1_aatypes_freqs = computeAllCountingsAndFreqs(sequences_for_counts[p1], list_codons, init_dict_codons, init_dict_aa, init_dict_classif, dict_genetic_code, dict_aa_classif)
             p1_GC3, p1_GC12, p1_IVYWREL, p1_EKQH, p1_PAYRESDGM, p1_purineload, p1_CvP = computeVarious(sequences_for_counts[p1], p1_aa_counts, p1_aatypes_freqs)
+
             
-            p1_codons_pvalues = testPvalues(p1_codons_freqs, codons_boot, args.iteration)
-            p1_aa_pvalues = testPvalues(p1_aa_freqs, aa_boot, args.iteration)
-            p1_aatypes_pvalues = testPvalues(p1_aatypes_freqs, aatypes_boot, args.iteration)
+            p1_codons_pvalues = testPvalues(p1_codons_freqs, codons_boot, args.iteration, 'p_resampling')
+            p1_aa_pvalues = testPvalues(p1_aa_freqs, aa_boot, args.iteration, 'p_resampling')
+            p1_aatypes_pvalues = testPvalues(p1_aatypes_freqs, aatypes_boot, args.iteration, 'p_resampling')
 
             all_codons[p1+"_obs_counts"] = p1_codons_counts
             all_codons[p1+"_obs_freqs"] = p1_codons_freqs
@@ -783,9 +852,9 @@ def main():
             p2_codons_counts, p2_codons_freqs, p2_aa_counts, p2_aa_freqs, p2_aatypes_counts, p2_aatypes_freqs = computeAllCountingsAndFreqs(sequences_for_counts[p2], list_codons, init_dict_codons, init_dict_aa, init_dict_classif, dict_genetic_code, dict_aa_classif)
             p2_GC3, p2_GC12, p2_IVYWREL, p2_EKQH, p2_PAYRESDGM, p2_purineload, p2_CvP = computeVarious(sequences_for_counts[p2], p2_aa_counts, p2_aatypes_freqs)
             
-            p2_codons_pvalues = testPvalues(p2_codons_freqs, codons_boot, args.iteration)
-            p2_aa_pvalues = testPvalues(p2_aa_freqs, aa_boot, args.iteration)
-            p2_aatypes_pvalues = testPvalues(p2_aatypes_freqs, aatypes_boot, args.iteration)
+            p2_codons_pvalues = testPvalues(p2_codons_freqs, codons_boot, args.iteration, 'p_resampling')
+            p2_aa_pvalues = testPvalues(p2_aa_freqs, aa_boot, args.iteration, 'p_resampling')
+            p2_aatypes_pvalues = testPvalues(p2_aatypes_freqs, aatypes_boot, args.iteration, 'p_resampling')
 
             all_codons[p2+"_obs_counts"] = p2_codons_counts
             all_codons[p2+"_obs_freqs"] = p2_codons_freqs
@@ -803,11 +872,15 @@ def main():
         if (p1, p2) not in index_transi and p1 in sequences_for_counts and p2 in sequences_for_counts:
             print "Countings transitions between {} and {}".format(p1, p2)
             codons_transitions, codons_transitions_freqs, aa_transitions, aa_transitions_freqs, aatypes_transitions, aatypes_transitions_freqs = computeAllBiases(sequences_for_counts[p1], sequences_for_counts[p2], dico_codons_transitions, dico_aa_transitions, dico_aatypes_transitions, reversecode, reverseclassif)
+            
+            # Ajout
+            codons_sed, aa_sed, aatypes_sed = all_sed(p1_codons_counts, p1_aa_counts, p1_aatypes_counts, codons_transitions, aa_transitions, aatypes_transitions, dico_codons_transitions, dico_aa_transitions, dico_aatypes_transitions)
+
             index_transi.append((p1,p2))
 
-            p1p2_codons_pvalues = testPvalues(codons_transitions_freqs, codons_transi_boot, args.iteration)
-            p1p2_aa_pvalues = testPvalues(aa_transitions_freqs, aa_transi_boot, args.iteration)
-            p1p2_aatypes_pvalues = testPvalues(aatypes_transitions_freqs, aatypes_transi_boot, args.iteration)
+            p1p2_codons_pvalues = testPvalues(codons_transitions_freqs, codons_transi_boot, args.iteration, 'p_resampling')
+            p1p2_aa_pvalues = testPvalues(aa_transitions_freqs, aa_transi_boot, args.iteration, 'p_resampling')
+            p1p2_aatypes_pvalues = testPvalues(aatypes_transitions_freqs, aatypes_transi_boot, args.iteration, 'p_resampling')
 
             all_codons_transitions[p1+">"+p2+"_obs_counts"] = codons_transitions
             all_codons_transitions[p1+">"+p2+"_obs_freqs"] = codons_transitions_freqs
@@ -818,6 +891,10 @@ def main():
             all_aatypes_transitions[p1+">"+p2+"_obs_counts"] = aatypes_transitions
             all_aatypes_transitions[p1+">"+p2+"_obs_freqs"] = aatypes_transitions_freqs            
             all_aatypes_transitions[p1+">"+p2+"_pvalues"] = p1p2_aatypes_pvalues
+
+            all_codons_transitions[p1+">"+p2+"_sed"] = codons_sed
+            all_aa_transitions[p1+">"+p2+"_sed"] = aa_sed
+            all_aatypes_transitions[p1+">"+p2+"_sed"] = aatypes_sed
 
             index_transi.append((p1, p2))
 
@@ -846,13 +923,13 @@ def main():
 
     print "Writing dataframes to output files ...\n"
 
-    frame_codons.to_csv("codons_freqs.csv", sep=",", encoding="utf-8")
-    frame_aa.to_csv("aa_freqs.csv", sep=",", encoding="utf-8")
-    frame_aatypes.astype('object').to_csv("aatypes_freqs.csv", sep=",", encoding="utf-8")
-    frame_codons_transitions.to_csv("codons_transitions_freqs.csv", sep=",", encoding="utf-8")
-    frame_aa_transitions.to_csv("aa_transitions_freqs.csv", sep=",", encoding="utf-8")
-    frame_aatypes_transitions.to_csv("aatypes_transitions_freqs.csv", sep=",", encoding="utf-8")
-    frame_various.to_csv("gc_and_others_freqs.csv", sep=",", encoding="utf-8")
+    frame_codons.round(8).to_csv("codons_freqs.csv", sep=",", encoding="utf-8")
+    frame_aa.round(8).to_csv("aa_freqs.csv", sep=",", encoding="utf-8")
+    frame_aatypes.astype('object').round(8).to_csv("aatypes_freqs.csv", sep=",", encoding="utf-8")
+    frame_codons_transitions.round(8).to_csv("codons_transitions_freqs.csv", sep=",", encoding="utf-8")
+    frame_aa_transitions.round(8).to_csv("aa_transitions_freqs.csv", sep=",", encoding="utf-8")
+    frame_aatypes_transitions.round(8).to_csv("aatypes_transitions_freqs.csv", sep=",", encoding="utf-8")
+    frame_various.round(8).to_csv("gc_and_others_freqs.csv", sep=",", encoding="utf-8")
 
     print "Done."
 

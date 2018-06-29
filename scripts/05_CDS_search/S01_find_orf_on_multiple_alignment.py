@@ -302,8 +302,8 @@ def detect_Methionine(seq_aa, Ortho):
 ############################################################
 def ReverseComplement2(seq):
     # too lazy to construct the dictionary manually, use a dict comprehension
-    seq1 = 'ATCG-TAGC-atcg-tagc-'
-    seq_dict = { seq1[i]:seq1[i+5] for i in range(20) if i < 5 or 10<=i<15 }
+    seq1 = 'ATCGN-TAGCN-atcgn-tagcn-'
+    seq_dict = { seq1[i]:seq1[i+6] for i in range(24) if i < 6 or 12<=i<16 }
     return "".join([seq_dict[base] for base in reversed(seq)])
 ############################
 
@@ -314,14 +314,16 @@ def ReverseComplement2(seq):
 import string, os, time, re, zipfile, sys
 from dico import dico
 
-infiles = sys.argv[1]
-MINIMAL_CDS_LENGTH = int(sys.argv[3])  ## in aa number
-
-## INPUT / OUTPUT
-list_file = str.split(infiles,",")
+MINIMAL_CDS_LENGTH = int(sys.argv[2])  ## in aa number
 
 ### Get Universal Code
-bash_codeUniversel = code_universel(sys.argv[2])  ### DEF2 ###
+bash_codeUniversel = code_universel(sys.argv[1])  ### DEF2 ###
+
+## INPUT from file containing list of species
+list_files = []
+with open(sys.argv[3], 'r') as f:
+    for line in f.readlines():
+        list_files.append(line.strip('\n'))
 
 os.mkdir("04_BEST_ORF_nuc")
 Path_OUT1 = "04_BEST_ORF_nuc"
@@ -350,16 +352,18 @@ count_file_with_CDS_plus_M = 0
 name_elems = ["orthogroup", "0", "with", "0", "species.fasta"]
 
 # by fixing the counter here, there will be some "holes" in the outputs directories (missing numbers), but the groups between directories will correspond
-n0 = 0
-for file in list_file:
-    n0 += 1
+#n0 = 0
+
+for file in list_files:
+    #n0 += 1
 
     count_file_processed = count_file_processed + 1
+    nb_gp = file.split('_')[1] # Keep trace of the orthogroup number
     fasta_file_path = "./%s" %file    
     bash_fasta = dico(fasta_file_path)   ### DEF 1 ###    
     BESTORF_nuc, BESTORF_nuc_CODING, BESTORF_nuc_CDS_with_M, BESTORF_aa, BESTORF_aa_CODING, BESTORF_aa_CDS_with_M  = find_good_ORF_criteria_3(bash_fasta, bash_codeUniversel)   ### DEF 4 - PART 2 - ###
     
-    name_elems[1] = str(n0)
+    name_elems[1] = nb_gp
 
     ## a ## OUTPUT BESTORF_nuc
     if BESTORF_nuc != {}:
@@ -431,7 +435,7 @@ for file in list_file:
             OUT6.write("%s\n" %seq)
         OUT6.close()
 
-    os.system("rm -rf %s" %file)
+    #os.system("rm -rf %s" %file)
 
 ## Print
 print "*************** CDS detection ***************"

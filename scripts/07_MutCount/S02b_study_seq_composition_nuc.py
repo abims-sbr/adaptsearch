@@ -95,13 +95,18 @@ outpath= "./OUT"
 os.makedirs(Path_IN_loci_NUC)
 os.makedirs(outpath)
 
-infiles = str.split(sys.argv[1], ",")
+infiles = []
+with open(sys.argv[2], 'r') as f:
+    for line in f.readlines():
+        infiles.append(line.strip('\n'))
+
+#infiles = str.split(sys.argv[1], ",")
 for file in infiles:
     os.system("cp %s %s" %(file, Path_IN_loci_NUC))
 
 ## 1 ## List taxa
 LT=[]
-cmd="grep '>' %s" % sys.argv[2]
+cmd="grep '>' {}".format(sys.argv[1])
 result = subprocess.check_output(cmd, shell=True)
 result=result.split('\n')
 for i in result:   
@@ -110,11 +115,7 @@ for i in result:
         LT.append(sp)
 print LT
 
-#LT = ["Ap", "Ac", "Pg"]
-#os.system("grep '>' %s" %(sys.argv[1]))
-
 ## 2 ## PathIN
-# fileIN_properties = open("01_AminoAcid_Properties2.csv", "r")
 Lloci_NUC = os.listdir(Path_IN_loci_NUC)
 
 

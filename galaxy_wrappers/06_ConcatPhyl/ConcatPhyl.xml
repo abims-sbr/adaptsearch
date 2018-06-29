@@ -28,7 +28,9 @@
         #end for
         #set $infiles_alignments = $infiles_alignments[:-1]
 
-        python $__tool_directory__/scripts/S01_concatenate.py
+        python $__tool_directory__/scripts/make_listfiles.py $infiles_alignments &&
+
+        python $__tool_directory__/scripts/S01_concatenate.py 
 
         $infiles_filter_assemblies
 
@@ -38,7 +40,8 @@
             proteic
         #end if
 
-        $infiles_alignments
+        list_files
+        
         > ${output};
 
         raxmlHPC -n galaxy_run

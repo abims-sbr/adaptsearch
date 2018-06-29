@@ -129,7 +129,6 @@ i=3
 ## Arguments
 infiles_filter_assemblies = sys.argv[1]
 format_run = sys.argv[2]
-input_alignments = sys.argv[3]
 
 ## add file to list_species
 list_species = str.split(infiles_filter_assemblies,",")
@@ -140,7 +139,16 @@ for name in list_species :
     SPECIES_ID_LIST.append(name)
 
 ## add alignment files to L_IN
-L_IN = str.split(input_alignments,",")
+list_files = []
+with open(sys.argv[3], 'r') as f:
+    for line in f.readlines():
+        list_files.append(line.strip('\n'))
+
+L_IN = []
+for file in list_files:
+    L_IN.append(file)
+
+#L_IN = str.split(input_alignments,",")
 print(L_IN)
 
 ### 1 ### Proteic

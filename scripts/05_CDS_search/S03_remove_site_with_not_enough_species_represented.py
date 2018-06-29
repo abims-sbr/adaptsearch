@@ -157,7 +157,8 @@ for file in L_IN1 :
 
     ## 4.3 ## Change file name for output, depending the number of species remaining in the alignment 
     n0+=1
-    name_elems[1] = str(n0)
+    #name_elems[1] = str(n0)
+    name_elems[1] = file.split('_')[1]
     name_elems[3] =  str(len(filtered_bash_aa.keys()))
     new_name = "_".join(name_elems)
 

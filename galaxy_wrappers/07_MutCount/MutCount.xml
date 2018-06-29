@@ -32,14 +32,16 @@
             #end for
             #set $infiles = $infiles[:-1]
 
+            python '$__tool_directory__/scripts/make_listfiles.py' '$infiles' &&
+
             #if str($method.format_run)== "nucleic" :
-                python '$__tool_directory__/scripts/S02b_study_seq_composition_nuc.py' '$infiles' ${method.concat_phy}
+                python '$__tool_directory__/scripts/S02b_study_seq_composition_nuc.py' ${method.concat_phy} list_files
             #end if
 
             #if str($method.format_run)== "proteic" :
                 cp '$__tool_directory__/scripts/amino_acid_properties.csv' .
                 &&
-                python '$__tool_directory__/scripts/S01b_study_seq_composition_aa.py' '$infiles' ${method.concat_phy}
+                python '$__tool_directory__/scripts/S01b_study_seq_composition_aa.py' ${method.concat_phy} list_files
             #end if
         #end if
         
@@ -157,7 +159,6 @@
     </outputs>
 
     <tests>
-   
         <test>
             <conditional name="method" >
                 <param name="method_run" value="concat" />
@@ -234,6 +235,7 @@
                 </assert_contents>
             </output>           
         </test>
+
     </tests>
 
     <help>
