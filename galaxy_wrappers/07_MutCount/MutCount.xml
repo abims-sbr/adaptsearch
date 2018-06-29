@@ -32,7 +32,7 @@
             #end for
             #set $infiles = $infiles[:-1]
 
-            python '$__tool_directory__/scripts/make_listfiles.py' '$infiles' &&
+            bash $__tool_directory__/scripts/make_listfiles.sh &&
 
             #if str($method.format_run)== "nucleic" :
                 python '$__tool_directory__/scripts/S02b_study_seq_composition_nuc.py' ${method.concat_phy} list_files
@@ -159,6 +159,7 @@
     </outputs>
 
     <tests>
+        <!--
         <test>
             <conditional name="method" >
                 <param name="method_run" value="concat" />
@@ -177,32 +178,32 @@
             <output name="aa_transitions_freqs" value="OUT_concat/aa_transitions_freqs.csv" lines_diff="72"/>
             <output name="aatypes_transitions_freqs" value="OUT_concat/aatypes_transitions_freqs.csv" lines_diff="72"/>
         </test>
-
+        -->
         <test>
             <conditional name="method" >
                 <param name="method_run" value="separated" />
                 <param name="format_run" value="nucleic" />
-                <param name="sep_file" ftype="fasta" value="sep_nuc/locus1_sp6_sp6.fasta,sep_nuc/locus1_sp8_sp8.fasta,sep_nuc/locus2_sp6_sp6.fasta" />
+                <param name="sep_file" ftype="fasta" value="sep_nuc/orthogroup_1_sp6_sp6.fasta,sep_nuc/orthogroup_1_sp8_sp8.fasta,sep_nuc/orthogroup_2_sp6_sp6.fasta" />
                 <param name="concat_phy" ftype="fasta" value="phylogeny_concat.fasta" />
             </conditional>
             <output name="nuc_comp">
                 <assert_contents>
-                    <has_line line="locus2_sp6_sp6.fasta,0.30208,0.23958,0.19792,0.26042,0.29688,0.27604,0.18229,0.24479,NA,NA,NA,NA,0.30208,0.24479,0.19792,0.25521,NA,NA,NA,NA,0.31250,0.26042,0.17188,0.25521,0.32292,0.21875,0.20312,0.25521,NA,NA,NA,NA,NA,NA,NA,NA,0.31771,0.25521,0.17708,0.25000"/>
+                    <has_line line="orthogroup_2_sp6_sp6.fasta,0.30208,0.23958,0.19792,0.26042,0.29688,0.27604,0.18229,0.24479,NA,NA,NA,NA,0.30208,0.24479,0.19792,0.25521,NA,NA,NA,NA,0.31250,0.26042,0.17188,0.25521,0.32292,0.21875,0.20312,0.25521,NA,NA,NA,NA,NA,NA,NA,NA,0.31771,0.25521,0.17708,0.25000"/>
                 </assert_contents>
             </output>
             <output name="percent_gc">
                 <assert_contents>
-                    <has_line line="locus2_sp6_sp6.fasta,45.83333,42.70833,NA,45.31250,NA,42.70833,45.83333,NA,NA,42.70833" />
+                    <has_line line="orthogroup_2_sp6_sp6.fasta,45.83333,42.70833,NA,45.31250,NA,42.70833,45.83333,NA,NA,42.70833" />
                 </assert_contents>
             </output>
             <output name="percent_pur">
                 <assert_contents>
-                    <has_line line="locus2_sp6_sp6.fasta,56.25000,54.16667,NA,55.72917,NA,56.77083,57.81250,NA,NA,56.77083" />
+                    <has_line line="orthogroup_2_sp6_sp6.fasta,56.25000,54.16667,NA,55.72917,NA,56.77083,57.81250,NA,NA,56.77083" />
                 </assert_contents>
             </output>
             <output name="purine_load">
                 <assert_contents>
-                    <has_line line="locus2_sp6_sp6.fasta,192,12,12,62.50000,62.50000,192,12,4,62.50000,20.83333,NA,NA,NA,NA,NA,192,11,11,57.29167,57.29167,NA,NA,NA,NA,NA,192,16,10,83.33333,52.08333,192,10,20,52.08333,104.16667,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,192,14,12,72.91667,62.50000" />
+                    <has_line line="orthogroup_2_sp6_sp6.fasta,192,12,12,62.50000,62.50000,192,12,4,62.50000,20.83333,NA,NA,NA,NA,NA,192,11,11,57.29167,57.29167,NA,NA,NA,NA,NA,192,16,10,83.33333,52.08333,192,10,20,52.08333,104.16667,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,192,14,12,72.91667,62.50000" />
                 </assert_contents>
             </output>
         </test>
@@ -211,27 +212,27 @@
             <conditional name="method" >
                 <param name="method_run" value="separated" />
                 <param name="format_run" value="proteic" />
-                <param name="sep_file" ftype="fasta" value="sep_aa/locus1_sp6_sp6.fasta,sep_aa/locus1_sp8_sp8.fasta,sep_aa/locus2_sp6_sp6.fasta" />
+                <param name="sep_file" ftype="fasta" value="sep_aa/orthogroup_1_sp6_sp6.fasta,sep_aa/orthogroup_1_sp8_sp8.fasta,sep_aa/orthogroup_2_sp6_sp6.fasta" />
                 <param name="concat_phy" ftype="fasta" value="phylogeny_concat.fasta" />
             </conditional>            
             <output name="ivywrel">
                 <assert_contents>
-                    <has_line line="locus1_sp8_sp8.fasta,25.00000,0.36765,28.00000,0.36364,NA,NA,NA,NA,27.00000,0.35065,27.00000,0.35065,28.00000,0.36364,0.00000,0.00000,27.00000,0.40909,27.00000,0.35065" />
+                    <has_line line="orthogroup_1_sp8_sp8.fasta,25.00000,0.36765,28.00000,0.36364,NA,NA,NA,NA,27.00000,0.35065,27.00000,0.35065,28.00000,0.36364,0.00000,0.00000,27.00000,0.40909,27.00000,0.35065" />
                 </assert_contents>
             </output>
             <output name="rhkde">
                 <assert_contents>
-                    <has_line line="locus1_sp6_sp6.fasta,28.00000,0.35897,14.00000,0.17949,14.00000,0.17949,30.00000,0.38462,16.00000,0.20513,14.00000,0.17949,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,30.00000,0.38462,16.00000,0.20513,14.00000,0.17949,30.00000,0.38462,16.00000,0.20513,14.00000,0.17949,30.00000,0.38462,16.00000,0.20513,14.00000,0.17949,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,30.00000,0.38462,16.00000,0.20513,14.00000,0.17949"/>
+                    <has_line line="orthogroup_1_sp6_sp6.fasta,28.00000,0.35897,14.00000,0.17949,14.00000,0.17949,30.00000,0.38462,16.00000,0.20513,14.00000,0.17949,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,30.00000,0.38462,16.00000,0.20513,14.00000,0.17949,30.00000,0.38462,16.00000,0.20513,14.00000,0.17949,30.00000,0.38462,16.00000,0.20513,14.00000,0.17949,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,30.00000,0.38462,16.00000,0.20513,14.00000,0.17949"/>
                 </assert_contents>
             </output>
             <output name="payre_mvgds">
                 <assert_contents>
-                    <has_line line="locus1_sp8_sp8.fasta,16.00000,0.23529,3.00000,0.04412,27.00000,0.39706,0.59259,0.11111,18.00000,0.23377,4.00000,0.05195,29.00000,0.37662,0.62069,0.13793,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,19.00000,0.24675,6.00000,0.07792,30.00000,0.38961,0.63333,0.20000,20.00000,0.25974,7.00000,0.09091,32.00000,0.41558,0.62500,0.21875,20.00000,0.25974,5.00000,0.06494,29.00000,0.37662,0.68966,0.17241,0.00000,0.00000,0.00000,0.00000,0.00000,0.00000,0.00000,0.00000,14.00000,0.21212,2.00000,0.03030,26.00000,0.39394,0.53846,0.07692,19.00000,0.24675,6.00000,0.07792,32.00000,0.41558,0.59375,0.18750"/>
+                    <has_line line="orthogroup_1_sp8_sp8.fasta,16.00000,0.23529,3.00000,0.04412,27.00000,0.39706,0.59259,0.11111,18.00000,0.23377,4.00000,0.05195,29.00000,0.37662,0.62069,0.13793,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,19.00000,0.24675,6.00000,0.07792,30.00000,0.38961,0.63333,0.20000,20.00000,0.25974,7.00000,0.09091,32.00000,0.41558,0.62500,0.21875,20.00000,0.25974,5.00000,0.06494,29.00000,0.37662,0.68966,0.17241,0.00000,0.00000,0.00000,0.00000,0.00000,0.00000,0.00000,0.00000,14.00000,0.21212,2.00000,0.03030,26.00000,0.39394,0.53846,0.07692,19.00000,0.24675,6.00000,0.07792,32.00000,0.41558,0.59375,0.18750"/>
                 </assert_contents>
             </output>
             <output name="avlimfyw">
                 <assert_contents>
-                    <has_line line="locus2_sp6_sp6.fasta,27.00000,0.42188,21.00000,0.32812,6.00000,0.09375,28.00000,0.43750,22.00000,0.34375,6.00000,0.09375,NA,NA,NA,NA,NA,NA,28.00000,0.43750,22.00000,0.34375,6.00000,0.09375,NA,NA,NA,NA,NA,NA,28.00000,0.43750,22.00000,0.34375,6.00000,0.09375,30.00000,0.46875,24.00000,0.37500,6.00000,0.09375,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,28.00000,0.43750,22.00000,0.34375,6.00000,0.09375"/>
+                    <has_line line="orthogroup_2_sp6_sp6.fasta,27.00000,0.42188,21.00000,0.32812,6.00000,0.09375,28.00000,0.43750,22.00000,0.34375,6.00000,0.09375,NA,NA,NA,NA,NA,NA,28.00000,0.43750,22.00000,0.34375,6.00000,0.09375,NA,NA,NA,NA,NA,NA,28.00000,0.43750,22.00000,0.34375,6.00000,0.09375,30.00000,0.46875,24.00000,0.37500,6.00000,0.09375,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,28.00000,0.43750,22.00000,0.34375,6.00000,0.09375"/>
                 </assert_contents>
             </output>           
         </test>

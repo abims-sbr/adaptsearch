@@ -20,7 +20,7 @@
         #end for
         #set $infiles = $infiles[:-1]
 
-        python $__tool_directory__/scripts/make_listfiles.py $infiles &&
+        bash $__tool_directory__/scripts/make_listfiles.sh &&
         
         ln -s $__tool_directory__/scripts/dico.py . &&
 
@@ -209,72 +209,6 @@
                 <element name="orthogroup_14_with_2_species" value="outputs_ORF_Search_08_CDS_without_indel_nuc/test1/orthogroup_14_with_2_species.fasta" />
             </output_collection>
 		</test>
-
-        <!-- tests with name "locus_x_spy.fasta" -->
-        <!--
-                <test>
-            <param name="inputs" ftype="fasta" value="inputs/locus1_sp5.fasta,inputs/locus1_sp7.fasta,inputs/locus2_sp4.fasta,inputs/locus2_sp6.fasta" />
-            <param name="nb_species_keep" value="2" />
-            <param name="methionine" value="no" />
-            <section name="length">
-                <param name="min_length_seq" value="50" />
-                <param name="min_length_subseq" value="15" />
-                <param name="min_length_nuc" value="50" />
-            </section>
-            <param name="out_BESTORF" value="both" />
-            <param name="out_CDS" value="both" />
-            <param name="out_CDS_filter" value="both" />
-            <output_collection name="output_BESTORF_aa" type="list">
-                <element name="orthogroup_2_with_7_species" value="outputs_ORF_Search_04_Best_ORF_aa/test2/orthogroup_2_with_7_species.fasta" />
-                <element name="orthogroup_4_with_6_species" value="outputs_ORF_Search_04_Best_ORF_aa/test2/orthogroup_4_with_6_species.fasta" />
-            </output_collection>
-            <output_collection name="output_BESTORF_nuc" type="list">
-                <element name="orthogroup_2_with_7_species" value="outputs_ORF_Search_04_Best_ORF_nuc/test2/orthogroup_2_with_7_species.fasta" />
-                <element name="orthogroup_4_with_6_species" value="outputs_ORF_Search_04_Best_ORF_nuc/test2/orthogroup_4_with_6_species.fasta" />
-            </output_collection>
-            <output_collection name="output_CDS_aa" type="list">
-                <element name="orthogroup_2_with_7_species" value="outputs_ORF_Search_05_CDS_aa/test2/orthogroup_2_with_7_species.fasta" />
-                <element name="orthogroup_4_with_6_species" value="outputs_ORF_Search_05_CDS_aa/test2/orthogroup_4_with_6_species.fasta" />
-            </output_collection>
-            <output_collection name="output_CDS_nuc" type="list">
-                <element name="orthogroup_2_with_7_species" value="outputs_ORF_Search_05_CDS_nuc/test2/orthogroup_2_with_7_species.fasta" />
-                <element name="orthogroup_4_with_6_species" value="outputs_ORF_Search_05_CDS_nuc/test2/orthogroup_4_with_6_species.fasta" />                
-            </output_collection>
-            <output_collection name="output_filter_aa" type="list">
-                <element name="orthogroup_1_with_4_species" value="outputs_ORF_Search_08_CDS_without_indel_aa/test2/orthogroup_1_with_4_species.fasta" />
-            </output_collection>
-            <output_collection name="output_filter_nuc" type="list">
-                <element name="orthogroup_1_with_4_species" value="outputs_ORF_Search_08_CDS_without_indel_nuc/test2/orthogroup_1_with_4_species.fasta" />
-            </output_collection>
-        </test>
-        <test>
-            <param name="inputs" ftype="fasta" value="inputs/locus1_sp5.fasta,inputs/locus1_sp7.fasta,inputs/locus2_sp4.fasta,inputs/locus2_sp6.fasta" />
-            <param name="nb_species_keep" value="2" />
-            <param name="methionine" value="yes" />
-            <section name="length">
-                <param name="min_length_seq" value="50" />
-                <param name="min_length_subseq" value="15" />
-                <param name="min_length_nuc" value="50" />
-            </section>
-            <param name="out_BESTORF" value="both" />
-            <param name="out_CDS" value="both" />
-            <param name="out_CDS_filter" value="both" />            
-            <output_collection name="output_BESTORF_aa" type="list">
-                <element name="orthogroup_2_with_7_species" value="outputs_ORF_Search_04_Best_ORF_aa/test2/orthogroup_2_with_7_species.fasta" />
-                <element name="orthogroup_4_with_6_species" value="outputs_ORF_Search_04_Best_ORF_aa/test2/orthogroup_4_with_6_species.fasta" />
-            </output_collection>
-            <output_collection name="output_BESTORF_nuc" type="list">
-                <element name="orthogroup_2_with_7_species" value="outputs_ORF_Search_04_Best_ORF_nuc/test2/orthogroup_2_with_7_species.fasta" />
-                <element name="orthogroup_4_with_6_species" value="outputs_ORF_Search_04_Best_ORF_nuc/test2/orthogroup_4_with_6_species.fasta" />
-            </output_collection>
-            <output_collection name="output_CDS_M_aa" type="list">
-                <element name="orthogroup_4_with_6_species" value="outputs_ORF_Search_06_CDS_with_M_aa/test2/orthogroup_4_with_6_species.fasta" />
-            </output_collection>
-            <output_collection name="output_CDS_M_nuc" type="list">
-                <element name="orthogroup_4_with_6_species" value="outputs_ORF_Search_06_CDS_with_M_nuc/test2/orthogroup_4_with_6_species.fasta" />
-            </output_collection>
-        </test>
-    -->
 	</tests>
 	<help>
 
