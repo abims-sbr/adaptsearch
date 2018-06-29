@@ -20,15 +20,11 @@
             #set $infiles_filter_assemblies = $infiles_filter_assemblies + $input_filter_assemblie.element_identifier + ","
         #end for
         #set $infiles_filter_assemblies = $infiles_filter_assemblies[:-1]
-
-        #set $infiles_alignments = ""
+        
         #for $input_alignment in $input_alignments
             ln -s '$input_alignment' '$input_alignment.element_identifier';
-            #set $infiles_alignments = $infiles_alignments + $input_alignment.element_identifier + ","
-        #end for
-        #set $infiles_alignments = $infiles_alignments[:-1]
-
-        bash $__tool_directory__/scripts/make_listfiles.sh &&
+            echo '$input_alignment.element_identifier' >> list_files;            
+        #end for        
 
         python $__tool_directory__/scripts/S01_concatenate.py 
 

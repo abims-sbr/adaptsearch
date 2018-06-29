@@ -12,15 +12,11 @@
 		<expand macro="python_required" />
 	</requirements>
 
-  	<command><![CDATA[
-        #set $infiles = ""
+  	<command><![CDATA[        
         #for $input in $inputs
             ln -s '$input' '$input.element_identifier';
-            #set $infiles = $infiles + $input.element_identifier + ","
+            echo '$input.element_identifier' >> list_files;
         #end for
-        #set $infiles = $infiles[:-1]
-
-        bash $__tool_directory__/scripts/make_listfiles.sh &&
         
         ln -s $__tool_directory__/scripts/dico.py . &&
 
