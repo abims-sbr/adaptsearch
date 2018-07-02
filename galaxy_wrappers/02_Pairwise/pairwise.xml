@@ -45,7 +45,7 @@
 
     <tests>
         <test>
-            <param name="inputs" ftype="fasta" value="inputs_tblastx/AcAcaud_Trinity.fasta,inputs_tblastx/AmAmphi_Trinity.fasta,inputs_tblastx/ApApomp_Trinity.fasta,inputs_tblastx/PfPfiji_Trinity.fasta" />
+            <param name="inputs" ftype="fasta" value="inputs_tblastx/AcAcaud_trinity.fasta,inputs_tblastx/AmAmphi_trinity.fasta,inputs_tblastx/ApApomp_trinity.fasta,inputs_tblastx/PfPfiji_trinity.fasta" />
             <param name="e-value" value="1e-5" />
             <param name="method" value="tblastx" />
             <output_collection name="output_fasta_dna" type="list">
