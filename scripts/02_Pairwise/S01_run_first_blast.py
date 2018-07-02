@@ -10,6 +10,8 @@ IMPROVMENTS :
     - See if it possible to avoid build several times the same db
 """
 
+# The script (and S03_run_second_blast.py as well) must be launched with the python '-W ignore' option if tested with planemo
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('files', help='fasta files separated by commas')
@@ -76,28 +78,36 @@ def main():
             a = pairwise[1].replace('translated_', '')
             b = pairwise[0].replace('translated_', '')
 
-            # Record only one best_hit per transcript (best of the 6 orfs)
-            os.system('python S02_04_keep_one_hit_from_blast.py matches_blast1_%s %s %s %s %s %s' %(sub_directory_name, a, b, sub_directory_name, '1', args.method))
+            # There is a chance to have no hits returned
+            if os.path.getsize('matches_blast1_%s' %sub_directory_name) == 0:
+                print 'No hits found. Processing next species pair ...'
+            else :
 
-            # 2d blast with only best hits as db
-            print 'Running second blast with Diamond ... '
+                # Record only one best_hit per transcript (best of the 6 orfs)
+                os.system('python S02_04_keep_one_hit_from_blast.py matches_blast1_%s %s %s %s %s %s' %(sub_directory_name, a, b, sub_directory_name, '1', args.method))
 
-            os.system('python S03_run_second_blast.py best_hits_db_blast1_%s %s %s %s %s' %(sub_directory_name, pairwise[0], sub_directory_name, args.evalue, args.method))
+                # 2d blast with only best hits as db
+                print 'Running second blast with Diamond ... '
 
-            # Record only one best_hit per transcript (best of the 6 orfs)
-            os.system('python S02_04_keep_one_hit_from_blast.py matches_blast2_%s %s %s %s %s %s' %(sub_directory_name, b, a, sub_directory_name, '2', args.method))
+                os.system('python -W ignore S03_run_second_blast.py best_hits_db_blast1_%s %s %s %s %s' %(sub_directory_name, pairwise[0], sub_directory_name, args.evalue, args.method))
 
-            # Find Reciprocical Best Hits
-            name1 = 'best_hits_q_blast1_{}'.format(sub_directory_name)
-            name2 = 'best_hits_q_blast2_{}'.format(sub_directory_name)
-            os.system('python S05_find_rbh.py %s %s ' %(name1, name2))
+                # Record only one best_hit per transcript (best of the 6 orfs)
+                os.system('python S02_04_keep_one_hit_from_blast.py matches_blast2_%s %s %s %s %s %s' %(sub_directory_name, b, a, sub_directory_name, '2', args.method))
 
-            os.system('mv matches_blast* ./blast_%s' %(sub_directory_name))
-            #os.system('mv matches_blast2_%s ./blast_%s' %(sub_directory_name, sub_directory_name))
-            os.system('mv *best_hits* ./blast_%s' %sub_directory_name)
+                # Find Reciprocical Best Hits
+                name1 = 'best_hits_q_blast1_{}'.format(sub_directory_name)
+                name2 = 'best_hits_q_blast2_{}'.format(sub_directory_name)
+                os.system('python S05_find_rbh.py %s %s ' %(name1, name2))
+
             os.system('mv log_diamond.log ./blast_%s' %sub_directory_name)        
             os.system('rm -f *.dmnd')
-            os.system('mv RBH* outputs_RBH_dna')
+
+            # Those files exist obly if hits were found during the first blast
+            if os.path.getsize('matches_blast1_%s' %sub_directory_name) != 0:
+                os.system('mv *best_hits* ./blast_%s' %sub_directory_name)
+                os.system('mv RBH* outputs_RBH_dna')
+
+            os.system('mv matches_blast* ./blast_%s' %(sub_directory_name))
 
         os.mkdir('translated_seqs')
         os.system('mv translated*.fasta ./translated_seqs')
@@ -120,36 +130,41 @@ def main():
             # tabular output :
             # qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore
             
-            # if os.path.getsize('matches_blast1_%s' %sub_directory_name) == 0:
-            #     print 'No hits found'
-            # else:
+            # There is a chance to have no hits returned
+            if os.path.getsize('matches_blast1_%s' %sub_directory_name) == 0:
+                 print 'No hits found. Processing next species pair ...'
+            else:
 
-            # Record only one best_hit per transcript (best of the 6 orfs)
-            os.system('python S02_04_keep_one_hit_from_blast.py matches_blast1_%s %s %s %s %s %s' %(sub_directory_name, pairwise[1], pairwise[0], sub_directory_name, '1', args.method))
+                # Record only one best_hit per transcript (best of the 6 orfs)
+                os.system('python S02_04_keep_one_hit_from_blast.py matches_blast1_%s %s %s %s %s %s' %(sub_directory_name, pairwise[1], pairwise[0], sub_directory_name, '1', args.method))
 
-            # 2d blast with only best hits as db
-            print 'Running second blast with Diamond ... '
+                # 2d blast with only best hits as db
+                print 'Running second blast with Diamond ... '
 
-            os.system('python S03_run_second_blast.py best_hits_db_blast1_%s %s %s %s %s' %(sub_directory_name, pairwise[0], sub_directory_name, args.evalue, args.method))
+                os.system('python S03_run_second_blast.py best_hits_db_blast1_%s %s %s %s %s' %(sub_directory_name, pairwise[0], sub_directory_name, args.evalue, args.method))
 
-            # Record only one best_hit per transcript (best of the 6 orfs)
-            os.system('python S02_04_keep_one_hit_from_blast.py matches_blast2_%s %s %s %s %s %s' %(sub_directory_name, pairwise[0], pairwise[1], sub_directory_name, '2', args.method))
+                # Record only one best_hit per transcript (best of the 6 orfs)
+                os.system('python S02_04_keep_one_hit_from_blast.py matches_blast2_%s %s %s %s %s %s' %(sub_directory_name, pairwise[0], pairwise[1], sub_directory_name, '2', args.method))
 
-            # Find Reciprocical Best Hits
-            name1 = 'best_hits_q_blast1_{}'.format(sub_directory_name)
-            name2 = 'best_hits_q_blast2_{}'.format(sub_directory_name)
-            os.system('python S05_find_rbh.py %s %s ' %(name1, name2))
+                # Find Reciprocical Best Hits
+                name1 = 'best_hits_q_blast1_{}'.format(sub_directory_name)
+                name2 = 'best_hits_q_blast2_{}'.format(sub_directory_name)
+                os.system('python S05_find_rbh.py %s %s ' %(name1, name2))
 
-            os.system('mv matches_blast* ./blast_%s' %(sub_directory_name))
-            #os.system('mv matches_blast2_%s ./blast_%s' %(sub_directory_name, sub_directory_name))
-            os.system('mv *best_hits* ./blast_%s' %sub_directory_name)
             os.system('mv log_tblastx.log ./blast_%s' %sub_directory_name)        
             os.system('rm -f *.nhr')
             os.system('rm -f *.nin')
             os.system('rm -f *.nsd')
             os.system('rm -f *.nsi')
             os.system('rm -f *.nsq')
-            os.system('mv RBH* outputs_RBH_dna')
+
+            # Those files exist obly if hits were found during the first blast
+            if os.path.getsize('matches_blast1_%s' %sub_directory_name) != 0:
+                os.system('mv *best_hits* ./blast_%s' %sub_directory_name)
+                os.system('mv RBH* outputs_RBH_dna')            
+
+            os.system('mv matches_blast* ./blast_%s' %(sub_directory_name))
+            #os.system('mv matches_blast2_%s ./blast_%s' %(sub_directory_name, sub_directory_name))            
 
 if __name__ == "__main__":
     main()
