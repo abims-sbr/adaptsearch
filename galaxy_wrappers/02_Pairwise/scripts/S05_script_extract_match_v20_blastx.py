@@ -1,1 +1,0 @@
-../../../scripts/02_Pairwise/S05_script_extract_match_v20_blastx.py

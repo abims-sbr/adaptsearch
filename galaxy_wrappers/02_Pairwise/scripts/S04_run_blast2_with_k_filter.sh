@@ -1,1 +1,0 @@
-../../../scripts/02_Pairwise/S04_run_blast2_with_k_filter.sh
