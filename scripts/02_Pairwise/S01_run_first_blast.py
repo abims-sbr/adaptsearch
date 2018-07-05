@@ -34,7 +34,7 @@ def main():
             translated_file = open(name, 'w')
             with open(file, 'r') as file:
                 for name, seq in itertools.izip_longest(*[file]*2):
-                    s = Seq(seq.strip('\n').upper(), IUPAC.unambiguous_dna)
+                    s = Seq(seq.strip('\n').upper(), IUPAC.ambiguous_dna)
                     translated_file.write(name.strip('\n')+'_orf_1\n')
                     translated_file.write(s.translate()._data+'\n')
                     translated_file.write(name.strip('\n')+'_orf_2\n')
