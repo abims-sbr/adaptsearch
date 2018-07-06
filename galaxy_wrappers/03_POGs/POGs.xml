@@ -136,6 +136,7 @@ The output of the tool 'Pairwise' (pairwise_DNA, nucleic format) (AdaptSearch su
 
 - paralogs : check 'Yes' if you also want to retrieve the orthogroups before the paralogous sequences removal.
 
+
 .. class:: warningmark
 The minimum number of species per group only applies to the main output files. In the case of the 'paralogs' option, this parameter is more likely the minimum amount of sequences to keep.
 

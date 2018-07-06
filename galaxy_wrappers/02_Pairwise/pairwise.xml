@@ -32,7 +32,7 @@
     ]]></command>
 
     <inputs>
-        <param name="inputs" type="data" format="fasta" multiple="true" label="Input files" />
+        <param name="inputs" type="data" format="fasta" multiple="true" label="Input fasta files" />
         <param name="method" type="select" label="Alignment tool to use" help="tblastx is slow and sensitive, diamond is a lot quicker and less sensitive">
             <option value="tblastx">tblastx</option>
             <option value="diamond">Diamond</option>
@@ -200,12 +200,6 @@ This tool searches for different homologous genes from pairwise comparisons betw
     - 'Pairwise_DNA' : the output which contains nucleic sequences (of the pairwise) that are homologous. The sequences are with nucleotides. It shows for both the query and match :
         the name        
         the sequence in nucleotides
-   
-    - 'Pairwise_PROT' : the output which contains proteic sequences (of the pairwise) that are homologous. The sequences are with protein. It shows :
-        Name, position, length, and part of the sequence in protein for query and match sequences
-        Divergence
-        Number of gaps 
-        Real divergence
 
 --------
 
@@ -217,6 +211,10 @@ This tool searches for different homologous genes from pairwise comparisons betw
 
 Changelog
 ---------
+
+**Version 2.1 - 03/07/2018**
+
+ - Add the possibility to use Diamond instead of tblastx
 
 **Version 2.0 - 18/04/2017**
 
