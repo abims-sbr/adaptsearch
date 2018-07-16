@@ -1,0 +1,9 @@
+"","Bj_vs_condition_2","Bs_vs_condition_2","Ha_vs_condition_1","Lf_vs_condition_1"
+"Greater",3,7,5,7
+"Lower",6,2,8,7
+"Difference",-3,5,-3,0
+"Trial_Number",9,9,13,14
+"p-value",0.5078125,0.1796875,0.5810546875,1
+"probability_of_success",0.333333333333333,0.777777777777778,0.384615384615385,0.5
+"confidence_interval_low",0.0748546314196918,0.399906426283688,0.138579338890161,0.230360541448062
+"confidence_interval_high",0.70070494379146,0.971855026522102,0.684222397085937,0.769639458551938

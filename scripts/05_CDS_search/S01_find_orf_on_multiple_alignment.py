@@ -360,7 +360,7 @@ for file in list_files:
     count_file_processed = count_file_processed + 1
     nb_gp = file.split('_')[1] # Keep trace of the orthogroup number
     fasta_file_path = "./%s" %file    
-    bash_fasta = dico(fasta_file_path)   ### DEF 1 ###    
+    bash_fasta = dico(fasta_file_path)   ### DEF 1 ###  
     BESTORF_nuc, BESTORF_nuc_CODING, BESTORF_nuc_CDS_with_M, BESTORF_aa, BESTORF_aa_CODING, BESTORF_aa_CDS_with_M  = find_good_ORF_criteria_3(bash_fasta, bash_codeUniversel)   ### DEF 4 - PART 2 - ###
     
     name_elems[1] = nb_gp

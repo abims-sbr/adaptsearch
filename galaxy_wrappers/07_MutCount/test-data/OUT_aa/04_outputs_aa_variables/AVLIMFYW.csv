@@ -1,0 +1,9 @@
+"","Ap_vs_condition_2","Pg_vs_condition_1","Pp_vs_condition_1","Ps_vs_condition_2"
+"Greater",2,1,3,3
+"Lower",3,5,3,1
+"Difference",-1,-4,0,2
+"Trial_Number",5,6,6,4
+"p-value",1,0.21875,1,0.625
+"probability_of_success",0.4,0.166666666666667,0.5,0.75
+"confidence_interval_low",0.0527449505263169,0.00421074451448947,0.118117248757025,0.194120449683243
+"confidence_interval_high",0.853367200365327,0.641234578997675,0.881882751242975,0.99369053679029

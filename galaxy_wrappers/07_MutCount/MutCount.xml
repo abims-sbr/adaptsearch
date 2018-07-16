@@ -13,6 +13,7 @@
         <expand macro="python_required" />
         <requirement type="package" version="0.20.0">pandas</requirement>
         <requirement type="package" version="1.12.0">numpy</requirement>
+        <requirement type="package" version="3.4.3">r</requirement>
     </requirements>
 
     <command>
@@ -25,20 +26,22 @@
         #end if
         
         #if str($method.method_run) == "separated" :
+            mkdir 01_input_files &&
+            ln -s '$__tool_directory__/scripts/S03b_sign_test_binomial.R' . &&
             #for $input in $method.sep_file
-                ln -s '$input' '$input.element_identifier';
-                echo '$input.element_identifier' >> list_files;
+                ln -s '$input' '01_input_files/$input.element_identifier';                
             #end for
 
             #if str($method.format_run)== "nucleic" :
-                python '$__tool_directory__/scripts/S02b_study_seq_composition_nuc.py' ${method.concat_phy} list_files
+                python '$__tool_directory__/scripts/S01b_extract_variable_nuc.py' ${method.sps_list} &&
             #end if
 
             #if str($method.format_run)== "proteic" :
-                cp '$__tool_directory__/scripts/amino_acid_properties.csv' .
-                &&
-                python '$__tool_directory__/scripts/S01b_study_seq_composition_aa.py' ${method.concat_phy} list_files
+                cp '$__tool_directory__/scripts/amino_acid_properties.csv' . &&
+                python '$__tool_directory__/scripts/S01b_extract_variable_prot.py' ${method.sps_list} amino_acid_properties.csv &&          
             #end if
+
+            python '$__tool_directory__/scripts/S02b_extreme_2states.py' ${method.sps_gp1} ${method.sps_gp2} ${method.format_run}
         #end if
         
     ]]>
@@ -64,8 +67,10 @@
                     <option value="nucleic">Nucleic format</option>
                     <option value="proteic">Proteic format</option>
                 </param>
-                <param name="sep_file" type="data" format="fasta" multiple="true" label="Choose fasta files" help="Concatenated files from ORF_search tool ; in nucleic or proteic, according to the format chosen above" />
-                <param name="concat_phy" type="data" format="fasta" label="Concatenated file from Phylogeny step" help="This file is used to retrieve the species names" />
+                <param name="sep_file" type="data" format="fasta" multiple="true" label="Choose fasta files" help="Fasta files from ORF_search tool ; in nucleic or proteic, according to the format chosen above" />
+                <param name="sps_list" type="text" size="100" label="Enter all the studied species" help="Enter all the species present in the set of fasta files (comma-separated abbreviated names)" />               
+                <param name="sps_gp1" type="text" size="100" label="Species for group one" help="Specify species (comma-separated abbreviated names) sharing an ecological condition"/>
+                <param name="sps_gp2" type="text" size="100" label="Species for group two" help="Specify species (comma-separated abbreviated names) sharing an other ecological condition"/>            
             </when>
         </conditional>
     </inputs>
@@ -98,60 +103,40 @@
         </data>
 
         <!-- outputs separated - nucleic -->
-        <data format="csv" name="nuc_comp" label="nuc_compositions.csv" from_work_dir="OUT/nuc_compositions.csv" >
+        <collection name="tables_nuc" type="list" label="counts_on_nucleotides">
+            <discover_datasets pattern="__name_and_ext__" directory="02_tables_per_nucleotide" />
             <filter>(method['method_run']=='separated' and method['format_run']== 'nucleic')</filter>
-        </data>
-        <data format="csv" name="percent_gc" label="percent_GC.csv" from_work_dir="OUT/percent_GC.csv" >
+        </collection>
+        <collection name="tables_nuc_var" type="list" label="counts_on_nuc_variables">
+            <discover_datasets pattern="__name_and_ext__" directory="02_tables_per_nuc_variable" />
             <filter>(method['method_run']=='separated' and method['format_run']== 'nucleic')</filter>
-        </data>
-        <data format="csv" name="percent_pur" label="percent_purine.csv" from_work_dir="OUT/percent_purine.csv" >
+        </collection>
+        <collection name="outputs_nuc" type="list" label="binomial_tests_on_nucleotides">
+            <discover_datasets pattern="__name_and_ext__" directory="04_outputs_nucleotides" />
             <filter>(method['method_run']=='separated' and method['format_run']== 'nucleic')</filter>
-        </data>
-        <data format="csv" name="purine_load" label="Purine_Load_Indice.csv" from_work_dir="OUT/Purine_Load_Indice.csv" >
+        </collection>
+        <collection name="outputs_nuc_var" type="list" label="binomial_tests_on_nuc_variables">
+            <discover_datasets pattern="__name_and_ext__" directory="04_outputs_nuc_variables" />
             <filter>(method['method_run']=='separated' and method['format_run']== 'nucleic')</filter>
-        </data>
+        </collection>
 
         <!-- outputs separated - proteic -->
-        <data format="csv" name="prot_comp" label="prot_compositions_All_AA.csv" from_work_dir="OUT/prot_compositions_All_AA.csv" >
+        <collection name="tables_aa" type="list" label="counts_on_amino_acids">
+            <discover_datasets pattern="__name_and_ext__" directory="02_tables_per_aa" />
             <filter>(method['method_run']=='separated' and method['format_run']== 'proteic')</filter>
-        </data>
-        <data format="csv" name="ivywrel" label="IVYWREL.csv" from_work_dir="OUT/IVYWREL.csv" >
+        </collection>
+        <collection name="tables_variables" type="list" label="counts_on_indices">
+            <discover_datasets pattern="__name_and_ext__" directory="02_tables_per_aa_variable" />
             <filter>(method['method_run']=='separated' and method['format_run']== 'proteic')</filter>
-        </data>
-        <data format="csv" name="erk_dnqtsh" label="ERK_DNQTSH.csv" from_work_dir="OUT/ERK_DNQTSH.csv" >
+        </collection>
+        <collection name="outputs_aa" type="list" label="binomial_tests_on_amino_acids">
+            <discover_datasets pattern="__name_and_ext__" directory="04_outputs_aa" />
             <filter>(method['method_run']=='separated' and method['format_run']== 'proteic')</filter>
-        </data>
-        <data format="csv" name="ek_qh" label="EK_QH.csv" from_work_dir="OUT/EK_QH.csv" >
+        </collection>
+        <collection name="outputs_variables" type="list" label="binomial_tests_on_indices">
+            <discover_datasets pattern="__name_and_ext__" directory="04_outputs_aa_variables" />
             <filter>(method['method_run']=='separated' and method['format_run']== 'proteic')</filter>
-        </data>
-        <data format="csv" name="fymink_garp" label="FYMINK_GARP.csv" from_work_dir="OUT/FYMINK_GARP.csv" >
-            <filter>(method['method_run']=='separated' and method['format_run']== 'proteic')</filter>
-        </data>
-        <data format="csv" name="avlimfyw" label="AVLIMFYW.csv" from_work_dir="OUT/AVLIMFYW.csv" >
-            <filter>(method['method_run']=='separated' and method['format_run']== 'proteic')</filter>
-        </data>
-        <data format="csv" name="stnq" label="STNQ.csv" from_work_dir="OUT/STNQ.csv" >
-            <filter>(method['method_run']=='separated' and method['format_run']== 'proteic')</filter>
-        </data>
-        <data format="csv" name="rhkde" label="RHKDE.csv" from_work_dir="OUT/RHKDE.csv" >
-            <filter>(method['method_run']=='separated' and method['format_run']== 'proteic')</filter>
-        </data>
-        <data format="csv" name="payre_mvgds" label="PAYRE-MVGDS.csv" from_work_dir="OUT/PAYRE-MVGDS.csv" >
-            <filter>(method['method_run']=='separated' and method['format_run']== 'proteic')</filter>
-        </data>
-        <data format="csv" name="res_weigth" label="TotalResidueWeight.csv" from_work_dir="OUT/TotalResidueWeight.csv" >
-            <filter>(method['method_run']=='separated' and method['format_run']== 'proteic')</filter>
-        </data>
-        <data format="csv" name="res_vol" label="TotalResidueVolume.csv" from_work_dir="OUT/TotalResidueVolume.csv" >
-            <filter>(method['method_run']=='separated' and method['format_run']== 'proteic')</filter>
-        </data>
-        <data format="csv" name="spec_vol" label="TotalPartialSpecificVolume.csv" from_work_dir="OUT/TotalPartialSpecificVolume.csv" >
-            <filter>(method['method_run']=='separated' and method['format_run']== 'proteic')</filter>
-        </data>
-        <data format="csv" name="hydrat" label="TotalHydratation.csv" from_work_dir="OUT/TotalHydratation.csv" >
-            <filter>(method['method_run']=='separated' and method['format_run']== 'proteic')</filter>
-        </data>
-        
+        </collection>
     </outputs>
 
     <tests>
@@ -173,64 +158,160 @@
             <output name="aa_transitions_freqs" value="OUT_concat/aa_transitions_freqs.csv" lines_diff="72"/>
             <output name="aatypes_transitions_freqs" value="OUT_concat/aatypes_transitions_freqs.csv" lines_diff="72"/>
         </test>
-        <test>
-            <conditional name="method" >
-                <param name="method_run" value="separated" />
-                <param name="format_run" value="nucleic" />
-                <param name="sep_file" ftype="fasta" value="sep_nuc/orthogroup_1_sp6_sp6.fasta,sep_nuc/orthogroup_1_sp8_sp8.fasta,sep_nuc/orthogroup_2_sp6_sp6.fasta" />
-                <param name="concat_phy" ftype="fasta" value="phylogeny_concat.fasta" />
-            </conditional>
-            <output name="nuc_comp">
-                <assert_contents>
-                    <has_line line="orthogroup_2_sp6_sp6.fasta,0.30208,0.23958,0.19792,0.26042,0.29688,0.27604,0.18229,0.24479,NA,NA,NA,NA,0.30208,0.24479,0.19792,0.25521,NA,NA,NA,NA,0.31250,0.26042,0.17188,0.25521,0.32292,0.21875,0.20312,0.25521,NA,NA,NA,NA,NA,NA,NA,NA,0.31771,0.25521,0.17708,0.25000"/>
-                </assert_contents>
-            </output>
-            <output name="percent_gc">
-                <assert_contents>
-                    <has_line line="orthogroup_2_sp6_sp6.fasta,45.83333,42.70833,NA,45.31250,NA,42.70833,45.83333,NA,NA,42.70833" />
-                </assert_contents>
-            </output>
-            <output name="percent_pur">
-                <assert_contents>
-                    <has_line line="orthogroup_2_sp6_sp6.fasta,56.25000,54.16667,NA,55.72917,NA,56.77083,57.81250,NA,NA,56.77083" />
-                </assert_contents>
-            </output>
-            <output name="purine_load">
-                <assert_contents>
-                    <has_line line="orthogroup_2_sp6_sp6.fasta,192,12,12,62.50000,62.50000,192,12,4,62.50000,20.83333,NA,NA,NA,NA,NA,192,11,11,57.29167,57.29167,NA,NA,NA,NA,NA,192,16,10,83.33333,52.08333,192,10,20,52.08333,104.16667,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,192,14,12,72.91667,62.50000" />
-                </assert_contents>
-            </output>
-        </test>
         
         <test>
             <conditional name="method" >
                 <param name="method_run" value="separated" />
-                <param name="format_run" value="proteic" />
-                <param name="sep_file" ftype="fasta" value="sep_aa/orthogroup_1_sp6_sp6.fasta,sep_aa/orthogroup_1_sp8_sp8.fasta,sep_aa/orthogroup_2_sp6_sp6.fasta" />
-                <param name="concat_phy" ftype="fasta" value="phylogeny_concat.fasta" />
-            </conditional>            
-            <output name="ivywrel">
-                <assert_contents>
-                    <has_line line="orthogroup_1_sp8_sp8.fasta,25.00000,0.36765,28.00000,0.36364,NA,NA,NA,NA,27.00000,0.35065,27.00000,0.35065,28.00000,0.36364,0.00000,0.00000,27.00000,0.40909,27.00000,0.35065" />
-                </assert_contents>
-            </output>
-            <output name="rhkde">
-                <assert_contents>
-                    <has_line line="orthogroup_1_sp6_sp6.fasta,28.00000,0.35897,14.00000,0.17949,14.00000,0.17949,30.00000,0.38462,16.00000,0.20513,14.00000,0.17949,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,30.00000,0.38462,16.00000,0.20513,14.00000,0.17949,30.00000,0.38462,16.00000,0.20513,14.00000,0.17949,30.00000,0.38462,16.00000,0.20513,14.00000,0.17949,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,30.00000,0.38462,16.00000,0.20513,14.00000,0.17949"/>
-                </assert_contents>
-            </output>
-            <output name="payre_mvgds">
-                <assert_contents>
-                    <has_line line="orthogroup_1_sp8_sp8.fasta,16.00000,0.23529,3.00000,0.04412,27.00000,0.39706,0.59259,0.11111,18.00000,0.23377,4.00000,0.05195,29.00000,0.37662,0.62069,0.13793,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,19.00000,0.24675,6.00000,0.07792,30.00000,0.38961,0.63333,0.20000,20.00000,0.25974,7.00000,0.09091,32.00000,0.41558,0.62500,0.21875,20.00000,0.25974,5.00000,0.06494,29.00000,0.37662,0.68966,0.17241,0.00000,0.00000,0.00000,0.00000,0.00000,0.00000,0.00000,0.00000,14.00000,0.21212,2.00000,0.03030,26.00000,0.39394,0.53846,0.07692,19.00000,0.24675,6.00000,0.07792,32.00000,0.41558,0.59375,0.18750"/>
-                </assert_contents>
-            </output>
-            <output name="avlimfyw">
-                <assert_contents>
-                    <has_line line="orthogroup_2_sp6_sp6.fasta,27.00000,0.42188,21.00000,0.32812,6.00000,0.09375,28.00000,0.43750,22.00000,0.34375,6.00000,0.09375,NA,NA,NA,NA,NA,NA,28.00000,0.43750,22.00000,0.34375,6.00000,0.09375,NA,NA,NA,NA,NA,NA,28.00000,0.43750,22.00000,0.34375,6.00000,0.09375,30.00000,0.46875,24.00000,0.37500,6.00000,0.09375,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,28.00000,0.43750,22.00000,0.34375,6.00000,0.09375"/>
-                </assert_contents>
-            </output>           
+                <param name="format_run" value="nucleic" />
+                <param name="sep_file" ftype="fasta" value="sep_nuc/orthogroup_109_with_3_species.fasta,sep_nuc/orthogroup_113_with_4_species.fasta,sep_nuc/orthogroup_253_with_2_species.fasta,sep_nuc/orthogroup_283_with_2_species.fasta,sep_nuc/orthogroup_299_with_2_species.fasta,sep_nuc/orthogroup_301_with_4_species.fasta,sep_nuc/orthogroup_316_with_4_species.fasta,sep_nuc/orthogroup_335_with_4_species.fasta,sep_nuc/orthogroup_343_with_4_species.fasta,sep_nuc/orthogroup_368_with_4_species.fasta,sep_nuc/orthogroup_404_with_4_species.fasta,sep_nuc/orthogroup_442_with_4_species.fasta,sep_nuc/orthogroup_487_with_4_species.fasta,sep_nuc/orthogroup_508_with_4_species.fasta,sep_nuc/orthogroup_544_with_4_species.fasta,sep_nuc/orthogroup_546_with_4_species.fasta,sep_nuc/orthogroup_588_with_4_species.fasta,sep_nuc/orthogroup_623_with_4_species.fasta,sep_nuc/orthogroup_651_with_4_species.fasta,sep_nuc/orthogroup_660_with_4_species.fasta,sep_nuc/orthogroup_696_with_4_species.fasta,sep_nuc/orthogroup_707_with_4_species.fasta,sep_nuc/orthogroup_727_with_4_species.fasta,sep_nuc/orthogroup_761_with_4_species.fasta" />
+                <param name="sps_list" value="Ha,Lf,Bs,Bj" />
+                <param name="sps_gp1" value="Ha,Lf" />
+                <param name="sps_gp2" value="Bs,Bj" />
+            </conditional>
+            <output_collection name="tables_nuc" type="list">
+                <element name="A" value="02_tables_per_nucleotide/A.csv" />
+                <element name="C" value="02_tables_per_nucleotide/C.csv" />
+                <element name="G" value="02_tables_per_nucleotide/G.csv" />
+                <element name="T" value="02_tables_per_nucleotide/T.csv" />
+            </output_collection>
+            <output_collection name="tables_nuc_var" type="list">
+                <element name="purine_percent" value="02_tables_per_nuc_variable/purine_percent.csv" />
+                <element name="GC_percent" value="02_tables_per_nuc_variable/_GC_percent.csv" />
+                <element name="DIFF_GC" value="02_tables_per_nuc_variable/DIFF_GC.csv" />
+                <element name="DIFF_AT" value="02_tables_per_nuc_variable/DIFF_AT.csv" />
+                <element name="PLI_GC" value="02_tables_per_nuc_variable/PLI_GC.csv" />
+                <element name="PLI_AT" value="02_tables_per_nuc_variable/PLI_AT.csv"  />
+                <element name="PLI_GC_1000" value="02_tables_per_nuc_variable/PLI_GC_1000.csv" />
+                <element name="PLI_AT_1000" value="02_tables_per_nuc_variable/PLI_AT_1000.csv" />
+            </output_collection>
+            <output_collection name="outputs_nuc" type="list">
+                <element name="A" value="04_outputs_nucleotides/A.csv" />
+                <element name="C" value="04_outputs_nucleotides/C.csv" />
+                <element name="G" value="04_outputs_nucleotides/G.csv" />
+                <element name="T" value="04_outputs_nucleotides/T.csv" />
+            </output_collection>
+            <output_collection name="outputs_nuc_var" type="list">
+                <element name="purine_percent" value="04_outputs_nuc_variables/purine_percent.csv" />
+                <element name="GC_percent" value="04_outputs_nuc_variables/GC_percent.csv" />
+                <element name="DIFF_GC" value="04_outputs_nuc_variables/DIFF_GC.csv" />
+                <element name="DIFF_AT" value="04_outputs_nuc_variables/DIFF_AT.csv" />
+                <element name="PLI_GC" value="04_outputs_nuc_variables/PLI_GC.csv" />
+                <element name="PLI_AT" value="04_outputs_nuc_variables/PLI_AT.csv" />
+                <element name="PLI_GC_1000" value="04_outputs_nuc_variables/PLI_GC_1000.csv" />
+                <element name="PLI_AT_1000" value="04_outputs_nuc_variables/PLI_AT_1000.csv" />
+            </output_collection>
         </test>
 
+        <test>
+            <conditional name="method" >
+                <param name="method_run" value="separated" />
+                <param name="format_run" value="proteic" />
+                <param name="sep_file" ftype="fasta" value="sep_aa/locus_3sp_2.fasta,sep_aa/locus_3sp_7.fasta,sep_aa/locus_4sp_4.fasta,sep_aa/locus_4sp_6.fasta,sep_aa/locus_6sp_10.fasta,sep_aa/locus_6sp_11.fasta,sep_aa/locus_6sp_16.fasta,sep_aa/locus_6sp_18.fasta,sep_aa/locus_6sp_25.fasta,sep_aa/locus_6sp_27.fasta,sep_aa/locus_6sp_30.fasta,sep_aa/locus_6sp_32.fasta,sep_aa/locus_6sp_35.fasta,sep_aa/locus_6sp_38.fasta,sep_aa/locus_6sp_39.fasta,sep_aa/locus_6sp_40.fasta,sep_aa/locus_6sp_41.fasta,sep_aa/locus_6sp_46.fasta,sep_aa/locus_6sp_47.fasta,sep_aa/locus_6sp_50.fasta,sep_aa/locus_6sp_53.fasta,sep_aa/locus_6sp_57.fasta,sep_aa/locus_6sp_58.fasta,sep_aa/locus_6sp_60.fasta" />
+                <param name="sps_list" value="Ps,Pp,Pf,Ac,Pg,Ap" />
+                <param name="sps_gp1" value="Pp,Pg" />
+                <param name="sps_gp2" value="Ap,Ps" />
+            </conditional>
+            <output_collection name="tables_aa" type="list">
+                <element name="A" value="02_tables_per_aa/A.csv" />
+                <element name="C" value="02_tables_per_aa/C.csv" />
+                <element name="D" value="02_tables_per_aa/D.csv" />
+                <element name="E" value="02_tables_per_aa/E.csv" />
+                <element name="F" value="02_tables_per_aa/F.csv" />
+                <element name="G" value="02_tables_per_aa/G.csv" />
+                <element name="H" value="02_tables_per_aa/H.csv" />
+                <element name="I" value="02_tables_per_aa/I.csv" />
+                <element name="K" value="02_tables_per_aa/K.csv" />
+                <element name="L" value="02_tables_per_aa/L.csv" />
+                <element name="M" value="02_tables_per_aa/M.csv" />
+                <element name="N" value="02_tables_per_aa/N.csv" />
+                <element name="P" value="02_tables_per_aa/P.csv" />
+                <element name="Q" value="02_tables_per_aa/Q.csv" />
+                <element name="R" value="02_tables_per_aa/R.csv" />
+                <element name="S" value="02_tables_per_aa/S.csv" />
+                <element name="T" value="02_tables_per_aa/T.csv" />
+                <element name="V" value="02_tables_per_aa/V.csv" />
+                <element name="W" value="02_tables_per_aa/W.csv" />
+                <element name="Y" value="02_tables_per_aa/Y.csv" />
+            </output_collection>
+            <output_collection name="tables_variables" type="list">
+                <element name="AC" value="02_tables_per_aa_variable/AC.csv" />
+                <element name="APGC" value="02_tables_per_aa_variable/APGC.csv" />
+                <element name="AVLIMFYW" value="02_tables_per_aa_variable/AVLIMFYW.csv" />
+                <element name="DE" value="02_tables_per_aa_variable/DE.csv" />
+                <element name="DNQTSHA" value="02_tables_per_aa_variable/DNQTSHA.csv" />
+                <element name="EK" value="02_tables_per_aa_variable/EK.csv" />
+                <element name="ERK" value="02_tables_per_aa_variable/ERK.csv" />
+                <element name="FYMINK" value="02_tables_per_aa_variable/FYMINK.csv" />
+                <element name="FYW" value="02_tables_per_aa_variable/FYW.csv" />
+                <element name="GARP" value="02_tables_per_aa_variable/GARP.csv" />
+                <element name="IVYWREL" value="02_tables_per_aa_variable/IVYWREL.csv" />
+                <element name="QH" value="02_tables_per_aa_variable/QH.csv" />
+                <element name="ratio_AC_VLIM" value="02_tables_per_aa_variable/ratio_AC_VLIM.csv" />
+                <element name="ratio_APGC_VLIM" value="02_tables_per_aa_variable/ratio_APGC_VLIM.csv" />
+                <element name="ratio_EK_QH" value="02_tables_per_aa_variable/ratio_EK_QH.csv" />
+                <element name="ratio_ERK_DNQTSHA" value="02_tables_per_aa_variable/ratio_ERK_DNQTSHA.csv" />
+                <element name="ratio_GARP_FYMINK" value="02_tables_per_aa_variable/ratio_GARP_FYMINK.csv" />
+                <element name="RHK" value="02_tables_per_aa_variable/RHK.csv" />
+                <element name="RHKDE" value="02_tables_per_aa_variable/RHKDE.csv" />
+                <element name="STNQ" value="02_tables_per_aa_variable/STNQ.csv" />
+                <element name="VLIM" value="02_tables_per_aa_variable/VLIM.csv" />
+                <element name="AVLIM" value="02_tables_per_aa_variable/AVLIM.csv" />
+                <element name="total_hydratation" value="02_tables_per_aa_variable/total_hydratation.csv" />
+                <element name="total_partial_specific_volume" value="02_tables_per_aa_variable/total_partial_specific_volume.csv" />
+                <element name="total_residue_volume" value="02_tables_per_aa_variable/total_residue_volume.csv" />
+                <element name="total_residue_weight" value="02_tables_per_aa_variable/total_residue_weight.csv" />
+            </output_collection>
+            <output_collection name="outputs_aa" type="list">
+                <element name="A" value="04_outputs_aa/A.csv" />
+                <element name="C" value="04_outputs_aa/C.csv" />
+                <element name="D" value="04_outputs_aa/D.csv" />
+                <element name="E" value="04_outputs_aa/E.csv" />
+                <element name="F" value="04_outputs_aa/F.csv" />
+                <element name="G" value="04_outputs_aa/G.csv" />
+                <element name="H" value="04_outputs_aa/H.csv" />
+                <element name="I" value="04_outputs_aa/I.csv" />
+                <element name="K" value="04_outputs_aa/K.csv" />
+                <element name="L" value="04_outputs_aa/L.csv" />
+                <element name="M" value="04_outputs_aa/M.csv" />
+                <element name="N" value="04_outputs_aa/N.csv" />
+                <element name="P" value="04_outputs_aa/P.csv" />
+                <element name="Q" value="04_outputs_aa/Q.csv" />
+                <element name="R" value="04_outputs_aa/R.csv" />
+                <element name="S" value="04_outputs_aa/S.csv" />
+                <element name="T" value="04_outputs_aa/T.csv" />
+                <element name="V" value="04_outputs_aa/V.csv" />
+                <element name="W" value="04_outputs_aa/W.csv" />
+                <element name="Y" value="04_outputs_aa/Y.csv" />
+            </output_collection>
+            <output_collection name="outputs_variables" type="list">
+                <element name="AC" value="04_outputs_aa_variables/AC.csv" />
+                <element name="APGC" value="04_outputs_aa_variables/APGC.csv" />
+                <element name="AVLIMFYW" value="04_outputs_aa_variables/AVLIMFYW.csv" />
+                <element name="DE" value="04_outputs_aa_variables/DE.csv" />
+                <element name="DNQTSHA" value="04_outputs_aa_variables/DNQTSHA.csv" />
+                <element name="EK" value="04_outputs_aa_variables/EK.csv" />
+                <element name="ERK" value="04_outputs_aa_variables/ERK.csv" />
+                <element name="FYMINK" value="04_outputs_aa_variables/FYMINK.csv"  />
+                <element name="FYW" value="04_outputs_aa_variables/FYW.csv"  />
+                <element name="GARP" value="04_outputs_aa_variables/GARP.csv"  />
+                <element name="IVYWREL" value="04_outputs_aa_variables/IVYWREL.csv" />
+                <element name="QH" value="04_outputs_aa_variables/QH.csv"  />
+                <element name="ratio_AC_VLIM" value="04_outputs_aa_variables/ratio_AC_VLIM.csv"  />
+                <element name="ratio_APGC_VLIM" value="04_outputs_aa_variables/ratio_APGC_VLIM.csv"  />
+                <element name="ratio_EK_QH" value="04_outputs_aa_variables/ratio_EK_QH.csv" />
+                <element name="ratio_ERK_DNQTSHA" value="04_outputs_aa_variables/ratio_ERK_DNQTSHA.csv" />
+                <element name="ratio_GARP_FYMINK" value="04_outputs_aa_variables/ratio_GARP_FYMINK.csv" />
+                <element name="RHK" value="04_outputs_aa_variables/RHK.csv" />
+                <element name="RHKDE" value="04_outputs_aa_variables/RHKDE.csv" />
+                <element name="STNQ" value="04_outputs_aa_variables/STNQ.csv" />
+                <element name="VLIM" value="04_outputs_aa_variables/VLIM.csv" />
+                <element name="AVLIM" value="04_outputs_aa_variables/AVLIM.csv" />
+                <element name="total_hydratation" value="04_outputs_aa_variables/total_hydratation.csv" />
+                <element name="total_partial_specific_volume" value="04_outputs_aa_variables/total_partial_specific_volume.csv" />
+                <element name="total_residue_volume" value="04_outputs_aa_variables/total_residue_volume.csv" />
+                <element name="total_residue_weight" value="04_outputs_aa_variables/total_residue_weight.csv" />
+            </output_collection>
+        </test>
     </tests>
 
     <help>
@@ -298,6 +379,9 @@ Many outputs in .csv format , varying according to the chosen method and format 
 
 Changelog
 ---------
+
+**Version 2.2 - 10/07/2018**
+- Updated separated mode : added a binomial sign test
 
 **Version 2.1 - 26/02/2017**
 - Fully re-written the concat method : fixed mistakes + cleaner code
