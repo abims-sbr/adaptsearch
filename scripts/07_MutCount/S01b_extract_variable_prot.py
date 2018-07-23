@@ -199,7 +199,7 @@ def sequence_properties_from_aa_properties(aa_counts, aa_properties):
         - seq_props (dict) : values of the sequence properties
     """
 
-    LS = ['total_residue_weight', 'total_residue_volume', 'total_partial_specific_volume', 'total_hydration']
+    LS = ['total_residue_weight', 'total_residue_volume', 'total_partial_specific_volume', 'total_hydratation']
     seq_props = {}
 
     for i in range(1,5):
@@ -221,7 +221,7 @@ def main():
     LV = ['IVYWREL','EK','ERK','DNQTSHA','QH','ratio_ERK_DNQTSHA','ratio_EK_QH','FYMINK','GARP',
           'ratio_GARP_FYMINK','AVLIM','FYW','AVLIMFYW','STNQ','RHK','DE','RHKDE','APGC','AC',
           'VLIM','ratio_AC_VLIM','ratio_APGC_VLIM']
-    LS = ['total_residue_weight', 'total_residue_volume', 'total_partial_specific_volume', 'total_hydration']
+    LS = ['total_residue_weight', 'total_residue_volume', 'total_partial_specific_volume', 'total_hydratation']
 
     list_inputs = []
 
