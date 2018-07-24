@@ -121,10 +121,15 @@ def main():
 
     # Prepare colnames for final frames
     colnames = {}
+    # for specie in sps_group_1:
+    #     colnames[specie] = '{}_vs_condition_1'.format(specie)
+    # for specie in sps_group_2:
+    #     colnames[specie] = '{}_vs_condition_2'.format(specie)
+
     for specie in sps_group_1:
-        colnames[specie] = '{}_vs_condition_1'.format(specie)
+        colnames[specie] = '{}_vs_{}'.format(specie, args.sps_group_2.replace(',',''))
     for specie in sps_group_2:
-        colnames[specie] = '{}_vs_condition_2'.format(specie)
+        colnames[specie] = '{}_vs_{}'.format(specie, args.sps_group_1.replace(',',''))
 
     # Building tables
     if args.format == 'nucleic':

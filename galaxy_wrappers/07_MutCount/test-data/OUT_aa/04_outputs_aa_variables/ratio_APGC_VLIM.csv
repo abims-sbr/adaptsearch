@@ -1,4 +1,4 @@
-"","Ap_vs_condition_2","Pg_vs_condition_1","Pp_vs_condition_1","Ps_vs_condition_2"
+"","Ap_vs_PpPg","Pg_vs_ApPs","Pp_vs_ApPs","Ps_vs_PpPg"
 "Greater",5,2,5,8
 "Lower",5,7,9,2
 "Difference",0,-5,-4,6
