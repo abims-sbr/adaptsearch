@@ -141,7 +141,7 @@
     </outputs>
 
     <tests>
-        
+
         <test>
             <conditional name="method" >
                 <param name="method_run" value="concat" />
@@ -171,47 +171,43 @@
                 <param name="sps_gp2" value="Bs,Bj" />
             </conditional>
             <output_collection name="tables_nuc" type="list" count="4">
-                <!--
-                <element name="A" value="OUT_nuc/02_tables_per_nucleotide/A.csv" lines_diff="4" />
-                <element name="C" value="OUT_nuc/02_tables_per_nucleotide/C.csv" lines_diff="4" />
-                <element name="G" value="OUT_nuc/02_tables_per_nucleotide/G.csv" lines_diff="4" />
-                <element name="T" value="OUT_nuc/02_tables_per_nucleotide/T.csv" lines_diff="4" />
-                -->
+                <element name="A" file="OUT_nuc/02_tables_per_nucleotide/A.csv" ftype="csv" compare="diff" lines_diff="8" />
+                <element name="C" file="OUT_nuc/02_tables_per_nucleotide/C.csv" ftype="csv" compare="diff" lines_diff="8" />
+                <element name="G" file="OUT_nuc/02_tables_per_nucleotide/G.csv" ftype="csv" compare="diff" lines_diff="8" />
+                <element name="T" file="OUT_nuc/02_tables_per_nucleotide/T.csv" ftype="csv" compare="diff" lines_diff="8" />
             </output_collection>
-            <output_collection name="tables_nuc_var" type="list" count="8">
+            <output_collection name="tables_nuc_var" type="list" count="8">                
+                <element name="DIFF_AT" file="OUT_nuc/02_tables_per_nuc_variable/DIFF_AT.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="DIFF_GC" file="OUT_nuc/02_tables_per_nuc_variable/DIFF_GC.csv" ftype="csv" compare="diff" lines_diff="6" />
                 <!--
-                <element name="purine_percent" value="OUT_nuc/02_tables_per_nuc_variable/purine_percent.csv" lines_diff="4" />
-                <element name="GC_percent" value="OUT_nuc/02_tables_per_nuc_variable/_GC_percent.csv" lines_diff="4" />
-                <element name="DIFF_GC" value="OUT_nuc/02_tables_per_nuc_variable/DIFF_GC.csv" lines_diff="4" />
-                <element name="DIFF_AT" value="OUT_nuc/02_tables_per_nuc_variable/DIFF_AT.csv" lines_diff="4" />
-                <element name="PLI_GC" value="OUT_nuc/02_tables_per_nuc_variable/PLI_GC.csv" lines_diff="4" />
-                <element name="PLI_AT" value="OUT_nuc/02_tables_per_nuc_variable/PLI_AT.csv" lines_diff="4"  />
-                <element name="PLI_GC_1000" value="OUT_nuc/02_tables_per_nuc_variable/PLI_GC_1000.csv" lines_diff="4" />
-                <element name="PLI_AT_1000" value="OUT_nuc/02_tables_per_nuc_variable/PLI_AT_1000.csv" lines_diff="4" />
-                -->
+                <element name="GC_percent" file="OUT_nuc/02_tables_per_nuc_variable/_GC_percent.csv" ftype="csv" compare="diff" lines_diff="6" />
+                -->              
+                <element name="PLI_AT" file="OUT_nuc/02_tables_per_nuc_variable/PLI_AT.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="PLI_AT_1000" file="OUT_nuc/02_tables_per_nuc_variable/PLI_AT_1000.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="PLI_GC" file="OUT_nuc/02_tables_per_nuc_variable/PLI_GC.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="PLI_GC_1000" file="OUT_nuc/02_tables_per_nuc_variable/PLI_GC_1000.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="purine_percent" file="OUT_nuc/02_tables_per_nuc_variable/purine_percent.csv" ftype="csv" compare="diff" lines_diff="6" />
             </output_collection>
             <output_collection name="outputs_nuc" type="list" count="4">
-                <!--
-                <element name="A" value="OUT_nuc/04_outputs_nucleotides/A.csv" lines_diff="4" />
-                <element name="C" value="OUT_nuc/04_outputs_nucleotides/C.csv" lines_diff="4" />
-                <element name="G" value="OUT_nuc/04_outputs_nucleotides/G.csv" lines_diff="4" />
-                <element name="T" value="OUT_nuc/04_outputs_nucleotides/T.csv" lines_diff="4" />
-                -->
+                <element name="A" file="OUT_nuc/04_outputs_nucleotides/A.csv" ftype="csv" compare="diff" lines_diff="8" />
+                <element name="C" file="OUT_nuc/04_outputs_nucleotides/C.csv" ftype="csv" compare="diff" lines_diff="8" />
+                <element name="G" file="OUT_nuc/04_outputs_nucleotides/G.csv" ftype="csv" compare="diff" lines_diff="8" />
+                <element name="T" file="OUT_nuc/04_outputs_nucleotides/T.csv" ftype="csv" compare="diff" lines_diff="8" />
             </output_collection>
             <output_collection name="outputs_nuc_var" type="list" count="8">
+                <element name="DIFF_AT" file="OUT_nuc/04_outputs_nuc_variables/DIFF_AT.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="DIFF_GC" file="OUT_nuc/04_outputs_nuc_variables/DIFF_GC.csv" ftype="csv" compare="diff" lines_diff="6" />
                 <!--
-                <element name="purine_percent" value="OUT_nuc/04_outputs_nuc_variables/purine_percent.csv" lines_diff="4" />
-                <element name="GC_percent" value="OUT_nuc/04_outputs_nuc_variables/GC_percent.csv" lines_diff="4" />
-                <element name="DIFF_GC" value="OUT_nuc/04_outputs_nuc_variables/DIFF_GC.csv" lines_diff="4" />
-                <element name="DIFF_AT" value="OUT_nuc/04_outputs_nuc_variables/DIFF_AT.csv" lines_diff="4" />
-                <element name="PLI_GC" value="OUT_nuc/04_outputs_nuc_variables/PLI_GC.csv" lines_diff="4" />
-                <element name="PLI_AT" value="OUT_nuc/04_outputs_nuc_variables/PLI_AT.csv" lines_diff="4" />
-                <element name="PLI_GC_1000" value="OUT_nuc/04_outputs_nuc_variables/PLI_GC_1000.csv" lines_diff="4" />
-                <element name="PLI_AT_1000" value="OUT_nuc/04_outputs_nuc_variables/PLI_AT_1000.csv" lines_diff="4" />
+                <element name="GC_percent" file="OUT_nuc/04_outputs_nuc_variables/GC_percent.csv" ftype="csv" compare="diff" lines_diff="6" />
                 -->
+                <element name="PLI_AT" file="OUT_nuc/04_outputs_nuc_variables/PLI_AT.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="PLI_AT_1000" file="OUT_nuc/04_outputs_nuc_variables/PLI_AT_1000.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="PLI_GC" file="OUT_nuc/04_outputs_nuc_variables/PLI_GC.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="PLI_GC_1000" file="OUT_nuc/04_outputs_nuc_variables/PLI_GC_1000.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="purine_percent" file="OUT_nuc/04_outputs_nuc_variables/purine_percent.csv" ftype="csv" compare="diff" lines_diff="6" />
             </output_collection>
-        </test>
-        
+        </test>    
+
         <test>
             <conditional name="method" >
                 <param name="method_run" value="separated" />
@@ -222,112 +218,109 @@
                 <param name="sps_gp2" value="Ap,Ps" />
             </conditional>
             <output_collection name="tables_aa" type="list" count="20">
-                <!--
-                <element name="A.csv" file="OUT_aa/02_tables_per_aa/A.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="C.csv" file="OUT_aa/02_tables_per_aa/C.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="D.csv" file="OUT_aa/02_tables_per_aa/D.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="E.csv" file="OUT_aa/02_tables_per_aa/E.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="F.csv" file="OUT_aa/02_tables_per_aa/F.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="G.csv" file="OUT_aa/02_tables_per_aa/G.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="H.csv" file="OUT_aa/02_tables_per_aa/H.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="I.csv" file="OUT_aa/02_tables_per_aa/I.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="K.csv" file="OUT_aa/02_tables_per_aa/K.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="L.csv" file="OUT_aa/02_tables_per_aa/L.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="M.csv" file="OUT_aa/02_tables_per_aa/M.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="N.csv" file="OUT_aa/02_tables_per_aa/N.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="P.csv" file="OUT_aa/02_tables_per_aa/P.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="Q.csv" file="OUT_aa/02_tables_per_aa/Q.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="R.csv" file="OUT_aa/02_tables_per_aa/R.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="S.csv" file="OUT_aa/02_tables_per_aa/S.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="T.csv" file="OUT_aa/02_tables_per_aa/T.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="V.csv" file="OUT_aa/02_tables_per_aa/V.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="W.csv" file="OUT_aa/02_tables_per_aa/W.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="Y.csv" file="OUT_aa/02_tables_per_aa/Y.csv" ftype="csv" compare="diff" lines_diff="4" />
-                -->
+                <element name="A" file="OUT_aa/02_tables_per_aa/A.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="C" file="OUT_aa/02_tables_per_aa/C.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="D" file="OUT_aa/02_tables_per_aa/D.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="E" file="OUT_aa/02_tables_per_aa/E.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="F" file="OUT_aa/02_tables_per_aa/F.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="G" file="OUT_aa/02_tables_per_aa/G.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="H" file="OUT_aa/02_tables_per_aa/H.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="I" file="OUT_aa/02_tables_per_aa/I.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="K" file="OUT_aa/02_tables_per_aa/K.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="L" file="OUT_aa/02_tables_per_aa/L.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="M" file="OUT_aa/02_tables_per_aa/M.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="N" file="OUT_aa/02_tables_per_aa/N.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="P" file="OUT_aa/02_tables_per_aa/P.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="Q" file="OUT_aa/02_tables_per_aa/Q.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="R" file="OUT_aa/02_tables_per_aa/R.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="S" file="OUT_aa/02_tables_per_aa/S.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="T" file="OUT_aa/02_tables_per_aa/T.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="V" file="OUT_aa/02_tables_per_aa/V.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="W" file="OUT_aa/02_tables_per_aa/W.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="Y" file="OUT_aa/02_tables_per_aa/Y.csv" ftype="csv" compare="diff" lines_diff="6" />
             </output_collection>
             <output_collection name="tables_variables" type="list" count="26">
+                
+                <element name="AC" file="OUT_aa/02_tables_per_aa_variable/AC.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="APGC" file="OUT_aa/02_tables_per_aa_variable/APGC.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="AVLIM" file="OUT_aa/02_tables_per_aa_variable/AVLIM.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="AVLIMFYW" file="OUT_aa/02_tables_per_aa_variable/AVLIMFYW.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="DE" file="OUT_aa/02_tables_per_aa_variable/DE.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="DNQTSHA" file="OUT_aa/02_tables_per_aa_variable/DNQTSHA.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="EK" file="OUT_aa/02_tables_per_aa_variable/EK.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="ERK" file="OUT_aa/02_tables_per_aa_variable/ERK.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="FYMINK" file="OUT_aa/02_tables_per_aa_variable/FYMINK.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="FYW" file="OUT_aa/02_tables_per_aa_variable/FYW.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="GARP" file="OUT_aa/02_tables_per_aa_variable/GARP.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="IVYWREL" file="OUT_aa/02_tables_per_aa_variable/IVYWREL.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="QH" file="OUT_aa/02_tables_per_aa_variable/QH.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="ratio_AC_VLIM" file="OUT_aa/02_tables_per_aa_variable/ratio_AC_VLIM.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="ratio_APGC_VLIM" file="OUT_aa/02_tables_per_aa_variable/ratio_APGC_VLIM.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="ratio_EK_QH" file="OUT_aa/02_tables_per_aa_variable/ratio_EK_QH.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="ratio_ERK_DNQTSHA" file="OUT_aa/02_tables_per_aa_variable/ratio_ERK_DNQTSHA.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="ratio_GARP_FYMINK" file="OUT_aa/02_tables_per_aa_variable/ratio_GARP_FYMINK.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="RHK" file="OUT_aa/02_tables_per_aa_variable/RHK.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="RHKDE" file="OUT_aa/02_tables_per_aa_variable/RHKDE.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="STNQ" file="OUT_aa/02_tables_per_aa_variable/STNQ.csv" ftype="csv" compare="diff" lines_diff="6" />
                 <!--
-                <element name="AC.csv" file="OUT_aa/02_tables_per_aa_variable/AC.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="APGC.csv" file="OUT_aa/02_tables_per_aa_variable/APGC.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="AVLIMFYW.csv" file="OUT_aa/02_tables_per_aa_variable/AVLIMFYW.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="DE.csv" file="OUT_aa/02_tables_per_aa_variable/DE.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="DNQTSHA.csv" file="OUT_aa/02_tables_per_aa_variable/DNQTSHA.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="EK.csv" file="OUT_aa/02_tables_per_aa_variable/EK.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="ERK.csv" file="OUT_aa/02_tables_per_aa_variable/ERK.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="FYMINK.csv" file="OUT_aa/02_tables_per_aa_variable/FYMINK.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="FYW.csv" file="OUT_aa/02_tables_per_aa_variable/FYW.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="GARP.csv" file="OUT_aa/02_tables_per_aa_variable/GARP.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="IVYWREL.csv" file="OUT_aa/02_tables_per_aa_variable/IVYWREL.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="QH.csv" file="OUT_aa/02_tables_per_aa_variable/QH.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="ratio_AC_VLIM.csv" file="OUT_aa/02_tables_per_aa_variable/ratio_AC_VLIM.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="ratio_APGC_VLIM.csv" file="OUT_aa/02_tables_per_aa_variable/ratio_APGC_VLIM.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="ratio_EK_QH.csv" file="OUT_aa/02_tables_per_aa_variable/ratio_EK_QH.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="ratio_ERK_DNQTSHA.csv" file="OUT_aa/02_tables_per_aa_variable/ratio_ERK_DNQTSHA.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="ratio_GARP_FYMINK.csv" file="OUT_aa/02_tables_per_aa_variable/ratio_GARP_FYMINK.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="RHK.csv" file="OUT_aa/02_tables_per_aa_variable/RHK.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="RHKDE.csv" file="OUT_aa/02_tables_per_aa_variable/RHKDE.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="STNQ.csv" file="OUT_aa/02_tables_per_aa_variable/STNQ.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="VLIM.csv" file="OUT_aa/02_tables_per_aa_variable/VLIM.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="AVLIM.csv" file="OUT_aa/02_tables_per_aa_variable/AVLIM.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="total_hydratation.csv" file="OUT_aa/02_tables_per_aa_variable/total_hydratation.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="total_partial_specific_volume.csv" file="OUT_aa/02_tables_per_aa_variable/total_partial_specific_volume.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="total_residue_volume.csv" file="OUT_aa/02_tables_per_aa_variable/total_residue_volume.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="total_residue_weight.csv" file="OUT_aa/02_tables_per_aa_variable/total_residue_weight.csv" ftype="csv" compare="diff" lines_diff="4" />
-            -->
+                <element name="total_hydratation" file="OUT_aa/02_tables_per_aa_variable/total_hydratation.csv" ftype="csv" compare="diff" lines_diff="6" />
+                -->
+                <element name="total_partial_specific_volume" file="OUT_aa/02_tables_per_aa_variable/total_partial_specific_volume.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="total_residue_volume" file="OUT_aa/02_tables_per_aa_variable/total_residue_volume.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="total_residue_weight" file="OUT_aa/02_tables_per_aa_variable/total_residue_weight.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="VLIM" file="OUT_aa/02_tables_per_aa_variable/VLIM.csv" ftype="csv" compare="diff" lines_diff="6" />
             </output_collection>
             <output_collection name="outputs_aa" type="list" count="20">
-                <!--
-                <element name="A.csv" file="OUT_aa/04_outputs_aa/A.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="C.csv" file="OUT_aa/04_outputs_aa/C.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="D.csv" file="OUT_aa/04_outputs_aa/D.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="E.csv" file="OUT_aa/04_outputs_aa/E.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="F.csv" file="OUT_aa/04_outputs_aa/F.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="G.csv" file="OUT_aa/04_outputs_aa/G.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="H.csv" file="OUT_aa/04_outputs_aa/H.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="I.csv" file="OUT_aa/04_outputs_aa/I.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="K.csv" file="OUT_aa/04_outputs_aa/K.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="L.csv" file="OUT_aa/04_outputs_aa/L.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="M.csv" file="OUT_aa/04_outputs_aa/M.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="N.csv" file="OUT_aa/04_outputs_aa/N.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="P.csv" file="OUT_aa/04_outputs_aa/P.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="Q.csv" file="OUT_aa/04_outputs_aa/Q.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="R.csv" file="OUT_aa/04_outputs_aa/R.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="S.csv" file="OUT_aa/04_outputs_aa/S.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="T.csv" file="OUT_aa/04_outputs_aa/T.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="V.csv" file="OUT_aa/04_outputs_aa/V.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="W.csv" file="OUT_aa/04_outputs_aa/W.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="Y.csv" file="OUT_aa/04_outputs_aa/Y.csv" ftype="csv" compare="diff" lines_diff="4" />
-                -->
+                <element name="A" file="OUT_aa/04_outputs_aa/A.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="C" file="OUT_aa/04_outputs_aa/C.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="D" file="OUT_aa/04_outputs_aa/D.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="E" file="OUT_aa/04_outputs_aa/E.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="F" file="OUT_aa/04_outputs_aa/F.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="G" file="OUT_aa/04_outputs_aa/G.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="H" file="OUT_aa/04_outputs_aa/H.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="I" file="OUT_aa/04_outputs_aa/I.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="K" file="OUT_aa/04_outputs_aa/K.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="L" file="OUT_aa/04_outputs_aa/L.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="M" file="OUT_aa/04_outputs_aa/M.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="N" file="OUT_aa/04_outputs_aa/N.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="P" file="OUT_aa/04_outputs_aa/P.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="Q" file="OUT_aa/04_outputs_aa/Q.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="R" file="OUT_aa/04_outputs_aa/R.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="S" file="OUT_aa/04_outputs_aa/S.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="T" file="OUT_aa/04_outputs_aa/T.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="V" file="OUT_aa/04_outputs_aa/V.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="W" file="OUT_aa/04_outputs_aa/W.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="Y" file="OUT_aa/04_outputs_aa/Y.csv" ftype="csv" compare="diff" lines_diff="6" />
             </output_collection>
             <output_collection name="outputs_variables" type="list" count="26">
+                <element name="AC" file="OUT_aa/04_outputs_aa_variables/AC.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="APGC" file="OUT_aa/04_outputs_aa_variables/APGC.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="AVLIM" file="OUT_aa/04_outputs_aa_variables/AVLIM.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="AVLIMFYW" file="OUT_aa/04_outputs_aa_variables/AVLIMFYW.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="DE" file="OUT_aa/04_outputs_aa_variables/DE.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="DNQTSHA" file="OUT_aa/04_outputs_aa_variables/DNQTSHA.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="EK" file="OUT_aa/04_outputs_aa_variables/EK.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="ERK" file="OUT_aa/04_outputs_aa_variables/ERK.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="FYMINK" file="OUT_aa/04_outputs_aa_variables/FYMINK.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="FYW" file="OUT_aa/04_outputs_aa_variables/FYW.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="GARP" file="OUT_aa/04_outputs_aa_variables/GARP.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="IVYWREL" file="OUT_aa/04_outputs_aa_variables/IVYWREL.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="QH" file="OUT_aa/04_outputs_aa_variables/QH.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="ratio_AC_VLIM" file="OUT_aa/04_outputs_aa_variables/ratio_AC_VLIM.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="ratio_APGC_VLIM" file="OUT_aa/04_outputs_aa_variables/ratio_APGC_VLIM.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="ratio_EK_QH" file="OUT_aa/04_outputs_aa_variables/ratio_EK_QH.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="ratio_ERK_DNQTSHA" file="OUT_aa/04_outputs_aa_variables/ratio_ERK_DNQTSHA.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="ratio_GARP_FYMINK" file="OUT_aa/04_outputs_aa_variables/ratio_GARP_FYMINK.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="RHK" file="OUT_aa/04_outputs_aa_variables/RHK.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="RHKDE" file="OUT_aa/04_outputs_aa_variables/RHKDE.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="STNQ" file="OUT_aa/04_outputs_aa_variables/STNQ.csv" ftype="csv" compare="diff" lines_diff="6" />
                 <!--
-                <element name="AC.csv" file="OUT_aa/04_outputs_aa_variables/AC.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="APGC.csv" file="OUT_aa/04_outputs_aa_variables/APGC.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="AVLIMFYW.csv" file="OUT_aa/04_outputs_aa_variables/AVLIMFYW.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="DE.csv" file="OUT_aa/04_outputs_aa_variables/DE.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="DNQTSHA.csv" file="OUT_aa/04_outputs_aa_variables/DNQTSHA.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="EK.csv" file="OUT_aa/04_outputs_aa_variables/EK.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="ERK.csv" file="OUT_aa/04_outputs_aa_variables/ERK.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="FYMINK.csv" file="OUT_aa/04_outputs_aa_variables/FYMINK.csv" ftype="csv" compare="diff" lines_diff="4"  />
-                <element name="FYW.csv" file="OUT_aa/04_outputs_aa_variables/FYW.csv" ftype="csv" compare="diff" lines_diff="4"  />
-                <element name="GARP.csv" file="OUT_aa/04_outputs_aa_variables/GARP.csv" ftype="csv" compare="diff" lines_diff="4"  />
-                <element name="IVYWREL.csv" file="OUT_aa/04_outputs_aa_variables/IVYWREL.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="QH.csv" file="OUT_aa/04_outputs_aa_variables/QH.csv" ftype="csv" compare="diff" lines_diff="4"  />
-                <element name="ratio_AC_VLIM.csv" file="OUT_aa/04_outputs_aa_variables/ratio_AC_VLIM.csv" ftype="csv" compare="diff" lines_diff="4"  />
-                <element name="ratio_APGC_VLIM.csv" file="OUT_aa/04_outputs_aa_variables/ratio_APGC_VLIM.csv" ftype="csv" compare="diff" lines_diff="4"  />
-                <element name="ratio_EK_QH.csv" file="OUT_aa/04_outputs_aa_variables/ratio_EK_QH.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="ratio_ERK_DNQTSHA.csv" file="OUT_aa/04_outputs_aa_variables/ratio_ERK_DNQTSHA.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="ratio_GARP_FYMINK.csv" file="OUT_aa/04_outputs_aa_variables/ratio_GARP_FYMINK.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="RHK.csv" file="OUT_aa/04_outputs_aa_variables/RHK.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="RHKDE.csv" file="OUT_aa/04_outputs_aa_variables/RHKDE.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="STNQ.csv" file="OUT_aa/04_outputs_aa_variables/STNQ.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="VLIM.csv" file="OUT_aa/04_outputs_aa_variables/VLIM.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="AVLIM.csv" file="OUT_aa/04_outputs_aa_variables/AVLIM.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="total_hydratation.csv" file="OUT_aa/04_outputs_aa_variables/total_hydratation.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="total_partial_specific_volume.csv" file="OUT_aa/04_outputs_aa_variables/total_partial_specific_volume.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="total_residue_volume.csv" file="OUT_aa/04_outputs_aa_variables/total_residue_volume.csv" ftype="csv" compare="diff" lines_diff="4" />
-                <element name="total_residue_weight.csv" file="OUT_aa/04_outputs_aa_variables/total_residue_weight.csv" ftype="csv" compare="diff" lines_diff="4" />
+                <element name="total_hydratation" file="OUT_aa/04_outputs_aa_variables/total_hydratation.csv" ftype="csv" compare="diff" lines_diff="6" />
                 -->
+                <element name="total_partial_specific_volume" file="OUT_aa/04_outputs_aa_variables/total_partial_specific_volume.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="total_residue_volume" file="OUT_aa/04_outputs_aa_variables/total_residue_volume.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="total_residue_weight" file="OUT_aa/04_outputs_aa_variables/total_residue_weight.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="VLIM" file="OUT_aa/04_outputs_aa_variables/VLIM.csv" ftype="csv" compare="diff" lines_diff="6" />
             </output_collection>
         </test>
 
