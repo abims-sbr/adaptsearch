@@ -336,7 +336,7 @@
 
 *1-Separated mode*
 
-Input files are all the orthogroups computed by the AdaptSearch suite; COunts and test are computed on each group separatly. This mode counts occurrences of amino-acids or nucleic acids, according to the sequences type, in each distinct orthogroup. Then, two subgroups of species are set by the user :
+Input files are all the orthogroups computed by the AdaptSearch suite; Counts and test are computed on each group separatly. This mode counts occurrences of amino-acids or nucleic acids, according to the sequences type, in each distinct orthogroup. Then, two subgroups of species are set by the user :
 
 - A first group, constitued by species having something in common (an ecological trait, an ecological niche, a particular environmental adaptation)
 - A second group, constitued by species sharing the opposite trait (for example, the user can have a first subgroup made with species adapted to high temperatures and a second group made with species adapted to cold temperatures)
@@ -345,12 +345,12 @@ Within the groups, the program checks wether the occurrences of each element (am
 
 *2-Concatenated mode*
 
-The input file is the super-alignment obtained by concatenation of all the orthogroups computed by the AdaptSearch suite. This script counts the number of codons, amino acids, and types of amino acids in sequences, as well as the mutation bias from one item to another between 2 sequences. Counting is then compared to empirical p-values, obtained from bootstrapped sequences obtained from a subset of sequences.
+The input file is the super-alignment obtained by concatenation of all the orthogroups computed by the AdaptSearch suite. This script counts the number of codons, amino acids, and types of amino acids in sequences, as well as the mutation bias from one item to another between 2 sequences. Counts are then compared to empirical p-values, obtained from bootstrapped sequences obtained from a subset of sequences.
     
-In the output files, the pvalues indicate the position of the observed data in a distribution of empirical countings obtained from a resample of the data. Values above 0.95 indicate a significantly higher counting, values under 0.05 a significantly lower counting.
+In the output files, the pvalues indicate the position of the observed data in a distribution of empirical counts obtained from a resampling of the data. Values above 0.95 indicate a significantly higher count, values under 0.05 a significantly lower count.
 
-The script resamples random pairs of aligned codon to determine what countings can be expected under the hypothesis of an homogenous dataset.
-Countings are performed on each generated random alignement, thousands of alignments allow to draw a gaussian distribution of the countings.
+The script resamples random pairs of aligned codon to determine what counts can be expected under the hypothesis of an homogenous dataset.
+Counts are performed on each generated random alignement, thousands of alignments allow to draw a gaussian distribution of the counts.
 Then the script simply checks whether the observed data are within the 5% lowest or 5% highest values of the distribution.
 
 --------
@@ -373,11 +373,11 @@ There are parameters only for the "Concatenated" method :
 
 - The list of species for **countings**, separated by commas and without space (e.g : sp1,sp2,sp3,sp4). You can run the tool on subgroup of species, not only on the total number of species present in the previous tools.
 
-- The list of species for **resampling**, separated by commas and without space (e.g : sp1,sp2,sp3,sp4). You can run the tool on subgroup of species, not only on the total number of species present in the previous tools. 
+- The list of species for **resampling**, separated by commas and without space (e.g : sp1,sp2,sp3,sp4). You can run the tool on subgroup of species (at least two species), not only on the total number of species present in the previous tools. 
 
 - The number of iterations : the number of alignments that will be generated (effect on the resolution of the gaussian distribution). Shouldn't be lower than 1000 to have a relatively smooth gaussian distribution.
 
-- The number of sampled codons : the number of pairs of codons in each generated alignments (effect on the robustness on the countings performed on this alignement). Shouldn't be lower than 1000 to detect codons with relatively low occurence (<1%).
+- The number of sampled codons : the number of pairs of codons in each generated alignments (effect on the robustness on the counts performed on this alignement). Shouldn't be lower than 1000 to detect codons with relatively low occurence (<1%).
 
 --------
 
@@ -385,9 +385,8 @@ There are parameters only for the "Concatenated" method :
 
 Many outputs in .csv format , varying according to the chosen method and format (separated, nucleic ...)
     - When method = concat : 6 .csv outputs : countings of codons, amino acids, amino acids types, and transitions from amino acid to amino acid and from amino acid type to amino acid type.
-    - When method = separated and format = nucleic : 4 .csv outputs : nucleotide composition, GC percent, purine percent, purine load indice.
-    - When method = separated and format = proteic : 13 .csv outputs : protein composition, several files of countings various AA combinations, results on residues, hydratation, partial specific volume.
-
+    - When method = separated and format = nucleic : 4 collections with several .csv files : counts tables and binomial sign tests results for nucleotides and various indices (GC and purine percent ...) .
+    - When method = separated and format = proteic : 4 collections with several .csv files : counts tables and binomial sign tests results for amino-acids and various indices (thermophilic indices, hydratation, partial specific volume...).
 ---------
 
 **The AdaptSearch Pipeline**
