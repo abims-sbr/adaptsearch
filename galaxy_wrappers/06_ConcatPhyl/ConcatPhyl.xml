@@ -413,6 +413,8 @@ Changelog
 
 	</help>
 
-	<expand macro="citations" />
+    <citations>
+        <citation type="doi">10.1093/bioinformatics/btu033</citation>
+    </citations>
 
 </tool>

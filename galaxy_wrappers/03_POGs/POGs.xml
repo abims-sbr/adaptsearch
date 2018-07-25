@@ -114,8 +114,6 @@
 
 <![CDATA[
 
-**Last Version** : Victor Mataigne and Gildas Le Corguillé
-
 **Description**
 
 This tool parses homologous sequences obtained by pairwise and gather sequences into groups of orthologous sequences.
@@ -183,7 +181,5 @@ Changelog
     ]]>
 
 	</help>
-
-	<expand macro="citations" />
 
 </tool>
