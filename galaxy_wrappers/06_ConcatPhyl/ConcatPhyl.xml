@@ -160,12 +160,12 @@
 
 		<param name="out" type="select" label="What format of file do you want for your output (concatenation of the sequences) ? ">
 			<option value="nothing">No output</option>
-			<option value="fasta">Fasta format</option>
+			<option value="fasta" selected="true">Fasta format</option>
 			<option value="phylip">Phylip format</option>
 			<option value="nexus">Nexus format</option>
 		</param>
 		
-		<param name="raxml1" type="boolean" label="Do you want the output of RAxML : best tree ? " />
+		<param name="raxml1" type="boolean" checked="True" label="Do you want the output of RAxML : best tree ? " />
 		<param name="raxml3" type="boolean" label="Do you want the output of RAxML : bi-partition ? " />
 		<param name="raxml4" type="boolean" label="Do you want the output of RAxML : bootstrap ? " help="Only if the option 'rapid bootsptrap' is chosen. When you don't want to choose your options, this output is accessible"/>
 
