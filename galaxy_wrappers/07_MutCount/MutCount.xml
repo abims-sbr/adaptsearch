@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<tool name="MutCount" id="mutcount" version="2.1.1">
+<tool name="MutCount" id="mutcount" version="2.2.0">
     <description>
         This tool proceeds to count codons, amino acids on each species of a set of species, and then proceeds to permutation tests.
     </description>
@@ -403,7 +403,7 @@ Many outputs in .csv format , varying according to the chosen method and format 
 Changelog
 ---------
 
-**Version 2.2 - 10/07/2018**
+**Version 2.2.0 - 10/07/2018**
 - Updated separated mode : added a binomial sign test
 
 **Version 2.1 - 26/02/2017**
