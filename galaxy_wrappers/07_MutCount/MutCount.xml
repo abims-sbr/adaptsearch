@@ -58,7 +58,7 @@
             <when value="concat">
                 <param name="concat_nuc" type="data" format="fasta" label="Choose your fasta file in nucleic format" help="It must contain the concatenated file in NUCLEIC format from Phylogeny tool" />
                 <param name="list_species" type="text" size="100" label="List of species for countings" help="List the species separated with a comma (for e.g Ap,As,Ct,Gt,Yu)" />
-                <param name="list_species_boot" type="text" size="100" label="List of species used for resampling" help="List the species separated with a comma (for e.g Ap,As,Ct,Gt,Yu)" />
+                <param name="list_species_boot" type="text" size="100" label="List of species (at least two) used for resampling" help="List the species separated with a comma (for e.g Ap,As,Ct,Gt,Yu)" />
                 <param name="num_iter" type="integer" value="1000" min="0" label="Number of sampled codons" help="Sets the length (in codons) of the resampled sequences"/>
                 <param name="num_sampled" type="integer" value="1000" min="0" label="Number of iterations" help="Sets the number of resampled sequences"/>
             </when>
