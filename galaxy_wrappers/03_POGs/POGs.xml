@@ -128,14 +128,13 @@ The output of the tool 'Pairwise' (pairwise_DNA, nucleic format) (AdaptSearch su
 
 **Parameters**
 
-- Species minimum : drop orthogroups with less than n species : orthogroups with less than n species within won't be recorded.
-
-- verbose : check 'Yes' if you want a supplementary table : countings of orthogroups before the paralogous sequences removal.
-
-- paralogs : check 'Yes' if you also want to retrieve the orthogroups before the paralogous sequences removal.
+    - Species minimum : drop orthogroups with less than n species : orthogroups with less than n species within won't be recorded.
+    - verbose : check 'Yes' if you want a supplementary table : countings of orthogroups before the paralogous sequences removal.
+    - paralogs : check 'Yes' if you also want to retrieve the orthogroups before the paralogous sequences removal.
 
 
 .. class:: warningmark
+
 The minimum number of species per group only applies to the main output files. In the case of the 'paralogs' option, this parameter is more likely the minimum amount of sequences to keep.
 
 --------
@@ -155,6 +154,8 @@ This tool, produces the following files :
 **The AdaptSearch Pipeline**
 
 .. image:: adaptsearch_picture_helps.png
+
+---------
 
 Changelog
 ---------

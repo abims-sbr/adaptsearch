@@ -285,18 +285,6 @@
 
 <![CDATA[
 
-.. class:: infomark
-
-**Authors**
-The run RAxML was written by Alexandros Stamatakis.
-The script was written by Eric Fontanillas.
-
-.. class:: infomark
-
-**Galaxy integration** by Julie Baffard and ABiMS team.
-
---------
-
 **Description**
 
 This tool takes files containing fasta sequences (from the CDS_Search in the AdaptSearch suite) and run RAxML to build a phylogeny.

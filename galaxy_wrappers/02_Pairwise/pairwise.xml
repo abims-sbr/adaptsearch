@@ -197,9 +197,19 @@ This tool searches for different homologous genes from pairwise comparisons betw
 
     - 'Pairwise' : the general output. It gives the information about what the tool has done for each pairwise.
 
-    - 'Pairwise_DNA' : the output which contains nucleic sequences (of the pairwise) that are homologous. The sequences are with nucleotides. It shows for both the query and match :
-        the name        
-        the sequence in nucleotides
+    - 'Pairwise_DNA' : the output which contains nucleic sequences (of the pairwise) that are homologous. The sequences are in nucleic format. There are one file per couple of species, and homologous pairs are written by sets of 4 lines : 
+
+Exemple for two homologous pairs for the output file for species X/Y :
+
+| >Gene_A_species_X_homologous_to_Gene_B_species_Y
+| Nucleic_sequence_from_filter_assemblies
+| >Gene_B_species_Y_homologous_to_Gene_A_species_X
+| Nucleic_sequence_from_filter_assemblies
+| >Gene_C_species_X_homologous_to_Gene_D_species_Y
+| Nucleic_sequence_from_filter_assemblies
+| >Gene_D_species_Y_homologous_to_Gene_C_species_X
+| Nucleic_sequence_from_filter_assemblies
+
 
 --------
 
