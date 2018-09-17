@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # coding: utf8
 ## Author: Eric Fontanillas
 ## Modification: 03/09/14 by Julie BAFFARD
@@ -100,7 +100,6 @@ from dico import dico
 
 ### 0 ### PARAMETERS
 MIN_SPECIES_NB = int(sys.argv[1])
-MAX_sp = MIN_SPECIES_NB
 MIN_LENGTH_FINAL_ALIGNMENT_NUC = int(sys.argv[2])
 n0 = 0
 bad = 0

@@ -7,13 +7,14 @@
     <token name="@HELP_AUTHORS@">
 .. class:: infomark
 
-**Authors**  Eric Fontanillas creates the scripts of this pipeline.
+**Authors**  Eric Fontanillas created the version 1 of this pipeline. Victor Mataigne developped version 2.
 
 .. class:: infomark
 
-**Galaxy integration** ABiMS TEAM
+**Galaxy integration** Julie Baffard and ABiMS TEAM, Roscoff Marine Station
 
  | Contact support.abims@sb-roscoff.fr for any questions or concerns about the Galaxy implementation of this tool.
+ | Credits : Gildas le Corguillé, Misharl Monsoor
 
 ---------------------------------------------------
 

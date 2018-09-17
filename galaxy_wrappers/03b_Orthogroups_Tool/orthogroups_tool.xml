@@ -1,7 +1,7 @@
 <tool name="Orthogroups_Tool" id="orthogroups_tool" version="1.0.2">
 
     <description>
-        This tool takes Orthogroups found by OrthoFinder and proceeds to retrieve nucleic sequences back, then write each orthogroups in its own fasta file.
+        Writes orthogroups found by OrthoFinder in fasta files (with their sequences).
     </description>
 
     <macros>
@@ -108,10 +108,6 @@
 
 <![CDATA[
 
-The script of this tool has been written by Victor Mataigne.
-
--------------------------------------------
-
 **Description**
 
 This tool takes Orthogroups found by OrthoFinder and proceeds to retrieve nucleic sequences back, then write each orthogroups in its own fasta file.
@@ -165,12 +161,7 @@ Changelog
     </help>
 
     <citations>
-        <citation type="bibtex">Credits : ABIMS team, Roscoff Marine Station</citation>
-        <citation type="bibtex">Contact support.abims@sb-roscoff.fr for any questions or concerns about the Galaxy implementation of this tool.</citation>
-        <citation type="bibtex">Author : Victor Mataigne -- Galaxy integration : Gildas Le Corguillé and Victor Mataigne.
-        </citation>
-        <citation type="bibtex">Emms, D.M. and Kelly, S. (2015) OrthoFinder: solving fundamental biases in whole genome comparisons dramatically improves orthogroup inference accuracy, Genome Biology 16:157.
-        </citation>
+        <citation type="doi">10.1186/s13059-015-0721-2</citation>
     </citations>
 
 </tool>
