@@ -1,33 +1,65 @@
-import itertools
+#!/usr/bin/env python
+#coding: utf-8
 
-def simplify_fasta_name(fasta_name,LT):
-    for abbreviation in LT:
-        if abbreviation in fasta_name:
-            new_fasta_name = abbreviation
+import itertools, os
 
-    return(new_fasta_name)
+def dico(fasta_file, path_in):
+    """
+    Stores a fasta file in a dictionary : key/value -> header/sequence
 
-## Generates bash, with key = fasta name; value = sequence (WITH GAP, IF ANY, REMOVED IN THIS FUNCTION)
-def dico(fasta_file,LT):
-    #count_fastaName = 0
-    bash1 = {}
-    with open(fasta_file, "r") as file:
-        for name, query in itertools.izip_longest(*[file]*2):
-            if not name:
-                break
-            if name[0] == ">":
-                #count_fastaName += 1
-                fasta_name = name[1:-1]
-                sequence = query[:-1]
-                if fasta_name not in bash1.keys():
-                    fasta_name = simplify_fasta_name(fasta_name, LT)
-                    bash1[fasta_name] = sequence
-                else :
-                    print fasta_name
+    Args:
+        - fasta_file (String) : the name of fasta file
+        - path_in (String) : path to the fasta file
 
-    kk = bash1.keys()
-    key0 = kk[0]
-    seq0 = bash1[key0]
-    ln_seq = len(seq0)
-    
-    return(bash1)
+    Return:
+        - bash1 (dict) : the dictionary header/sequence        
+    """
+    bash1 = {}    
+
+    with open(path_in+'/'+fasta_file, 'r') as F1:
+        for h,s in itertools.izip_longest(*[F1]*2):            
+            fasta_name = h[1:3]
+            sequence = s[:-1]
+            if fasta_name not in bash1.keys():
+                bash1[fasta_name] = sequence
+            else:
+                print fasta_name
+   
+    return bash1 # same length for all (alignment)
+
+def write_output(names, sps_list, out_dir, results_dict):
+    """ Write results in csv files. There is one file per counted element (one file per amino-acid, one file per indice ...)
+
+    Args:
+        - names (list) : list with the names of elems
+        - sps_list (list) : species names, sorted alphabetically
+        - out_dir (String) : output directory
+        - results_dict (dict) : vcounts values of each element for each input file (keys names : elems from 'names argument')
+
+    """
+    for name in names:
+        out = open(name+".csv", 'w')
+        out.write('Group,' + sps_list[0:-1]+'\n')
+        for group in results_dict.keys():
+            count_of_elems = ''
+            for specs in sorted(results_dict[group].keys()):
+                count_of_elems += str(results_dict[group][specs][name]) + ','
+            out.write(group + ',' + count_of_elems[0:-1] + '\n')
+        out.close()
+        os.system('mv %s.csv %s/' %(name, out_dir))
+
+def fill_with_NaN(what):
+    """ Used to create a dict only with NaN values ; used when a species is not present in an orthogroup
+
+    Args:
+        - what (list of Strings) : the names of the elements studied (nucleotide, amino-acids, indices of thermostability ...)
+
+    Return:
+        - NaN_values (dict) : dictionary with keys=elems of what, values=NaN
+    """
+
+    NaN_values = {}
+    for elem in what:
+        NaN_values[elem] = 'NaN'
+
+    return NaN_values
