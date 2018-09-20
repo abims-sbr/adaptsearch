@@ -112,14 +112,16 @@ This tool reformats Velvet Oases or Trinity assemblies for the AdaptSearch galax
 
 **Input format**
 
-    (1) Sequences are in the sequential format:
-        >seqname1
-        AAAGAGAGACCACATGTCAGTAGC -on one or several lines -
-        >seqname2
-        AAGGCCTGACCACATGAGTTAAGC -on one or several lines -
-        ...
+(1) Sequences are in the sequential format:
 
-    2) The file name should begin with a two letter abbreviation of the species name (for isntance, 'Ap' if the species is Alviella pompejana).
+| >seqname1
+| AAAGAGAGACCACATGTCAGTAGC -on one or several lines -
+| >seqname2
+| AAGGCCTGACCACATGAGTTAAGC -on one or several lines -
+| etc ...
+|
+
+2) The file name should begin with a two letter abbreviation of the species name (for isntance, 'Ap' if the species is Alvinella pompejana).
 
 **For Velvet Oases assemblies input**
             
@@ -127,7 +129,7 @@ This tool reformats Velvet Oases or Trinity assemblies for the AdaptSearch galax
 
 **For Trinity assemblies inputs**   
             
-    The headers must be as follow : >cj_gj_ij Len=j path=[j:0-j] where all the j are integers (locus number, transcript variant, length, position...)
+    The headers must be as follow : *>cj_gj_ij Len=j path=[j:0-j]* where all the j are integers (locus number, transcript variant, length, position...)
 
 **The tool handles the case if input files come from both assemblers (there is no need for input files to be exclusively from one or another assembler).**
 
@@ -185,7 +187,5 @@ Changelog
 
     ]]>
 	</help>
-
-    <expand macro="citations" />
 
 </tool>

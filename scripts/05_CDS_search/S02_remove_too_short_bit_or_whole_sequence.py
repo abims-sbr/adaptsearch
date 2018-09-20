@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # coding: utf8
 ## Author: Eric Fontanillas
 ## Modification: 03/09/14 by Julie BAFFARD
@@ -48,7 +48,6 @@ MIN_LENGTH_BIT_OF_SEQUENCE_aa = int(sys.argv[4])
 MAX_LENGTH_SMALL_INDEL = 2      ## in aa
 MAX_LENGTH_SMALL_INDEL_nuc = 6  ## in nuc
 MIN_SPECIES_NB = int(sys.argv[1])
-MAX_sp = MIN_SPECIES_NB
 dicoco = {}
 dico_dico = {}
 list_new_file = []

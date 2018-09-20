@@ -24,3 +24,9 @@ Victor Mataigne
 [ABiMS - Station Biologique de Roscoff - France - CNRS/UPMC](http://abims.sb-roscoff.fr/)
 [ABICE / Adaptation et Biologie des Invertébrés en Conditions Extrêmes](http://www.sb-roscoff.fr/fr/abice-adaptation-et-biologie-des-invertebres-en-conditions-extremes)
 
+## Other repositories
+[Code and user documentation](https://github.com/Mataivic/AdaptSearch_Documentation)
+
+[Visualization tools](https://github.com/Mataivic/AdaptSearch_visualization_tools)
+
+
