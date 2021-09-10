@@ -12,6 +12,8 @@
                                  # OUTPUTs "06_CDS_with_M_aa" & "06_CDS_with_M_nuc" => INCLUDE THIS CRITERIA
 
 import string, os, time, re, zipfile, sys, argparse
+from Bio.Blast import NCBIWWW
+from Bio.Blast import NCBIXML
 from dico import dico
 
 def code_universel(F1):
@@ -20,7 +22,7 @@ def code_universel(F1):
 
     with open(F1, "r") as file:
         for line in file.readlines():
-            L1 = string.split(line, " ")
+            L1 = str.split(line, " ")
             length1 = len(L1)
             if length1 == 3:
                 key = L1[0]
@@ -100,6 +102,7 @@ def find_good_ORF_criteria_3(bash_aligned_nc_seq, bash_codeUniversel, minimal_cd
         # For each seq of the multialignment => give the 6 ORFs (in aa)
         bash_of_aligned_aa_seq_3ORF[fasta_name] = [seq_prot_ORF1, seq_prot_ORF2, seq_prot_ORF3, seq_prot_ORF4, seq_prot_ORF5, seq_prot_ORF6]
 
+
     # 2 - Test for the best ORF (Get the longuest segment in the alignment with no codon stop ... for each ORF ... the longuest should give the ORF)
     BEST_MAX = 0
 
@@ -141,6 +144,7 @@ def find_good_ORF_criteria_3(bash_aligned_nc_seq, bash_codeUniversel, minimal_cd
                 else:
                     List_positions_subsequence.append(j)
 
+
         # 2.3 - Among all the sublists (separated by column with codon stop "*"), get the longuest one (BETTER SEGMENT for a given ORF)
         LONGUEST_SUBSEQUENCE_LIST_POSITION = []
         MAX=0
@@ -148,6 +152,7 @@ def find_good_ORF_criteria_3(bash_aligned_nc_seq, bash_codeUniversel, minimal_cd
             if len(sublist) > MAX and len(sublist) > minimal_cds_length:
                 MAX = len(sublist)
                 LONGUEST_SUBSEQUENCE_LIST_POSITION = sublist
+
 
         # 2.4. - Test if the longuest subsequence start exactly at the beginning of the original sequence (i.e. means the ORF maybe truncated)
         if LONGUEST_SUBSEQUENCE_LIST_POSITION != []:
@@ -174,8 +179,6 @@ def find_good_ORF_criteria_3(bash_aligned_nc_seq, bash_codeUniversel, minimal_cd
         pos_MIN_aa = BEST_LONGUEST_SUBSEQUENCE_LIST_POSITION[0]
         pos_MIN_aa = pos_MIN_aa - 1
         pos_MAX_aa = BEST_LONGUEST_SUBSEQUENCE_LIST_POSITION[-1]
-
-
         BESTORF_bash_of_aligned_aa_seq = {}
         BESTORF_bash_of_aligned_aa_seq_CODING = {}
         for fasta_name in bash_of_aligned_aa_seq_3ORF.keys():
@@ -186,6 +189,7 @@ def find_good_ORF_criteria_3(bash_aligned_nc_seq, bash_codeUniversel, minimal_cd
             BESTORF_bash_of_aligned_aa_seq_CODING[fasta_name] = seq_coding
 
         # 4 - Get the corresponding position (START/END of BEST CODING SEGMENT) for nucleotides alignment
+        # And Blast the best coding sequence <=> longuest sequence to check if it's the better one
         pos_MIN_nuc = pos_MIN_aa * 3
         pos_MAX_nuc = pos_MAX_aa * 3
 
@@ -196,6 +200,48 @@ def find_good_ORF_criteria_3(bash_aligned_nc_seq, bash_codeUniversel, minimal_cd
             seq_coding = seq[pos_MIN_nuc:pos_MAX_nuc]
             BESTORF_bash_aligned_nc_seq[fasta_name] = seq
             BESTORF_bash_aligned_nc_seq_CODING[fasta_name] = seq_coding
+            seq_cutted = re.sub(r'^.*?[a-zA-Z]', '', seq)
+            sequence_for_blast=(fasta_name+'\n'+seq_cutted+'\n')
+            good_ORF_found = False
+            try:
+                result_handle = NCBIWWW.qblast("blastn", "nt", sequence_for_blast, expect=0.001, hitlist_size=1)
+                blast_records = NCBIXML.parse(result_handle)
+            except:
+                good_ORF_found = False
+            else:
+                for blast_record in blast_records:
+                    for alignment in blast_record.alignments:
+                        for hsp in alignment.hsps:
+                            if hsp.expect < 0.001:
+                                good_ORF_found = True
+
+            if good_ORF_found is False:
+                # Blast other possible CDS and keep best evalue, if no one keep the longuest sequence
+                for i in range (0,5):
+                    sequence = bash_of_aligned_nuc_seq_3ORF[fasta_name][i]
+                    if sequence == seq:
+                        pass
+                    else:
+                        sequence = re.sub(r'^.*?[a-zA-Z]', '', sequence)
+                        sequence_to_blast=(fasta_name+'\n'+sequence+'\n')
+                        try:
+                            result_handle = NCBIWWW.qblast("blastn", "nt", sequence_to_blast, expect=0.001, hitlist_size=1)
+                            blast_records = NCBIXML.parse(result_handle)
+                        except:
+                            pass
+                        else:
+                            for blast_record in blast_records:
+                                for alignment in blast_record.alignments:
+                                    for hsp in alignment.hsps:
+                                        if hsp.expect < 0.001:
+                                            # New good CDS found
+                                            BESTORF_bash_aligned_nc_seq[fasta_name] = sequence
+                                            seq_coding = sequence[pos_MIN_nuc:pos_MAX_nuc]
+                                            BESTORF_bash_aligned_nc_seq_CODING[fasta_name] = seq_coding
+
+            else:
+                pass
+
 
     else: # no CDS found
         BESTORF_bash_aligned_nc_seq = {}
@@ -226,7 +272,7 @@ def find_good_ORF_criteria_3(bash_aligned_nc_seq, bash_codeUniversel, minimal_cd
     # CASE 3: CDS not truncated AND no "M" found in good position (i.e. before the last 50 aa):
         ## => the 2 bash "CDS_with_M" are left empty ("{}")
 
-    return(BESTORF_bash_aligned_nc_seq,  BESTORF_bash_aligned_nc_seq_CODING, BESTORF_bash_of_aligned_nuc_seq_CDS_with_M, BESTORF_bash_of_aligned_aa_seq, BESTORF_bash_of_aligned_aa_seq_CODING, BESTORF_bash_of_aligned_aa_seq_CDS_with_M)
+    return(BESTORF_bash_aligned_nc_seq,  BESTORF_bash_aligned_nc_seq_CODING, BESTORF_bash_of_aligned_nuc_seq_CDS_with_M, BESTORF_bash_of_aligned_aa_seq, BESTORF_bash_of_aligned_aa_seq_CODING, BESTORF_bash_of_aligned_aa_seq_CDS_with_M, BEST_LONGUEST_SUBSEQUENCE_LIST_POSITION)
 
 def write_output_file(results_dict, name_elems, path_out):
     if results_dict != {}:
@@ -280,8 +326,8 @@ def main():
         nb_gp = file.split('_')[1] # Keep trace of the orthogroup number
         fasta_file_path = "./%s" %file    
         bash_fasta = dico(fasta_file_path)
-        BESTORF_nuc, BESTORF_nuc_CODING, BESTORF_nuc_CDS_with_M, BESTORF_aa, BESTORF_aa_CODING, BESTORF_aa_CDS_with_M  = find_good_ORF_criteria_3(bash_fasta, bash_codeUniversel, minimal_cds_length, minimum_species)
-        
+
+        BESTORF_nuc, BESTORF_nuc_CODING, BESTORF_nuc_CDS_with_M, BESTORF_aa, BESTORF_aa_CODING, BESTORF_aa_CDS_with_M, LONGUEST_SUBSEQUENCE_LIST_POSITION = find_good_ORF_criteria_3(bash_fasta, bash_codeUniversel, minimal_cds_length, minimum_species)
         name_elems[1] = nb_gp
 
         # Update counts and write group in corresponding output directory
@@ -305,14 +351,14 @@ def main():
                 write_output_file(BESTORF_nuc_CDS_with_M, name_elems, dirs[4])
                 write_output_file(BESTORF_aa_CDS_with_M, name_elems, dirs[5])
 
-    print "*************** CDS detection ***************"
-    print "\nFiles processed: %d" %count_file_processed
-    print "\tFiles with CDS: %d" %count_file_with_CDS
-    print "\tFiles wth CDS and more than %s species: %d" %(minimum_species, count_file_with_cds_and_enought_species)
-    print "\t\tFiles with CDS plus M (codon start): %d" %count_file_with_CDS_plus_M
-    print "\t\tFiles with CDS plus M (codon start) and more than %s species: %d" %(minimum_species,count_file_with_cds_M_and_enought_species) 
-    print "\tFiles without CDS: %d \n" %count_file_without_CDS
-    print ""
+    print("*************** CDS detection ***************")
+    print("\nFiles processed: %d" %count_file_processed)
+    print("\tFiles with CDS: %d" %count_file_with_CDS)
+    print("\tFiles wth CDS and more than %s species: %d" %(minimum_species, count_file_with_cds_and_enought_species))
+    print("\t\tFiles with CDS plus M (codon start): %d" %count_file_with_CDS_plus_M)
+    print("\t\tFiles with CDS plus M (codon start) and more than %s species: %d" %(minimum_species,count_file_with_cds_M_and_enought_species) )
+    print("\tFiles without CDS: %d \n" %count_file_without_CDS)
+    print("")
 
 if __name__ == '__main__':
     main()
