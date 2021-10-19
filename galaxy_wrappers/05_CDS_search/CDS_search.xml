@@ -1,4 +1,4 @@
-<tool name="CDS_search" id="cds_search" version="2.1.2">
+<tool name="CDS_search" id="cds_search" version="2.2.2">
 
 	<description>
 		ORF and CDS search
@@ -9,7 +9,7 @@
 	</macros>
 
 	<requirements>
-		<expand macro="python_required" />
+		<expand macro="python3_required" />
 	</requirements>
 
   	<command><![CDATA[        
