@@ -4,6 +4,10 @@
 			<requirement type="package" version="2.7">python</requirement>
 	</xml>
 
+	<xml name="python3_required">
+                        <requirement type="package" version="3.9">python</requirement>
+        </xml>
+
     <token name="@HELP_AUTHORS@">
 .. class:: infomark
 
