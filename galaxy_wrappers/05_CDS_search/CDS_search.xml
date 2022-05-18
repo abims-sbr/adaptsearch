@@ -9,7 +9,7 @@
 	</macros>
 
 	<requirements>
-		<expand macro="python3_required" />
+		<requirement type="package" version="1.79">biopython</requirement>
 	</requirements>
 
   	<command><![CDATA[        

@@ -89,9 +89,9 @@ for file in L_IN1:
         seq_nuc = dico_nuc[fasta_name]
 
         if "?" in seq:
-            seq = string.replace(seq, "?", "-")
+            seq = str.replace(seq, "?", "-")
         if "?" in seq_nuc:
-            seq_nuc = string.replace(seq_nuc, "?", "-")
+            seq_nuc = str.replace(seq_nuc, "?", "-")
         
         ## 4.1 ## [FILTER 1] : Detect and Replace short internal indel symbole (= "-" as for other longer gaps) by a "?"
         ## aa
@@ -107,7 +107,7 @@ for file in L_IN1:
         
         ## 4.2 ## [FILTER 2] : Remove short bits of sequence (<"MIN_LENGTH_BIT_OF_SEQUENCE_aa")
         LIST_sublist_aa=[]
-        S1 = string.split(seq, "-")
+        S1 = str.split(seq, "-")
         for element in S1:
             if len(element) > MIN_LENGTH_BIT_OF_SEQUENCE_aa:
                 LIST_sublist_aa.append(element)
@@ -126,7 +126,7 @@ for file in L_IN1:
         
         for subsequence in LIST_sublist_aa:
             ## aa
-            START = string.find(seq, subsequence)
+            START = str.find(seq, subsequence)
             END = START + len(subsequence)
             seq_gap = seq_gap[:START] + seq[START:END] + seq_gap[END:]  ## 4.4.2 ## and then replace the correponding gaps by coding subsequence in the sequence
             ## nuc
@@ -135,11 +135,11 @@ for file in L_IN1:
             seq_gap_nuc = seq_gap_nuc[:START_nuc] + seq_nuc[START_nuc:END_nuc] + seq_gap_nuc[END_nuc:]
         
         ## 4.5 ## Save new sequence in bash if not empty
-        seq_empty_test = string.replace(seq_gap, "-", "")
+        seq_empty_test = str.replace(seq_gap, "-", "")
         if seq_empty_test != "":
             new_bash_aa[fasta_name] = seq_gap
 
-        seq_empty_test = string.replace(seq_gap_nuc, "-", "")
+        seq_empty_test = str.replace(seq_gap_nuc, "-", "")
         if seq_empty_test != "":
             new_bash_nuc[fasta_name] = seq_gap_nuc
 
@@ -180,8 +180,8 @@ for name in list_new_file :
 
 ###Print
 if sys.argv[2] == "oui" :
-    print "\nIn locus with CDS considering Methionine : \n"
+    print("\nIn locus with CDS considering Methionine : \n")
 else :
-    print "\nIn locus with CDS regardless of the Methionine : \n"
+    print("\nIn locus with CDS regardless of the Methionine : \n")
 
-print "\nTotal number of locus recorded  = %d" %n0
+print("\nTotal number of locus recorded  = %d" %n0)

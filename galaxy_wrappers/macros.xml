@@ -5,7 +5,7 @@
 	</xml>
 
 	<xml name="python3_required">
-                        <requirement type="package" version="3.9">python</requirement>
+                        <requirement type="package" version="1.79">biopython</requirement>
         </xml>
 
     <token name="@HELP_AUTHORS@">

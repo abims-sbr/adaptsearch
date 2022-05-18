@@ -12,7 +12,7 @@
 def remove_position_with_too_much_missing_data(bash_aa, bash_nuc, MIN_SPECIES_NB):
 
     ## 1 ## Get alignment length
-    fasta_name0 = bash_aa.keys()[0]
+    fasta_name0 = list(bash_aa.keys())[0]
     ln_aa = len(bash_aa[fasta_name0])
 
     ln_nuc = len(bash_nuc[fasta_name0])
@@ -23,7 +23,7 @@ def remove_position_with_too_much_missing_data(bash_aa, bash_nuc, MIN_SPECIES_NB
     i=0
     while i < ln_aa:
         site = []
-        for fasta_name in bash_aa.keys():
+        for fasta_name in list(bash_aa.keys()):
             pos = bash_aa[fasta_name][i]
 
             if pos != "-" and pos != "?" and pos != "X":
@@ -45,15 +45,15 @@ def remove_position_with_too_much_missing_data(bash_aa, bash_nuc, MIN_SPECIES_NB
     ## 4 ## Create entries for "filtered_bash" for aa & nuc
     filtered_bash_aa = {}
     filtered_bash_nuc = {}
-    for fasta_name in bash_aa.keys():
+    for fasta_name in list(bash_aa.keys()):
         filtered_bash_aa[fasta_name] = ""
-    for fasta_name in bash_nuc.keys():
+    for fasta_name in list(bash_nuc.keys()):
         filtered_bash_nuc[fasta_name] = ""
 
     ## 5 ## Write "filtered_bash" for aa
     j=0
     while j < ln_aa:
-        for fasta_name in bash_aa.keys():
+        for fasta_name in list(bash_aa.keys()):
             seq=filtered_bash_aa[fasta_name]
             pos=bash_aa[fasta_name][j]
 
@@ -63,7 +63,7 @@ def remove_position_with_too_much_missing_data(bash_aa, bash_nuc, MIN_SPECIES_NB
         j = j + 1
 
     ## 6 ## Remove empty sequence
-    for name in filtered_bash_aa.keys():
+    for name in list(filtered_bash_aa.keys()):
         seq = filtered_bash_aa[name]
         if seq == '':
             del filtered_bash_aa[name]
@@ -72,7 +72,7 @@ def remove_position_with_too_much_missing_data(bash_aa, bash_nuc, MIN_SPECIES_NB
     ## 7 ## Write "filtered_bash" for nuc
     j=0
     while j < ln_nuc:
-        for fasta_name in bash_nuc.keys():
+        for fasta_name in list(bash_nuc.keys()):
             seq=filtered_bash_nuc[fasta_name]
             #print seq
             pos=bash_nuc[fasta_name][j]
@@ -83,7 +83,7 @@ def remove_position_with_too_much_missing_data(bash_aa, bash_nuc, MIN_SPECIES_NB
         j = j + 1
 
     ## 8 ## Remove empty sequence
-    for name in filtered_bash_nuc.keys():
+    for name in list(filtered_bash_nuc.keys()):
         seq = filtered_bash_nuc[name]
         if seq == '':
             del filtered_bash_nuc[name]
@@ -147,7 +147,7 @@ for file in L_IN1 :
     ## 4.1 ## REMOVE POSITIONS WITH TOO MUCH MISSING DATA (i.e. not enough taxa represented at each position in the alignment)
     filtered_bash_aa, filtered_bash_nuc = remove_position_with_too_much_missing_data(dico_aa, dico_nuc, MIN_SPECIES_NB)   ### DEF 2 ###
 
-    k = filtered_bash_nuc.keys()
+    k = list(filtered_bash_nuc.keys())
     new_leng_nuc = 0
     if k != []:
         k0 = k[0]
@@ -158,14 +158,14 @@ for file in L_IN1 :
     n0+=1
     #name_elems[1] = str(n0)
     name_elems[1] = file.split('_')[1]
-    name_elems[3] =  str(len(filtered_bash_aa.keys()))
+    name_elems[3] =  str(len(list(filtered_bash_aa.keys())))
     new_name = "_".join(name_elems)
 
     ## 4.5 ## Write filtered alignment in OUTPUTs
     ## aa
     if filtered_bash_aa != {} and new_leng_nuc >= MIN_LENGTH_FINAL_ALIGNMENT_NUC:
         OUTaa=open("%s/%s" %(path_OUT1, new_name), "w")
-        for fasta_name in filtered_bash_aa.keys():
+        for fasta_name in list(filtered_bash_aa.keys()):
             seq_aa = filtered_bash_aa[fasta_name]
             OUTaa.write("%s\n" %fasta_name)
             OUTaa.write("%s\n" %seq_aa)
@@ -174,7 +174,7 @@ for file in L_IN1 :
     if filtered_bash_nuc != {} and new_leng_nuc >= MIN_LENGTH_FINAL_ALIGNMENT_NUC:
         good+=1
         OUTnuc=open("%s/%s" %(path_OUT2, new_name), "w")
-        for fasta_name in filtered_bash_nuc.keys():
+        for fasta_name in list(filtered_bash_nuc.keys()):
             seq_nuc = filtered_bash_nuc[fasta_name]
             OUTnuc.write("%s\n" %fasta_name)
             OUTnuc.write("%s\n" %seq_nuc)
@@ -184,8 +184,8 @@ for file in L_IN1 :
 
 
 ## 5 ## Print
-print "*************** 2nd Filter : removal of the indel ***************"
-print "\nTotal number of locus recorded  = %d" %n0
-print "\tTotal number of locus with no indels (SAVED) = %d" %good
-print "\tTotal number of locus, when removing indel, wich are empty (EXCLUDED) = %d" %bad
-print ""
+print("*************** 2nd Filter : removal of the indel ***************")
+print("\nTotal number of locus recorded  = %d" %n0)
+print("\tTotal number of locus with no indels (SAVED) = %d" %good)
+print("\tTotal number of locus, when removing indel, wich are empty (EXCLUDED) = %d" %bad)
+print("")
