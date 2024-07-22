@@ -43,10 +43,10 @@ class Locus:
 
     def prettyPrint(self): 
         # Used for debugging : print "{ Header : ", self.header[0:-1], "Tag : ", self.tagged, " }"
-        print "[ Header : {header} ]".format(header=self.header[0:-1])
+        print("[ Header : {header} ]".format(header=self.header[0:-1]))
 
     def prettyPrint2(self):
-        print "[ Header : {header} Sequence : {sequence} ]".format(header=self.header[0:-1], sequence=self.sequence[0:-1])
+        print("[ Header : {header} Sequence : {sequence} ]".format(header=self.header[0:-1], sequence=self.sequence[0:-1]))
 
 """ Applies the getPairwiseCouple() function to a list of files and return a big list with ALL pairwises couples 
     Returns a list of sets (2 items per set) """
@@ -59,7 +59,7 @@ def getListPairwiseAll(listPairwiseFiles):
     def getPairwiseCouple(pairwiseFile):        
         list_pairwises_2sp = []
         with open(pairwiseFile, "r") as file:
-            for name, sequence, name2, sequence2 in itertools.izip_longest(*[file]*4):            
+            for name, sequence, name2, sequence2 in itertools.zip_longest(*[file]*4):            
                 # One locus every two lines (one pairwise couple = 4 lines) : header + sequence
                 locus1 = Locus(name, sequence)
                 locus2 = Locus(name2, sequence2)
@@ -229,12 +229,12 @@ def makeOrthogroups(list_pairwises_allsp, minspec, nb_rbh, verbose, paralogs):
     if verbose :
         frame = countings(list_orthogroups, nb_rbh)
         df = asFrame(frame)
-        print "\n    Summary before paralogous filtering : \n"
-        print df.loc[df.ne(0).any(1),df.ne(0).any()], "\n" # Don't display columns and lines filled with 0
+        print("\n    Summary before paralogous filtering : \n")
+        print(df.loc[df.ne(0).any(1),df.ne(0).any()], "\n") # Don't display columns and lines filled with 0
 
     # Write outputFile with all the paralogous
     if paralogs:
-        print "Writing orthogroups with paralogs files ...\n"
+        print("Writing orthogroups with paralogs files ...\n")
         j = 1
         for group in list_orthogroups:
             if len(group) >= minspec:
@@ -243,16 +243,16 @@ def makeOrthogroups(list_pairwises_allsp, minspec, nb_rbh, verbose, paralogs):
 
     # Paralogs filtering and summary ----------------------------------------------------------------------------
 
-    print "Filtering paralogous sequences and writing final orthogroups files ..."
-    print "    (Dropping Orthogroups with less than {} species)".format(minspec)
+    print("Filtering paralogous sequences and writing final orthogroups files ...")
+    print("    (Dropping Orthogroups with less than {} species)".format(minspec))
 
     # writeOutputFile() is called in filterParalogs()    
     list_orthogroups_format = filterParalogs(list_orthogroups, minspec)   
 
     frame = countings(list_orthogroups_format, nb_rbh)    
     df = asFrame(frame)
-    print "\n    Summary after paralogous filtering : \n"
-    print df.loc[df.ne(0).any(1),df.ne(0).any()]
+    print("\n    Summary after paralogous filtering : \n")
+    print(df.loc[df.ne(0).any(1),df.ne(0).any()])
 
     #return only the length of the list (at this point the program doesn't need more)
     return len(list_orthogroups_format)
@@ -265,19 +265,19 @@ def main():
     parser.add_argument("-p", "--paralogs", action="store_true", help="Proceeds to write orthogroups also before paralogous filtering")
     args = parser.parse_args()
 
-    print "*** pogs.py ***"
-    print "\nBuilding of orthogroups based on pairs of genes obtained by pairwise comparisons between pairs of species."
-    print "Genes are gathered in orthogroups based on the principle of transitivity between genes pairs."    
+    print("*** pogs.py ***")
+    print("\nBuilding of orthogroups based on pairs of genes obtained by pairwise comparisons between pairs of species.")
+    print("Genes are gathered in orthogroups based on the principle of transitivity between genes pairs.")    
 
     os.system("mkdir outputs")
     if args.paralogs: os.system("mkdir outputs_withParalogs")
     infiles = args.files
     listPairwiseFiles = str.split(infiles, ",")
-    print "\nParsing input files ..."
+    print("\nParsing input files ...")
     list_Locus = getListPairwiseAll(listPairwiseFiles)
-    print "Creating Orthogroups ..."
+    print("Creating Orthogroups ...")
     nb_orthogroups = makeOrthogroups(list_Locus, args.minspec, len(listPairwiseFiles), args.verbose, args.paralogs)
-    print "\n{} orthogroups have been infered from {} pairwise comparisons by RBH\n".format(nb_orthogroups, len(listPairwiseFiles))
+    print("\n{} orthogroups have been infered from {} pairwise comparisons by RBH\n".format(nb_orthogroups, len(listPairwiseFiles)))
 
 if __name__ == "__main__":
     main()

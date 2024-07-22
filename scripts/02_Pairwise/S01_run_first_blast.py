@@ -27,13 +27,13 @@ def main():
         from Bio.Alphabet import IUPAC
 
         # From every sequence, make three sequences (translations in the three reading frames)
-        print 'Translating every sequence in all reading frames ...'
+        print('Translating every sequence in all reading frames ...')
         for file in in_files:
             name = 'translated_%s' %file
             in_files_translated.append(name)
             translated_file = open(name, 'w')
             with open(file, 'r') as file:
-                for name, seq in itertools.izip_longest(*[file]*2):
+                for name, seq in itertools.zip_longest(*[file]*2):
                     s = Seq(seq.strip('\n').upper(), IUPAC.ambiguous_dna)
                     translated_file.write(name.strip('\n')+'_orf_1\n')
                     translated_file.write(s.translate()._data+'\n')
@@ -50,7 +50,7 @@ def main():
         list_pairwise = itertools.combinations(in_files, 2)
 
     else :
-        print 'Mispecified alignment tool'
+        print('Mispecified alignment tool')
         exit()
 
     os.mkdir('outputs_RBH_dna')
@@ -59,14 +59,14 @@ def main():
 
     if args.method == 'diamond':
         for pairwise in list_pairwise:
-            print "Pair of species:"
-            print pairwise
+            print("Pair of species:")
+            print(pairwise)
 
             sp1, sp2 = pairwise[0].split('_')[1], pairwise[1].split('_')[1] #rename 'translated_Xx_transcriptom.fasta'
             sub_directory_name = sp1 + '_' + sp2
             os.mkdir('./blast_%s' %sub_directory_name)
 
-            print 'Running first blast with Diamond ...'
+            print('Running first blast with Diamond ...')
 
             # Run diamond
             os.system('diamond makedb --in %s -d %s >> log_diamond.log' %(pairwise[1], sp2))
@@ -80,14 +80,14 @@ def main():
 
             # There is a chance to have no hits returned
             if os.path.getsize('matches_blast1_%s' %sub_directory_name) == 0:
-                print 'No hits found. Processing next species pair ...'
+                print('No hits found. Processing next species pair ...')
             else :
 
                 # Record only one best_hit per transcript (best of the 6 orfs)
                 os.system('python S02_04_keep_one_hit_from_blast.py matches_blast1_%s %s %s %s %s %s' %(sub_directory_name, a, b, sub_directory_name, '1', args.method))
 
                 # 2d blast with only best hits as db
-                print 'Running second blast with Diamond ... '
+                print('Running second blast with Diamond ... ')
 
                 os.system('python -W ignore S03_run_second_blast.py best_hits_db_blast1_%s %s %s %s %s' %(sub_directory_name, pairwise[0], sub_directory_name, args.evalue, args.method))
 
@@ -114,14 +114,14 @@ def main():
 
     elif args.method == 'tblastx':
         for pairwise in list_pairwise:
-            print "Pair of species:"
-            print pairwise
+            print("Pair of species:")
+            print(pairwise)
 
             sp1, sp2 = pairwise[0].split('_')[0], pairwise[1].split('_')[0]
             sub_directory_name = sp1 + '_' + sp2
             os.mkdir('./blast_%s' %sub_directory_name)
 
-            print 'Running first tblastx ...'
+            print('Running first tblastx ...')
 
             # Run diamond
             os.system('formatdb -i %s -p F -o T >> log_tblastx.log' %(pairwise[1]))
@@ -132,14 +132,14 @@ def main():
             
             # There is a chance to have no hits returned
             if os.path.getsize('matches_blast1_%s' %sub_directory_name) == 0:
-                 print 'No hits found. Processing next species pair ...'
+                 print('No hits found. Processing next species pair ...')
             else:
 
                 # Record only one best_hit per transcript (best of the 6 orfs)
                 os.system('python S02_04_keep_one_hit_from_blast.py matches_blast1_%s %s %s %s %s %s' %(sub_directory_name, pairwise[1], pairwise[0], sub_directory_name, '1', args.method))
 
                 # 2d blast with only best hits as db
-                print 'Running second blast with Diamond ... '
+                print('Running second blast with Diamond ... ')
 
                 os.system('python S03_run_second_blast.py best_hits_db_blast1_%s %s %s %s %s' %(sub_directory_name, pairwise[0], sub_directory_name, args.evalue, args.method))
 

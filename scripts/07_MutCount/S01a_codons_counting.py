@@ -29,23 +29,23 @@ def buildDicts(list_codons, content, dict_genetic_code, dict_aa_classif):
         dico_codons[codon] = copy.deepcopy(content)
 
     dico_aa = {}
-    for aa in dict_genetic_code.keys():
+    for aa in list(dict_genetic_code.keys()):
         dico_aa[aa] = copy.deepcopy(content)
 
     dico_aatypes = {}
-    for aatype in dict_aa_classif.keys():
+    for aatype in list(dict_aa_classif.keys()):
         dico_aatypes[aatype] = copy.deepcopy(content)
 
     dico_codons_transitions=copy.deepcopy(dico_codons)
-    for key in dico_codons_transitions.keys():
+    for key in list(dico_codons_transitions.keys()):
         dico_codons_transitions[key]=copy.deepcopy(dico_codons)
 
     dico_aa_transitions = copy.deepcopy(dico_aa)
-    for key in dico_aa_transitions.keys():
+    for key in list(dico_aa_transitions.keys()):
         dico_aa_transitions[key]=copy.deepcopy(dico_aa)
 
     dico_aatypes_transitions = copy.deepcopy(dico_aatypes)
-    for key in dico_aatypes_transitions.keys():
+    for key in list(dico_aatypes_transitions.keys()):
         dico_aatypes_transitions[key]=copy.deepcopy(dico_aatypes)
 
     return dico_codons, dico_aa, dico_aatypes, dico_codons_transitions, dico_aa_transitions, dico_aatypes_transitions
@@ -118,7 +118,7 @@ def computeAllCountingsAndFreqs(seq, list_codons, init_dict_codons, init_dict_aa
 
         codons_freqs = {}
 
-        for key in dict_codons_counts.keys():
+        for key in list(dict_codons_counts.keys()):
             freq = float(dict_codons_counts[key])/sum(dict_codons_counts.values())
             codons_freqs[key] = freq
 
@@ -137,10 +137,10 @@ def computeAllCountingsAndFreqs(seq, list_codons, init_dict_codons, init_dict_aa
         """
         dict_aa = copy.deepcopy(init_dict_aa)        
 
-        for key in dict_codons.keys():
-            for value in dict_genetic_code.values(): 
+        for key in list(dict_codons.keys()):
+            for value in list(dict_genetic_code.values()): 
                 if key in value:            
-                    dict_aa[dict_genetic_code.keys()[dict_genetic_code.values().index(value)]] += dict_codons[key]
+                    dict_aa[list(dict_genetic_code.keys())[list(dict_genetic_code.values()).index(value)]] += dict_codons[key]
 
         return dict_aa
 
@@ -156,7 +156,7 @@ def computeAllCountingsAndFreqs(seq, list_codons, init_dict_codons, init_dict_aa
 
         dict_aa_freqs = {}
 
-        for key in dict_aa_counts.keys():
+        for key in list(dict_aa_counts.keys()):
             freq = float(dict_aa_counts[key])/sum(dict_aa_counts.values())
             dict_aa_freqs[key] = freq
 
@@ -175,8 +175,8 @@ def computeAllCountingsAndFreqs(seq, list_codons, init_dict_codons, init_dict_aa
         """
         dict_aatypes = copy.deepcopy(init_dict_classif)
 
-        for key_classif in dict_aa_classif.keys():
-            for key_aa in dict_aa.keys():
+        for key_classif in list(dict_aa_classif.keys()):
+            for key_aa in list(dict_aa.keys()):
                 if key_aa in dict_aa_classif[key_classif]:
                     dict_aatypes[key_classif] += dict_aa[key_aa]
 
@@ -193,7 +193,7 @@ def computeAllCountingsAndFreqs(seq, list_codons, init_dict_codons, init_dict_aa
         """
         dict_aatypes_freqs = {}
 
-        for key in dict_aatypes.keys():
+        for key in list(dict_aatypes.keys()):
             freq = float(dict_aatypes[key])/sum(dict_aatypes.values())
             dict_aatypes_freqs[key] = freq
 
@@ -276,7 +276,7 @@ def computeVarious(seq, dict_aa_counts, dict_aa_types):
         IVYWREL = 0
 
         for aa in ["I","V","Y","W","R","E","L"]: # Impossible to make a simple sum, in case one the aa is not in the dict keys
-            if aa in dict_aa_counts.keys():
+            if aa in list(dict_aa_counts.keys()):
                 IVYWREL += dict_aa_counts[aa]
 
         return float(IVYWREL)/nb_codons
@@ -408,9 +408,9 @@ def computeAllBiases(seq1, seq2, dico_codons_transi, dico_aa_transi, dico_aatype
 
         codons_transi_freqs = {}
 
-        for key in codons_transitions_counts.keys():
+        for key in list(codons_transitions_counts.keys()):
             codons_transi_freqs[key] = {}
-            for key2 in codons_transitions_counts[key].keys():
+            for key2 in list(codons_transitions_counts[key].keys()):
                 if sum(codons_transitions_counts[key].values()) != 0:
                     freq = float(codons_transitions_counts[key][key2])/sum(codons_transitions_counts[key].values())
                     codons_transi_freqs[key][key2] = freq
@@ -432,9 +432,9 @@ def computeAllBiases(seq1, seq2, dico_codons_transi, dico_aa_transi, dico_aatype
 
         aa_transi = copy.deepcopy(dico_aa_transi)
         
-        for k in dico_codons_transi.keys():
+        for k in list(dico_codons_transi.keys()):
             newk = reversecode[k]
-            for k2 in dico_codons_transi[k].keys():
+            for k2 in list(dico_codons_transi[k].keys()):
                 newk2 = reversecode[k2]               
                 aa_transi[newk][newk2] += dico_codons_transi[k][k2]
         
@@ -448,9 +448,9 @@ def computeAllBiases(seq1, seq2, dico_codons_transi, dico_aa_transi, dico_aatype
 
         aa_transi_freqs = {}
 
-        for key in aa_transitions_counts.keys():
+        for key in list(aa_transitions_counts.keys()):
             aa_transi_freqs[key] = {}
-            for key2 in aa_transitions_counts[key].keys():
+            for key2 in list(aa_transitions_counts[key].keys()):
                 if sum(aa_transitions_counts[key].values()) != 0:
                     freq = float(aa_transitions_counts[key][key2])/sum(aa_transitions_counts[key].values())
                     aa_transi_freqs[key][key2] = freq
@@ -471,9 +471,9 @@ def computeAllBiases(seq1, seq2, dico_codons_transi, dico_aa_transi, dico_aatype
         """
 
         aatypes_transi = copy.deepcopy(dico_aatypes_transi)
-        for k in dico_aa_transi.keys():
+        for k in list(dico_aa_transi.keys()):
             newk = reverseclassif[k]
-            for k2 in dico_aa_transi[k].keys():
+            for k2 in list(dico_aa_transi[k].keys()):
                 newk2 = reverseclassif[k2]
                 aatypes_transi[newk][newk2] += dico_aa_transi[k][k2]
 
@@ -487,9 +487,9 @@ def computeAllBiases(seq1, seq2, dico_codons_transi, dico_aa_transi, dico_aatype
 
         aatypes_transi_freqs = {}
 
-        for key in aatypes_transitions_counts.keys():
+        for key in list(aatypes_transitions_counts.keys()):
             aatypes_transi_freqs[key] = {}
-            for key2 in aatypes_transitions_counts[key].keys():
+            for key2 in list(aatypes_transitions_counts[key].keys()):
                 if sum(aatypes_transitions_counts[key].values()) != 0:
                     freq = float(aatypes_transitions_counts[key][key2])/sum(aatypes_transitions_counts[key].values())
                     aatypes_transi_freqs[key][key2] = freq
@@ -524,8 +524,8 @@ def all_sed(codons_c, aa_c, aat_c, codons_transitions, aa_transitions, aatypes_t
         """
         dict_sed = copy.deepcopy(dico)
 
-        for key in transi.keys():
-            for key2 in transi.keys():                
+        for key in list(transi.keys()):
+            for key2 in list(transi.keys()):                
                 if counts[key] != 0 and float(transi[key2][key])/counts[key] != 0.0:
                     x = (float(transi[key][key2])/counts[key]) / (float(transi[key2][key])/counts[key])
                     dict_sed[key][key2] = - pow(2,1-x)+1
@@ -565,28 +565,28 @@ def sampling (dict_seq, nb_iter, len_sample, list_codons, genetic_code, aa_class
     codons_lst, aa_lst, classif_lst, codons_transitions_lst, aa_transitions_lst, classif_transitions_lst = buildDicts(list_codons, [], genetic_code, aa_classif)
     
     # determine the max position where sampling is possible
-    l = len(dict_seq.values()[1])
+    l = len(list(dict_seq.values())[1])
     if l%3 == 0: max_indice = l-3
     if l%3 == 1: max_indice = l-4
     if l%3 == 2: max_indice = l-5
 
     # List of positions to resample
-    viable_positions = [pos for pos in range(0,max_indice,3) if viable(dict_seq.values(), pos, "all")]
+    viable_positions = [pos for pos in range(0,max_indice,3) if viable(list(dict_seq.values()), pos, "all")]
     sample_positions = np.random.choice(viable_positions, len_sample)
 
     # nb_iter resampled sequences
     for i in range(nb_iter):
         if (i+1)%(nb_iter/10) == 0:
-            print "    "+str( (i+1)*100/nb_iter)+"%"
+            print("    "+str( (i+1)*100/nb_iter)+"%")
 
         seqa, seqb = "", ""
         for pos in sample_positions:
             codona, codonb = "---", "---"
             # The sequence to be resampled in this position is randomly chosen  ; no "-" resampled
             while "-" in codona :
-                codona = dict_seq.values()[random.randrange(0, len(dict_seq.keys())-1)][pos:pos+3]
+                codona = list(dict_seq.values())[random.randrange(0, len(list(dict_seq.keys()))-1)][pos:pos+3]
             while "-" in codonb :
-                codonb = dict_seq.values()[random.randrange(0, len(dict_seq.keys())-1)][pos:pos+3]
+                codonb = list(dict_seq.values())[random.randrange(0, len(list(dict_seq.keys()))-1)][pos:pos+3]
             seqa += codona
             seqb += codonb
         
@@ -596,22 +596,22 @@ def sampling (dict_seq, nb_iter, len_sample, list_codons, genetic_code, aa_class
         codons_transitions_tmp, codons_transitions_freq_tmp, aa_transition_tmp, aa_transitions_freq_tmp, aatypes_transitions_tmp, aatypes_transitions_freq_tmp = computeAllBiases(seqa, seqb, codons_transitions_0, aa_transitions_0, classif_transitions_0, reversecode, reverseclassif)
         
         # Adding occurrences in final dicts
-        for key in codons_freq_tmp.keys():
+        for key in list(codons_freq_tmp.keys()):
             codons_lst[key].append(codons_freq_tmp[key])
-        for key in aa_freq_tmp.keys():
+        for key in list(aa_freq_tmp.keys()):
             aa_lst[key].append(aa_freq_tmp[key])
-        for key in aatypes_freq_tmp.keys():
+        for key in list(aatypes_freq_tmp.keys()):
             classif_lst[key].append(aatypes_freq_tmp[key])
         
         # Adding occurrences in final dicts (transitions)
-        for key in codons_transitions_freq_tmp.keys():
-            for key2 in codons_transitions_freq_tmp[key].keys():
+        for key in list(codons_transitions_freq_tmp.keys()):
+            for key2 in list(codons_transitions_freq_tmp[key].keys()):
                 codons_transitions_lst[key][key2].append(codons_transitions_freq_tmp[key][key2])
-        for key in aa_transitions_freq_tmp.keys():
-            for key2 in aa_transitions_freq_tmp[key].keys():
+        for key in list(aa_transitions_freq_tmp.keys()):
+            for key2 in list(aa_transitions_freq_tmp[key].keys()):
                 aa_transitions_lst[key][key2].append(aa_transitions_freq_tmp[key][key2])
-        for key in aatypes_transitions_freq_tmp.keys():
-            for key2 in aatypes_transitions_freq_tmp[key].keys():
+        for key in list(aatypes_transitions_freq_tmp.keys()):
+            for key2 in list(aatypes_transitions_freq_tmp[key].keys()):
                 classif_transitions_lst[key][key2].append(aatypes_transitions_freq_tmp[key][key2])
     
     return codons_lst, aa_lst, classif_lst, codons_transitions_lst, aa_transitions_lst, classif_transitions_lst
@@ -687,8 +687,8 @@ def testPvalues(dict_counts, dict_resampling, nb_iter, method):
 
     pvalues = {}
 
-    for key in dict_resampling.keys():
-        if type(dict_resampling.values()[1]) is not dict :
+    for key in list(dict_resampling.keys()):
+        if type(list(dict_resampling.values())[1]) is not dict :
             if method == 'origin':
                 pvalues[key] = testPvalue(dict_counts[key], dict_resampling[key], nb_iter)
             elif method == 'pnorm':
@@ -697,7 +697,7 @@ def testPvalues(dict_counts, dict_resampling, nb_iter, method):
                 pvalues[key] = p_resampling(dict_counts[key], dict_resampling[key], nb_iter)
         else :
             pvalues[key] = {}
-            for key2 in dict_resampling[key].keys():
+            for key2 in list(dict_resampling[key].keys()):
                 if method == 'origin':
                     pvalues[key][key2] = testPvalue(dict_counts[key][key2], dict_resampling[key][key2], nb_iter)
                 elif method == 'pnorm':
@@ -718,19 +718,19 @@ def main():
     parser.add_argument("sample_length", help="The lenght of a bootstrapped sequences (better if >= 1000", type=int)
     args = parser.parse_args()
 
-    print "\n ------ Occurences and frequencies of codons, amino-acids, amino-acids types -------\n"
+    print("\n ------ Occurences and frequencies of codons, amino-acids, amino-acids types -------\n")
 
-    print "The script counts the number of codons, amino acids, and types of amino acids in sequences,"
-    print "as well as the mutation bias from one item to another between 2 sequences.\n"
+    print("The script counts the number of codons, amino acids, and types of amino acids in sequences,")
+    print("as well as the mutation bias from one item to another between 2 sequences.\n")
 
-    print "Counting are then compared to empirical p-values, obtained from bootstrapped sequences obtained from a subset of sequences."
-    print "In the output files, the pvalues indicate the position of the observed data in a distribution of empirical countings obtained from"
-    print "a resample of the data. Values above 0.95 indicate a significantly higher counting, values under 0.05 a significantly lower counting."
+    print("Counting are then compared to empirical p-values, obtained from bootstrapped sequences obtained from a subset of sequences.")
+    print("In the output files, the pvalues indicate the position of the observed data in a distribution of empirical countings obtained from")
+    print("a resample of the data. Values above 0.95 indicate a significantly higher counting, values under 0.05 a significantly lower counting.")
 
-    print "    Sequences file : {}".format(args.sequences_file)
-    print "    Species retained for countings : {}\n".format(args.considered_species)
+    print("    Sequences file : {}".format(args.sequences_file))
+    print("    Species retained for countings : {}\n".format(args.considered_species))
 
-    print "Processing : reading input file, opening output files, building dictionaries."
+    print("Processing : reading input file, opening output files, building dictionaries.")
     
     # make pairs
     list_species = str.split(args.considered_species, ",")
@@ -741,7 +741,7 @@ def main():
     sequences_for_counts = {}
     sequences_for_resampling = {}
     with open(args.sequences_file, "r") as file:
-        for line1,line2 in itertools.izip_longest(*[file]*2):
+        for line1,line2 in itertools.zip_longest(*[file]*2):
             species = line1.strip(">\r\n")
             sequence = line2.strip("\r\n")
             if species in list_species:                
@@ -749,13 +749,13 @@ def main():
             if species in list_species_boot:
                 sequences_for_resampling[species] = sequence
 
-    print "    Warning : countings might be biased and show high differences between species because of high variations of the indels proportions among sequences."
-    print "    Frequences are more representative."
+    print("    Warning : countings might be biased and show high differences between species because of high variations of the indels proportions among sequences.")
+    print("    Frequences are more representative.")
 
-    print "\n    Indels percent :"
+    print("\n    Indels percent :")
 
-    for k,v in sequences_for_counts.items():        
-        print "    {} : {} %".format(k, float(v.count("-"))/len(v)*100)
+    for k,v in list(sequences_for_counts.items()):        
+        print("    {} : {} %".format(k, float(v.count("-"))/len(v)*100))
 
     # useful dictionaries
     dict_genetic_code={"F":["ttt","ttc"],
@@ -809,13 +809,13 @@ def main():
     
     # RUN
 
-    print "\nProcessing : resampling ..."
-    print "    Parameters : {niter} iterations, {lensample} codon per resampled sequence, species used : {species}\n".format(niter=args.iteration, lensample=args.sample_length, species=args.species_for_bootstrap)
+    print("\nProcessing : resampling ...")
+    print("    Parameters : {niter} iterations, {lensample} codon per resampled sequence, species used : {species}\n".format(niter=args.iteration, lensample=args.sample_length, species=args.species_for_bootstrap))
 
     codons_boot, aa_boot, aatypes_boot, codons_transi_boot, aa_transi_boot, aatypes_transi_boot = sampling(sequences_for_resampling, args.iteration, args.sample_length, list_codons, dict_genetic_code, dict_aa_classif, reversecode, reverseclassif)
-    print "    Done.\n"
+    print("    Done.\n")
 
-    print "Processing : countings....\n"
+    print("Processing : countings....\n")
 
     # Initialize empty dictionaries for countings and transitions
     init_dict_codons, init_dict_aa, init_dict_classif, dico_codons_transitions, dico_aa_transitions, dico_aatypes_transitions = buildDicts(list_codons, 0, dict_genetic_code, dict_aa_classif)
@@ -823,7 +823,7 @@ def main():
     for pair in pairs_list:
         p1, p2 = pair[0], pair[1]
         if p1 not in index:
-            print "Countings on {}".format(p1)
+            print("Countings on {}".format(p1))
 
             p1_codons_counts, p1_codons_freqs, p1_aa_counts, p1_aa_freqs, p1_aatypes_counts, p1_aatypes_freqs = computeAllCountingsAndFreqs(sequences_for_counts[p1], list_codons, init_dict_codons, init_dict_aa, init_dict_classif, dict_genetic_code, dict_aa_classif)
             p1_GC3, p1_GC12, p1_IVYWREL, p1_EKQH, p1_PAYRESDGM, p1_purineload, p1_CvP = computeVarious(sequences_for_counts[p1], p1_aa_counts, p1_aatypes_freqs)
@@ -847,7 +847,7 @@ def main():
             index.append(p1)
 
         if p2 not in index:
-            print "Countings on {}".format(p2)
+            print("Countings on {}".format(p2))
             
             p2_codons_counts, p2_codons_freqs, p2_aa_counts, p2_aa_freqs, p2_aatypes_counts, p2_aatypes_freqs = computeAllCountingsAndFreqs(sequences_for_counts[p2], list_codons, init_dict_codons, init_dict_aa, init_dict_classif, dict_genetic_code, dict_aa_classif)
             p2_GC3, p2_GC12, p2_IVYWREL, p2_EKQH, p2_PAYRESDGM, p2_purineload, p2_CvP = computeVarious(sequences_for_counts[p2], p2_aa_counts, p2_aatypes_freqs)
@@ -870,7 +870,7 @@ def main():
             index.append(p2)
 
         if (p1, p2) not in index_transi and p1 in sequences_for_counts and p2 in sequences_for_counts:
-            print "Countings transitions between {} and {}".format(p1, p2)
+            print("Countings transitions between {} and {}".format(p1, p2))
             codons_transitions, codons_transitions_freqs, aa_transitions, aa_transitions_freqs, aatypes_transitions, aatypes_transitions_freqs = computeAllBiases(sequences_for_counts[p1], sequences_for_counts[p2], dico_codons_transitions, dico_aa_transitions, dico_aatypes_transitions, reversecode, reverseclassif)
             
             # Ajout
@@ -898,21 +898,21 @@ def main():
 
             index_transi.append((p1, p2))
 
-    print "\n    Done.\n"
+    print("\n    Done.\n")
 
-    print "Processing : creating dataframes ..."    
+    print("Processing : creating dataframes ...")    
 
     frame_codons = pd.DataFrame(all_codons).T.astype('object')
     frame_aa = pd.DataFrame(all_aa).T.astype('object')    
     frame_aatypes = pd.DataFrame(all_aatypes).T.astype('object')
 
-    frame_codons_transitions = pd.concat({k: pd.DataFrame(v) for k, v in all_codons_transitions.items()}).unstack()
+    frame_codons_transitions = pd.concat({k: pd.DataFrame(v) for k, v in list(all_codons_transitions.items())}).unstack()
     frame_codons_transitions.columns = frame_codons_transitions.columns.map('>'.join)
 
-    frame_aa_transitions = pd.concat({k: pd.DataFrame(v) for k, v in all_aa_transitions.items()}).unstack()
+    frame_aa_transitions = pd.concat({k: pd.DataFrame(v) for k, v in list(all_aa_transitions.items())}).unstack()
     frame_aa_transitions.columns = frame_aa_transitions.columns.map('>'.join)
 
-    frame_aatypes_transitions = pd.concat({k: pd.DataFrame(v) for k, v in all_aatypes_transitions.items()}).unstack()
+    frame_aatypes_transitions = pd.concat({k: pd.DataFrame(v) for k, v in list(all_aatypes_transitions.items())}).unstack()
     frame_aatypes_transitions.columns = frame_aatypes_transitions.columns.map('>'.join)
 
     frame_various = pd.DataFrame(all_various).T
@@ -921,7 +921,7 @@ def main():
     frame_codons.index.name, frame_aa.index.name, frame_aatypes.index.name = "Species", "Species","Species"
     frame_aa_transitions.index.name, frame_aatypes_transitions.index.name, frame_various.index.name = "Species","Species","Species"
 
-    print "Writing dataframes to output files ...\n"
+    print("Writing dataframes to output files ...\n")
 
     frame_codons.round(8).to_csv("codons_freqs.csv", sep=",", encoding="utf-8")
     frame_aa.round(8).to_csv("aa_freqs.csv", sep=",", encoding="utf-8")
@@ -931,7 +931,7 @@ def main():
     frame_aatypes_transitions.round(8).to_csv("aatypes_transitions_freqs.csv", sep=",", encoding="utf-8")
     frame_various.round(8).to_csv("gc_and_others_freqs.csv", sep=",", encoding="utf-8")
 
-    print "Done."
+    print("Done.")
 
 if __name__ == "__main__":
     main()

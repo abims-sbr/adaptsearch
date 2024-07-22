@@ -13,15 +13,15 @@ def dico(fasta_file, path_in):
     bash1 = {}    
 
     with open(path_in+'/'+fasta_file, 'r') as F1:
-        for h,s in itertools.izip_longest(*[F1]*2):            
+        for h,s in itertools.zip_longest(*[F1]*2):            
             fasta_name = h[1:3]
             sequence = s[:-1]
-            if fasta_name not in bash1.keys():
+            if fasta_name not in list(bash1.keys()):
                 bash1[fasta_name] = sequence
             else:
-                print fasta_name
+                print(fasta_name)
    
-    return(bash1, len(bash1[bash1.keys()[0]])) # same length for all (alignment)
+    return(bash1, len(bash1[list(bash1.keys())[0]])) # same length for all (alignment)
 
 def one_aa_counts(seq, aa):
     count = seq.count(aa)
@@ -41,7 +41,7 @@ def all_aa_counts(seq):
 def all_aa_props(seq_counts):
 
     aa_props = {}
-    for key in seq_counts.keys():
+    for key in list(seq_counts.keys()):
         aa_props[key] = float(seq_counts[key]) / sum(seq_counts.values())
     return aa_props
 
@@ -71,7 +71,7 @@ def aa_variables_counts_and_props(aa_counts):
     aa_variables_counts['VLIM'] = aa_counts['V'] + aa_counts['L'] + aa_counts['I'] + aa_counts['M']
 
     # compute proportions
-    for key in aa_variables_counts.keys():
+    for key in list(aa_variables_counts.keys()):
         aa_variables_props[key] = float(aa_variables_counts[key]) / float(len_seq)
 
     if aa_variables_counts['DNQTSHA'] != 0:
@@ -141,7 +141,7 @@ def main():
         aa_variables_counts_per_seq = {}
         aa_variables_props_per_seq = {}
 
-        for key in content.keys():
+        for key in list(content.keys()):
             aa_counts_per_seq[key] = all_aa_counts(content[key])
             aa_props_per_seq[key] = all_aa_props(aa_counts_per_seq[key])
             aa_variables_counts_per_seq[key], aa_variables_props_per_seq[key] = aa_variables_counts_and_props(aa_counts_per_seq[key])
@@ -155,7 +155,7 @@ def main():
     for aa in LAA:
         out = open(aa, 'w')
         out.write('Group,'+flsp[0:-1]+'\n')
-        for group in dict_for_files_aa_counts.keys():
+        for group in list(dict_for_files_aa_counts.keys()):
             count_of_aa = ''
             for specs in sorted(dict_for_files_aa_counts[group].keys()):
                 count_of_aa += str(dict_for_files_aa_counts[group][specs][aa])+','
@@ -167,7 +167,7 @@ def main():
     for var in LV:
         out = open(var, 'w')
         out.write('Group,'+flsp[0:-1]+'\n')
-        for group in dict_for_files_variables_counts.keys():
+        for group in list(dict_for_files_variables_counts.keys()):
             count_of_var = ''
             for specs in sorted(dict_for_files_variables_counts[group].keys()):
                 count_of_var += str(dict_for_files_variables_counts[group][specs][var])+','

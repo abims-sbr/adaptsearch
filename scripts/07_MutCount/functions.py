@@ -17,13 +17,13 @@ def dico(fasta_file, path_in):
     bash1 = {}    
 
     with open(path_in+'/'+fasta_file, 'r') as F1:
-        for h,s in itertools.izip_longest(*[F1]*2):            
+        for h,s in itertools.zip_longest(*[F1]*2):            
             fasta_name = h[1:3]
             sequence = s[:-1]
-            if fasta_name not in bash1.keys():
+            if fasta_name not in list(bash1.keys()):
                 bash1[fasta_name] = sequence
             else:
-                print fasta_name
+                print(fasta_name)
    
     return bash1 # same length for all (alignment)
 
@@ -40,7 +40,7 @@ def write_output(names, sps_list, out_dir, results_dict):
     for name in names:
         out = open(name+".csv", 'w')
         out.write('Group,' + sps_list[0:-1]+'\n')
-        for group in results_dict.keys():
+        for group in list(results_dict.keys()):
             count_of_elems = ''
             for specs in sorted(results_dict[group].keys()):
                 count_of_elems += str(results_dict[group][specs][name]) + ','

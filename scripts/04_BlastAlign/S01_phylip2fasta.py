@@ -16,7 +16,7 @@ if len(sys.argv) == 1:
 if os.path.isfile(sys.argv[1]) :
     f1 = sys.argv[1]
 else:
-    print "No existing phylip file ; exiting ..."
+    print("No existing phylip file ; exiting ...")
     exit()
 
 F1 = open("%s" %f1, 'r')

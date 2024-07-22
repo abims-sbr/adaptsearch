@@ -61,7 +61,7 @@ def loop_on_elems(list_of_elems, path_in, path_out, sps_group_1, sps_group_2, co
     # Function ------------------------------------------------------
 
     for variable in list_of_elems:        
-        print 'Processing : {} ...'.format(variable)
+        print('Processing : {} ...'.format(variable))
         file_in = "{}/{}.csv".format(path_in, variable)
         file_out = open('{}/{}.csv'.format(path_out,variable), 'w')
 
@@ -71,7 +71,7 @@ def loop_on_elems(list_of_elems, path_in, path_out, sps_group_1, sps_group_2, co
         # totals and diffs
         diff_dict = {}
         total_dict = {}
-        for key in greater_dict.keys():
+        for key in list(greater_dict.keys()):
             diff_dict[key] = greater_dict[key] - lower_dict[key]
             total_dict[key] = greater_dict[key] + lower_dict[key]
             #total_dict[key] = number_trials
@@ -141,7 +141,7 @@ def main():
         loop_on_elems(LS, input_path_var, out_path_var, sps_group_1, sps_group_2, colnames)
 
     # Final R script launching sign test
-    print 'Processing : binomial sign tests ...'
+    print('Processing : binomial sign tests ...')
 
     if args.format == 'nucleic':
         final_output_elem = '04_outputs_nucleotides'

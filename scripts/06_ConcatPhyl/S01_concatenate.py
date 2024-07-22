@@ -9,7 +9,7 @@
 def dico(F2):
     dicoco = {}
     with open(F2, "r") as file:
-        for name, query in itertools.izip_longest(*[file]*2):
+        for name, query in itertools.zip_longest(*[file]*2):
             if not name:
                 break
             if name[0] == ">":
@@ -46,7 +46,7 @@ def concatenate(L_IN, SPECIES_ID_LIST):
         ## a ## Open alignments        
         dico_seq = dico(file)   ### DEF 0 ###        
         ## b ## Get alignment length + genes positions for RAxML
-        key0 = dico_seq.keys()[0]
+        key0 = list(dico_seq.keys())[0]
         ln = len(dico_seq[key0])
         ln_concat = ln_concat + ln
 
@@ -171,13 +171,13 @@ if format_run == "proteic" :
     OUT_PARTITION_gene_AA.close()
 
     ## Get "ntax" for NEXUS HEADER
-    nb_taxa = len(bash_concatenation.keys())
+    nb_taxa = len(list(bash_concatenation.keys()))
 
-    print "******************** CONCATENATION ********************\n"
-    print "Process amino-acid concatenation:"
-    print "\tNumber of taxa aligned = %d" %nb_taxa
-    print "\tNumber of loci concatenated = %d\n" %nb_locus
-    print "\tTotal length of the concatenated sequences = %d" %ln
+    print("******************** CONCATENATION ********************\n")
+    print("Process amino-acid concatenation:")
+    print("\tNumber of taxa aligned = %d" %nb_taxa)
+    print("\tNumber of loci concatenated = %d\n" %nb_locus)
+    print("\tTotal length of the concatenated sequences = %d" %ln)
 
 
     ## Print NEXUS HEADER:
@@ -191,7 +191,7 @@ if format_run == "proteic" :
     OUT2.write("   %d %d\n" %(nb_taxa, ln))
 
     ## 3.5 ## Print outputs
-    for seq_name in bash_concatenation.keys():
+    for seq_name in list(bash_concatenation.keys()):
         seq = bash_concatenation[seq_name]
 
         ## Filtering the sequence in case of remaining "?"
@@ -271,15 +271,15 @@ elif format_run == "nucleic" :
 
 
     ## Get "ntax" for NEXUS HEADER
-    nb_taxa = len(bash_concatenation.keys())
+    nb_taxa = len(list(bash_concatenation.keys()))
 
-    print "******************** CONCATENATION ********************\n"
-    print "Process nucleotides concatenation:"
-    print "\tNumber of taxa aligned = %d" %nb_taxa
-    print "\tNumber of loci concatenated = %d\n" %nb_locus
-    print "\tTotal length of the concatenated sequences [All codon positions] = %d" %ln
-    print "\t\tTotal length of the concatenated sequences [Codon positions 1 & 2] = %d" %ln_12
-    print "\t\tTotal length of the concatenated sequences [Codon position 3] = %d" %ln_3
+    print("******************** CONCATENATION ********************\n")
+    print("Process nucleotides concatenation:")
+    print("\tNumber of taxa aligned = %d" %nb_taxa)
+    print("\tNumber of loci concatenated = %d\n" %nb_locus)
+    print("\tTotal length of the concatenated sequences [All codon positions] = %d" %ln)
+    print("\t\tTotal length of the concatenated sequences [Codon positions 1 & 2] = %d" %ln_12)
+    print("\t\tTotal length of the concatenated sequences [Codon position 3] = %d" %ln_3)
 
 
     ## Print NEXUS HEADER:
@@ -307,7 +307,7 @@ elif format_run == "nucleic" :
     OUT2_pos3.write("   %d %d\n" %(nb_taxa, ln_3))
 
     ## Print outputs
-    for seq_name in bash_concatenation.keys():
+    for seq_name in list(bash_concatenation.keys()):
         seq = bash_concatenation[seq_name]
 
         ## Filtering the sequence in case of remaining "?"
@@ -358,4 +358,4 @@ elif format_run == "nucleic" :
     OUT2_pos3.close()
     OUT3_pos3.close()
 
-print "\n\n\n******************** RAxML RUN ********************\n"
+print("\n\n\n******************** RAxML RUN ********************\n")
