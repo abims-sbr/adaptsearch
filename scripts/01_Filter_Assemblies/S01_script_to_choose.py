@@ -9,15 +9,12 @@ def reformat_headers(input_file, output_file, prefix):
     with open(input_file, 'r') as infile, open(output_file, 'w') as outfile:
         for line in infile:
             if line.startswith('>'):
-                parts = line.strip().split('_')
-                if len(parts) > 1:
-                    # Extract the numeric part after 'ou'
-                    numeric_part = parts[0][1:].replace('ou', '')
-                    rest = '_'.join(parts[1:])
-                    new_header = f">{prefix}{numeric_part}_{rest}"
-                    outfile.write(new_header + '\n')
-                else:
-                    outfile.write(line)
+                # Extract the numeric part and the rest of the header
+                header_parts = line[1:].split('/')
+                numeric_part = header_parts[0].replace('ou', '')
+                rest = '/'.join(header_parts[1:])
+                new_header = f">{prefix}{numeric_part}/{rest}"
+                outfile.write(new_header + '\n')
             else:
                 outfile.write(line)
 
@@ -50,21 +47,21 @@ def name_formatting(name, prefix):
     name_find_orf_input = ""
 
     if f1.startswith(">Locus"):
-        name_remove_redondancy = os.path.join("outputs", f"02_{name}")
+        name_remove_redondancy = os.path.join("outputs", f"02_{os.path.basename(name)}")
         os.makedirs(os.path.dirname(name_remove_redondancy), exist_ok=True)
         subprocess.run(["python", "S02a_remove_redondancy_from_velvet_oases.py", name, name_remove_redondancy], check=True)
-        name_find_orf_input = os.path.join("outputs", f"{prefix}{name}")
+        name_find_orf_input = os.path.join("outputs", f"{prefix}_{os.path.basename(name)}")
         sed_cmd = f"sed -e 's/Locus_/{prefix}/g' -e 's/_Confidence_/_/g' -e 's/_Transcript_/_/g' -e 's/_Length_/_/g' {name_remove_redondancy}"
         sed_output = subprocess.check_output(sed_cmd, shell=True, text=True)
         with open(name_find_orf_input, 'w') as file:
             file.write(sed_output)
     elif f1.startswith(">c"):
         # Format the name of the sequences with good name
-        name_format_fasta = os.path.join("outputs", f"03_{name}")
+        name_format_fasta = os.path.join("outputs", f"03_{os.path.basename(name)}")
         os.makedirs(os.path.dirname(name_format_fasta), exist_ok=True)
         subprocess.run(["python", "S02b_format_fasta_name_trinity.py", name, name_format_fasta, prefix], check=True)
         # Apply first script to avoid redundant sequences
-        name_find_orf_input = os.path.join("outputs", f"04_{name}")
+        name_find_orf_input = os.path.join("outputs", f"04_{os.path.basename(name)}")
         os.makedirs(os.path.dirname(name_find_orf_input), exist_ok=True)
         subprocess.run(["python", "S03_choose_one_variants_per_locus_trinity.py", name_format_fasta, name_find_orf_input], check=True)
 
@@ -86,7 +83,7 @@ def main():
             continue
 
         prefix = name[0:2]
-        name_fasta_formatter = os.path.join("outputs", f"01_{name}")
+        name_fasta_formatter = os.path.join("outputs", f"01_{os.path.basename(name)}")
         fasta_formatter(name, name_fasta_formatter)
         name_find_orf_input = name_formatting(name_fasta_formatter, prefix)
 
@@ -94,7 +91,7 @@ def main():
             continue
 
         # Apply the ORF finding script to keep the longest ORF
-        name_find_orf = os.path.join("outputs", f"05_{name}")
+        name_find_orf = os.path.join("outputs", f"05_{os.path.basename(name)}")
         os.makedirs(os.path.dirname(name_find_orf), exist_ok=True)
         subprocess.run(["python", "S04_find_orf.py", name_find_orf_input, name_find_orf], check=True)
 
@@ -108,7 +105,7 @@ def main():
             file.write(singlets_output)
 
         # Apply filter script
-        name_filter = os.path.join("outputs", f"05_{name}")
+        name_filter = os.path.join("outputs", f"05_{os.path.basename(name)}")
         subprocess.run(["python", "S05_filter.py", singlets_output_file, length_seq_max], check=True)
 
         # Reformat headers in the final output file
