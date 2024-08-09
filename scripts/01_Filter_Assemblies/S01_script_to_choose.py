@@ -2,39 +2,54 @@ import sys
 import os
 import subprocess
 from Bio import SeqIO
-from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-
-def reformat_headers(input_file, output_file, prefix):
-    with open(input_file, 'r') as infile, open(output_file, 'w') as outfile:
-        for line in infile:
-            if line.startswith('>'):
-                # Extract the numeric part and the rest of the header
-                header_parts = line[1:].split('/')
-                numeric_part = header_parts[0].replace('ou', '')
-                rest = '/'.join(header_parts[1:])
-                new_header = f">{prefix}{numeric_part}/{rest}"
-                outfile.write(new_header + '\n')
-            else:
-                outfile.write(line)
+from Bio.Seq import Seq
 
 def fasta_formatter(input_file, output_file):
+    """
+    Reformats the input FASTA file to ensure that sequences are on a single line.
+    """
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
     with open(input_file, 'r') as infile, open(output_file, 'w') as outfile:
         sequence = ''
         header = ''
         for line in infile:
             if line.startswith('>'):
-                if header:
-                    outfile.write(header + '\n')
+                if sequence:
                     outfile.write(sequence + '\n')
                 header = line.strip()
+                outfile.write(header + '\n')
                 sequence = ''
             else:
                 sequence += line.strip()
-        if header:
-            outfile.write(header + '\n')
+        if sequence:
             outfile.write(sequence + '\n')
+
+
+def reformat_headers(input_file, output_file, prefix):
+    """
+    Reformats the headers of the FASTA records by adding a specified prefix
+    and ensures that sequences are on a single line.
+    """
+    with open(input_file, 'r') as infile, open(output_file, 'w') as outfile:
+        sequence = ''
+        for line in infile:
+            if line.startswith('>'):
+                if sequence:
+                    outfile.write(sequence + '\n')
+                # Process header line
+                original_id = line[1:].strip()
+                header_parts = original_id.split('/')
+                numeric_part = header_parts[0].replace('ou', '')
+                rest = '/'.join(header_parts[1:]) if len(header_parts) > 1 else ""
+                new_header = f">{prefix}{numeric_part}/{rest}" if rest else f">{prefix}{numeric_part}"
+                outfile.write(new_header + '\n')
+                sequence = ''
+            else:
+                sequence += line.strip()
+        if sequence:
+            outfile.write(sequence + '\n')
+
 
 def name_formatting(name, prefix):
     if not os.path.isfile(name):
@@ -64,6 +79,12 @@ def name_formatting(name, prefix):
         name_find_orf_input = os.path.join("outputs", f"04_{os.path.basename(name)}")
         os.makedirs(os.path.dirname(name_find_orf_input), exist_ok=True)
         subprocess.run(["python", "S03_choose_one_variants_per_locus_trinity.py", name_format_fasta, name_find_orf_input], check=True)
+    elif f1.startswith(">NODE"):
+        # Handle SPAdes output
+        name_find_orf_input = os.path.join("outputs", f"{prefix}_{os.path.basename(name)}")
+        os.makedirs(os.path.dirname(name_find_orf_input), exist_ok=True)
+        # No additional formatting is done, assuming SPAdes output doesn't need it
+        subprocess.run(["cp", name, name_find_orf_input], check=True)
 
     return name_find_orf_input
 
