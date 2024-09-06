@@ -90,11 +90,11 @@ def name_formatting(name, prefix):
 
 def main():
     if len(sys.argv) < 5:
-        print("Usage: script.py <input_files> <length_seq_max> <percent_identity> <overlap_length>")
+        print("Usage: script.py <input_files> <length_seq_min> <percent_identity> <overlap_length>")
         sys.exit(1)
 
     os.makedirs("outputs", exist_ok=True)
-    length_seq_max = sys.argv[2]
+    length_seq_min = sys.argv[2]
     percent_identity = sys.argv[3]
     overlap_length = sys.argv[4]
 
@@ -117,6 +117,7 @@ def main():
         subprocess.run(["python", "S04_find_orf.py", name_find_orf_input, name_find_orf], check=True)
 
         # Apply CAP3
+        print(f"cap3{name_find_orf} -p {percent_identity} -o {overlap_length}")
         subprocess.run(["cap3", name_find_orf, "-p", percent_identity, "-o", overlap_length], check=True)
 
         # Merge singlets and contigs
@@ -127,7 +128,7 @@ def main():
 
         # Apply filter script
         name_filter = os.path.join("outputs", f"05_{os.path.basename(name)}")
-        subprocess.run(["python", "S05_filter.py", singlets_output_file, length_seq_max], check=True)
+        subprocess.run(["python", "S05_filter.py", singlets_output_file, length_seq_min], check=True)
 
         # Reformat headers in the final output file
         final_output_file = os.path.join("outputs", f"{prefix}{name}")
