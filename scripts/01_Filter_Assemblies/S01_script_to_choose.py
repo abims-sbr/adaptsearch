@@ -51,49 +51,44 @@ def reformat_headers(input_file, output_file, prefix):
             outfile.write(sequence + '\n')
 
 
-def name_formatting(name, prefix):
-    if not os.path.isfile(name):
-        print(f"Error: File {name} does not exist.")
-        return ""
+def rename_fasta_headers(input_fasta, output_fasta):
+    # Extraire le nom de base du fichier (sans l'extension .fasta)
+    base_name_dir = input_fasta.split('.')[0]
+    base_name = base_name_dir.split('/')[1]
+    # Les deux premières lettres du nom de fichier
+    prefix = base_name[3:5]
+    # Liste pour stocker les nouvelles séquences
+    modified_sequences = []
 
-    with open(name, "r") as f:
-        f1 = f.readline()  # Only need to check first line to know the assembler which has been used
+    # Lire le fichier fasta et modifier les en-têtes
+    for index, record in enumerate(SeqIO.parse(input_fasta, "fasta"), start=1):
+        # Longueur de la séquence
+        seq_length = len(record.seq)
+        
+        # Créer le nouvel en-tête selon le format demandé
+        new_header = f">{prefix}{index}_1/1_1.000_{seq_length}"
+        
+        # Modifier l'en-tête du record
+        record.id = new_header[1:]  # [1:] pour enlever le ">"
+        record.description = ""
+        
+        # Ajouter la séquence modifiée à la liste
+        modified_sequences.append(record)
+    
+    # Nom du fichier de sortie
+    #output_fasta = f"{base_name_dir}_renamed.fasta"
+    
+    # Écrire le fichier de sortie avec les nouvelles en-têtes
+    SeqIO.write(modified_sequences, output_fasta, "fasta")
 
-    name_find_orf_input = ""
-
-    if f1.startswith(">Locus"):
-        name_remove_redondancy = os.path.join("outputs", f"02_{os.path.basename(name)}")
-        os.makedirs(os.path.dirname(name_remove_redondancy), exist_ok=True)
-        subprocess.run(["python", "S02a_remove_redondancy_from_velvet_oases.py", name, name_remove_redondancy], check=True)
-        name_find_orf_input = os.path.join("outputs", f"{prefix}_{os.path.basename(name)}")
-        sed_cmd = f"sed -e 's/Locus_/{prefix}/g' -e 's/_Confidence_/_/g' -e 's/_Transcript_/_/g' -e 's/_Length_/_/g' {name_remove_redondancy}"
-        sed_output = subprocess.check_output(sed_cmd, shell=True, text=True)
-        with open(name_find_orf_input, 'w') as file:
-            file.write(sed_output)
-    elif f1.startswith(">c"):
-        # Format the name of the sequences with good name
-        name_format_fasta = os.path.join("outputs", f"03_{os.path.basename(name)}")
-        os.makedirs(os.path.dirname(name_format_fasta), exist_ok=True)
-        subprocess.run(["python", "S02b_format_fasta_name_trinity.py", name, name_format_fasta, prefix], check=True)
-        # Apply first script to avoid redundant sequences
-        name_find_orf_input = os.path.join("outputs", f"04_{os.path.basename(name)}")
-        os.makedirs(os.path.dirname(name_find_orf_input), exist_ok=True)
-        subprocess.run(["python", "S03_choose_one_variants_per_locus_trinity.py", name_format_fasta, name_find_orf_input], check=True)
-    elif f1.startswith(">NODE"):
-        # Handle SPAdes output
-        name_find_orf_input = os.path.join("outputs", f"{prefix}_{os.path.basename(name)}")
-        os.makedirs(os.path.dirname(name_find_orf_input), exist_ok=True)
-        # No additional formatting is done, assuming SPAdes output doesn't need it
-        subprocess.run(["cp", name, name_find_orf_input], check=True)
-
-    return name_find_orf_input
 
 def main():
     if len(sys.argv) < 5:
         print("Usage: script.py <input_files> <length_seq_min> <percent_identity> <overlap_length>")
         sys.exit(1)
 
-    os.makedirs("outputs", exist_ok=True)
+    output_dir = "outputs_new"  # Define the output directory
+    os.makedirs(output_dir, exist_ok=True)
     length_seq_min = sys.argv[2]
     percent_identity = sys.argv[3]
     overlap_length = sys.argv[4]
@@ -103,36 +98,51 @@ def main():
             print(f"Error: Input file {name} does not exist.")
             continue
 
-        prefix = name[0:2]
-        name_fasta_formatter = os.path.join("outputs", f"01_{os.path.basename(name)}")
-        fasta_formatter(name, name_fasta_formatter)
-        name_find_orf_input = name_formatting(name_fasta_formatter, prefix)
-
-        if name_find_orf_input == "":
-            continue
-
-        # Apply the ORF finding script to keep the longest ORF
-        name_find_orf = os.path.join("outputs", f"05_{os.path.basename(name)}")
-        os.makedirs(os.path.dirname(name_find_orf), exist_ok=True)
-        subprocess.run(["python", "S04_find_orf.py", name_find_orf_input, name_find_orf], check=True)
-
         # Apply CAP3
-        print(f"cap3{name_find_orf} -p {percent_identity} -o {overlap_length}")
-        subprocess.run(["cap3", name_find_orf, "-p", percent_identity, "-o", overlap_length], check=True)
+        # Get the base file name
+        file_name = os.path.basename(name)
+        # Define the output file path in the output directory
+        output_file_path = os.path.join(output_dir, file_name)
+        # Create a symbolic link for the input file in the output directory
+        symlink_path = os.path.join(output_dir, file_name)
+        if not os.path.exists(symlink_path):
+            os.symlink(os.path.abspath(name), symlink_path)
+
+        # Print and run the CAP3 command
+        print(f"cap3 {output_file_path} -p {percent_identity} -o {overlap_length}")
+        subprocess.run(["cap3", output_file_path, "-p", percent_identity, "-o", overlap_length], check=True)
+
+        # Format file to have sequence in one line
+        name_fasta_formatter = os.path.join(output_dir, f"02_{os.path.basename(name)}")
+        fasta_formatter(f"{output_file_path}.cap.singlets", name_fasta_formatter)
 
         # Merge singlets and contigs
-        singlets_output = subprocess.check_output(["zcat", "-f", f"{name_find_orf}.cap.singlets"], text=True)
-        singlets_output_file = os.path.join("outputs", f"{prefix}_singlets.fasta")
-        with open(singlets_output_file, 'w') as file:
-            file.write(singlets_output)
+        merged_file = os.path.join(output_dir, f"03_{file_name}_merged.fasta")
+        # Define paths for CAP3 output files
+        cap_singlets_file = os.path.join(output_dir, f"{file_name}.cap.singlets")
+        cap_contigs_file = os.path.join(output_dir, f"{file_name}.cap.contigs")
+        print(f"{cap_singlets_file} and {cap_contigs_file}")
 
-        # Apply filter script
-        name_filter = os.path.join("outputs", f"05_{os.path.basename(name)}")
-        subprocess.run(["python", "S05_filter.py", singlets_output_file, length_seq_min], check=True)
+        with open(merged_file, 'w') as outfile:
+            # Write the contents of the contigs file first
+            if os.path.exists(cap_contigs_file):
+                with open(cap_contigs_file, 'r') as contigs:
+                    outfile.write(contigs.read())
+            # Append the contents of the singlets file
+            if os.path.exists(cap_singlets_file):
+                with open(cap_singlets_file, 'r') as singlets:
+                    outfile.write(singlets.read())
 
-        # Reformat headers in the final output file
-        final_output_file = os.path.join("outputs", f"{prefix}{name}")
-        reformat_headers(name_filter, final_output_file, prefix)
+        # Reformat headers
+        name_fasta_final = os.path.join(output_dir, f"04_{os.path.basename(name)}")
+        rename_fasta_headers(merged_file, name_fasta_final)
+
+        # Format final file to have sequence in one line
+        prefix = file_name[:2]
+        tmp = prefix + os.path.basename(name)
+        name_final_file = os.path.join(output_dir, tmp)
+        fasta_formatter(name_fasta_final, name_final_file)
+
 
 if __name__ == "__main__":
     main()
