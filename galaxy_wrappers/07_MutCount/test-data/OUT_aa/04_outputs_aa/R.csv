@@ -1,0 +1,9 @@
+"","Ap_vs_PpPg","Pg_vs_ApPs","Pp_vs_ApPs","Ps_vs_PpPg"
+"Greater",4,4,2,3
+"Lower",4,2,4,1
+"Difference",0,2,-2,2
+"Trial_Number",8,6,6,4
+"p-value",1,0.6875,0.6875,0.625
+"probability_of_success",0.5,0.666666666666667,0.333333333333333,0.75
+"confidence_interval_low",0.157012770487058,0.222778095503512,0.0432718682927417,0.194120449683243
+"confidence_interval_high",0.842987229512942,0.956728131707258,0.777221904496488,0.99369053679029

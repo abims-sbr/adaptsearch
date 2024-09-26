@@ -1,281 +1,230 @@
-<tool name="Pairwise" id="pairwise" version="2.0">
+<tool name="Pairwise" id="pairwise" version="2.1.1">
 
-	<description>
-		Run reciproque tblastx pairwise
-	</description>
+    <description>
+        Find homologous couples by blast with RBH
+    </description>
 
-	<macros>
-		<import>macros.xml</import>
-	</macros>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
 
-	<requirements>
-		<expand macro="python_required" />
-		<requirement type="package" version="2.2.22">blast-legacy</requirement>
-		<requirement type="package" version="1.3.1">samtools</requirement>
-	</requirements>
+    <requirements>
+        <expand macro="python_required" />
+        <requirement type="package" version="1.65">biopython</requirement>
+        <requirement type="package" version="0.9.22">diamond</requirement>
+        <requirement type="package" version="2.2.22">blast-legacy</requirement>      
+    </requirements>
 
-  	<command><![CDATA[
+    <command><![CDATA[
         #set $infiles = ""
         #for $input in $inputs
             ln -s '$input' '$input.element_identifier';
             #set $infiles = $infiles + $input.element_identifier + ","
         #end for
         #set $infiles = $infiles[:-1]
+        
+        ln -s $__tool_directory__/scripts/S02_04_keep_one_hit_from_blast.py . &&
+        ln -s $__tool_directory__/scripts/S03_run_second_blast.py . &&
+        ln -s $__tool_directory__/scripts/S05_find_rbh.py . &&        
 
-        ln -s $__tool_directory__/scripts/S02_xxx_patron_pipeline.sh . &&
-        ln -s $__tool_directory__/scripts/S03_run_blast_with_k_filter.sh . &&
-        ln -s $__tool_directory__/scripts/S04_run_blast2_with_k_filter.sh . &&
-        ln -s $__tool_directory__/scripts/S05_script_extract_match_v20_blastx.py . &&
-        ln -s $__tool_directory__/scripts/S06_post_processing_of_pairwise.py . &&
-        ln -s $__tool_directory__/scripts/S07_format_match_get_back_nucleotides.py . &&
-        ln -s $__tool_directory__/scripts/S08_script_extract_match_v20_blastx.py . &&
-        ln -s $__tool_directory__/scripts/S09_post_processing_of_pairwise.py . &&
-        ln -s $__tool_directory__/scripts/S10_compare_list_pairs_for_reciprocal_best_hits_test.py . &&
-        ln -s $__tool_directory__/scripts/S11_post_processing_of_pairwise.py . &&
-        ln -s $__tool_directory__/scripts/S12_prot2dna.py . &&
+        python -W ignore $__tool_directory__/scripts/S01_run_first_blast.py $infiles ${e_value} $method
+        > ${output};
+    ]]></command>
 
-		python $__tool_directory__/scripts/S01_organize_rbh.py $infiles ${e_value} \${GALAXY_SLOTS:-1}
-		> ${output};
-  	]]></command>
+    <inputs>
+        <param name="inputs" type="data" format="fasta" multiple="true" label="Input fasta files" />
+        <param name="method" type="select" label="Alignment tool to use" help="tblastx is slow and sensitive, diamond is a lot quicker and less sensitive">
+            <option value="tblastx">tblastx</option>
+            <option value="diamond">Diamond</option>
+        </param>
+        <param name="e_value" type="float" value="1e-5" label="e_value" help="e-value for blast." />
+    </inputs>
 
- 	<inputs>
-        <param name="inputs" type="data" format="fasta" multiple="true" label="Input files" />
-		<param name="e_value" type="float" value="1e-5" label="e_value" help="By default, it's 1e-5. you can write the e-value like this: 1e-5" />
-	</inputs>
-
-	<outputs>
-		<data format="txt" name="output" label="Pairwise" />
-        <collection name="output_fasta_dna" type="list" label="Pairwise DNA">
-            <discover_datasets pattern="__name_and_ext__" directory="outputs_dna" />
+    <outputs>
+        <data format="txt" name="output" label="Pairwise" />
+        <collection name="output_fasta_dna" type="list" label="Pairwise_DNA">
+            <discover_datasets pattern="__name_and_ext__" directory="outputs_RBH_dna" />
         </collection>
-        <collection name="output_fasta_prot" type="list" label="Pairwise PROT">
-            <discover_datasets pattern="__name_and_ext__" directory="outputs_prot" />
-        </collection>
-	</outputs>
+    </outputs>
 
-	<tests>
-		<test>
-            <param name="inputs" ftype="fasta" value="inputs/PfPfiji_Trinity.fasta,inputs/ApApomp_Trinity.fasta,inputs/AmAmphi_Trinity.fasta,inputs/AcAcaud_Trinity.fasta" />
-			<param name="e-value" value="1e-5" />
-			<output name="output" >
-				<assert_contents>
-					<has_line line="('PfPfiji_Trinity.fasta', 'ApApomp_Trinity.fasta')"/>
-					<has_line line="('PfPfiji_Trinity.fasta', 'AmAmphi_Trinity.fasta')"/>
-					<has_line line="('PfPfiji_Trinity.fasta', 'AcAcaud_Trinity.fasta')"/>
-					<has_line line="('ApApomp_Trinity.fasta', 'AmAmphi_Trinity.fasta')"/>
-					<has_line line="('ApApomp_Trinity.fasta', 'AcAcaud_Trinity.fasta')"/>
-					<has_line line="('AmAmphi_Trinity.fasta', 'AcAcaud_Trinity.fasta')"/>
-
-					<has_text text="Number of pairwises parsed = 2" />
-					<has_text text="Number of pairwises parsed = 3" />
-					<has_text text="Number of pairwises parsed = 0" />
-					<has_text text="Number of pairwises parsed = 5" />
-					<has_text text="Number of pairwises parsed = 1" />
-				</assert_contents>
-			</output>
-            <output_collection name="output_fasta_prot" type="list">
-                <element name="ReciprocalBestHits_AmAmphi_AcAcaud" value="outputs_prot/ReciprocalBestHits_AmAmphi_AcAcaud.fasta" />
-                <element name="ReciprocalBestHits_ApApomp_AcAcaud" value="outputs_prot/ReciprocalBestHits_ApApomp_AcAcaud.fasta" />
-                <element name="ReciprocalBestHits_ApApomp_AmAmphi" value="outputs_prot/ReciprocalBestHits_ApApomp_AmAmphi.fasta" />
-                <element name="ReciprocalBestHits_PfPfiji_AcAcaud" value="outputs_prot/ReciprocalBestHits_PfPfiji_AcAcaud.fasta" />
-                <element name="ReciprocalBestHits_PfPfiji_AmAmphi" value="outputs_prot/ReciprocalBestHits_PfPfiji_AmAmphi.fasta" />
-                <element name="ReciprocalBestHits_PfPfiji_ApApomp" value="outputs_prot/ReciprocalBestHits_PfPfiji_ApApomp.fasta" />
-            </output_collection>
+    <tests>
+        <test>
+            <param name="inputs" ftype="fasta" value="inputs_tblastx/AcAcaud_trinity.fasta,inputs_tblastx/AmAmphi_trinity.fasta,inputs_tblastx/ApApomp_trinity.fasta,inputs_tblastx/PfPfiji_trinity.fasta" />
+            <param name="e-value" value="1e-5" />
+            <param name="method" value="tblastx" />
             <output_collection name="output_fasta_dna" type="list">
-                <element name="DNAalignment_corresponding_to_protein_from_RBH_AmAmphi_AcAcaud" value="outputs_dna/DNAalignment_corresponding_to_protein_from_RBH_AmAmphi_AcAcaud.fasta" />
-                <element name="DNAalignment_corresponding_to_protein_from_RBH_ApApomp_AcAcaud" value="outputs_dna/DNAalignment_corresponding_to_protein_from_RBH_ApApomp_AcAcaud.fasta" />
-                <element name="DNAalignment_corresponding_to_protein_from_RBH_ApApomp_AmAmphi" value="outputs_dna/DNAalignment_corresponding_to_protein_from_RBH_ApApomp_AmAmphi.fasta" />
-                <element name="DNAalignment_corresponding_to_protein_from_RBH_PfPfiji_AcAcaud" value="outputs_dna/DNAalignment_corresponding_to_protein_from_RBH_PfPfiji_AcAcaud.fasta" />
-                <element name="DNAalignment_corresponding_to_protein_from_RBH_PfPfiji_AmAmphi" value="outputs_dna/DNAalignment_corresponding_to_protein_from_RBH_PfPfiji_AmAmphi.fasta" />
-                <element name="DNAalignment_corresponding_to_protein_from_RBH_PfPfiji_ApApomp" value="outputs_dna/DNAalignment_corresponding_to_protein_from_RBH_PfPfiji_ApApomp.fasta" />
+                <element name="RBH_AcAcaud_AmAmphi_dna">
+                    <assert_contents>
+                        <has_text text=">Ac5_1/1_1.000_160"/>
+                        <has_text text="GCACCGGGATGCGGATTTGCTGACGATATGGCAAAAGCATTGTCAGCGTGCGGAACCTGTTTATGTCACACCA"/>
+                        <has_text text=">Am1_1/1_1.000_160"/>
+                        <has_text text=">Ac7_1/1_1.000_160"/>
+                        <has_text text="GCACCTAGAATTACCCGAAGTTGCTTGGCAATAGCGACACCTAACGGTCGCCATGATATTTGCAGGAAGAAGG"/>
+                        <has_text text=">Am3_1/1_1.000_160"/>
+                        <has_text text=">Ac6_1/1_1.000_160"/>
+                        <has_text text="CAGCCTACCACTGAGAAGAGATACTTCAACATGTCTTACTGGGGTAGAAGTGGTGGTCGTACAGCGGGTGGTA"/>
+                        <has_text text=">Am2_1/1_1.000_160"/>
+                    </assert_contents>
+                </element>
+                <element name="RBH_AcAcaud_PfPfiji_dna">
+                    <assert_contents>
+                        <has_text text=">Ac8_1/1_1.000_160"/>
+                        <has_text text="ATCAAAGAAGAGCAACATCGAGCTACTGGCACTGGCAATGGAATCCTAATTATAGCAGAAACAAGCACTGGTTG"/>
+                        <has_text text=">Pf8_1/1_1.000_160"/>
+                        <has_text text=">Ac5_1/1_1.000_160"/>
+                        <has_text text="GCACCGGGATGCGGATTTGCTGACGATATGGCAAAAGCATTGTCAGCGTGCGGAACCTGTTTATGTCACACCAC"/>
+                        <has_text text=">Pf7_1/1_1.000_160"/>
+                    </assert_contents>
+                </element>
+                <element name="RBH_ApApomp_PfPfiji_dna">
+                    <assert_contents>
+                        <has_text text=">Ap2_1/1_1.000_160"/>
+                        <has_text text="ATACTCAGGCACACAGCATTTGTCGTACTAGGCGAGAGAGAGAGAGGAACGACTAATTGCAACCACGATTA"/>
+                        <has_text text=">Pf5_1/1_1.000_160"/>
+                        <has_text text=">Ap1_1/1_1.000_160"/>
+                        <has_text text="GGTCGCCTTATAAAAACCAATCCGAAACAGTTTTCCTTTGAAACGTGCCAAAAACCAAAAACATACTTCAA"/>
+                        <has_text text=">Pf4_1/1_1.000_160"/>
+                        <has_text text=">Ap4_1/1_1.000_135"/>
+                        <has_text text="CGGCCGCGGCGCGTCGTTCTCAGCCAAGCTGACTTCGACTTGAGCCGTCCATTCGCTTATTTACACGACGA"/>
+                        <has_text text=">Pf10_1/1_1.000_160"/>
+                        <has_text text=">Ap3_1/1_1.000_160"/>
+                        <has_text text="GCCATGCAGTACACTGGACTTCTGTTATTCTGTTTGTTTGCCTTGACGGCAGCCAAACCCGCGGAAGACCT"/>
+                        <has_text text=">Pf6_1/1_1.000_160"/>
+                    </assert_contents>
+                </element>
+                <element name="RBH_AmAmphi_PfPfiji_dna">
+                    <assert_contents>
+                        <has_text text=">Am8_1/1_1.000_160"/>
+                        <has_text text="GTATTAATAAAAGGACAAGACTATTATTTAATACCAAGAAATCTGGCCTTAATAAGCATGGTTGCTTATATCAT"/>
+                        <has_text text=">Pf9_1/1_1.000_160"/>
+                        <has_text text=">Am1_1/1_1.000_160"/>
+                        <has_text text="GCACCGGGATGCGGATTTGCTGACGATATGGCAAAAGCATTGTCAGCGTGCGGAACCTGTTTATGTCACACCA"/>
+                        <has_text text=">Pf7_1/1_1.000_160"/>
+                    </assert_contents>
+                </element>
             </output_collection>
-		</test>
-	</tests>
+        </test>
 
-	<help>
+        <test>
+            <param name="inputs" ftype="fasta" value="inputs_diamond/AcAcaud_Trinity.fasta,inputs_diamond/AmAmphi_Trinity.fasta,inputs_diamond/ApApomp_Trinity.fasta,inputs_diamond/PfPfiji_Trinity.fasta" />
+            <param name="e-value" value="1e-5" />
+            <param name="method" value="diamond" />
+            <output_collection name="output_fasta_dna" type="list">
+                <element name="RBH_AcAcaud_AmAmphi_dna">
+                    <assert_contents>
+                        <has_text text=">Ac5_1/1_1.000_160"/>
+                        <has_text text="GCACCGGGATGCGGATTTGCTGACGATATGGCAAAAGCATTGTCAGCGTGCGGAACCTGTTTATGTCACACCA"/>
+                        <has_text text=">Am1_1/1_1.000_160"/>
+                        <has_text text=">Ac7_1/1_1.000_160"/>
+                        <has_text text="GCACCTAGAATTACCCGAAGTTGCTTGGCAATAGCGACACCTAACGGTCGCCATGATATTTGCAGGAAGAAGG"/>
+                        <has_text text=">Am3_1/1_1.000_160"/>
+                        <has_text text=">Ac6_1/1_1.000_160"/>
+                        <has_text text="CAGCCTACCACTGAGAAGAGATACTTCAACATGTCTTACTGGGGTAGAAGTGGTGGTCGTACAGCGGGTGGTA"/>
+                        <has_text text=">Am2_1/1_1.000_160"/>
+                    </assert_contents>
+                </element>
+                <element name="RBH_AcAcaud_ApApomp_dna">
+                    <assert_contents>
+                        <has_text text=">Ac23_1/1_1.000_366"/>
+                        <has_text text="ACTGAGGCTCGAACACAACAAAAAGGTGATGAGCAGTCAGCACTTAATAGAATATTACAGCAAGTAGCCAGTAA"/>
+                        <has_text text=">Ap46_1/1_1.000_217"/>
+                        <has_text text="CCACAACCAAGTGGCGGGTATAACAGCACCGAGGCTCGAACACAGCAAAAAGGTGATGAGCAGTCAGCTCTTAA"/>
+                    </assert_contents>
+                </element>
+                <element name="RBH_AcAcaud_PfPfiji_dna">
+                    <assert_contents>
+                        <has_text text=">Ac8_1/1_1.000_160"/>
+                        <has_text text="ATCAAAGAAGAGCAACATCGAGCTACTGGCACTGGCAATGGAATCCTAATTATAGCAGAAACAAGCACTGGTTG"/>
+                        <has_text text=">Pf8_1/1_1.000_160"/>
+                        <has_text text=">Ac5_1/1_1.000_160"/>
+                        <has_text text="GCACCGGGATGCGGATTTGCTGACGATATGGCAAAAGCATTGTCAGCGTGCGGAACCTGTTTATGTCACACCAC"/>
+                        <has_text text=">Pf7_1/1_1.000_160"/>
+                    </assert_contents>
+                </element>
+                <element name="RBH_AmAmphi_PfPfiji_dna">
+                    <assert_contents>
+                        <has_text text=">Am8_1/1_1.000_160"/>
+                        <has_text text="GTATTAATAAAAGGACAAGACTATTATTTAATACCAAGAAATCTGGCCTTAATAAGCATGGTTGCTTATATCAT"/>
+                        <has_text text=">Pf9_1/1_1.000_160"/>
+                        <has_text text=">Am1_1/1_1.000_160"/>
+                        <has_text text="GCACCGGGATGCGGATTTGCTGACGATATGGCAAAAGCATTGTCAGCGTGCGGAACCTGTTTATGTCACACCA"/>
+                        <has_text text=">Pf7_1/1_1.000_160"/>
+                    </assert_contents>
+                </element>
+                <element name="RBH_ApApomp_PfPfiji_dna">
+                    <assert_contents>
+                        <has_text text=">Ap2_1/1_1.000_160"/>
+                        <has_text text="ATACTCAGGCACACAGCATTTGTCGTACTAGGCGAGAGAGAGAGAGGAACGACTAATTGCAACCACGATTA"/>
+                        <has_text text=">Pf5_1/1_1.000_160"/>
+                        <!--
+                        <has_text text=">Ap1_1/1_1.000_160"/>
+                        <has_text text="GGTCGCCTTATAAAAACCAATCCGAAACAGTTTTCCTTTGAAACGTGCCAAAAACCAAAAACATACTTCAA"/>
+                        <has_text text=">Pf4_1/1_1.000_160"/>
+                        <has_text text=">Ap4_1/1_1.000_160"/>
+                        <has_text text="CGGCCGCGGCGCGTCGTTCTCAGCCAAGCTGACTTCGACTTGAGCCGTCCATTCGCTTATTTACACGACGA"/>
+                        <has_text text=">Pf10_1/1_1.000_160"/>
+                        <has_text text=">Ap3_1/1_1.000_160"/>
+                        <has_text text="GCCATGCAGTACACTGGACTTCTGTTATTCTGTTTGTTTGCCTTGACGGCAGCCAAACCCGCGGAAGACCT"/>
+                        <has_text text=">Pf6_1/1_1.000_160"/>
+                        -->
+                    </assert_contents>
+                </element>
+            </output_collection>
+        </test>
+    </tests>
 
-@HELP_AUTHORS@
+    <help>
 
-============
-What it does
-============
+ @HELP_AUTHORS@
+ 
+<![CDATA[
 
-| This tool takes a 'data collection list' containing nucleic fasta sequence files and searches different homologous genes from pairwise comparaisons.
-| There are 3 outputs.
-|
+**Description**
 
+This tool searches for different homologous genes from pairwise comparisons between a set of fasta files (one file per species).
+ 
 --------
 
-==========
-Parameters
-==========
-
-The choice of parameters is possible :
-
-**-e** :
-	|  is the option for the choice of the e-value.
-	| By default it's 10.
-	|
-
---------
-
-=======
-Outputs
-=======
-
-This tool, produces the following files :
-
-**Pairwise**:
-	| is the general output. It gives the information about what the tool is doing (for each pairwise).
-	|
-
-**Pairwise DNA**:
-	| is the output wich contains nucleic sequences (of the pairwise) that are homologues. The sequences are with nucleotides. Shows:
-	| the name of the query sequence
-	| the part of the sequence in nucleotides
-	| the name of the match sequence
-	| the part of the sequence in nucleotides
-	|
-
-**Pairwise PROT**:
-	| is the output wich contains proteic sequences (of the pairwise) that are homologues. The sequences are with protein. Shows:
-	| the name of the query sequence (the name of the sequence || the position (Start and End) of the homologous sequences || divergence || number of gaps || real divergence || the length of the homologous sequence)
-	| the part of the sequence in protein
-	| the name of the match sequence (the name of the sequence || the position (Start and End) of the homologous sequences || divergence || number of gaps || real divergence || the length of the homologous sequence)
-	| the part of the sequence in protein
-
---------
-
-===============
-Working Example
-===============
-
----------------------------
-The input files and options
----------------------------
-
-**Input files**
-	| 3 files with 200 nucleic sequences each : Ap.fasta, Ac.fasta et Pp.fasta
-	|
 **Parameters**
-	| e-value = 1e-20
-	|
 
-----------------
-The output files
-----------------
+    - 'Input files' : a collection of fasta files (one file per species)
+    - 'e_value' : the blast e-value. By default it's 1e-5.
+    - 'Alignment tool' : choose the sequences alignment tool between tblastx and Diamond. tblastx is more sensitive and Diamond is much faster.
 
-**Pairwise**
+--------
 
-| -------------------- Pairwise Pp_Ap --------------------
-|
-| database :  Pp.fasta
-| query file :  Ap.fasta
-|
-| ***** START run BLAST *****
-| ***** END run BLAST *****
-|
-|
-| database :  Ap.fasta
-| query file : only the sequences of Pp.fasta who matched during the last BLAST
-|
-| ***** START run BLAST *****
-| ***** END run BLAST *****
-|
-| [3/5] Get pairs of sequences ...
-| Get list of fasta name involved in RBH
-| Number of pairwises parsed = 15
-| Get subset of Alvinella db
-| Get subset of Paralvinella db
-|
-| -------------------- Pairwise Pp_Ac --------------------
-|
-| database :  Pp.fasta
-| query file :  Ac.fasta
-|
-| ***** START run BLAST *****
-| ***** END run BLAST *****
-|
-|
-| database :  Ac.fasta
-| query file : only the sequences of Pp.fasta who matched during the last BLAST
-|
-| ***** START run BLAST *****
-| ***** END run BLAST *****
-|
-| [3/5] Get pairs of sequences ...
-| Get list of fasta name involved in RBH
-| Number of pairwises parsed = 13
-| Get subset of Alvinella db
-| Get subset of Paralvinella db
-|
-|
-| -------------------- Pairwise Ap_Ac --------------------
-|
-| database :  Ap.fasta
-| query file :  Ac.fasta
-| 
-| ***** START run BLAST *****
-| ***** END run BLAST *****
-|
-|
-| database :  Ac.fasta
-| query file : only the sequences of Ap.fasta who matched during the last BLAST
-|
-| ***** START run BLAST *****
-| ***** END run BLAST *****
-|
-| [3/5] Get pairs of sequences ...
-| Get list of fasta name involved in RBH
-| Number of pairwises parsed = 24
-| Get subset of Alvinella db
-| Get subset of Paralvinella db
-|
-|
+**Outputs**
 
-**Pairwise_output_file_PROT**
+    - 'Pairwise' : the general output. It gives the information about what the tool has done for each pairwise.
 
-| For example the 4 last sequences of the file 19_ReciprocalBestHits_Pp_Ap.fasta
-|
-| &gt;Ap123_1/1_1.000_748||254...478||[[1/1]][[1/6]]||29.3333333333||0||29.3333333333||75.0
-| FVRITVGDEMSRRPKFAMITWVGPEVSPMKRAKVSTDKAFVKQIFQNFAKEIQTSERSELEEEYVRQEVMKAGGA
-| &gt;Pp_146_1/2_1.000_713||259...483||[[1/1]][[1/6]]||29.3333333333||0||29.3333333333||75.0
-| FAYIRCTNEESKRSKFAMITWIGQGVEAMKRAKVSMDKQFLKEIFQNFAREFQTSEKSELDEVCIKHALAIDDGA
-| &gt;Ap66_1/1_1.000_400||192...398||[[1/1]][[1/6]]||21.7391304348||0||21.7391304348||69.0
-| LSTSLLNWRKHTLCF*GMKLILIILLISFIIPAILFLLSIFTTMRMPESREKFRPYECGFDPNHSARTP
-| &gt;Pp_201_2/2_1.000_691||14...220||[[1/1]][[1/6]]||21.7391304348||0||21.7391304348||69.0
-| LSTSLLN*RKQPFASEEMKLLILLLFISALIPRILIILSIFTSIRTPKNREKSSPYECGFDPNHSARTP
-|
-|
+    - 'Pairwise_DNA' : the output which contains nucleic sequences (of the pairwise) that are homologous. The sequences are in nucleic format. There are one file per couple of species, and homologous pairs are written by sets of 4 lines : 
 
-**Pairwise_output_file_DNA**
+Exemple for two homologous pairs for the output file for species X/Y :
 
-| For example the 4 last sequences of the file 25_DNAalignement_corresponding_to_protein_from_19_RBH_Pp_Ap.fasta
-|
-| &gt;Ap123_1/1_1.000_748
-| CCAGTAACAAGCCGCCACGGGTCCGTCGTGTCTTCTCTTCAAGGAAAGGTTGACAGATTCTCGTACGCTAGACGTCGCCACCTACTCGTCCTGGACTCCGGTGCCGTAGGTGGCGCCACCTGCTTTCATCACTTCCTGCCTA
-| ACGTACTCCTCTTCTAGCTCCGATCTCTCGCTCGTCTGGATCTCTTTGGCAAAGTTCTGGAATATCTGCTTGACGAACGCCTTGTCCGTGCTGACTTTGGCGCGCTTCATTGGGCTCACTTCCGGTCCGACCCACGTGATCA
-| TGGCGAACTTCGGTCTTCTGCTCATTTCGTCCCCGACGGTAATACGGACAAAGGCGAACGCCCGCTGGTCATCTTGTAGTTTTGATAACAGATCCTCGTATTCGGTTCCTGTAGAGTCCAGTATAATATTGTCGCCATCATA
-| CGTCACAAACGCCCAGTTTGTCTCCGTCGCGTCGCTCCTGACGTCTTCGTAAGCCTGTCCGATAGCCTCTCTGTCGATGTCTGCCATGCTGCTGGTCCCGCTCTCGACGCTAATGAGCCAATCACGACTTCTGACAGACGAG
-| TAGACATGCAGACAGCCAGACGGACTGACGGACTGACG
-| &gt;Pp_146_1/2_1.000_713
-| CATTAATTGTGTGTCTGGTTGTGGGTGTGTGTTATAAGAGACATCACTTAGTGTATACTGATGTCCACGTGGTAGTTGACCAGCATGTCGAATATGGATAGGGACTCGATCTTGAATGGCTATGAGGAGGTTCGCAACGACGA
-| CTCGGACATTAACTGGGCTTTCGTAACGTATTCACCTGACAACAAACTAGTACTTGATTCAACTGGCACAGACTACTTCCAGCTCCAGGAGAAATATCAAGATGATATGCGAGGATTTGCTTACATCCGGTGCACTAACGAGG
-| AGAGTAAACGTTCTAAATTTGCCATGATTACCTGGATTGGACAAGGAGTGGAAGCAATGAAGCGTGCCAAGGTCAGCATGGACAAACAGTTCCTAAAGGAAATCTTCCAGAATTTCGCAAGAGAATTTCAGACGAGTGAAAAG
-| TCAGAGCTTGATGAGGTCTGTATTAAACACGCGCTTGCCATTGACGATGGAGCTGGTTGCAAAGTGGAAAGCGAGGACACGAGAAAAGGGGCCTTTCTCAGGAAAGAGGATGACACTGAAGTGGAAAGGGAAACTAATGTCAA
-| CAATGTCTCCGGTGTCGTGGAAGAAGATGATGACGCAAAAAATGCAAATGATTTTAATTACGAAGAGGACTGTAACAATGAATAGGTGCATGTCGATGATTTATATAGAGAACTAGACTTCGCACTCGCTAGGTGGTTGAT
-| &gt;Ap66_1/1_1.000_400
-| TGATCGTCTTATAAACCTAACTTGAAAAACCTTCCTACCATTTAGGGCTAGCAGCCCTATTAATTATCACACCTATCGCAGCGCTCTCACTATAATTATAAGTATTGCGCCGGGTTTGAACGGATAGCTCTGATGCTGCTAATT
-| ACGGGACCTAATAATCCCCAATACTTTATCCTTAGAGAGCTGTACCTCTTAGCACCAGTCTTTTAAACTGGCGAAAGCACACTTTATGCTTCTAAGGAATGAAACTAATTCTTATAATCCTACTAATCTCTTTTATCATCCCCG
-| CCATTCTATTTTTACTCTCGATCTTTACTACTATGCGCATGCCAGAGAGCCGTGAAAAATTTAGGCCCTACGAGTGCGGGTTTGACCCCAATCACTCGGCCCGAACCCCATT
-| &gt;Pp_201_2/2_1.000_691
-| ATCGTAGGGAAAAAGGTGTTCGTGCAGAATGATTGGGGTCAAATCCACATTCGTAGGGGCTAGATTTTTCACGGTTTTTAGGTGTACGAATAGAGGTGAAGATTGATAGGATGATTAAAATTCTTGGGATTAATGCTGAAATAAA
-| GAGAAGTAGGATTAAAAGTTTCATTTCCTCAGAAGCAAAGGGTTGCTTTCGTCAGTTTAAAAGACTGGTGCTAAGTAGGTACAGCTCTCTAAGGG
+| >Gene_A_species_X_homologous_to_Gene_B_species_Y
+| Nucleic_sequence_from_filter_assemblies
+| >Gene_B_species_Y_homologous_to_Gene_A_species_X
+| Nucleic_sequence_from_filter_assemblies
+| >Gene_C_species_X_homologous_to_Gene_D_species_Y
+| Nucleic_sequence_from_filter_assemblies
+| >Gene_D_species_Y_homologous_to_Gene_C_species_X
+| Nucleic_sequence_from_filter_assemblies
 
----------------------------------------------------
+
+--------
+
+**The AdaptSearch Pipeline**
+
+.. image:: adaptsearch_picture_helps.png
+
+---------
 
 Changelog
 ---------
+
+**Version 2.1 - 03/07/2018**
+
+ - Add the possibility to use Diamond instead of tblastx
 
 **Version 2.0 - 18/04/2017**
 
@@ -284,12 +233,11 @@ Changelog
 
 **Version 1.0 - 13/04/2017**
 
- - TEST: Add funtional test with planemo
+ - TEST: Add functional test with planemo
 
  - IMPROVEMENT: Use conda dependencies for blast, samtools and python
 
+    ]]>
     </help>
-
-    <expand macro="citations" />
 
 </tool>

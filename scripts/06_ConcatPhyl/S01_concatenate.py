@@ -3,24 +3,22 @@
 ## Last modification: 17/06/2011
 ## Subject: find and remove indels
 
-
 ###############################
 ##### DEF 0 : Dico fasta  #####
 ###############################
 def dico(F2):
     dicoco = {}
-    while 1:
-        next2 = F2.readline()
-        if not next2:
-            break
-        if next2[0] == ">":
-            fasta_name_query = next2[:-1]
-            Sn = string.split(fasta_name_query, "||")
-            fasta_name_query = Sn[0]
-            next3 = F2.readline()
-            fasta_seq_query = next3[:-1]
-            dicoco[fasta_name_query]=fasta_seq_query
-    return(dicoco)
+    with open(F2, "r") as file:
+        for name, query in itertools.zip_longest(*[file]*2):
+            if not name:
+                break
+            if name[0] == ">":
+                fasta_name_query = name[:-1]
+                Sn = string.split(fasta_name_query, "||")
+                fasta_name_query = Sn[0]
+                fasta_seq_query = query[:-1]
+                dicoco[fasta_name_query]=fasta_seq_query
+    return dicoco
 ###################################################################################
 
 
@@ -45,12 +43,10 @@ def concatenate(L_IN, SPECIES_ID_LIST):
     for file in L_IN:
         nb_locus=nb_locus+1
 
-        ## a ## Open alignments
-        file_IN = open(file, "r")
-        dico_seq = dico(file_IN)   ### DEF 0 ###
-        file_IN.close()
+        ## a ## Open alignments        
+        dico_seq = dico(file)   ### DEF 0 ###        
         ## b ## Get alignment length + genes positions for RAxML
-        key0 = dico_seq.keys()[0]
+        key0 = list(dico_seq.keys())[0]
         ln = len(dico_seq[key0])
         ln_concat = ln_concat + ln
 
@@ -123,7 +119,7 @@ def get_codon_position(seq_inORF):
 #######################
 ##### RUN RUN RUN #####
 #######################
-import string, os, time, re, sys, zipfile
+import string, os, time, re, sys, itertools
 
 list_species = []
 SPECIES_ID_LIST = []
@@ -133,7 +129,6 @@ i=3
 ## Arguments
 infiles_filter_assemblies = sys.argv[1]
 format_run = sys.argv[2]
-input_alignments = sys.argv[3]
 
 ## add file to list_species
 list_species = str.split(infiles_filter_assemblies,",")
@@ -144,7 +139,16 @@ for name in list_species :
     SPECIES_ID_LIST.append(name)
 
 ## add alignment files to L_IN
-L_IN = str.split(input_alignments,",")
+list_files = []
+with open(sys.argv[3], 'r') as f:
+    for line in f.readlines():
+        list_files.append(line.strip('\n'))
+
+L_IN = []
+for file in list_files:
+    L_IN.append(file)
+
+#L_IN = str.split(input_alignments,",")
 print(L_IN)
 
 ### 1 ### Proteic
@@ -167,13 +171,13 @@ if format_run == "proteic" :
     OUT_PARTITION_gene_AA.close()
 
     ## Get "ntax" for NEXUS HEADER
-    nb_taxa = len(bash_concatenation.keys())
+    nb_taxa = len(list(bash_concatenation.keys()))
 
-    print "******************** CONCATENATION ********************\n"
-    print "Process amino-acid concatenation:"
-    print "\tNumber of taxa aligned = %d" %nb_taxa
-    print "\tNumber of loci concatenated = %d\n" %nb_locus
-    print "\tTotal length of the concatenated sequences = %d" %ln
+    print("******************** CONCATENATION ********************\n")
+    print("Process amino-acid concatenation:")
+    print("\tNumber of taxa aligned = %d" %nb_taxa)
+    print("\tNumber of loci concatenated = %d\n" %nb_locus)
+    print("\tTotal length of the concatenated sequences = %d" %ln)
 
 
     ## Print NEXUS HEADER:
@@ -187,7 +191,7 @@ if format_run == "proteic" :
     OUT2.write("   %d %d\n" %(nb_taxa, ln))
 
     ## 3.5 ## Print outputs
-    for seq_name in bash_concatenation.keys():
+    for seq_name in list(bash_concatenation.keys()):
         seq = bash_concatenation[seq_name]
 
         ## Filtering the sequence in case of remaining "?"
@@ -267,15 +271,15 @@ elif format_run == "nucleic" :
 
 
     ## Get "ntax" for NEXUS HEADER
-    nb_taxa = len(bash_concatenation.keys())
+    nb_taxa = len(list(bash_concatenation.keys()))
 
-    print "******************** CONCATENATION ********************\n"
-    print "Process nucleotides concatenation:"
-    print "\tNumber of taxa aligned = %d" %nb_taxa
-    print "\tNumber of loci concatenated = %d\n" %nb_locus
-    print "\tTotal length of the concatenated sequences [All codon positions] = %d" %ln
-    print "\t\tTotal length of the concatenated sequences [Codon positions 1 & 2] = %d" %ln_12
-    print "\t\tTotal length of the concatenated sequences [Codon position 3] = %d" %ln_3
+    print("******************** CONCATENATION ********************\n")
+    print("Process nucleotides concatenation:")
+    print("\tNumber of taxa aligned = %d" %nb_taxa)
+    print("\tNumber of loci concatenated = %d\n" %nb_locus)
+    print("\tTotal length of the concatenated sequences [All codon positions] = %d" %ln)
+    print("\t\tTotal length of the concatenated sequences [Codon positions 1 & 2] = %d" %ln_12)
+    print("\t\tTotal length of the concatenated sequences [Codon position 3] = %d" %ln_3)
 
 
     ## Print NEXUS HEADER:
@@ -303,7 +307,7 @@ elif format_run == "nucleic" :
     OUT2_pos3.write("   %d %d\n" %(nb_taxa, ln_3))
 
     ## Print outputs
-    for seq_name in bash_concatenation.keys():
+    for seq_name in list(bash_concatenation.keys()):
         seq = bash_concatenation[seq_name]
 
         ## Filtering the sequence in case of remaining "?"
@@ -354,4 +358,4 @@ elif format_run == "nucleic" :
     OUT2_pos3.close()
     OUT3_pos3.close()
 
-print "\n\n\n******************** RAxML RUN ********************\n"
+print("\n\n\n******************** RAxML RUN ********************\n")

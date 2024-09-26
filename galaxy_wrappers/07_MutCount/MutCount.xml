@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<tool name="MutCount" id="mutcount" version="2.0">
+<tool name="MutCount" id="mutcount" version="2.2.0">
     <description>
         This tool proceeds to count codons, amino acids on each species of a set of species, and then proceeds to permutation tests.
     </description>
@@ -11,36 +11,41 @@
 
     <requirements>
         <expand macro="python_required" />
+        <requirement type="package" version="0.20.0">pandas</requirement>
+        <requirement type="package" version="1.12.0">numpy</requirement>
+        <requirement type="package" version="1.4.4">r-optparse</requirement>
     </requirements>
 
     <command>
     <![CDATA[
+    
+        ln -s $__tool_directory__/scripts/functions.py . &&
+        
         #if str($method.method_run) == "concat" :
-            python '$__tool_directory__/scripts/S01a_mutcount_pairs.py' $method.num_sampled $method.num_iter $method.list_species
-            &&
-            python '$__tool_directory__/scripts/S02a_codon_counting.py' ${method.concat_nuc} 
+            python '$__tool_directory__/scripts/S01a_codons_counting.py' ${method.concat_nuc} '$method.list_species' '$method.list_species_boot' $method.num_iter $method.num_sampled > ${log}
         #end if
-
+        
         #if str($method.method_run) == "separated" :
-            #set $infiles = ""
+            mkdir 01_input_files &&
+            ln -s '$__tool_directory__/scripts/S03b_sign_test_binomial.R' . &&
             #for $input in $method.sep_file
-                ln -s '$input' '$input.element_identifier';
-                #set $infiles = $infiles + $input.element_identifier + ","
+                ln -s '$input' '01_input_files/$input.element_identifier';
             #end for
-            #set $infiles = $infiles[:-1]
 
             #if str($method.format_run)== "nucleic" :
-                python '$__tool_directory__/scripts/S02b_study_seq_composition_nuc.py' '$infiles' ${method.concat_phy}                 
+                python '$__tool_directory__/scripts/S01b_extract_variable_nuc.py' ${method.sps_list} &&
             #end if
 
             #if str($method.format_run)== "proteic" :
-                cp '$__tool_directory__/scripts/amino_acid_properties.csv' .
-                &&
-                python '$__tool_directory__/scripts/S01b_study_seq_composition_aa.py' '$infiles' ${method.concat_phy}               
+                cp '$__tool_directory__/scripts/amino_acid_properties.csv' . &&
+                python '$__tool_directory__/scripts/S01b_extract_variable_prot.py' ${method.sps_list} amino_acid_properties.csv &&
             #end if
+
+            python '$__tool_directory__/scripts/S02b_extreme_2states.py' ${method.sps_gp1} ${method.sps_gp2} ${method.format_run}
         #end if
+        
     ]]>
-    </command>   
+    </command>
 
     <inputs>
         <conditional name="method">
@@ -51,9 +56,10 @@
 
             <when value="concat">
                 <param name="concat_nuc" type="data" format="fasta" label="Choose your fasta file in nucleic format" help="It must contain the concatenated file in NUCLEIC format from Phylogeny tool" />
-                <param name="num_sampled" type="integer" value="100" min="0" label="Number of iterations"/>
-                <param name="num_iter" type="integer" value="100" min="0" label="Number of sampled codons"/>
-                <param name="list_species" type="text" size="100" label="List of species" help="List the species separated with a comma (for e.g Ap,As,Ct,Gt,Yu)" />
+                <param name="list_species" type="text" size="100" label="List of species for countings" help="List the species separated with a comma (for e.g Ap,As,Ct,Gt,Yu)" />
+                <param name="list_species_boot" type="text" size="100" label="List of species (at least two) used for resampling" help="List the species separated with a comma (for e.g Ap,As,Ct,Gt,Yu)" />
+                <param name="num_iter" type="integer" value="1000" min="0" label="Number of sampled codons" help="Sets the length (in codons) of the resampled sequences"/>
+                <param name="num_sampled" type="integer" value="1000" min="0" label="Number of iterations" help="Sets the number of resampled sequences"/>
             </when>
 
             <when value="separated">
@@ -61,245 +67,358 @@
                     <option value="nucleic">Nucleic format</option>
                     <option value="proteic">Proteic format</option>
                 </param>
-                <param name="sep_file" type="data" format="fasta" multiple="true" label="Choose fasta files" help="Concatenated files from ORF_search tool ; in nucleic or proteic, according to the format chosen above" />
-                <param name="concat_phy" type="data" format="fasta" label="Concatenated file from Phylogeny step" help="This file is used to retrieve the species names" />
+                <param name="sep_file" type="data" format="fasta" multiple="true" label="Choose fasta files" help="Fasta files from ORF_search tool ; in nucleic or proteic, according to the format chosen above" />
+                <param name="sps_list" type="text" size="100" label="Enter all the studied species" help="Enter all the species present in the set of fasta files (comma-separated abbreviated names)" />               
+                <param name="sps_gp1" type="text" size="100" label="Species for group one" help="Specify species (comma-separated abbreviated names) sharing an ecological condition"/>
+                <param name="sps_gp2" type="text" size="100" label="Species for group two" help="Specify species (comma-separated abbreviated names) sharing an other ecological condition"/>            
             </when>
         </conditional>
     </inputs>
 
     <outputs>
         <!-- output concat -->
-        <data format="txt" name="output1" label="concatenated_results.txt" from_work_dir="codoncounting_results.txt" >
+        <data format="txt" name="log" label="MutCount_concat_log.output" >
+            <filter>(method['method_run']=='concat')</filter>
+        </data>
+        <data format="csv" name="codons_freqs" label="codons_freqs.csv" from_work_dir="codons_freqs.csv" >
+            <filter>(method['method_run']=='concat')</filter>
+        </data>
+        <data format="csv" name="aa_freqs" label="aa_freqs.csv" from_work_dir="aa_freqs.csv" >
+            <filter>(method['method_run']=='concat')</filter>
+        </data>
+        <data format="csv" name="aatypes_freqs" label="aatypes_freqs.csv" from_work_dir="aatypes_freqs.csv" >
+            <filter>(method['method_run']=='concat')</filter>
+        </data>
+        <data format="csv" name="gc_and_others_freqs" label="gc_and_others_freqs.csv" from_work_dir="gc_and_others_freqs.csv" >
+            <filter>(method['method_run']=='concat')</filter>
+        </data>
+        <data format="csv" name="codons_transitions_freqs" label="codons_transitions_freqs" from_work_dir="codons_transitions_freqs.csv" >
+            <filter>(method['method_run']=='concat')</filter>
+        </data>
+        <data format="csv" name="aa_transitions_freqs" label="aa_transitions_freqs.csv" from_work_dir="aa_transitions_freqs.csv" >
+            <filter>(method['method_run']=='concat')</filter>
+        </data>
+        <data format="csv" name="aatypes_transitions_freqs" label="aatypes_transitions.csv" from_work_dir="aatypes_transitions_freqs.csv" >
             <filter>(method['method_run']=='concat')</filter>
         </data>
 
         <!-- outputs separated - nucleic -->
-        <data format="csv" name="nuc_comp" label="nuc_compositions.csv" from_work_dir="OUT/nuc_compositions.csv" >
+        <collection name="tables_nuc" type="list" label="counts_on_nucleotides">
+            <discover_datasets pattern="__name_and_ext__" directory="02_tables_per_nucleotide" />
             <filter>(method['method_run']=='separated' and method['format_run']== 'nucleic')</filter>
-        </data>
-        <data format="csv" name="percent_gc" label="percent_GC.csv" from_work_dir="OUT/percent_GC.csv" >
+        </collection>
+        <collection name="tables_nuc_var" type="list" label="counts_on_nuc_variables">
+            <discover_datasets pattern="__name_and_ext__" directory="02_tables_per_nuc_variable" />
             <filter>(method['method_run']=='separated' and method['format_run']== 'nucleic')</filter>
-        </data>
-        <data format="csv" name="percent_pur" label="percent_purine.csv" from_work_dir="OUT/percent_purine.csv" >
+        </collection>
+        <collection name="outputs_nuc" type="list" label="binomial_tests_on_nucleotides">
+            <discover_datasets pattern="__name_and_ext__" directory="04_outputs_nucleotides" />
             <filter>(method['method_run']=='separated' and method['format_run']== 'nucleic')</filter>
-        </data>
-        <data format="csv" name="purine_load" label="Purine_Load_Indice.csv" from_work_dir="OUT/Purine_Load_Indice.csv" >
+        </collection>
+        <collection name="outputs_nuc_var" type="list" label="binomial_tests_on_nuc_variables">
+            <discover_datasets pattern="__name_and_ext__" directory="04_outputs_nuc_variables" />
             <filter>(method['method_run']=='separated' and method['format_run']== 'nucleic')</filter>
-        </data>
+        </collection>
 
         <!-- outputs separated - proteic -->
-        <data format="csv" name="prot_comp" label="prot_compositions_All_AA.csv" from_work_dir="OUT/prot_compositions_All_AA.csv" >
+        <collection name="tables_aa" type="list" label="counts_on_amino_acids">
+            <discover_datasets pattern="__name_and_ext__" directory="02_tables_per_aa" />
             <filter>(method['method_run']=='separated' and method['format_run']== 'proteic')</filter>
-        </data>
-        <data format="csv" name="ivywrel" label="IVYWREL.csv" from_work_dir="OUT/IVYWREL.csv" >
+        </collection>
+        <collection name="tables_variables" type="list" label="counts_on_indices">
+            <discover_datasets pattern="__name_and_ext__" directory="02_tables_per_aa_variable" />
             <filter>(method['method_run']=='separated' and method['format_run']== 'proteic')</filter>
-        </data>
-        <data format="csv" name="erk_dnqtsh" label="ERK_DNQTSH.csv" from_work_dir="OUT/ERK_DNQTSH.csv" >
+        </collection>
+        <collection name="outputs_aa" type="list" label="binomial_tests_on_amino_acids">
+            <discover_datasets pattern="__name_and_ext__" directory="04_outputs_aa" />
             <filter>(method['method_run']=='separated' and method['format_run']== 'proteic')</filter>
-        </data>
-        <data format="csv" name="ek_qh" label="EK_QH.csv" from_work_dir="OUT/EK_QH.csv" >
+        </collection>
+        <collection name="outputs_variables" type="list" label="binomial_tests_on_indices">
+            <discover_datasets pattern="__name_and_ext__" directory="04_outputs_aa_variables" />
             <filter>(method['method_run']=='separated' and method['format_run']== 'proteic')</filter>
-        </data>
-        <data format="csv" name="fymink_garp" label="FYMINK_GARP.csv" from_work_dir="OUT/FYMINK_GARP.csv" >
-            <filter>(method['method_run']=='separated' and method['format_run']== 'proteic')</filter>
-        </data>
-        <data format="csv" name="avlimfyw" label="AVLIMFYW.csv" from_work_dir="OUT/AVLIMFYW.csv" >
-            <filter>(method['method_run']=='separated' and method['format_run']== 'proteic')</filter>
-        </data>
-        <data format="csv" name="stnq" label="STNQ.csv" from_work_dir="OUT/STNQ.csv" >
-            <filter>(method['method_run']=='separated' and method['format_run']== 'proteic')</filter>
-        </data>
-        <data format="csv" name="rhkde" label="RHKDE.csv" from_work_dir="OUT/RHKDE.csv" >
-            <filter>(method['method_run']=='separated' and method['format_run']== 'proteic')</filter>
-        </data>
-        <data format="csv" name="payre_mvgds" label="PAYRE-MVGDS.csv" from_work_dir="OUT/PAYRE-MVGDS.csv" >
-            <filter>(method['method_run']=='separated' and method['format_run']== 'proteic')</filter>
-        </data>
-        <data format="csv" name="res_weigth" label="TotalResidueWeight.csv" from_work_dir="OUT/TotalResidueWeight.csv" >
-            <filter>(method['method_run']=='separated' and method['format_run']== 'proteic')</filter>
-        </data>
-        <data format="csv" name="res_vol" label="TotalResidueVolume.csv" from_work_dir="OUT/TotalResidueVolume.csv" >
-            <filter>(method['method_run']=='separated' and method['format_run']== 'proteic')</filter>
-        </data>
-        <data format="csv" name="spec_vol" label="TotalPartialSpecificVolume.csv" from_work_dir="OUT/TotalPartialSpecificVolume.csv" >
-            <filter>(method['method_run']=='separated' and method['format_run']== 'proteic')</filter>
-        </data>
-        <data format="csv" name="hydrat" label="TotalHydratation.csv" from_work_dir="OUT/TotalHydratation.csv" >
-            <filter>(method['method_run']=='separated' and method['format_run']== 'proteic')</filter>
-        </data>
-        
+        </collection>
     </outputs>
 
     <tests>
-        <test>
-            <conditional name="method" >
-                <param name="method_run" value="concat" />
-                <param name="concat_nuc" ftype="fasta" value="test_07_output_phylogeny_concatenation.fasta" />
-                <param name="num_sampled" value="100" />
-                <param name="num_iter" value="100" />
-                <param name="list_species" ftype="text" value="Ac,Pu,Am,Ap,Pf,Pg,Th,Ph,Te" />
-            </conditional>
-            <output name="output1">
-                <assert_contents>
-                    <has_text text="counting of Ac"/>
-                    <has_text text="counting of Pu"/>
-                    <has_text text="counting of Am"/>
-                    <has_text text="counting of Ap"/>
-                    <has_text text="counting of Pf"/>
-                    <has_text text="counting of Pg"/>
-                    <has_text text="counting of Th"/>
-                    <has_text text="counting of Ph"/>
-                </assert_contents>
-            </output>
-        </test>
 
         <test>
             <conditional name="method" >
-                <param name="method_run" value="separated" />                
-                <param name="format_run" value="nucleic" />
-                <param name="sep_file" ftype="fasta" value="sep_nuc/locus1_sp6_sp6.fasta,sep_nuc/locus1_sp8_sp8.fasta,sep_nuc/locus2_sp6_sp6.fasta" />
-                <param name="concat_phy" ftype="fasta" value="phylogeny_concat.fasta" />                
+                <param name="method_run" value="concat" />
+                <param name="concat_nuc" ftype="fasta" value="concatenation.fasta" />
+                <param name="list_species" ftype="text" value="Ps,Pp,Pu,Ac,Ap,Pf,Pg,Ph,Pi" />
+                <param name="list_species_boot" ftype="text" value="Ps,Pp,Pu,Pf" />
+                <param name="num_iter" value="200" />
+                <param name="num_sampled" value="200" /> 
             </conditional>
-            <output name="nuc_comp" >
-                <assert_contents>
-                    <has_line line="locus1_sp8_sp8.fasta,0.29870,0.25541,0.19481,0.25108," />
-                </assert_contents>
-            </output>
-            <output name="percent_gc">
-                <assert_contents>
-                    <has_line line="locus2_sp6_sp6.fasta,42.70833," />
-                </assert_contents>
-            </output>
-            <output name="percent_pur" >
-                <assert_contents>
-                    <has_line line="locus2_sp6_sp6.fasta,56.77083," />
-                </assert_contents>
-            </output>
-            <output name="purine_load" >
-                <assert_contents>
-                    <has_line line="locus2_sp6_sp6.fasta,192,14,12,72.91667,62.50000," />
-                </assert_contents>
-            </output>
+            <output name="log" value="OUT_concat/MutCount_concat_log.output" lines_diff="2"/>
+            <output name="codons_freqs" value="OUT_concat/codons_freqs.csv" lines_diff="18"/>
+            <output name="aa_freqs" value="OUT_concat/aa_freqs.csv" lines_diff="18"/>
+            <output name="aatypes_freqs" value="OUT_concat/aatypes_freqs.csv" lines_diff="18"/>
+            <output name="gc_and_others_freqs" value="OUT_concat/gc_and_others_freqs.csv"/>            
+            <output name="codons_transitions_freqs" value="OUT_concat/codons_transitions_freqs.csv" lines_diff="72"/>
+            <output name="aa_transitions_freqs" value="OUT_concat/aa_transitions_freqs.csv" lines_diff="72"/>
+            <output name="aatypes_transitions_freqs" value="OUT_concat/aatypes_transitions_freqs.csv" lines_diff="72"/>
         </test>
 
         <test>
             <conditional name="method" >
                 <param name="method_run" value="separated" />
-                <param name="format_run" value="proteic" />
-                <param name="sep_file" ftype="fasta" value="sep_aa/locus1_sp6_sp6.fasta,sep_aa/locus1_sp8_sp8.fasta,sep_aa/locus2_sp6_sp6.fasta" />
-                <param name="concat_phy" ftype="fasta" value="phylogeny_concat.fasta" />
+                <param name="format_run" value="nucleic" />
+                <param name="sep_file" ftype="fasta" value="sep_nuc/orthogroup_109_with_3_species.fasta,sep_nuc/orthogroup_113_with_4_species.fasta,sep_nuc/orthogroup_253_with_2_species.fasta,sep_nuc/orthogroup_283_with_2_species.fasta,sep_nuc/orthogroup_299_with_2_species.fasta,sep_nuc/orthogroup_301_with_4_species.fasta,sep_nuc/orthogroup_316_with_4_species.fasta,sep_nuc/orthogroup_335_with_4_species.fasta,sep_nuc/orthogroup_343_with_4_species.fasta,sep_nuc/orthogroup_368_with_4_species.fasta,sep_nuc/orthogroup_404_with_4_species.fasta,sep_nuc/orthogroup_442_with_4_species.fasta,sep_nuc/orthogroup_487_with_4_species.fasta,sep_nuc/orthogroup_508_with_4_species.fasta,sep_nuc/orthogroup_544_with_4_species.fasta,sep_nuc/orthogroup_546_with_4_species.fasta,sep_nuc/orthogroup_588_with_4_species.fasta,sep_nuc/orthogroup_623_with_4_species.fasta,sep_nuc/orthogroup_651_with_4_species.fasta,sep_nuc/orthogroup_660_with_4_species.fasta,sep_nuc/orthogroup_696_with_4_species.fasta,sep_nuc/orthogroup_707_with_4_species.fasta,sep_nuc/orthogroup_727_with_4_species.fasta,sep_nuc/orthogroup_761_with_4_species.fasta" />
+                <param name="sps_list" value="Ha,Lf,Bs,Bj" />
+                <param name="sps_gp1" value="Ha,Lf" />
+                <param name="sps_gp2" value="Bs,Bj" />
             </conditional>
-            <output name="prot_comp" >
-                <assert_contents>
-                    <has_line line="locus2_sp6_sp6.fasta,0.12500,0.00000,0.09375,0.04688,0.03125,0.09375,0.03125,0.07812,0.00000,0.04688,0.01562,0.03125,0.03125,0.01562,0.04688,0.00000,0.07812,0.07812,0.06250,0.09375,0.12500,0.00000,0.09375,0.04688,0.03125,0.09375,0.01562,0.10938,0.00000,0.04688,0.01562,0.04688,0.01562,0.01562,0.04688,0.00000,0.07812,0.07812,0.06250,0.07812,0.12500,0.00000,0.09375,0.04688,0.04688,0.09375,0.01562,0.09375,0.00000,0.04688,0.01562,0.03125,0.01562,0.01562,0.04688,0.00000,0.07812,0.07812,0.06250,0.09375,0.14062,0.00000,0.09375,0.06250,0.04688,0.09375,0.01562,0.09375,0.00000,0.03125,0.01562,0.04688,0.01562,0.01562,0.03125,0.00000,0.07812,0.07812,0.06250,0.07812,0.12500,0.00000,0.12500,0.04688,0.03125,0.09375,0.01562,0.10938,0.00000,0.04688,0.01562,0.04688,0.01562,0.01562,0.04688,0.00000,0.07812,0.07812,0.06250,0.04688,0.14062,0.00000,0.09375,0.06250,0.04688,0.09375,0.01562,0.09375,0.00000,0.03125,0.01562,0.04688,0.01562,0.01562,0.03125,0.00000,0.07812,0.07812,0.06250,0.07812," />
-                </assert_contents>
-            </output>
-            <output name="ivywrel">
-                <assert_contents>
-                    <has_line line="locus2_sp6_sp6.fasta,21.00000,0.32812,23.00000,0.35938,23.00000,0.35938,22.00000,0.34375,23.00000,0.35938,22.00000,0.34375," />
-                </assert_contents>
-            </output>
-            <output name="res_vol" >
-                <assert_contents>
-                    <has_line line="locus2_sp6_sp6.fasta,6575.00000,6593.00000,6587.00000,6645.00000,6631.00000,6645.00000," />
-                </assert_contents>
-            </output>
-            <output name="hydrat" >
-                <assert_contents>
-                    <has_line line="locus2_sp6_sp6.fasta,171.50000,171.50000,170.50000,171.00000,171.50000,171.00000," />
-                </assert_contents>
-            </output>
+            <output_collection name="tables_nuc" type="list" count="4">
+                <element name="A" file="OUT_nuc/02_tables_per_nucleotide/A.csv" ftype="csv" compare="diff" lines_diff="8" />
+                <element name="C" file="OUT_nuc/02_tables_per_nucleotide/C.csv" ftype="csv" compare="diff" lines_diff="8" />
+                <element name="G" file="OUT_nuc/02_tables_per_nucleotide/G.csv" ftype="csv" compare="diff" lines_diff="8" />
+                <element name="T" file="OUT_nuc/02_tables_per_nucleotide/T.csv" ftype="csv" compare="diff" lines_diff="8" />
+            </output_collection>
+            <output_collection name="tables_nuc_var" type="list" count="8">                
+                <element name="DIFF_AT" file="OUT_nuc/02_tables_per_nuc_variable/DIFF_AT.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="DIFF_GC" file="OUT_nuc/02_tables_per_nuc_variable/DIFF_GC.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <!--
+                <element name="GC_percent" file="OUT_nuc/02_tables_per_nuc_variable/_GC_percent.csv" ftype="csv" compare="diff" lines_diff="6" />
+                -->              
+                <element name="PLI_AT" file="OUT_nuc/02_tables_per_nuc_variable/PLI_AT.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="PLI_AT_1000" file="OUT_nuc/02_tables_per_nuc_variable/PLI_AT_1000.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="PLI_GC" file="OUT_nuc/02_tables_per_nuc_variable/PLI_GC.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="PLI_GC_1000" file="OUT_nuc/02_tables_per_nuc_variable/PLI_GC_1000.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="purine_percent" file="OUT_nuc/02_tables_per_nuc_variable/purine_percent.csv" ftype="csv" compare="diff" lines_diff="6" />
+            </output_collection>
+            <output_collection name="outputs_nuc" type="list" count="4">
+                <element name="A" file="OUT_nuc/04_outputs_nucleotides/A.csv" ftype="csv" compare="diff" lines_diff="8" />
+                <element name="C" file="OUT_nuc/04_outputs_nucleotides/C.csv" ftype="csv" compare="diff" lines_diff="8" />
+                <element name="G" file="OUT_nuc/04_outputs_nucleotides/G.csv" ftype="csv" compare="diff" lines_diff="8" />
+                <element name="T" file="OUT_nuc/04_outputs_nucleotides/T.csv" ftype="csv" compare="diff" lines_diff="8" />
+            </output_collection>
+            <output_collection name="outputs_nuc_var" type="list" count="8">
+                <element name="DIFF_AT" file="OUT_nuc/04_outputs_nuc_variables/DIFF_AT.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="DIFF_GC" file="OUT_nuc/04_outputs_nuc_variables/DIFF_GC.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <!--
+                <element name="GC_percent" file="OUT_nuc/04_outputs_nuc_variables/GC_percent.csv" ftype="csv" compare="diff" lines_diff="6" />
+                -->
+                <element name="PLI_AT" file="OUT_nuc/04_outputs_nuc_variables/PLI_AT.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="PLI_AT_1000" file="OUT_nuc/04_outputs_nuc_variables/PLI_AT_1000.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="PLI_GC" file="OUT_nuc/04_outputs_nuc_variables/PLI_GC.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="PLI_GC_1000" file="OUT_nuc/04_outputs_nuc_variables/PLI_GC_1000.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="purine_percent" file="OUT_nuc/04_outputs_nuc_variables/purine_percent.csv" ftype="csv" compare="diff" lines_diff="6" />
+            </output_collection>
+        </test>    
+
+        <test>
+            <conditional name="method" >
+                <param name="method_run" value="separated" />
+                <param name="format_run" value="proteic" />
+                <param name="sep_file" ftype="fasta" value="sep_aa/locus_3sp_2.fasta,sep_aa/locus_3sp_7.fasta,sep_aa/locus_4sp_4.fasta,sep_aa/locus_4sp_6.fasta,sep_aa/locus_6sp_10.fasta,sep_aa/locus_6sp_11.fasta,sep_aa/locus_6sp_16.fasta,sep_aa/locus_6sp_18.fasta,sep_aa/locus_6sp_25.fasta,sep_aa/locus_6sp_27.fasta,sep_aa/locus_6sp_30.fasta,sep_aa/locus_6sp_32.fasta,sep_aa/locus_6sp_35.fasta,sep_aa/locus_6sp_38.fasta,sep_aa/locus_6sp_39.fasta,sep_aa/locus_6sp_40.fasta,sep_aa/locus_6sp_41.fasta,sep_aa/locus_6sp_46.fasta,sep_aa/locus_6sp_47.fasta,sep_aa/locus_6sp_50.fasta,sep_aa/locus_6sp_53.fasta,sep_aa/locus_6sp_57.fasta,sep_aa/locus_6sp_58.fasta,sep_aa/locus_6sp_60.fasta" />
+                <param name="sps_list" value="Ps,Pp,Pf,Ac,Pg,Ap" />
+                <param name="sps_gp1" value="Pp,Pg" />
+                <param name="sps_gp2" value="Ap,Ps" />
+            </conditional>
+            <output_collection name="tables_aa" type="list" count="20">
+                <element name="A" file="OUT_aa/02_tables_per_aa/A.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="C" file="OUT_aa/02_tables_per_aa/C.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="D" file="OUT_aa/02_tables_per_aa/D.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="E" file="OUT_aa/02_tables_per_aa/E.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="F" file="OUT_aa/02_tables_per_aa/F.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="G" file="OUT_aa/02_tables_per_aa/G.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="H" file="OUT_aa/02_tables_per_aa/H.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="I" file="OUT_aa/02_tables_per_aa/I.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="K" file="OUT_aa/02_tables_per_aa/K.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="L" file="OUT_aa/02_tables_per_aa/L.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="M" file="OUT_aa/02_tables_per_aa/M.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="N" file="OUT_aa/02_tables_per_aa/N.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="P" file="OUT_aa/02_tables_per_aa/P.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="Q" file="OUT_aa/02_tables_per_aa/Q.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="R" file="OUT_aa/02_tables_per_aa/R.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="S" file="OUT_aa/02_tables_per_aa/S.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="T" file="OUT_aa/02_tables_per_aa/T.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="V" file="OUT_aa/02_tables_per_aa/V.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="W" file="OUT_aa/02_tables_per_aa/W.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="Y" file="OUT_aa/02_tables_per_aa/Y.csv" ftype="csv" compare="diff" lines_diff="6" />
+            </output_collection>
+            <output_collection name="tables_variables" type="list" count="26">
+                
+                <element name="AC" file="OUT_aa/02_tables_per_aa_variable/AC.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="APGC" file="OUT_aa/02_tables_per_aa_variable/APGC.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="AVLIM" file="OUT_aa/02_tables_per_aa_variable/AVLIM.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="AVLIMFYW" file="OUT_aa/02_tables_per_aa_variable/AVLIMFYW.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="DE" file="OUT_aa/02_tables_per_aa_variable/DE.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="DNQTSHA" file="OUT_aa/02_tables_per_aa_variable/DNQTSHA.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="EK" file="OUT_aa/02_tables_per_aa_variable/EK.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="ERK" file="OUT_aa/02_tables_per_aa_variable/ERK.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="FYMINK" file="OUT_aa/02_tables_per_aa_variable/FYMINK.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="FYW" file="OUT_aa/02_tables_per_aa_variable/FYW.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="GARP" file="OUT_aa/02_tables_per_aa_variable/GARP.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="IVYWREL" file="OUT_aa/02_tables_per_aa_variable/IVYWREL.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="QH" file="OUT_aa/02_tables_per_aa_variable/QH.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="ratio_AC_VLIM" file="OUT_aa/02_tables_per_aa_variable/ratio_AC_VLIM.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="ratio_APGC_VLIM" file="OUT_aa/02_tables_per_aa_variable/ratio_APGC_VLIM.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="ratio_EK_QH" file="OUT_aa/02_tables_per_aa_variable/ratio_EK_QH.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="ratio_ERK_DNQTSHA" file="OUT_aa/02_tables_per_aa_variable/ratio_ERK_DNQTSHA.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="ratio_GARP_FYMINK" file="OUT_aa/02_tables_per_aa_variable/ratio_GARP_FYMINK.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="RHK" file="OUT_aa/02_tables_per_aa_variable/RHK.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="RHKDE" file="OUT_aa/02_tables_per_aa_variable/RHKDE.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="STNQ" file="OUT_aa/02_tables_per_aa_variable/STNQ.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <!--
+                <element name="total_hydratation" file="OUT_aa/02_tables_per_aa_variable/total_hydratation.csv" ftype="csv" compare="diff" lines_diff="6" />
+                -->
+                <element name="total_partial_specific_volume" file="OUT_aa/02_tables_per_aa_variable/total_partial_specific_volume.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="total_residue_volume" file="OUT_aa/02_tables_per_aa_variable/total_residue_volume.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="total_residue_weight" file="OUT_aa/02_tables_per_aa_variable/total_residue_weight.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="VLIM" file="OUT_aa/02_tables_per_aa_variable/VLIM.csv" ftype="csv" compare="diff" lines_diff="6" />
+            </output_collection>
+            <output_collection name="outputs_aa" type="list" count="20">
+                <element name="A" file="OUT_aa/04_outputs_aa/A.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="C" file="OUT_aa/04_outputs_aa/C.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="D" file="OUT_aa/04_outputs_aa/D.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="E" file="OUT_aa/04_outputs_aa/E.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="F" file="OUT_aa/04_outputs_aa/F.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="G" file="OUT_aa/04_outputs_aa/G.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="H" file="OUT_aa/04_outputs_aa/H.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="I" file="OUT_aa/04_outputs_aa/I.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="K" file="OUT_aa/04_outputs_aa/K.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="L" file="OUT_aa/04_outputs_aa/L.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="M" file="OUT_aa/04_outputs_aa/M.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="N" file="OUT_aa/04_outputs_aa/N.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="P" file="OUT_aa/04_outputs_aa/P.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="Q" file="OUT_aa/04_outputs_aa/Q.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="R" file="OUT_aa/04_outputs_aa/R.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="S" file="OUT_aa/04_outputs_aa/S.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="T" file="OUT_aa/04_outputs_aa/T.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="V" file="OUT_aa/04_outputs_aa/V.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="W" file="OUT_aa/04_outputs_aa/W.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="Y" file="OUT_aa/04_outputs_aa/Y.csv" ftype="csv" compare="diff" lines_diff="6" />
+            </output_collection>
+            <output_collection name="outputs_variables" type="list" count="26">
+                <element name="AC" file="OUT_aa/04_outputs_aa_variables/AC.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="APGC" file="OUT_aa/04_outputs_aa_variables/APGC.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="AVLIM" file="OUT_aa/04_outputs_aa_variables/AVLIM.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="AVLIMFYW" file="OUT_aa/04_outputs_aa_variables/AVLIMFYW.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="DE" file="OUT_aa/04_outputs_aa_variables/DE.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="DNQTSHA" file="OUT_aa/04_outputs_aa_variables/DNQTSHA.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="EK" file="OUT_aa/04_outputs_aa_variables/EK.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="ERK" file="OUT_aa/04_outputs_aa_variables/ERK.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="FYMINK" file="OUT_aa/04_outputs_aa_variables/FYMINK.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="FYW" file="OUT_aa/04_outputs_aa_variables/FYW.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="GARP" file="OUT_aa/04_outputs_aa_variables/GARP.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="IVYWREL" file="OUT_aa/04_outputs_aa_variables/IVYWREL.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="QH" file="OUT_aa/04_outputs_aa_variables/QH.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="ratio_AC_VLIM" file="OUT_aa/04_outputs_aa_variables/ratio_AC_VLIM.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="ratio_APGC_VLIM" file="OUT_aa/04_outputs_aa_variables/ratio_APGC_VLIM.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="ratio_EK_QH" file="OUT_aa/04_outputs_aa_variables/ratio_EK_QH.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="ratio_ERK_DNQTSHA" file="OUT_aa/04_outputs_aa_variables/ratio_ERK_DNQTSHA.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="ratio_GARP_FYMINK" file="OUT_aa/04_outputs_aa_variables/ratio_GARP_FYMINK.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="RHK" file="OUT_aa/04_outputs_aa_variables/RHK.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="RHKDE" file="OUT_aa/04_outputs_aa_variables/RHKDE.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="STNQ" file="OUT_aa/04_outputs_aa_variables/STNQ.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <!--
+                <element name="total_hydratation" file="OUT_aa/04_outputs_aa_variables/total_hydratation.csv" ftype="csv" compare="diff" lines_diff="6" />
+                -->
+                <element name="total_partial_specific_volume" file="OUT_aa/04_outputs_aa_variables/total_partial_specific_volume.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="total_residue_volume" file="OUT_aa/04_outputs_aa_variables/total_residue_volume.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="total_residue_weight" file="OUT_aa/04_outputs_aa_variables/total_residue_weight.csv" ftype="csv" compare="diff" lines_diff="6" />
+                <element name="VLIM" file="OUT_aa/04_outputs_aa_variables/VLIM.csv" ftype="csv" compare="diff" lines_diff="6" />
+            </output_collection>
         </test>
+
     </tests>
 
     <help>
 
-.. class:: infomark
+@HELP_AUTHORS@
 
-**Authors**  Eric Fontanillas and Pierre-Guillaume Brun creates the scripts of this pipeline.
+<![CDATA[
 
-.. class:: infomark
+**Description**
 
-**Galaxy integration** Julie Baffard and ABIMS TEAM
+*1-Separated mode*
 
- | Contact support.abims@sb-roscoff.fr for any questions or concerns about the Galaxy implementation of this tool.
+Input files are all the orthogroups computed by the AdaptSearch suite; Counts and test are computed on each group separatly. This mode counts occurrences of amino-acids or nucleic acids, according to the sequences type, in each distinct orthogroup. Then, two subgroups of species are set by the user :
 
----------------------------------------------------
+- A first group, constitued by species having something in common (an ecological trait, an ecological niche, a particular environmental adaptation)
+- A second group, constitued by species sharing the opposite trait (for example, the user can have a first subgroup made with species adapted to high temperatures and a second group made with species adapted to cold temperatures)
 
+Within the groups, the program checks wether the occurrences of each element (amino-acid, nucleic acid, thermostability indice, GC content …) is higher of lower between one species and all the species of the opposite group. Binomial tests are then performed of these counts.
 
-========
-Mutcount
-========
+*2-Concatenated mode*
 
------------
-Description
------------
+The input file is the super-alignment obtained by concatenation of all the orthogroups computed by the AdaptSearch suite. This script counts the number of codons, amino acids, and types of amino acids in sequences, as well as the mutation bias from one item to another between 2 sequences. Counts are then compared to empirical p-values, obtained from bootstrapped sequences obtained from a subset of sequences.
+    
+In the output files, the pvalues indicate the position of the observed data in a distribution of empirical counts obtained from a resampling of the data. Values above 0.95 indicate a significantly higher count, values under 0.05 a significantly lower count.
 
-
-| This script counts the number of codons, amino acids, and types of amino acids in sequences, as well as the mutation bias from one item to another between 2 sequences. Counting is then compared to empirical p-values, obtained from bootstrapped sequences obtained from a subset of sequences
-     
-| In the output files, the pvalues indicate the position of the observed data in a distribution of empirical countings obtained from a resample of the data. Values above 0.95 indicate a significantly higher counting, values under 0.05 a significantly lower counting
-
-| The script automatically reads the sequences to compare from a file that must be called pairs.txt (pre-computed by the tool itself) and located with the .fasta file in the pairs.txt file, sequences (let's assume X, Y, Z, U, V) pairs must be written as 'X Y\nU V\nZ V' in this case, codoncounting will count the occurence of codons, amino acids, and types of amino acids in X, U, Z, and count the mutation bias from Y to X, V to U and V to Z X, Y, Z, U, V must be character strings contained in the sequences names in the .fasta file (and be specific to each of them). In pairs.txt, you must write how should be built the bootstrapped resampling of sequences. This must be formated as:'X Y\nbackground: length iterration plusminus listofspecies\nU V\nZ V', explanation below backgrounds must be excplicitely written in the pairs.txt file (the script still integers default parameters). This implies that the first line of pairs.txt should be a background line by default, once the background has been determined, it will be applied to each subsequent analysis until another background is written e.g. 'background: length1 iterration1 plusminus1 listofspecies1\nU V\nZ V\nbackground: length2 iterration2 plusminus2 listofspecies2\nX Y' the first background is applied to U V and Z V and the 2nd background to X Y
-
-
-| The script resamples random pairs of aligned codon to determine what countings can be expected under the hypothesis of an homogenous dataset.
-| Countings are performed on each generated random alignement, thousands of alignments allow to draw a gaussian distribution of the countings.
-| Then the script simply checks whether the observed data are within the 5% lowest or 5% highest values of the distribution
-
-| - length is the number of pairs of codons in each generated alignments (effect on the robustness on the countings performed on this alignement)
-| - iterration is the number of alignments that will be generated (effect on the resolution of the gaussian distribution)
-| - plusminus can be either '+' or '-', '+' indicates that the following species only must be resampled, '-' that the following species must be excluded from the resampling
-| - listofspecies is the list of species (names contained in the sequences names from the fasta file) that must be included or excluded from the sampling. You can also write 'all' to include every species (in this case, plusminus parameter is ignored)
-
-| Iteration shouldn't be lower that 1000 to have a relatively smooth gaussian distribution, length shouldn't be lower as 1000 to detect codons with relatively low occurence (&lt;1%). For the list of species, you can try to form subgroups depending on the studied parameter (e.g. comparing a terrestrial species with a background composed of marine species)
-
-
-
-.. class:: infomark
-
-
-**Important part of this tool (the inputs format)**
+The script resamples random pairs of aligned codon to determine what counts can be expected under the hypothesis of an homogenous dataset.
+Counts are performed on each generated random alignement, thousands of alignments allow to draw a gaussian distribution of the counts.
+Then the script simply checks whether the observed data are within the 5% lowest or 5% highest values of the distribution.
 
 --------
 
------------
-Input files
------------
+.. class:: infomark
 
-| If you choose the concatenated method, the input file is the concatenated genes fasta file (in nucleic format) from a previous run of the toolConcatPhyl.
+**Input files**
 
-| If you choose the separated method, there are two input files :
-| - A dataset collection containing output files from the CDS_Search tool, the one without indels. These files must be in nucleic or proteic format according to the format chosen along with the method.
-| - The concatenated genes fasta file from ConcatPhyl, only used here to retrieve species name.
+If you choose the concatenated method, the input file is the concatenated genes fasta file (in nucleic format) from a previous run of the toolConcatPhyl.
 
-----------
-Parameters
-----------
+If you choose the separated method, there are two input files :
+- A dataset collection containing output files from the CDS_Search tool, the one without indels. These files must be in nucleic or proteic format according to the format chosen along with the method.
+- The concatenated genes fasta file from ConcatPhyl, only used here to retrieve species name.
 
-| There are parameters only for the "Concatenated" method :
-| - The number of iterations
-| - The number of sampled codons
-| - The list of species, separated by commas and without space (e.g : sp1,sp2,sp3,sp4). You can run the toll on subgroup of species, not only on the total number of species present in the previous tools.
+--------
+
+**Parameters**
+
+There are parameters only for the "Concatenated" method :
+
+- The list of species for **countings**, separated by commas and without space (e.g : sp1,sp2,sp3,sp4). You can run the tool on subgroup of species, not only on the total number of species present in the previous tools.
+
+- The list of species for **resampling**, separated by commas and without space (e.g : sp1,sp2,sp3,sp4). You can run the tool on subgroup of species (at least two species), not only on the total number of species present in the previous tools. 
+
+- The number of iterations : the number of alignments that will be generated (effect on the resolution of the gaussian distribution). Shouldn't be lower than 1000 to have a relatively smooth gaussian distribution.
+
+- The number of sampled codons : the number of pairs of codons in each generated alignments (effect on the robustness on the counts performed on this alignement). Shouldn't be lower than 1000 to detect codons with relatively low occurence (<1%).
+
+--------
+
+**Outputs**
+
+Many outputs in .csv format , varying according to the chosen method and format (separated, nucleic ...)
+    - When method = concat : 6 .csv outputs : countings of codons, amino acids, amino acids types, and transitions from amino acid to amino acid and from amino acid type to amino acid type.
+    - When method = separated and format = nucleic : 4 collections with several .csv files : counts tables and binomial sign tests results for nucleotides and various indices (GC and purine percent ...) .
+    - When method = separated and format = proteic : 4 collections with several .csv files : counts tables and binomial sign tests results for amino-acids and various indices (thermophilic indices, hydratation, partial specific volume...).
+---------
+
+**The AdaptSearch Pipeline**
+
+.. image:: adaptsearch_picture_helps.png
 
 ---------
+
 Changelog
 ---------
 
+**Version 2.2.0 - 10/07/2018**
+- Updated separated mode : added a binomial sign test
+
+**Version 2.1 - 26/02/2017**
+- Fully re-written the concat method : fixed mistakes + cleaner code
+- Splitted output of concatenated method in several csv files.
+- Bug corrected in output files of separated method.
+
 **Version 2.0 - 12/07/2017**
 
- - NEW: Replaced the zip between tools by Dataset Collection
- - More functional tests
+- NEW: Replaced the zip between tools by Dataset Collection
+- More functional tests
 
 **Version 1.0 - 14/04/2017**
-    
- - Added the tools to the suite
- - Added a functional test with planemo
- - Planemo test using conda dependencies for python
- - Scripts renamed + symlinks to the directory 'scripts'
+   
+- Added the tools to the suite
+- Added a functional test with planemo
+- Planemo test using conda dependencies for python
+- Scripts renamed + symlinks to the directory 'scripts'
+
+    ]]>
 
     </help>
-    
-    <expand macro="citations" />
 
 </tool>

@@ -1,21 +1,21 @@
-<tool name="Filter assemblies" id="filter_assemblies" version="2.0">
+<tool name="Filter assemblies" id="filter_assemblies" version="2.0.3">
 
-	<description>
-		Filter the outputs of Velvet or Trinity assemblies
-	</description>
+    <description>
+        Filter the outputs of Velvet or Trinity assemblies
+    </description>
 
-	<macros>
-		<import>macros.xml</import>
-	</macros>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
 
-	<requirements>
-		<expand macro="python_required" />
-		<requirement type="package" version="0.0.14">fastx_toolkit</requirement>
-		<requirement type="package" version="10.2011">cap3</requirement>
-	</requirements>
+    <requirements>
+        <expand macro="python_required" />
+        <requirement type="package" version="0.0.14">fastx_toolkit</requirement>
+        <requirement type="package" version="10.2011">cap3</requirement>
+    </requirements>
 
-  	<command>
-	<![CDATA[
+    <command>
+    <![CDATA[
         #set $infiles = ""
         #for $input in $inputs
             ln -s '$input' '$input.element_identifier';
@@ -23,151 +23,169 @@
         #end for
         #set $infiles = $infiles[:-1]
 
-		ln -s '$__tool_directory__/scripts/S02a_remove_redondancy_from_velvet_oases.py' . &&
-		ln -s '$__tool_directory__/scripts/S02b_format_fasta_name_trinity.py' . &&
-		ln -s '$__tool_directory__/scripts/S03_choose_one_variants_per_locus_trinity.py' . &&
-		ln -s '$__tool_directory__/scripts/S04_find_orf.py' . &&
-		ln -s '$__tool_directory__/scripts/S05_filter.py' . &&
+        ln -s '$__tool_directory__/scripts/S02a_remove_redondancy_from_velvet_oases.py' . &&
+        ln -s '$__tool_directory__/scripts/S02b_format_fasta_name_trinity.py' . &&
+        ln -s '$__tool_directory__/scripts/S03_choose_one_variants_per_locus_trinity.py' . &&
+        ln -s '$__tool_directory__/scripts/S04_find_orf.py' . &&
+        ln -s '$__tool_directory__/scripts/S05_filter.py' . &&
 
-		python '$__tool_directory__/scripts/S01_script_to_choose.py'
+        python '$__tool_directory__/scripts/S01_script_to_choose.py'
 
         '$infiles'
-		$assembler
-		$length_seq_max
+        $length_seq_max
         $percent_identity
         $overlap_length
-		> ${log}
-	]]>
-  	</command>
+        > ${log}
+    ]]>
+    </command>
 
- 	<inputs>
+    <inputs>
         <param name="inputs" type="data" format="fasta" multiple="true" label="Input files" />
-		<param name="assembler" type="select" label="Which assembler was used?">
-			<option value="velvet">Velvet Oases</option>
-			<option value="trinity">Trinity</option>
-		</param>
-		<param name="percent_identity" type="integer" value="100" label="Maximum sequence length" help="Cap3 parameter -p  N  specify overlap percent identity cutoff N &gt; 65 " />
-		<param name="overlap_length" type="integer" value="60" label="Maximum sequence length" help="Cap3 parameter -o  N  specify overlap length cutoff &gt; 15 " />
-		<param name="length_seq_max" type="integer" value="100" label="Minimum sequence length" help="Keep sequences which length is higher than the minimum sequence length  " />
-	</inputs>
+        <param name="percent_identity" type="integer" value="100" label="Overlap percent identity cutoff" help="Cap3 parameter (-p N); minimum percent identity of an overlap. The specified value should be more than 65%." />
+        <param name="overlap_length" type="integer" value="60" label="Overlap length cutoff" help="Cap3 parameter (-o N); minimum length of an overlap (in base pairs). The specified value should be more than 15 base pairs." />
+        <param name="length_seq_max" type="integer" value="100" label="Minimum sequence length" help="Keep sequences which length is higher than the minimum sequence length  " />
+    </inputs>
 
-	<outputs>
+    <outputs>
         <collection name="output_fasta" type="list" label="Filter Assemblies outputs">
             <discover_datasets pattern="__name_and_ext__" directory="outputs" />
         </collection>
-		<data format="txt" name="log" label="Filter Assemblies Summary"/>
-	</outputs>
+        <data format="txt" name="log" label="Filter Assemblies Summary"/>
+    </outputs>
 
 	<tests>
-		<test>
-            <param name="inputs" ftype="fasta" value="trinity/Pfiji_trinity.fasta,trinity/Apomp_trinity.fasta,trinity/Amphi_trinity.fasta,trinity/Acaud_trinity.fasta" />
-            <param name="assembler" value="trinity" />
+        <test>
+            <param name="inputs" ftype="fasta" value="trinity/Pfiji_trinity.fasta,trinity/Apomp_trinity.fasta,trinity/Amphi_trinity.fasta,trinity/Acaud_trinity.fasta,velvet/Pg_transcriptome_90109.fasta,velvet/Ap_transcriptome_35099.fasta,velvet/Ac_transcriptome_25591.fasta" />
             <param name="percent_identity" value="100" />
-			<param name="overlap_length" value="60" />
-			<param name="length_seq_max" value="100" />
-			<output name="log" value="trinity.output" />
+            <param name="overlap_length" value="60" />
+            <param name="length_seq_max" value="100" />
+            <output name="log" value="trinity_and_velvet_up.output" />
+            <output_collection name="output_fasta" type="list">
+                <element name="AcAc_transcriptome_25591" value="velvet_out/AcAc_transcriptome_25591.fasta" />
+                <element name="ApAp_transcriptome_35099" value="velvet_out/ApAp_transcriptome_35099.fasta" />
+                <element name="PgPg_transcriptome_90109" value="velvet_out/PgPg_transcriptome_90109.fasta" />
+                <element name="AcAcaud_trinity" value="trinity_out/AcAcaud_trinity.fasta" />
+                <element name="AmAmphi_trinity" value="trinity_out/AmAmphi_trinity.fasta" />
+                <element name="ApApomp_trinity" value="trinity_out/ApApomp_trinity.fasta" />
+                <element name="PfPfiji_trinity" value="trinity_out/PfPfiji_trinity.fasta" />
+            </output_collection>
+        </test>        
+        <test>
+            <param name="inputs" ftype="fasta" value="trinity/Pfiji_trinity.fasta,trinity/Apomp_trinity.fasta,trinity/Amphi_trinity.fasta,trinity/Acaud_trinity.fasta" />
+            <param name="percent_identity" value="100" />
+            <param name="overlap_length" value="60" />
+            <param name="length_seq_max" value="100" />
+            <output name="log" value="trinity_up.output" />
             <output_collection name="output_fasta" type="list">
                 <element name="AcAcaud_trinity" value="trinity_out/AcAcaud_trinity.fasta" />
                 <element name="AmAmphi_trinity" value="trinity_out/AmAmphi_trinity.fasta" />
                 <element name="ApApomp_trinity" value="trinity_out/ApApomp_trinity.fasta" />
                 <element name="PfPfiji_trinity" value="trinity_out/PfPfiji_trinity.fasta" />
             </output_collection>
-		</test>
-		<test>
+        </test>
+        <test>
             <param name="inputs" ftype="fasta" value="velvet/Pg_transcriptome_90109.fasta,velvet/Ap_transcriptome_35099.fasta,velvet/Ac_transcriptome_25591.fasta" />
-			<param name="assembler" value="velvet" />
-			<param name="percent_identity" value="100" />
-			<param name="overlap_length" value="60" />
-			<param name="length_seq_max" value="100" />
-			<output name="log" value="velvet.output" />
+            <param name="percent_identity" value="100" />
+            <param name="overlap_length" value="60" />
+            <param name="length_seq_max" value="100" />
+            <output name="log" value="velvet_up.output" />
             <output_collection name="output_fasta" type="list">
                 <element name="AcAc_transcriptome_25591" value="velvet_out/AcAc_transcriptome_25591.fasta" />
                 <element name="ApAp_transcriptome_35099" value="velvet_out/ApAp_transcriptome_35099.fasta" />
                 <element name="PgPg_transcriptome_90109" value="velvet_out/PgPg_transcriptome_90109.fasta" />
             </output_collection>
-		</test>
-
-	</tests>
+        </test>
+        
+    </tests>
 
 	<help>
 
 @HELP_AUTHORS@
 
-===========
-Filter Oase
-===========
+<![CDATA[
 
------------
-Description
------------
+**Description**
 
+This tool reformats Velvet Oases or Trinity assemblies for the AdaptSearch galaxy suite and selects only one variant per gene according to its length and quality check.
 
-This script reformats Velvet Oases or Trinity assemblies for the AdaptSearch galaxy suite and selects only one variant per gene according to its length and quality check.
+---------
 
---------
+**Input format**
 
-============
-Input format
-============
+(1) Sequences are in the sequential format:
 
+| >seqname1
+| AAAGAGAGACCACATGTCAGTAGC -on one or several lines -
+| >seqname2
+| AAGGCCTGACCACATGAGTTAAGC -on one or several lines -
+| etc ...
+|
 
----------------------------------
-For Velvet Oases assemblies input
----------------------------------
+2) The file name should begin with a two letter abbreviation of the species name (for isntance, 'Ap' if the species is Alvinella pompejana).
 
-Because of putative changes in the sequence names of the assemblies associated with the upgrade of the Velvet/Oases software, the script will only work if:
+**For Velvet Oases assemblies input**
+            
+    The headers must be as follow : *>Locus_i_Transcript_i/j_Confidence_x.xxx_Length_N* where i is the locus number, j the transcript variant among all versions of the transcript, x.xxx the confidence value and N the length.
 
-(1)sequences are in the sequential format:
-	| e.g.
-	| &gt;seqname
-	| AAAGAGAGAVCACATGTCAGTAGC
-	| &gt;seqname
-	| AAAGAGAGAVCACATGTCAGTAGC
+**For Trinity assemblies inputs**   
+            
+    The headers must be as follow : *>cj_gj_ij Len=j path=[j:0-j]* where all the j are integers (locus number, transcript variant, length, position...)
 
-(2)The name of each transcript must start by a species abbreviation of two letters, unique for each assembly. The file name of the assembly file must also begin with these same two letters.
+**The tool handles the case if input files come from both assemblers (there is no need for input files to be exclusively from one or another assembler).**
 
-(3)The syntax of the sequence name must be constructed as: &gt;fh1_2/3_4_5 where are the two chosen letters the number of the locus, the transcript variant among all versions of the transcript,the confidence value and the length of the transcript. In this case, the file name should thus begin with fs.
+---------
 
------------------------------
-For Trinity assemblies inputs
------------------------------
+**Parameters**
 
-Because of putative changes in the sequence names of the assemblies associated with the upgrade of the Trinity software, the script will only work if:
+    - 'Input files' : a collection of fasta files (one file per species).
+    - 'Overlap percent identity cutoff' : cap3 -p parameter : minimum percent identity of an overlap.
+        must be > 65 ; default : 100.
+    - 'Overlap length cutoff' (integer) : cap3 -o parameter : minimum length of an overlap (in base pairs).
+        must be > 15 ; default : 60.
+    - 'Minimum sequence length' (integer) : only keep sequences which are longer than the specified value.
+        default : 100.
 
-(1)Sequences are in the sequential format:
-	| e.g.
-	| &gt;seqname
-	| AAAGAGAGAVCACATGTCAGTAGC
-	| &gt;seqname
-	| AAAGAGAGAVCACATGTCAGTAGC
+---------
 
-(2)The name of each transcript must start by &gt;comp, e.g. &gt;comp10020 instead of &gt;c10020 or &gt;transcript, etc...
+**Steps**:
+    
+The tool:
+    1) Modifies the sequence name to add the species abbreviation using the 2 first letters of the name of the transcriptome file : note that each species abbreviation must be unique
+    2) Selects one allelic sequence from each transcript (c or locus) using the length of the sequence and its level of confidence
+    3) Selects the best ORF from the sequence between two stop codons
+    4) Performs a CAP3 from the full set of ORFs to minimize redundancy
+    5) Retrieves the initial transcript sequences from the remaining set of proceeded ORF sequences
 
-(3)The syntax of the sequence name should avoid spaces and must contain _len:, e.g. &gt;comp1_g1_it1_len:1000_path=[.....]
+**Outputs**
 
-(4)A suffix of two letters abbreviating the species name must be chosen, e.g. Homo sapiens -&gt; Hs. The file name of the assembly file must begin with this suffix. Each suffix should be unique among the n analyzed transcriptomes.
-e.g. if the file name is Hs_trinity_22000_transcripts.fasta with sequences, the suffix abbreviation must be Hs and all sequences must be : &gt;Hs.
-Alternatively if the name is: Homosapiens_trinity_22000_transcripts.fasta, the suffix must be thus Ho.
+    - 'Filter Assemblies Summary' : the log file.
+    - 'Filter Assemblies outputs' : the main results.
 
----------------------------------------------------
+---------
+
+**The AdaptSearch Pipeline**
+
+.. image:: adaptsearch_picture_helps.png
+
+---------
 
 Changelog
 ---------
 
+**Version 2.1 - 15/01/2018**
+
+    - Input files can be a mix from files coming either from Trinity or Velvet Oases assemblers
+
 **Version 2.0 - 14/04/2017**
 
- - NEW: Replace the zip between tools by Dataset Collection
-
+    - NEW: Replace the zip between tools by Dataset Collection
 
 **Version 1.0 - 13/04/2017**
 
- - TEST: Add funtional test with planemo
+    - TEST: Add funtional test with planemo
+    - IMPROVEMENT: Use conda dependencies for cap3, fastaformatter and python
 
- - IMPROVEMENT: Use conda dependencies for cap3, fastaformatter and python
-
-
+    ]]>
 	</help>
-
-    <expand macro="citations" />
 
 </tool>

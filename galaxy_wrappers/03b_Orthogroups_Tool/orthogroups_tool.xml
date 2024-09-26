@@ -1,0 +1,167 @@
+<tool name="Orthogroups_Tool" id="orthogroups_tool" version="1.0.2">
+
+    <description>
+        Writes orthogroups found by OrthoFinder in fasta files (with their sequences).
+    </description>
+
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+
+    <requirements>
+        <requirement type="package" version="2.7">python</requirement>
+        <requirement type="package" version="1.12.0">numpy</requirement>
+        <requirement type="package" version="0.20.0">pandas</requirement>
+    </requirements>
+    
+    <command>
+    <![CDATA[        
+        #set $infiles = ""
+        #for $input in $inputs_fasta
+            ln -s '$input' '$input.element_identifier';
+            #set $infiles = $infiles + $input.element_identifier + ","
+        #end for
+        #set $infiles = $infiles[:-1]
+
+        $__tool_directory__/scripts/format_transdecoder_headers.sh '$orthogroups' tmp_orthogroups.txt
+        &&
+        python $__tool_directory__/scripts/filter_orthofinder.py tmp_orthogroups.txt '$infiles' $nbseq               
+        #if $verbosity=="T":
+            -v
+        #end if
+        #if $paralogs=="T":
+            -p
+        #end if
+
+        > '$output';
+    ]]> 
+    </command>
+
+    <inputs>
+        <param name="orthogroups" type="data" format="txt" label="Select a file of Orthogroups" help="The output from OrthoFinder, 'Orthogroups.txt'."/>
+        <param name="inputs_fasta" type="data" format="fasta" multiple="true" label="Outputs from Filter Assemblies" help="Contains the nucleic sequences to retrieve."/>
+        <param name="nbseq" type="integer" value="3" label="Minimal number of sequences per orthogroup" help="Drop orthogroups with less than x sequences :" />
+        <param name="verbosity" type="boolean" checked="True" truevalue="T" falsevalue="F" label="verbosity" help="Turn on this paramater to display an additional summary table (computed before the pralogous filtering)" />
+        <param name="paralogs" type="boolean" checked="False" truevalue="T" falsevalue="F" label="paralogs" help="Turn on this parameter to obtain an additional output (orthogroups files before paralogous filtering)" />
+    </inputs>
+
+    <outputs>
+        <data format="txt" name="output" label="orthogroups_tool.output" />        
+        <collection name="orthogroups_fasta" type="list" label="Orthogroups_fasta_files" >
+            <discover_datasets pattern="__name_and_ext__" directory="filtered_orthogroups" />
+        </collection>
+        <collection name="orthogroups_fasta_paralogs" type="list" label="Orthogroups_with_paralogs_fasta_files" >
+            <discover_datasets pattern="__name_and_ext__" directory="orthogroups_withParalogs" />
+            <filter>paralogs == True</filter>
+        </collection>
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="orthogroups" value="Orthogroups.txt"/>
+            <param name="inputs_fasta" value="output_filterassemblies/AcAcaud_trinity.fasta,output_filterassemblies/AmAmphi_trinity.fasta,output_filterassemblies/ApApomp_trinity.fasta,output_filterassemblies/AsAsp1_trinity.fasta"/>
+            <param name="nbseq" value="2"/>
+            <param name="verbosity" value="True"/>
+            <param name="paralogs" value="True"/>
+            <output name="output" value="orthogroups_tool.output" lines_diff="2"/>
+            <output_collection name="orthogroups_fasta" type="list">
+                <element name="orthogroup_1_3_sequences" value="filtered_orthogroups/orthogroup_1_3_sequences.fasta" />
+                <element name="orthogroup_2_4_sequences" value="filtered_orthogroups/orthogroup_2_4_sequences.fasta" />
+                <element name="orthogroup_3_2_sequences" value="filtered_orthogroups/orthogroup_3_2_sequences.fasta" />
+                <element name="orthogroup_4_3_sequences" value="filtered_orthogroups/orthogroup_4_3_sequences.fasta" />
+                <element name="orthogroup_5_3_sequences" value="filtered_orthogroups/orthogroup_5_3_sequences.fasta" />
+                <element name="orthogroup_6_3_sequences" value="filtered_orthogroups/orthogroup_6_3_sequences.fasta" />
+                <element name="orthogroup_7_2_sequences" value="filtered_orthogroups/orthogroup_7_2_sequences.fasta" />
+            </output_collection>
+            <output_collection name="orthogroups_fasta_paralogs" type="list">
+                <element name="orthogroup_1_8_sequences_withParalogs" value="orthogroups_withParalogs/orthogroup_1_8_sequences_withParalogs.fasta" />
+                <element name="orthogroup_2_5_sequences_withParalogs" value="orthogroups_withParalogs/orthogroup_2_5_sequences_withParalogs.fasta" />
+                <element name="orthogroup_3_3_sequences_withParalogs" value="orthogroups_withParalogs/orthogroup_3_3_sequences_withParalogs.fasta" />
+                <element name="orthogroup_4_3_sequences_withParalogs" value="orthogroups_withParalogs/orthogroup_4_3_sequences_withParalogs.fasta" />
+                <element name="orthogroup_5_3_sequences_withParalogs" value="orthogroups_withParalogs/orthogroup_5_3_sequences_withParalogs.fasta" />
+                <element name="orthogroup_6_3_sequences_withParalogs" value="orthogroups_withParalogs/orthogroup_6_3_sequences_withParalogs.fasta" />
+                <element name="orthogroup_7_2_sequences_withParalogs" value="orthogroups_withParalogs/orthogroup_7_2_sequences_withParalogs.fasta" />
+            </output_collection>
+        </test>
+        <test>
+            <param name="orthogroups" value="Orthogroups.txt"/>
+            <param name="inputs_fasta" value="output_filterassemblies/AcAcaud_trinity.fasta,output_filterassemblies/AmAmphi_trinity.fasta,output_filterassemblies/ApApomp_trinity.fasta,output_filterassemblies/AsAsp1_trinity.fasta"/>
+            <param name="nbseq" value="2"/>
+            <param name="verbosity" value="True"/>
+            <param name="paralogs" value="False"/>
+            <output name="output" value="2_orthogroups_tool.output" lines_diff="2"/>
+            <output_collection name="orthogroups_fasta" type="list">
+                <element name="orthogroup_1_3_sequences" value="filtered_orthogroups/orthogroup_1_3_sequences.fasta" />
+                <element name="orthogroup_2_4_sequences" value="filtered_orthogroups/orthogroup_2_4_sequences.fasta" />
+                <element name="orthogroup_3_2_sequences" value="filtered_orthogroups/orthogroup_3_2_sequences.fasta" />
+                <element name="orthogroup_4_3_sequences" value="filtered_orthogroups/orthogroup_4_3_sequences.fasta" />
+                <element name="orthogroup_5_3_sequences" value="filtered_orthogroups/orthogroup_5_3_sequences.fasta" />
+                <element name="orthogroup_6_3_sequences" value="filtered_orthogroups/orthogroup_6_3_sequences.fasta" />
+                <element name="orthogroup_7_2_sequences" value="filtered_orthogroups/orthogroup_7_2_sequences.fasta" />
+            </output_collection>
+        </test>
+    </tests>
+
+    <help>
+
+@HELP_AUTHORS@
+
+<![CDATA[
+
+**Description**
+
+This tool takes Orthogroups found by OrthoFinder and proceeds to retrieve nucleic sequences back, then write each orthogroups in its own fasta file.
+
+-------------------------------------------
+
+**Step 1 : re-writing headers**
+
+.. class:: warningmark
+
+This tool is configured to work within the AdaptSearch toolsuite, which implies a specific format of headers. Indeed, due to the use of external tools (like TransDecoder), the genes IDs might have been modified. A regular expression rewrites all the genes IDs in order to have, for instance, this format : >Pf1004_1/1_1.000_369
+
+-------------------------------------------
+
+**Step 2 : reading an re-writing orthoGroups from OrthoFinder**
+
+OrthoFinder (Emms, D.M. and Kelly, S., 2015) is a fast, accurate and comprehensive analysis tool for comparative genomics. It finds orthologues and orthogroups infers gene trees for all orthogroups and infers a rooted species tree for the species being analysed. OrthoFinder also provides comprehensive statistics for comparative genomic analyses. 
+
+Our tool focus on the orthogroups.txt file created before gene trees.The script proceeds to split each orthogroup in its own fasta file and, with the use of the output of Filter_Assemblies, to re-associate each ID with its sequence.
+
+-------------------------------------------
+
+**Inputs and parameters**
+
+- File of Orthogroups : the orthogroups.txt file from OrthoFinder.
+- Output from Filter_Assemblies (either as multiple datasets or dataset collection)
+- Minimal number of sequences : The orthogroups with less than the specified number won't be recorded.
+- Verbose : If 'Yes', a supplementary table will be displayed in the outputs (coutings of species and sequences in orthogroups before the removal of paralogs).
+- Paralogs : if 'Yes', there will be a supplementary output of orthogroups file, before the removal of paralogs.
+
+-------------------------------------------
+
+**Outputs**
+
+- Dataset collection of fasta files : each file represents an orthogroup, each gene within tthe group has the couple ID-nucleic sequence.
+- If the --paralogs option is checked : another dataset collection of fasta files with all the paralogous genes.
+- The tool log.
+
+---------
+
+**The AdaptSearch Pipeline**
+
+.. image:: adaptsearch_picture_helps.png
+
+Changelog
+---------
+
+**Version 1.0 - 11/01/2018**
+
+]]>
+    </help>
+
+    <citations>
+        <citation type="doi">10.1186/s13059-015-0721-2</citation>
+    </citations>
+
+</tool>
