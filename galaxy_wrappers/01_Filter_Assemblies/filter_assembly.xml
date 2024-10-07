@@ -1,4 +1,4 @@
-<tool name="Filter assemblies" id="filter_assemblies" version="2.0.3">
+<tool name="Filter assemblies" id="filter_assemblies" version="2.0.4">
 
     <description>
         Filter the outputs of Velvet or Trinity assemblies
@@ -10,7 +10,6 @@
 
     <requirements>
         <expand macro="python_required" />
-        <requirement type="package" version="0.0.14">fastx_toolkit</requirement>
         <requirement type="package" version="10.2011">cap3</requirement>
     </requirements>
 
@@ -21,13 +20,7 @@
             ln -s '$input' '$input.element_identifier';
             #set $infiles = $infiles + $input.element_identifier + ","
         #end for
-        #set $infiles = $infiles[:-1]
-
-        ln -s '$__tool_directory__/scripts/S02a_remove_redondancy_from_velvet_oases.py' . &&
-        ln -s '$__tool_directory__/scripts/S02b_format_fasta_name_trinity.py' . &&
-        ln -s '$__tool_directory__/scripts/S03_choose_one_variants_per_locus_trinity.py' . &&
-        ln -s '$__tool_directory__/scripts/S04_find_orf.py' . &&
-        ln -s '$__tool_directory__/scripts/S05_filter.py' . &&
+        #set $infiles = $infiles[:-1
 
         python '$__tool_directory__/scripts/S01_script_to_choose.py'
 
@@ -106,13 +99,13 @@
 
 **Description**
 
-This tool reformats Velvet Oases or Trinity assemblies for the AdaptSearch galaxy suite and selects only one variant per gene according to its length and quality check.
+This tool runs the CAP3 software on assembly FASTA data, merge singlets and contigs and then reformat headers to allow any assembly tools.
 
 ---------
 
 **Input format**
 
-(1) Sequences are in the sequential format:
+Sequences are in the FASTA format:
 
 | >seqname1
 | AAAGAGAGACCACATGTCAGTAGC -on one or several lines -
@@ -120,18 +113,6 @@ This tool reformats Velvet Oases or Trinity assemblies for the AdaptSearch galax
 | AAGGCCTGACCACATGAGTTAAGC -on one or several lines -
 | etc ...
 |
-
-2) The file name should begin with a two letter abbreviation of the species name (for isntance, 'Ap' if the species is Alvinella pompejana).
-
-**For Velvet Oases assemblies input**
-            
-    The headers must be as follow : *>Locus_i_Transcript_i/j_Confidence_x.xxx_Length_N* where i is the locus number, j the transcript variant among all versions of the transcript, x.xxx the confidence value and N the length.
-
-**For Trinity assemblies inputs**   
-            
-    The headers must be as follow : *>cj_gj_ij Len=j path=[j:0-j]* where all the j are integers (locus number, transcript variant, length, position...)
-
-**The tool handles the case if input files come from both assemblers (there is no need for input files to be exclusively from one or another assembler).**
 
 ---------
 
@@ -150,11 +131,9 @@ This tool reformats Velvet Oases or Trinity assemblies for the AdaptSearch galax
 **Steps**:
     
 The tool:
-    1) Modifies the sequence name to add the species abbreviation using the 2 first letters of the name of the transcriptome file : note that each species abbreviation must be unique
-    2) Selects one allelic sequence from each transcript (c or locus) using the length of the sequence and its level of confidence
-    3) Selects the best ORF from the sequence between two stop codons
-    4) Performs a CAP3 from the full set of ORFs to minimize redundancy
-    5) Retrieves the initial transcript sequences from the remaining set of proceeded ORF sequences
+    1) Performs a CAP3 from the full set of ORFs to minimize redundancy
+    2) Merges singlets and contigs identified by CAP3
+    3) Reformats headers of the FASTA records by adding a specified prefix (defined from the original filename) and ensures that sequences are on a single line
 
 **Outputs**
 
@@ -172,6 +151,11 @@ The tool:
 Changelog
 ---------
 
+		
+**Version 2.2 - 07/10/2024**
+
+    - Input files can be from any assembly tools
+		
 **Version 2.1 - 15/01/2018**
 
     - Input files can be a mix from files coming either from Trinity or Velvet Oases assemblers
