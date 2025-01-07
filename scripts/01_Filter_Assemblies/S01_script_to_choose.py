@@ -108,7 +108,7 @@ def main():
 
         # Print and run the CAP3 command
         print(
-            "cap3 {} -p {} -o {}".format(output_file_path, 
+            "cap3 {} -p {} -o {}".format(output_file_path,
                                          percent_identity, overlap_length)
         )
         subprocess.run([
@@ -122,12 +122,12 @@ def main():
             "{}.cap.singlets".format(output_file_path), name_fasta_formatter)
 
         # Merge singlets and contigs
-        merged_file = os.path.join(output_dir, 
+        merged_file = os.path.join(output_dir,
                                    "03_{}_merged.fasta".format(file_name))
         # Define paths for CAP3 output files
-        cap_singlets_file = os.path.join(output_dir, 
+        cap_singlets_file = os.path.join(output_dir,
                                          "{}.cap.singlets".format(file_name))
-        cap_contigs_file = os.path.join(output_dir, 
+        cap_contigs_file = os.path.join(output_dir,
                                         "{}.cap.contigs".format(file_name))
         print("{} and {}".format(cap_singlets_file, cap_contigs_file))
 
@@ -143,7 +143,7 @@ def main():
 
         # Reformat headers
         name_fasta_final = os.path.join(
-            output_dir, "04_{}".format(os.path.basename(name)))        
+            output_dir, "04_{}".format(os.path.basename(name)))
         rename_fasta_headers(merged_file, name_fasta_final)
 
         # Format final file to have sequence in one line
