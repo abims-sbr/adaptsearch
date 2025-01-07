@@ -20,7 +20,7 @@
             ln -s '$input' '$input.element_identifier';
             #set $infiles = $infiles + $input.element_identifier + ","
         #end for
-        #set $infiles = $infiles[:-1
+        #set $infiles = $infiles[:-1]
 
         python '$__tool_directory__/scripts/S01_script_to_choose.py'
 
