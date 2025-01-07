@@ -7,3 +7,4 @@ long_description: This tool formats Velvet Oase and Trinity assemblies for the o
 name: filter_assemblies
 owner: abims-sbr
 remote_repository_url: https://github.com/abims-sbr/adaptsearch
+homepage_url: https://github.com/abims-sbr/adaptsearch
