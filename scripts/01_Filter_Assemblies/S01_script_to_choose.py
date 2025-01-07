@@ -46,7 +46,7 @@ def reformat_headers(input_file, output_file, prefix):
                 rest = '/'.join(header_parts[1:]) \
                     if len(header_parts) > 1 else ""
                 if rest:
-                    new_header = ">{}/{}".format(prefix + 
+                    new_header = ">{}/{}".format(prefix +
                                                  str(numeric_part), rest)
                 else:
                     new_header = ">{}".format(prefix + str(numeric_part))
@@ -93,7 +93,7 @@ def main():
 
     for name in sys.argv[1].split(","):
         if not os.path.isfile(name):
-            print(f"Error: Input file {name} does not exist.")
+            print("Error: Input file {} does not exist.".format(name))
             continue
 
         # Apply CAP3
@@ -108,25 +108,28 @@ def main():
 
         # Print and run the CAP3 command
         print(
-            f"cap3 {output_file_path} -p {percent_identity}"
-            " -o {overlap_length}")
+            "cap3 {} -p {} -o {}".format(output_file_path, 
+                                         percent_identity, overlap_length)
+        )
         subprocess.run([
             "cap3", output_file_path, "-p", percent_identity,
             "-o", overlap_length], check=True)
 
         # Format file to have sequence in one line
         name_fasta_formatter = os.path.join(
-            output_dir, f"02_{os.path.basename(name)}")
+            output_dir, "02_{}".format(os.path.basename(name)))
         fasta_formatter(
-            f"{output_file_path}.cap.singlets", name_fasta_formatter)
+            "{}.cap.singlets".format(output_file_path), name_fasta_formatter)
 
         # Merge singlets and contigs
-        merged_file = os.path.join(output_dir, f"03_{file_name}_merged.fasta")
+        merged_file = os.path.join(output_dir, 
+                                   "03_{}_merged.fasta".format(file_name))
         # Define paths for CAP3 output files
-        cap_singlets_file = os.path.join(
-            output_dir, f"{file_name}.cap.singlets")
-        cap_contigs_file = os.path.join(output_dir, f"{file_name}.cap.contigs")
-        print(f"{cap_singlets_file} and {cap_contigs_file}")
+        cap_singlets_file = os.path.join(output_dir, 
+                                         "{}.cap.singlets".format(file_name))
+        cap_contigs_file = os.path.join(output_dir, 
+                                        "{}.cap.contigs".format(file_name))
+        print("{} and {}".format(cap_singlets_file, cap_contigs_file))
 
         with open(merged_file, 'w') as outfile:
             # Write the contents of the contigs file first
@@ -140,7 +143,7 @@ def main():
 
         # Reformat headers
         name_fasta_final = os.path.join(
-            output_dir, f"04_{os.path.basename(name)}")
+            output_dir, "04_{}".format(os.path.basename(name)))        
         rename_fasta_headers(merged_file, name_fasta_final)
 
         # Format final file to have sequence in one line
