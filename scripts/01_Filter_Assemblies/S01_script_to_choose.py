@@ -46,7 +46,8 @@ def reformat_headers(input_file, output_file, prefix):
                 rest = '/'.join(header_parts[1:]) \
                     if len(header_parts) > 1 else ""
                 if rest:
-                    new_header = ">{}/{}".format(prefix + str(numeric_part), rest)
+                    new_header = ">{}/{}".format(prefix + 
+                                                 str(numeric_part), rest)
                 else:
                     new_header = ">{}".format(prefix + str(numeric_part))
                 outfile.write(new_header + '\n')
@@ -58,30 +59,23 @@ def reformat_headers(input_file, output_file, prefix):
 
 
 def rename_fasta_headers(input_fasta, output_fasta):
-    # Extraire le nom de base du fichier (sans l'extension .fasta)
+    # Extract the base name of the file (without .fasta extension)
     base_name_dir = input_fasta.split('.')[0]
     base_name = base_name_dir.split('/')[1]
-    # Les deux premières lettres du nom de fichier
+    # The first two letters of the file name
     prefix = base_name[3:5]
-    # Liste pour stocker les nouvelles séquences
+    # List to store new sequences
     modified_sequences = []
 
-    # Lire le fichier fasta et modifier les en-têtes
+    # Read the file and edit the headers
     for index, record in enumerate(SeqIO.parse(input_fasta, "fasta"), start=1):
-        # Longueur de la séquence
         seq_length = len(record.seq)
-
-        # Créer le nouvel en-tête selon le format demandé
         new_header = f">{prefix}{index}_1/1_1.000_{seq_length}"
-
-        # Modifier l'en-tête du record
-        record.id = new_header[1:]  # [1:] pour enlever le ">"
+        record.id = new_header[1:]  # [1:] to remove ">"
         record.description = ""
-
-        # Ajouter la séquence modifiée à la liste
         modified_sequences.append(record)
 
-    # Ecrire le fichier de sortie avec les nouvelles en-têtes
+    # Write output file with new headers
     SeqIO.write(modified_sequences, output_fasta, "fasta")
 
 
