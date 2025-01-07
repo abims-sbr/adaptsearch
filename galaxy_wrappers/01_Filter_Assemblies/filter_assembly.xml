@@ -28,7 +28,7 @@
         $length_seq_max
         $percent_identity
         $overlap_length
-        > ${log}
+        > '${log}'
     ]]>
     </command>
 
