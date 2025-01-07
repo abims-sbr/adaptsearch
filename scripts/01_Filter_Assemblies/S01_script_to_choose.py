@@ -46,9 +46,9 @@ def reformat_headers(input_file, output_file, prefix):
                 rest = '/'.join(header_parts[1:]) \
                     if len(header_parts) > 1 else ""
                 if rest:
-                    new_header = ">{}{}{}".format(prefix, numeric_part, f"/{rest}")
+                    new_header = ">{}/{}".format(prefix + str(numeric_part), rest)
                 else:
-                    new_header = ">{}{}".format(prefix, numeric_part)
+                    new_header = ">{}".format(prefix + str(numeric_part))
                 outfile.write(new_header + '\n')
                 sequence = ''
             else:
