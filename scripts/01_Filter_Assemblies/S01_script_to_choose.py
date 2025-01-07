@@ -45,12 +45,10 @@ def reformat_headers(input_file, output_file, prefix):
                 numeric_part = header_parts[0].replace('ou', '')
                 rest = '/'.join(header_parts[1:]) \
                     if len(header_parts) > 1 else ""
-                new_header = (
-                    f">{prefix}{numeric_part}/{rest}"
-                    if rest
-                    else f">{prefix}{numeric_part}"
-                )
-
+                if rest:
+                    new_header = f">{prefix}{numeric_part}/{rest}"
+                else:
+                    new_header = f">{prefix}{numeric_part}"
                 outfile.write(new_header + '\n')
                 sequence = ''
             else:
