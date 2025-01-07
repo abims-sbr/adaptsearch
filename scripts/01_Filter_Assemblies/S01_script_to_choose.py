@@ -70,7 +70,7 @@ def rename_fasta_headers(input_fasta, output_fasta):
     # Read the file and edit the headers
     for index, record in enumerate(SeqIO.parse(input_fasta, "fasta"), start=1):
         seq_length = len(record.seq)
-        new_header = f">{prefix}{index}_1/1_1.000_{seq_length}"
+        new_header = ">{}{}_1/1_1.000_{}".format(prefix, index, seq_length)
         record.id = new_header[1:]  # [1:] to remove ">"
         record.description = ""
         modified_sequences.append(record)
