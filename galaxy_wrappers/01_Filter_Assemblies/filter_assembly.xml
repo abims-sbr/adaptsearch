@@ -9,7 +9,7 @@
     </macros>
 
     <requirements>
-        <expand macro="python_required" />
+        <expand macro="python3_required" />
         <requirement type="package" version="10.2011">cap3</requirement>
     </requirements>
 
