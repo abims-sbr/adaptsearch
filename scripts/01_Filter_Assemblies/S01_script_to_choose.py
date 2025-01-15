@@ -86,7 +86,7 @@ def main():
             "<percent_identity> <overlap_length>")
         sys.exit(1)
 
-    output_dir = "outputs_new"  # Define the output directory
+    output_dir = "outputs"  # Define the output directory
     os.makedirs(output_dir, exist_ok=True)
     percent_identity = sys.argv[3]
     overlap_length = sys.argv[4]
