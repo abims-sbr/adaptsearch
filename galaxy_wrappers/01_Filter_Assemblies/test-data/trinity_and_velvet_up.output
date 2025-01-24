@@ -1,4 +1,3 @@
-20
 Number of segment pairs = 380; number of pairwise comparisons = 3
 '+' means given segment; '-' means reverse complement
 
@@ -6,7 +5,13 @@ Overlaps            Containments  No. of Constraints Supporting Overlap
 
 
 DETAILED DISPLAY OF CONTIGS
-21
+Number of segment pairs = 420; number of pairwise comparisons = 4
+'+' means given segment; '-' means reverse complement
+
+Overlaps            Containments  No. of Constraints Supporting Overlap
+
+
+DETAILED DISPLAY OF CONTIGS
 Number of segment pairs = 380; number of pairwise comparisons = 3
 '+' means given segment; '-' means reverse complement
 
@@ -14,40 +19,45 @@ Overlaps            Containments  No. of Constraints Supporting Overlap
 
 
 DETAILED DISPLAY OF CONTIGS
-20
-Number of segment pairs = 380; number of pairwise comparisons = 3
+Number of segment pairs = 462; number of pairwise comparisons = 4
 '+' means given segment; '-' means reverse complement
 
 Overlaps            Containments  No. of Constraints Supporting Overlap
 
 
 DETAILED DISPLAY OF CONTIGS
-22
-Number of segment pairs = 342; number of pairwise comparisons = 2
+Number of segment pairs = 39402; number of pairwise comparisons = 402
 '+' means given segment; '-' means reverse complement
 
 Overlaps            Containments  No. of Constraints Supporting Overlap
 
 
 DETAILED DISPLAY OF CONTIGS
-Number of segment pairs = 4032; number of pairwise comparisons = 0
+Number of segment pairs = 39402; number of pairwise comparisons = 343
 '+' means given segment; '-' means reverse complement
 
 Overlaps            Containments  No. of Constraints Supporting Overlap
 
 
 DETAILED DISPLAY OF CONTIGS
-Number of segment pairs = 4160; number of pairwise comparisons = 0
+Number of segment pairs = 39402; number of pairwise comparisons = 352
 '+' means given segment; '-' means reverse complement
 
 Overlaps            Containments  No. of Constraints Supporting Overlap
 
 
 DETAILED DISPLAY OF CONTIGS
-Number of segment pairs = 4422; number of pairwise comparisons = 1
-'+' means given segment; '-' means reverse complement
-
-Overlaps            Containments  No. of Constraints Supporting Overlap
-
-
-DETAILED DISPLAY OF CONTIGS
+cap3 outputs/Pfiji_trinity.fasta -p 100 -o 60
+outputs/Pfiji_trinity.fasta.cap.singlets and outputs/Pfiji_trinity.fasta.cap.contigs
+cap3 outputs/Apomp_trinity.fasta -p 100 -o 60
+outputs/Apomp_trinity.fasta.cap.singlets and outputs/Apomp_trinity.fasta.cap.contigs
+cap3 outputs/Amphi_trinity.fasta -p 100 -o 60
+outputs/Amphi_trinity.fasta.cap.singlets and outputs/Amphi_trinity.fasta.cap.contigs
+cap3 outputs/Acaud_trinity.fasta -p 100 -o 60
+outputs/Acaud_trinity.fasta.cap.singlets and outputs/Acaud_trinity.fasta.cap.contigs
+cap3 outputs/Pg_transcriptome_90109.fasta -p 100 -o 60
+outputs/Pg_transcriptome_90109.fasta.cap.singlets and outputs/Pg_transcriptome_90109.fasta.cap.contigs
+cap3 outputs/Ap_transcriptome_35099.fasta -p 100 -o 60
+outputs/Ap_transcriptome_35099.fasta.cap.singlets and outputs/Ap_transcriptome_35099.fasta.cap.contigs
+cap3 outputs/Ac_transcriptome_25591.fasta -p 100 -o 60
+outputs/Ac_transcriptome_25591.fasta.cap.singlets and outputs/Ac_transcriptome_25591.fasta.cap.contigs
