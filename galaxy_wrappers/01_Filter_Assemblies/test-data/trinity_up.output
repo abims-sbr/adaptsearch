@@ -1,4 +1,3 @@
-20
 Number of segment pairs = 380; number of pairwise comparisons = 3
 '+' means given segment; '-' means reverse complement
 
@@ -6,7 +5,13 @@ Overlaps            Containments  No. of Constraints Supporting Overlap
 
 
 DETAILED DISPLAY OF CONTIGS
-21
+Number of segment pairs = 420; number of pairwise comparisons = 4
+'+' means given segment; '-' means reverse complement
+
+Overlaps            Containments  No. of Constraints Supporting Overlap
+
+
+DETAILED DISPLAY OF CONTIGS
 Number of segment pairs = 380; number of pairwise comparisons = 3
 '+' means given segment; '-' means reverse complement
 
@@ -14,19 +19,18 @@ Overlaps            Containments  No. of Constraints Supporting Overlap
 
 
 DETAILED DISPLAY OF CONTIGS
-20
-Number of segment pairs = 380; number of pairwise comparisons = 3
+Number of segment pairs = 462; number of pairwise comparisons = 4
 '+' means given segment; '-' means reverse complement
 
 Overlaps            Containments  No. of Constraints Supporting Overlap
 
 
 DETAILED DISPLAY OF CONTIGS
-22
-Number of segment pairs = 342; number of pairwise comparisons = 2
-'+' means given segment; '-' means reverse complement
-
-Overlaps            Containments  No. of Constraints Supporting Overlap
-
-
-DETAILED DISPLAY OF CONTIGS
+cap3 outputs/Pfiji_trinity.fasta -p 100 -o 60
+outputs/Pfiji_trinity.fasta.cap.singlets and outputs/Pfiji_trinity.fasta.cap.contigs
+cap3 outputs/Apomp_trinity.fasta -p 100 -o 60
+outputs/Apomp_trinity.fasta.cap.singlets and outputs/Apomp_trinity.fasta.cap.contigs
+cap3 outputs/Amphi_trinity.fasta -p 100 -o 60
+outputs/Amphi_trinity.fasta.cap.singlets and outputs/Amphi_trinity.fasta.cap.contigs
+cap3 outputs/Acaud_trinity.fasta -p 100 -o 60
+outputs/Acaud_trinity.fasta.cap.singlets and outputs/Acaud_trinity.fasta.cap.contigs
