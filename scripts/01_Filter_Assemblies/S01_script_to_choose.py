@@ -1,14 +1,15 @@
 #!/usr/bin/env python
-import sys
 import os
 import subprocess
+import sys
+
 from Bio import SeqIO
-from Bio.SeqRecord import SeqRecord
-from Bio.Seq import Seq
+
 
 def fasta_formatter(input_file, output_file):
     """
-    Reformats the input FASTA file to ensure that sequences are on a single line.
+    Reformats the input FASTA file to ensure that sequences
+    are on a single line.
     """
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
     with open(input_file, 'r') as infile, open(output_file, 'w') as outfile:
@@ -42,8 +43,13 @@ def reformat_headers(input_file, output_file, prefix):
                 original_id = line[1:].strip()
                 header_parts = original_id.split('/')
                 numeric_part = header_parts[0].replace('ou', '')
-                rest = '/'.join(header_parts[1:]) if len(header_parts) > 1 else ""
-                new_header = f">{prefix}{numeric_part}/{rest}" if rest else f">{prefix}{numeric_part}"
+                rest = '/'.join(header_parts[1:]) \
+                    if len(header_parts) > 1 else ""
+                if rest:
+                    new_header = ">{}/{}".format(prefix +
+                                                 str(numeric_part), rest)
+                else:
+                    new_header = ">{}".format(prefix + str(numeric_part))
                 outfile.write(new_header + '\n')
                 sequence = ''
             else:
@@ -53,50 +59,41 @@ def reformat_headers(input_file, output_file, prefix):
 
 
 def rename_fasta_headers(input_fasta, output_fasta):
-    # Extraire le nom de base du fichier (sans l'extension .fasta)
+    # Extract the base name of the file (without .fasta extension)
     base_name_dir = input_fasta.split('.')[0]
     base_name = base_name_dir.split('/')[1]
-    # Les deux premières lettres du nom de fichier
+    # The first two letters of the file name
     prefix = base_name[3:5]
-    # Liste pour stocker les nouvelles séquences
+    # List to store new sequences
     modified_sequences = []
 
-    # Lire le fichier fasta et modifier les en-têtes
+    # Read the file and edit the headers
     for index, record in enumerate(SeqIO.parse(input_fasta, "fasta"), start=1):
-        # Longueur de la séquence
         seq_length = len(record.seq)
-        
-        # Créer le nouvel en-tête selon le format demandé
-        new_header = f">{prefix}{index}_1/1_1.000_{seq_length}"
-        
-        # Modifier l'en-tête du record
-        record.id = new_header[1:]  # [1:] pour enlever le ">"
+        new_header = ">{}{}_1/1_1.000_{}".format(prefix, index, seq_length)
+        record.id = new_header[1:]  # [1:] to remove ">"
         record.description = ""
-        
-        # Ajouter la séquence modifiée à la liste
         modified_sequences.append(record)
-    
-    # Nom du fichier de sortie
-    #output_fasta = f"{base_name_dir}_renamed.fasta"
-    
-    # Écrire le fichier de sortie avec les nouvelles en-têtes
+
+    # Write output file with new headers
     SeqIO.write(modified_sequences, output_fasta, "fasta")
 
 
 def main():
     if len(sys.argv) < 5:
-        print("Usage: script.py <input_files> <length_seq_min> <percent_identity> <overlap_length>")
+        print(
+            "Usage: script.py <input_files> <length_seq_min>",
+            "<percent_identity> <overlap_length>")
         sys.exit(1)
 
-    output_dir = "outputs_new"  # Define the output directory
+    output_dir = "outputs"  # Define the output directory
     os.makedirs(output_dir, exist_ok=True)
-    length_seq_min = sys.argv[2]
     percent_identity = sys.argv[3]
     overlap_length = sys.argv[4]
 
     for name in sys.argv[1].split(","):
         if not os.path.isfile(name):
-            print(f"Error: Input file {name} does not exist.")
+            print("Error: Input file {} does not exist.".format(name))
             continue
 
         # Apply CAP3
@@ -110,19 +107,29 @@ def main():
             os.symlink(os.path.abspath(name), symlink_path)
 
         # Print and run the CAP3 command
-        print(f"cap3 {output_file_path} -p {percent_identity} -o {overlap_length}")
-        subprocess.run(["cap3", output_file_path, "-p", percent_identity, "-o", overlap_length], check=True)
+        print(
+            "cap3 {} -p {} -o {}".format(output_file_path,
+                                         percent_identity, overlap_length)
+        )
+        subprocess.run([
+            "cap3", output_file_path, "-p", percent_identity,
+            "-o", overlap_length], check=True)
 
         # Format file to have sequence in one line
-        name_fasta_formatter = os.path.join(output_dir, f"02_{os.path.basename(name)}")
-        fasta_formatter(f"{output_file_path}.cap.singlets", name_fasta_formatter)
+        name_fasta_formatter = os.path.join(
+            output_dir, "02_{}".format(os.path.basename(name)))
+        fasta_formatter(
+            "{}.cap.singlets".format(output_file_path), name_fasta_formatter)
 
         # Merge singlets and contigs
-        merged_file = os.path.join(output_dir, f"03_{file_name}_merged.fasta")
+        merged_file = os.path.join(output_dir,
+                                   "03_{}_merged.fasta".format(file_name))
         # Define paths for CAP3 output files
-        cap_singlets_file = os.path.join(output_dir, f"{file_name}.cap.singlets")
-        cap_contigs_file = os.path.join(output_dir, f"{file_name}.cap.contigs")
-        print(f"{cap_singlets_file} and {cap_contigs_file}")
+        cap_singlets_file = os.path.join(output_dir,
+                                         "{}.cap.singlets".format(file_name))
+        cap_contigs_file = os.path.join(output_dir,
+                                        "{}.cap.contigs".format(file_name))
+        print("{} and {}".format(cap_singlets_file, cap_contigs_file))
 
         with open(merged_file, 'w') as outfile:
             # Write the contents of the contigs file first
@@ -135,7 +142,8 @@ def main():
                     outfile.write(singlets.read())
 
         # Reformat headers
-        name_fasta_final = os.path.join(output_dir, f"04_{os.path.basename(name)}")
+        name_fasta_final = os.path.join(
+            output_dir, "04_{}".format(os.path.basename(name)))
         rename_fasta_headers(merged_file, name_fasta_final)
 
         # Format final file to have sequence in one line

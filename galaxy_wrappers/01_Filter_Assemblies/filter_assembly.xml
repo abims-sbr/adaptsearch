@@ -9,7 +9,7 @@
     </macros>
 
     <requirements>
-        <expand macro="python_required" />
+        <expand macro="python3_required" />
         <requirement type="package" version="10.2011">cap3</requirement>
     </requirements>
 
@@ -20,7 +20,7 @@
             ln -s '$input' '$input.element_identifier';
             #set $infiles = $infiles + $input.element_identifier + ","
         #end for
-        #set $infiles = $infiles[:-1
+        #set $infiles = $infiles[:-1]
 
         python '$__tool_directory__/scripts/S01_script_to_choose.py'
 
@@ -28,7 +28,7 @@
         $length_seq_max
         $percent_identity
         $overlap_length
-        > ${log}
+        > '${log}'
     ]]>
     </command>
 
