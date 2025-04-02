@@ -152,6 +152,15 @@ def main():
         name_final_file = os.path.join(output_dir, tmp)
         fasta_formatter(name_fasta_final, name_final_file)
 
+        # Deletion of temporary files
+        os.remove(name_fasta_formatter)
+        os.remove(merged_file)
+        os.remove(cap_singlets_file)
+        os.remove(cap_contigs_file)
+        os.remove(name_fasta_final)
+
+
+
 
 if __name__ == "__main__":
     main()
