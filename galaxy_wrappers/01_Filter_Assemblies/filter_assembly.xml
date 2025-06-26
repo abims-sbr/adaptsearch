@@ -1,7 +1,7 @@
 <tool name="Filter assemblies" id="filter_assemblies" version="2.0.4">
 
     <description>
-        Filter the outputs of Velvet or Trinity assemblies
+        Filter the outputs of Spades, Velvet or Trinity assemblies
     </description>
 
     <macros>
@@ -34,7 +34,7 @@
 
     <inputs>
         <param name="inputs" type="data" format="fasta" multiple="true" label="Input files" />
-        <param name="percent_identity" type="integer" value="100" label="Overlap percent identity cutoff" help="Cap3 parameter (-p N); minimum percent identity of an overlap. The specified value should be more than 65%." />
+        <param name="percent_identity" type="integer" value="90" label="Overlap percent identity cutoff" help="Cap3 parameter (-p N); minimum percent identity of an overlap. The specified value should be more than 65%." />
         <param name="overlap_length" type="integer" value="60" label="Overlap length cutoff" help="Cap3 parameter (-o N); minimum length of an overlap (in base pairs). The specified value should be more than 15 base pairs." />
         <param name="length_seq_max" type="integer" value="100" label="Minimum sequence length" help="Keep sequences which length is higher than the minimum sequence length  " />
     </inputs>
