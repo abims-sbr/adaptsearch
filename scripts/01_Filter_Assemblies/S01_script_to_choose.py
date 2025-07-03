@@ -5,6 +5,7 @@ import sys
 
 from Bio import SeqIO
 
+
 def fasta_formatter(input_file, output_file):
     """
     Reformats the input FASTA file to ensure that sequences
@@ -25,6 +26,7 @@ def fasta_formatter(input_file, output_file):
                 sequence += line.strip()
         if sequence:
             outfile.write(sequence + '\n')
+
 
 def reformat_headers(input_file, output_file, prefix):
     """
@@ -75,6 +77,7 @@ def rename_fasta_headers(input_fasta, output_fasta):
 
     # Write output file with new headers
     SeqIO.write(modified_sequences, output_fasta, "fasta")
+
 
 def main():
     if len(sys.argv) < 5:
@@ -155,6 +158,7 @@ def main():
         os.remove(cap_singlets_file)
         os.remove(cap_contigs_file)
         os.remove(name_fasta_final)
+
 
 if __name__ == "__main__":
     main()
