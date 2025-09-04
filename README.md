@@ -10,6 +10,8 @@ The program is divided into several modules that allow for RNAseq assembly filtr
 
 ## Credits
 
+Forked from: [abice-sbr/adaptsearch](https://github.com/abice-sbr/adaptsearch)
+
 **Didier Jollivet** *(Project Lead)*
 [DYDIV / Dynamics of the marine diversity - France - CNRS Sorbonne Université](https://www.sb-roscoff.fr/fr/equipe-dydiv)
 
