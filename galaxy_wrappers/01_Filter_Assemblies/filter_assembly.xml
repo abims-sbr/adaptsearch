@@ -1,4 +1,4 @@
-<tool name="Filter assemblies" id="filter_assemblies" version="2.0.5">
+<tool name="Filter assemblies" id="filter_assemblies" version="2.0.6">
 
     <description>
         Filter the outputs of Spades, Velvet or Trinity assemblies
