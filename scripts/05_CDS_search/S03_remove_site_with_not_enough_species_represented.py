@@ -2,7 +2,7 @@
 # coding: utf8
 ## Author: Eric Fontanillas
 ## Modification: 03/09/14 by Julie BAFFARD
-## Last modification : 05/03/18 by Victor Mataigne
+## Last modification : 05/03/18 by Alice Mataigne
 
 ## Description : find and remove indels
 

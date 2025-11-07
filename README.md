@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/Mataivic/adaptsearch.svg?branch=master)](https://travis-ci.org/Mataivic/adaptsearch)
-
 # AdaptSearch
 
 ## A pipeline for the search of adaptive mutations and positively selected genes from RNASeq orthologs
@@ -30,12 +28,12 @@ Julie Baffard
 Misharl Monsoor
 [ABiMS - Roscoff Marine Station - France - CNRS/UPMC](https://abims.sb-roscoff.fr/)
 
-Victor Mataigne *(Initial Developer)*
+Alice Mataigne *(Initial Developer)*
 [ABiMS - Roscoff Marine Station - France - CNRS/UPMC](https://abims.sb-roscoff.fr/)
 [ABICE / Adaptation et Biologie des Invertébrés en Conditions Extrêmes](https://www.sb-roscoff.fr/fr/equipe-dydiv)
 
 
 ## Other repositories
-[Code and user documentation](https://github.com/Mataivic/AdaptSearch_Documentation)
+[Code and user documentation](https://github.com/alimatai/AdaptSearch_Documentation)
 
-[Visualization tools](https://github.com/Mataivic/AdaptSearch_visualization_tools)
+[Visualization tools](https://github.com/alimatai/AdaptSearch_visualization_tools)

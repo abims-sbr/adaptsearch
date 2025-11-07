@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #coding: utf-8
-#Author : Eric Fontanillas (2010) - Victor Mataigne (2018)
+#Author : Eric Fontanillas (2010) - Alice Mataigne (2018)
 
 # TODO : 
     # - Deal with missing data : do not do the sign test if missing species in a group
