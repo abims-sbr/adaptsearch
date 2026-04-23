@@ -12,7 +12,7 @@ def fasta_formatter(input_file, output_file):
     are on a single line.
     """
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
-    with open(input_file, 'r') as infile, open(output_file, 'w') as outfile:
+    with open(input_file, 'r', encoding="utf-8") as infile, open(output_file, 'w', encoding="utf-8") as outfile:
         sequence = ''
         header = ''
         for line in infile:
@@ -33,7 +33,7 @@ def reformat_headers(input_file, output_file, prefix):
     Reformats the headers of the FASTA records by adding a specified prefix
     and ensures that sequences are on a single line.
     """
-    with open(input_file, 'r') as infile, open(output_file, 'w') as outfile:
+    with open(input_file, 'r', encoding="utf-8") as infile, open(output_file, 'w', encoding="utf-8") as outfile:
         sequence = ''
         for line in infile:
             if line.startswith('>'):
@@ -46,8 +46,7 @@ def reformat_headers(input_file, output_file, prefix):
                 rest = '/'.join(header_parts[1:]) \
                     if len(header_parts) > 1 else ""
                 if rest:
-                    new_header = ">{}/{}".format(prefix +
-                                                 str(numeric_part), rest)
+                    new_header = ">{}/{}".format(prefix + str(numeric_part), rest)
                 else:
                     new_header = ">{}".format(prefix + str(numeric_part))
                 outfile.write(new_header + '\n')
@@ -131,14 +130,14 @@ def main():
                                         "{}.cap.contigs".format(file_name))
         print("{} and {}".format(cap_singlets_file, cap_contigs_file))
 
-        with open(merged_file, 'w') as outfile:
+        with open(merged_file, 'w', encoding="utf-8") as outfile:
             # Write the contents of the contigs file first
             if os.path.exists(cap_contigs_file):
-                with open(cap_contigs_file, 'r') as contigs:
+                with open(cap_contigs_file, 'r', encoding="utf-8") as contigs:
                     outfile.write(contigs.read())
             # Append the contents of the singlets file
             if os.path.exists(cap_singlets_file):
-                with open(cap_singlets_file, 'r') as singlets:
+                with open(cap_singlets_file, 'r', encoding="utf-8") as singlets:
                     outfile.write(singlets.read())
 
         # Reformat headers
@@ -147,17 +146,39 @@ def main():
         rename_fasta_headers(merged_file, name_fasta_final)
 
         # Format final file to have sequence in one line
-        prefix = file_name[:2]
+        prefix = file_name[:4]
         tmp = prefix + os.path.basename(name)
         name_final_file = os.path.join(output_dir, tmp)
         fasta_formatter(name_fasta_final, name_final_file)
 
         # Deletion of temporary files
-        os.remove(name_fasta_formatter)
-        os.remove(merged_file)
-        os.remove(cap_singlets_file)
-        os.remove(cap_contigs_file)
-        os.remove(name_fasta_final)
+        print("\n\n******************* Cleanning ********************")
+        files_to_delete = [
+            name_fasta_formatter,
+            merged_file,
+            cap_singlets_file,
+            cap_contigs_file,
+            name_fasta_final
+        ]
+
+        for f in files_to_delete:
+            if os.path.exists(f):
+                print(f)
+                os.remove(f)
+
+        # Additional CAP3 files
+        extra_files = [
+            "{}.cap.ace".format(output_file_path),
+            "{}.cap.contigs.links".format(output_file_path),
+            "{}.cap.contigs.qual".format(output_file_path),
+            "{}.cap.info".format(output_file_path),
+            symlink_path
+        ]
+
+        for f in extra_files:
+            if os.path.exists(f):
+                print(f)
+                os.remove(f)
 
 
 if __name__ == "__main__":
