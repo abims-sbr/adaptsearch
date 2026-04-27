@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #coding: utf-8
-#Author : Eric Fontanillas (2010) - Victor Mataigne (2018)
+#Author : Eric Fontanillas (2010) - Alice Mataigne (2018)
 
 import pandas as pd
 import argparse, os
