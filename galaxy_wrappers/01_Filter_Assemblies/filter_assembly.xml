@@ -54,13 +54,13 @@
             <param name="length_seq_max" value="100" />
             <output name="log" value="trinity_and_velvet_up.output" />
             <output_collection name="output_fasta" type="list">
-                <element name="AcAc_transcriptome_25591" value="velvet_out/AcAc_transcriptome_25591.fasta" />
-                <element name="ApAp_transcriptome_35099" value="velvet_out/ApAp_transcriptome_35099.fasta" />
-                <element name="PgPg_transcriptome_90109" value="velvet_out/PgPg_transcriptome_90109.fasta" />
-                <element name="AcAcaud_trinity" value="trinity_out/AcAcaud_trinity.fasta" />
-                <element name="AmAmphi_trinity" value="trinity_out/AmAmphi_trinity.fasta" />
-                <element name="ApApomp_trinity" value="trinity_out/ApApomp_trinity.fasta" />
-                <element name="PfPfiji_trinity" value="trinity_out/PfPfiji_trinity.fasta" />
+                <element name="Ac_tAc_transcriptome_25591" value="velvet_out/Ac_tAc_transcriptome_25591.fasta" />
+                <element name="Ap_tAp_transcriptome_35099" value="velvet_out/Ap_tAp_transcriptome_35099.fasta" />
+                <element name="Pg_tPg_transcriptome_90109" value="velvet_out/Pg_tPg_transcriptome_90109.fasta" />
+                <element name="AcauAcaud_trinity" value="trinity_out/AcauAcaud_trinity.fasta" />
+                <element name="AmphAmphi_trinity" value="trinity_out/AmphAmphi_trinity.fasta" />
+                <element name="ApomApomp_trinity" value="trinity_out/ApomApomp_trinity.fasta" />
+                <element name="PfijPfiji_trinity" value="trinity_out/PfijPfiji_trinity.fasta" />
             </output_collection>
         </test>        
         <test>
@@ -70,10 +70,10 @@
             <param name="length_seq_max" value="100" />
             <output name="log" value="trinity_up.output" />
             <output_collection name="output_fasta" type="list">
-                <element name="AcAcaud_trinity" value="trinity_out/AcAcaud_trinity.fasta" />
-                <element name="AmAmphi_trinity" value="trinity_out/AmAmphi_trinity.fasta" />
-                <element name="ApApomp_trinity" value="trinity_out/ApApomp_trinity.fasta" />
-                <element name="PfPfiji_trinity" value="trinity_out/PfPfiji_trinity.fasta" />
+                <element name="AcauAcaud_trinity" value="trinity_out/AcauAcaud_trinity.fasta" />
+                <element name="AmphAmphi_trinity" value="trinity_out/AmphAmphi_trinity.fasta" />
+                <element name="ApomApomp_trinity" value="trinity_out/ApomApomp_trinity.fasta" />
+                <element name="PfijPfiji_trinity" value="trinity_out/PfijPfiji_trinity.fasta" />
             </output_collection>
         </test>
         <test>
@@ -83,9 +83,9 @@
             <param name="length_seq_max" value="100" />
             <output name="log" value="velvet_up.output" />
             <output_collection name="output_fasta" type="list">
-                <element name="AcAc_transcriptome_25591" value="velvet_out/AcAc_transcriptome_25591.fasta" />
-                <element name="ApAp_transcriptome_35099" value="velvet_out/ApAp_transcriptome_35099.fasta" />
-                <element name="PgPg_transcriptome_90109" value="velvet_out/PgPg_transcriptome_90109.fasta" />
+                <element name="Ac_tAc_transcriptome_25591" value="velvet_out/Ac_tAc_transcriptome_25591.fasta" />
+                <element name="Ap_tAp_transcriptome_35099" value="velvet_out/Ap_tAp_transcriptome_35099.fasta" />
+                <element name="Pg_tPg_transcriptome_90109" value="velvet_out/Pg_tPg_transcriptome_90109.fasta" />
             </output_collection>
         </test>
         
