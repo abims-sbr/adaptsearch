@@ -162,7 +162,6 @@ def main():
         fasta_formatter(name_fasta_final, name_final_file)
 
         # Deletion of temporary files
-        print("\n\n******************* Cleanning ********************")
         files_to_delete = [
             name_fasta_formatter,
             merged_file,
@@ -173,7 +172,6 @@ def main():
 
         for f in files_to_delete:
             if os.path.exists(f):
-                print(f)
                 os.remove(f)
 
         # Additional CAP3 files
@@ -187,7 +185,6 @@ def main():
 
         for f in extra_files:
             if os.path.exists(f):
-                print(f)
                 os.remove(f)
 
 
