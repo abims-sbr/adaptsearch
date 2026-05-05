@@ -12,7 +12,10 @@ def fasta_formatter(input_file, output_file):
     are on a single line.
     """
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
-    with open(input_file, 'r', encoding="utf-8") as infile, open(output_file, 'w', encoding="utf-8") as outfile:
+    with (
+        open(input_file, 'r', encoding="utf-8") as infile,
+        open(output_file, 'w', encoding="utf-8") as outfile,
+    ):
         sequence = ''
         header = ''
         for line in infile:
@@ -33,7 +36,10 @@ def reformat_headers(input_file, output_file, prefix):
     Reformats the headers of the FASTA records by adding a specified prefix
     and ensures that sequences are on a single line.
     """
-    with open(input_file, 'r', encoding="utf-8") as infile, open(output_file, 'w', encoding="utf-8") as outfile:
+    with (
+        open(input_file, 'r', encoding="utf-8") as infile,
+        open(output_file, 'w', encoding="utf-8") as outfile,
+    ):
         sequence = ''
         for line in infile:
             if line.startswith('>'):
@@ -46,7 +52,7 @@ def reformat_headers(input_file, output_file, prefix):
                 rest = '/'.join(header_parts[1:]) \
                     if len(header_parts) > 1 else ""
                 if rest:
-                    new_header = ">{}/{}".format(prefix + str(numeric_part), rest)
+                    new_header = f">{prefix}{numeric_part}/{rest}"
                 else:
                     new_header = ">{}".format(prefix + str(numeric_part))
                 outfile.write(new_header + '\n')
@@ -137,7 +143,11 @@ def main():
                     outfile.write(contigs.read())
             # Append the contents of the singlets file
             if os.path.exists(cap_singlets_file):
-                with open(cap_singlets_file, 'r', encoding="utf-8") as singlets:
+                with open(
+                    cap_singlets_file,
+                    'r',
+                    encoding="utf-8",
+                ) as singlets:
                     outfile.write(singlets.read())
 
         # Reformat headers
@@ -152,7 +162,6 @@ def main():
         fasta_formatter(name_fasta_final, name_final_file)
 
         # Deletion of temporary files
-        print("\n\n******************* Cleanning ********************")
         files_to_delete = [
             name_fasta_formatter,
             merged_file,
@@ -163,7 +172,6 @@ def main():
 
         for f in files_to_delete:
             if os.path.exists(f):
-                print(f)
                 os.remove(f)
 
         # Additional CAP3 files
@@ -177,7 +185,6 @@ def main():
 
         for f in extra_files:
             if os.path.exists(f):
-                print(f)
                 os.remove(f)
 
 
