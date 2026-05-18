@@ -425,27 +425,27 @@ jobs:
         shed-target: toolshed
         shed-key: ${{ secrets.TS_API_KEY }}
 
-  deploy-report:
-    name: Report deploy status
-    needs: [deploy]
-    if: ${{ always() && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' ) && github.repository_owner == 'abims-sbr' }}
-    runs-on: ubuntu-latest
-    steps:
-    # report to the PR if deployment failed
-    - name: Get PR object
-      uses: 8BitJonny/gh-get-current-pr@4.0.0
-      id: getpr
-      with:
-        sha: ${{ github.event.after }}
-    - name: Create comment
-      uses: peter-evans/create-or-update-comment@v5
-      with:
-        token: ${{ secrets.PAT }}
-        issue-number: ${{ steps.getpr.outputs.number }}
-        body: |
-          Deployment status: **${{ needs.deploy.result }}**
+  # deploy-report:
+  #   name: Report deploy status
+  #   needs: [deploy]
+  #   if: ${{ always() && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' ) && github.repository_owner == 'abims-sbr' }}
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   # report to the PR if deployment failed
+  #   - name: Get PR object
+  #     uses: 8BitJonny/gh-get-current-pr@4.0.0
+  #     id: getpr
+  #     with:
+  #       sha: ${{ github.event.after }}
+  #   - name: Create comment
+  #     uses: peter-evans/create-or-update-comment@v5
+  #     with:
+  #       token: ${{ secrets.PAT }}
+  #       issue-number: ${{ steps.getpr.outputs.number }}
+  #       body: |
+  #         Deployment status: **${{ needs.deploy.result }}**
 
-          https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+  #         https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
   determine-success:
     name: Check workflow success
