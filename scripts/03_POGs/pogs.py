@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coding: utf8
-# September 2017 - Author : Victor Mataigne (Station Biologique de Roscoff - ABiMS)
+# September 2017 - Author : Alice Mataigne (Station Biologique de Roscoff - ABiMS)
 # Command line : ./pogsPOO.py <list_of_input_files_separated_by_commas> <minimal number of species per group> [-v) [-p]
 
 """

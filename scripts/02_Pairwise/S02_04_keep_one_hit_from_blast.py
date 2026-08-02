@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
-# Author : Victor Mataigne
+# Author : Alice Mataigne
 
 import argparse, itertools, pickle
 

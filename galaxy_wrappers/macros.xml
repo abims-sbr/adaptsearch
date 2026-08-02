@@ -11,7 +11,7 @@
     <token name="@HELP_AUTHORS@">
 .. class:: infomark
 
-**Authors**  Eric Fontanillas created the version 1 of this pipeline. Victor Mataigne developped version 2.
+**Authors**  Eric Fontanillas created the version 1 of this pipeline. Alice Mataigne developped version 2.
 
 .. class:: infomark
 
@@ -29,7 +29,7 @@
 			<citation type="bibtex">Credits : ABIMS team, Roscoff Marine Station</citation>
 			<citation type="bibtex">Contact support.abims@sb-roscoff.fr for any questions or concerns about the Galaxy implementation of this tool.</citation>
 			<citation type="bibtex">Version 1 : Scripts by Eric Fontanillas -- Galaxy integration by Julie Baffard</citation>
-			<citation type="bibtex">Version 2 : improvments by Victor Mataigne, Gildas le Corguillé, Misharl Monsoor</citation>
+			<citation type="bibtex">Version 2 : improvments by Alice Mataigne, Gildas le Corguillé, Misharl Monsoor</citation>
 		</citations>
 	</xml>
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 #coding: utf-8
-#Author : Eric Fontanillas (2010) - Victor Mataigne (2018)
+#Author : Eric Fontanillas (2010) - Alice Mataigne (2018)
 
 # binom test - null hypothesis : 
 # The test computes the number of times where the value of the variable A is higher to the value of the variable B.
