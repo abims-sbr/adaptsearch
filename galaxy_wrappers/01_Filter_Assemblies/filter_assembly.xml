@@ -25,7 +25,6 @@
         python '$__tool_directory__/scripts/S01_script_to_choose.py'
 
         '$infiles'
-        $length_seq_max
         $percent_identity
 		\${GALAXY_SLOTS:-1}
         > '${log}'
@@ -78,10 +77,6 @@ Sequences must be provided in FASTA format::
   Default: 0.9 (90%).
 
   The global sequence identity is calculated as the number of identical amino acids or bases in the alignment divided by the full length of the shorter sequence.
-
-* **Minimum sequence length** (integer): only keep sequences which are longer than the specified value.
-
-  Default: 100.
 
 ---
 
