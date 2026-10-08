@@ -28,6 +28,7 @@
         $length_seq_max
         $percent_identity
         $overlap_length
+		\${GALAXY_SLOTS:-1}
         > '${log}'
     ]]>
     </command>
