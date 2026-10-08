@@ -95,10 +95,10 @@ def rename_fasta_headers(input_fasta, output_fasta):
 
 
 def main():
-    if len(sys.argv) < 6:
+    if len(sys.argv) < 5:
         print(
             "Usage: script.py <input_files> <length_seq_min> "
-            "<percent_identity> <overlap_length> <threads>"
+            "<percent_identity> <threads>"
         )
         sys.exit(1)
 
@@ -106,8 +106,7 @@ def main():
     os.makedirs(output_dir, exist_ok=True)
 
     percent_identity = sys.argv[3]
-    overlap_length = sys.argv[4]
-    threads = sys.argv[5]
+    threads = sys.argv[4]
 
     for name in sys.argv[1].split(","):
         if not os.path.isfile(name):
