@@ -45,20 +45,23 @@ def reformat_headers(input_file, output_file, prefix):
             if line.startswith('>'):
                 if sequence:
                     outfile.write(sequence + '\n')
-                # Process header line
+
                 original_id = line[1:].strip()
                 header_parts = original_id.split('/')
                 numeric_part = header_parts[0].replace('ou', '')
                 rest = '/'.join(header_parts[1:]) \
                     if len(header_parts) > 1 else ""
+
                 if rest:
                     new_header = f">{prefix}{numeric_part}/{rest}"
                 else:
                     new_header = ">{}".format(prefix + str(numeric_part))
+
                 outfile.write(new_header + '\n')
                 sequence = ''
             else:
                 sequence += line.strip()
+
         if sequence:
             outfile.write(sequence + '\n')
 
@@ -67,120 +70,143 @@ def rename_fasta_headers(input_fasta, output_fasta):
     # Extract the base name of the file (without .fasta extension)
     base_name_dir = input_fasta.split('.')[0]
     base_name = base_name_dir.split('/')[1]
+
     # The first two letters of the file name
     prefix = base_name[3:5]
-    # List to store new sequences
+
     modified_sequences = []
 
     # Read the file and edit the headers
-    for index, record in enumerate(SeqIO.parse(input_fasta, "fasta"), start=1):
+    for index, record in enumerate(
+        SeqIO.parse(input_fasta, "fasta"),
+        start=1,
+    ):
         seq_length = len(record.seq)
-        new_header = ">{}{}_1/1_1.000_{}".format(prefix, index, seq_length)
-        record.id = new_header[1:]  # [1:] to remove ">"
+        new_header = ">{}{}_1/1_1.000_{}".format(
+            prefix,
+            index,
+            seq_length,
+        )
+        record.id = new_header[1:]
         record.description = ""
         modified_sequences.append(record)
 
-    # Write output file with new headers
     SeqIO.write(modified_sequences, output_fasta, "fasta")
 
 
 def main():
-    if len(sys.argv) < 5:
+    if len(sys.argv) < 6:
         print(
-            "Usage: script.py <input_files> <length_seq_min>",
-            "<percent_identity> <overlap_length>")
+            "Usage: script.py <input_files> <length_seq_min> "
+            "<percent_identity> <overlap_length> <threads>"
+        )
         sys.exit(1)
 
-    output_dir = "outputs"  # Define the output directory
+    output_dir = "outputs"
     os.makedirs(output_dir, exist_ok=True)
+
     percent_identity = sys.argv[3]
     overlap_length = sys.argv[4]
+    threads = sys.argv[5]
 
     for name in sys.argv[1].split(","):
         if not os.path.isfile(name):
             print("Error: Input file {} does not exist.".format(name))
             continue
 
-        # Apply CAP3
         # Get the base file name
         file_name = os.path.basename(name)
+
         # Define the output file path in the output directory
         output_file_path = os.path.join(output_dir, file_name)
+
         # Create a symbolic link for the input file in the output directory
         symlink_path = os.path.join(output_dir, file_name)
+
         if not os.path.exists(symlink_path):
             os.symlink(os.path.abspath(name), symlink_path)
 
-        # Print and run the CAP3 command
+        # Run CD-HIT
         print(
-            "cap3 {} -p {} -o {}".format(output_file_path,
-                                         percent_identity, overlap_length)
+            "cd-hit -i {} -o {} -c {} -T {}".format(
+                output_file_path,
+                os.path.join(output_dir, "cdhit_{}".format(file_name)),
+                percent_identity,
+                threads,
+            )
         )
-        subprocess.run([
-            "cap3", output_file_path, "-p", percent_identity,
-            "-o", overlap_length], check=True)
 
-        # Format file to have sequence in one line
+        cdhit_output = os.path.join(
+            output_dir,
+            "cdhit_{}".format(file_name),
+        )
+
+        subprocess.run(
+            [
+                "cd-hit",
+                "-i",
+                output_file_path,
+                "-o",
+                cdhit_output,
+                "-c",
+                percent_identity,
+                "-T",
+                threads,
+            ],
+            check=True,
+        )
+
+        # Format CD-HIT output to have sequences on one line
         name_fasta_formatter = os.path.join(
-            output_dir, "02_{}".format(os.path.basename(name)))
+            output_dir,
+            "02_{}".format(os.path.basename(name)),
+        )
+
         fasta_formatter(
-            "{}.cap.singlets".format(output_file_path), name_fasta_formatter)
-
-        # Merge singlets and contigs
-        merged_file = os.path.join(output_dir,
-                                   "03_{}_merged.fasta".format(file_name))
-        # Define paths for CAP3 output files
-        cap_singlets_file = os.path.join(output_dir,
-                                         "{}.cap.singlets".format(file_name))
-        cap_contigs_file = os.path.join(output_dir,
-                                        "{}.cap.contigs".format(file_name))
-        print("{} and {}".format(cap_singlets_file, cap_contigs_file))
-
-        with open(merged_file, 'w', encoding="utf-8") as outfile:
-            # Write the contents of the contigs file first
-            if os.path.exists(cap_contigs_file):
-                with open(cap_contigs_file, 'r', encoding="utf-8") as contigs:
-                    outfile.write(contigs.read())
-            # Append the contents of the singlets file
-            if os.path.exists(cap_singlets_file):
-                with open(
-                    cap_singlets_file,
-                    'r',
-                    encoding="utf-8",
-                ) as singlets:
-                    outfile.write(singlets.read())
+            cdhit_output,
+            name_fasta_formatter,
+        )
 
         # Reformat headers
         name_fasta_final = os.path.join(
-            output_dir, "04_{}".format(os.path.basename(name)))
-        rename_fasta_headers(merged_file, name_fasta_final)
+            output_dir,
+            "04_{}".format(os.path.basename(name)),
+        )
+
+        rename_fasta_headers(
+            name_fasta_formatter,
+            name_fasta_final,
+        )
 
         # Format final file to have sequence in one line
         prefix = file_name[:4]
         tmp = prefix + os.path.basename(name)
-        name_final_file = os.path.join(output_dir, tmp)
-        fasta_formatter(name_fasta_final, name_final_file)
+
+        name_final_file = os.path.join(
+            output_dir,
+            tmp,
+        )
+
+        fasta_formatter(
+            name_fasta_final,
+            name_final_file,
+        )
 
         # Deletion of temporary files
         files_to_delete = [
             name_fasta_formatter,
-            merged_file,
-            cap_singlets_file,
-            cap_contigs_file,
-            name_fasta_final
+            name_fasta_final,
+            cdhit_output,
         ]
 
         for f in files_to_delete:
             if os.path.exists(f):
                 os.remove(f)
 
-        # Additional CAP3 files
+        # CD-HIT generates additional files
         extra_files = [
-            "{}.cap.ace".format(output_file_path),
-            "{}.cap.contigs.links".format(output_file_path),
-            "{}.cap.contigs.qual".format(output_file_path),
-            "{}.cap.info".format(output_file_path),
-            symlink_path
+            "{}.clstr".format(cdhit_output),
+            symlink_path,
         ]
 
         for f in extra_files:
