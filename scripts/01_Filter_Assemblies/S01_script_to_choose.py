@@ -95,9 +95,9 @@ def rename_fasta_headers(input_fasta, output_fasta):
 
 
 def main():
-    if len(sys.argv) < 5:
+    if len(sys.argv) < 4:
         print(
-            "Usage: script.py <input_files> <length_seq_min> "
+            "Usage: script.py <input_files> "
             "<percent_identity> <threads>"
         )
         sys.exit(1)
