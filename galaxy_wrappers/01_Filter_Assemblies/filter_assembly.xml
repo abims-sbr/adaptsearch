@@ -45,7 +45,7 @@
         <data format="txt" name="log" label="Filter Assemblies Summary"/>
     </outputs>
 
-	<help>
+<help>
 
 @HELP_AUTHORS@
 
@@ -59,47 +59,46 @@ This tool runs CD-HIT on FASTA sequence data to cluster and remove redundant or 
 
 **Input format**
 
-Sequences must be provided in FASTA format:
+Sequences must be provided in FASTA format::
 
-| >seqname1
-| AAAGAGAGACCACATGTCAGTAGC -on one or several lines-
-| >seqname2
-| AAGGCCTGACCACATGAGTTAAGC -on one or several lines-
-| etc ...
-|
+    >seqname1
+    AAAGAGAGACCACATGTCAGTAGC
+    -on one or several lines-
+    >seqname2
+    AAGGCCTGACCACATGAGTTAAGC
+    -on one or several lines-
+    etc ...
 
 ---
 
 **Parameters**
 
-```
-- 'Input files' : a collection of FASTA files (one file per species).
-- 'Sequence identity threshold' : CD-HIT sequence identity threshold used to cluster similar sequences.
-    Default: 0.9 (90%).
-    The global sequence identity is calculated as the number of identical amino acids or bases in the alignment divided by the full length of the shorter sequence.
-- 'Minimum sequence length' (integer) : only keep sequences which are longer than the specified value.
-    Default: 100.
-```
+* **Input files**: a collection of FASTA files (one file per species).
+* **Sequence identity threshold**: CD-HIT sequence identity threshold used to cluster similar sequences.
+
+  Default: 0.9 (90%).
+
+  The global sequence identity is calculated as the number of identical amino acids or bases in the alignment divided by the full length of the shorter sequence.
+
+* **Minimum sequence length** (integer): only keep sequences which are longer than the specified value.
+
+  Default: 100.
 
 ---
 
-**Steps**:
+**Steps**
 
 The tool:
 
-```
-1) Combines the input FASTA files into a single sequence dataset.
-2) Runs CD-HIT to cluster sequences according to the specified sequence identity threshold.
-3) Selects one representative sequence for each cluster to remove redundant sequences.
-4) Reformats the FASTA headers by adding a specified prefix (defined from the original filename) and ensures that sequences are written on a single line.
-```
+#. Combines the input FASTA files into a single sequence dataset.
+#. Runs CD-HIT to cluster sequences according to the specified sequence identity threshold.
+#. Selects one representative sequence for each cluster to remove redundant sequences.
+#. Reformats the FASTA headers by adding a specified prefix (defined from the original filename) and ensures that sequences are written on a single line.
 
 **Outputs**
 
-```
-- 'CD-HIT Summary' : the CD-HIT log file containing information about the clustering process.
-- 'CD-HIT outputs' : the FASTA file containing the representative sequences obtained after clustering.
-```
+* **CD-HIT Summary**: the CD-HIT log file containing information about the clustering process.
+* **CD-HIT outputs**: the FASTA file containing the representative sequences obtained after clustering.
 
 ---------
 
@@ -114,26 +113,27 @@ Changelog
 
 **Version 2.3 - 08/10/2026**
 
-    - CAP3 has been replaced by CD-HIT to perform clustering and to remove redundant or highly similar sequences.
-		
+* CAP3 has been replaced by CD-HIT to perform clustering and to remove redundant or highly similar sequences.
+
 **Version 2.2 - 07/10/2024**
 
-    - Input files can be from any assembly tools
-		
+* Input files can be from any assembly tools.
+
 **Version 2.1 - 15/01/2018**
 
-    - Input files can be a mix from files coming either from Trinity or Velvet Oases assemblers
+* Input files can be a mix from files coming either from Trinity or Velvet Oases assemblers.
 
 **Version 2.0 - 14/04/2017**
 
-    - NEW: Replace the zip between tools by Dataset Collection
+* NEW: Replace the zip between tools by Dataset Collection.
 
 **Version 1.0 - 13/04/2017**
 
-    - TEST: Add funtional test with planemo
-    - IMPROVEMENT: Use conda dependencies for cap3, fastaformatter and python
+* TEST: Add functional test with planemo.
+* IMPROVEMENT: Use conda dependencies for cap3, fastaformatter and python.
 
-    ]]>
-	</help>
+]]>
+
+</help>
 
 </tool>
