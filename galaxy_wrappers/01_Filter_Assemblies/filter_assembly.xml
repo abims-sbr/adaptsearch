@@ -32,10 +32,11 @@
     ]]>
     </command>
 
-    <inputs>
-        <param name="inputs" type="data" format="fasta" multiple="true" label="Input files" />
-        <param name="percent_identity" type="float" value="0.9" min="0.0" max="1.0" label="Sequence identity threshold" help="Default: 0.9. CD-HIT's global sequence identity is calculated as the number of identical amino acids or bases in the alignment divided by the full length of the shorter sequence." />
-    </inputs>
+	<inputs>
+    	<param name="inputs" type="data" format="fasta" multiple="true" label="Input files" />
+    	<param name="overlap_length" type="integer" value="10" min="1" label="Overlap length" />
+    	<param name="percent_identity" type="float" value="0.9" min="0.0" max="1.0" label="Sequence identity threshold" help="Default: 0.9. CD-HIT's global sequence identity is calculated as the number of identical amino acids or bases in the alignment divided by the full length of the shorter sequence." />
+	</inputs>
 
     <outputs>
         <collection name="output_fasta" type="list" label="Filter Assemblies outputs">
