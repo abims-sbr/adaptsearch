@@ -25,6 +25,7 @@
         python '$__tool_directory__/scripts/S01_script_to_choose.py'
 
         '$infiles'
+		$overlap_length
         $percent_identity
 		\${GALAXY_SLOTS:-1}
         > '${log}'
@@ -57,6 +58,12 @@
             	<element name="Pg_tPg_transcriptome_90109" value="velvet_out/Pg_tPg_transcriptome_90109.fasta" />
         	</output_collection>
     	</test>
+
+		<test> <param name="inputs" ftype="fasta" value="velvet/Pg_transcriptome_90109.fasta,velvet/Ap_transcriptome_35099.fasta,
+				   velvet/Ac_transcriptome_25591.fasta" /> 
+			<param name="percent_identity" value="0.9" /> 
+			<output name="log" value="velvet_up.output" /> 
+			<output_collection name="output_fasta" type="list"> <element name="Ac_tAc_transcriptome_25591" value="velvet_out/Ac_tAc_transcriptome_25591.fasta" /> <element name="Ap_tAp_transcriptome_35099" value="velvet_out/Ap_tAp_transcriptome_35099.fasta" /> <element name="Pg_tPg_transcriptome_90109" value="velvet_out/Pg_tPg_transcriptome_90109.fasta" /> </output_collection> </test>
 		
 	<!-- Test 2 : Trinity -->
 		<test>
