@@ -51,7 +51,6 @@
         	<param name="inputs" ftype="fasta" value="velvet/Pg_transcriptome_90109.fasta,velvet/Ap_transcriptome_35099.fasta,velvet/Ac_transcriptome_25591.fasta" />
         	<param name="overlap_length" value="10" />
         	<param name="percent_identity" value="0.9" />
-        	<param name="threads" value="2" />
         	<output name="log" value="velvet_up.output" />
         	<output_collection name="output_fasta" type="list">
             	<element name="Ac_tAc_transcriptome_25591" value="velvet_out/Ac_tAc_transcriptome_25591.fasta" />
@@ -59,19 +58,12 @@
             	<element name="Pg_tPg_transcriptome_90109" value="velvet_out/Pg_tPg_transcriptome_90109.fasta" />
         	</output_collection>
     	</test>
-
-		<test> <param name="inputs" ftype="fasta" value="velvet/Pg_transcriptome_90109.fasta,velvet/Ap_transcriptome_35099.fasta,
-				   velvet/Ac_transcriptome_25591.fasta" /> 
-			<param name="percent_identity" value="0.9" /> 
-			<output name="log" value="velvet_up.output" /> 
-			<output_collection name="output_fasta" type="list"> <element name="Ac_tAc_transcriptome_25591" value="velvet_out/Ac_tAc_transcriptome_25591.fasta" /> <element name="Ap_tAp_transcriptome_35099" value="velvet_out/Ap_tAp_transcriptome_35099.fasta" /> <element name="Pg_tPg_transcriptome_90109" value="velvet_out/Pg_tPg_transcriptome_90109.fasta" /> </output_collection> </test>
 		
 	<!-- Test 2 : Trinity -->
 		<test>
     		<param name="inputs" ftype="fasta" value="trinity/Pfiji_trinity.fasta,trinity/Apomp_trinity.fasta,trinity/Amphi_trinity.fasta,trinity/Acaud_trinity.fasta" />
     		<param name="overlap_length" value="10" />
     		<param name="percent_identity" value="0.8" />
-    		<param name="threads" value="2" />
     		<output name="log" value="trinity_up.output" />
     		<output_collection name="output_fasta" type="list">
         		<element name="AcauAcaud_trinity" value="trinity_out/AcauAcaud_trinity.fasta" />
@@ -86,7 +78,6 @@
     		<param name="inputs" ftype="fasta" value="trinity/Pfiji_trinity.fasta,trinity/Apomp_trinity.fasta,trinity/Amphi_trinity.fasta,trinity/Acaud_trinity.fasta,velvet/Pg_transcriptome_90109.fasta,velvet/Ap_transcriptome_35099.fasta,velvet/Ac_transcriptome_25591.fasta" />
     		<param name="overlap_length" value="10" />
     		<param name="percent_identity" value="0.9" />
-    		<param name="threads" value="2" />
     		<output name="log" value="trinity_and_velvet_up.output" />
     		<output_collection name="output_fasta" type="list">
         		<element name="Ac_tAc_transcriptome_25591" value="velvet_out/Ac_tAc_transcriptome_25591.fasta" />
