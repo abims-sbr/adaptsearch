@@ -1,13 +1,15 @@
-cd-hit -i outputs/Pfiji_trinity.fasta -o outputs/cdhit_Pfiji_trinity.fasta -c 0.8 -T 2
 ================================================================
 Program: CD-HIT, V4.8.1 (+OpenMP), Aug 07 2022, 06:48:22
 Command: cd-hit -i outputs/Pfiji_trinity.fasta -o
-         outputs/cdhit_Pfiji_trinity.fasta -c 0.8 -T 2
+         outputs/cdhit_Pfiji_trinity.fasta -c 0.8 -T 4
 
-Started: Sat Oct 10 15:04:39 2026
+Started: Tue Oct 27 15:26:46 2026
 ================================================================
                             Output                              
 ----------------------------------------------------------------
+Warning: total number of CPUs in the system is 1
+Actual number of CPUs to be used: 1
+
 total seq: 20
 longest and shortest : 160 and 160
 Total letters: 3200
@@ -15,36 +17,37 @@ Sequences have been sorted
 
 Approximated minimal memory consumption:
 Sequence        : 0M
-Buffer          : 2 X 16M = 32M
-Table           : 2 X 65M = 130M
+Buffer          : 1 X 16M = 16M
+Table           : 1 X 65M = 65M
 Miscellaneous   : 0M
-Total           : 162M
+Total           : 81M
 
 Table limit with the given memory limit:
-Max number of representatives: 2449363
-Max number of word counting entries: 79653305
+Max number of representatives: 2762185
+Max number of word counting entries: 89826281
 
-# comparing sequences from          0  to         20
----------- new table with       17 representatives
+comparing sequences from          0  to         20
 
        20  finished         17  clusters
 
-Approximated maximum memory consumption: 162M
+Approximated maximum memory consumption: 81M
 writing new database
 writing clustering information
 program completed !
 
-Total CPU time 0.16
-cd-hit -i outputs/Apomp_trinity.fasta -o outputs/cdhit_Apomp_trinity.fasta -c 0.8 -T 2
+Total CPU time 0.10
 ================================================================
 Program: CD-HIT, V4.8.1 (+OpenMP), Aug 07 2022, 06:48:22
 Command: cd-hit -i outputs/Apomp_trinity.fasta -o
-         outputs/cdhit_Apomp_trinity.fasta -c 0.8 -T 2
+         outputs/cdhit_Apomp_trinity.fasta -c 0.8 -T 4
 
-Started: Sat Oct 10 15:04:40 2026
+Started: Tue Oct 27 15:26:47 2026
 ================================================================
                             Output                              
 ----------------------------------------------------------------
+Warning: total number of CPUs in the system is 1
+Actual number of CPUs to be used: 1
+
 total seq: 21
 longest and shortest : 160 and 160
 Total letters: 3360
@@ -52,36 +55,37 @@ Sequences have been sorted
 
 Approximated minimal memory consumption:
 Sequence        : 0M
-Buffer          : 2 X 16M = 32M
-Table           : 2 X 65M = 130M
+Buffer          : 1 X 16M = 16M
+Table           : 1 X 65M = 65M
 Miscellaneous   : 0M
-Total           : 162M
+Total           : 81M
 
 Table limit with the given memory limit:
-Max number of representatives: 2449361
-Max number of word counting entries: 79653262
+Max number of representatives: 2762184
+Max number of word counting entries: 89826242
 
-# comparing sequences from          0  to         21
----------- new table with       18 representatives
+comparing sequences from          0  to         21
 
        21  finished         18  clusters
 
-Approximated maximum memory consumption: 162M
+Approximated maximum memory consumption: 81M
 writing new database
 writing clustering information
 program completed !
 
-Total CPU time 0.19
-cd-hit -i outputs/Amphi_trinity.fasta -o outputs/cdhit_Amphi_trinity.fasta -c 0.8 -T 2
+Total CPU time 0.09
 ================================================================
 Program: CD-HIT, V4.8.1 (+OpenMP), Aug 07 2022, 06:48:22
 Command: cd-hit -i outputs/Amphi_trinity.fasta -o
-         outputs/cdhit_Amphi_trinity.fasta -c 0.8 -T 2
+         outputs/cdhit_Amphi_trinity.fasta -c 0.8 -T 4
 
-Started: Sat Oct 10 15:04:40 2026
+Started: Tue Oct 27 15:26:47 2026
 ================================================================
                             Output                              
 ----------------------------------------------------------------
+Warning: total number of CPUs in the system is 1
+Actual number of CPUs to be used: 1
+
 total seq: 20
 longest and shortest : 160 and 160
 Total letters: 3200
@@ -89,36 +93,37 @@ Sequences have been sorted
 
 Approximated minimal memory consumption:
 Sequence        : 0M
-Buffer          : 2 X 16M = 32M
-Table           : 2 X 65M = 130M
+Buffer          : 1 X 16M = 16M
+Table           : 1 X 65M = 65M
 Miscellaneous   : 0M
-Total           : 162M
+Total           : 81M
 
 Table limit with the given memory limit:
-Max number of representatives: 2449363
-Max number of word counting entries: 79653305
+Max number of representatives: 2762185
+Max number of word counting entries: 89826281
 
-# comparing sequences from          0  to         20
----------- new table with       17 representatives
+comparing sequences from          0  to         20
 
        20  finished         17  clusters
 
-Approximated maximum memory consumption: 162M
+Approximated maximum memory consumption: 81M
 writing new database
 writing clustering information
 program completed !
 
-Total CPU time 0.19
-cd-hit -i outputs/Acaud_trinity.fasta -o outputs/cdhit_Acaud_trinity.fasta -c 0.8 -T 2
+Total CPU time 0.08
 ================================================================
 Program: CD-HIT, V4.8.1 (+OpenMP), Aug 07 2022, 06:48:22
 Command: cd-hit -i outputs/Acaud_trinity.fasta -o
-         outputs/cdhit_Acaud_trinity.fasta -c 0.8 -T 2
+         outputs/cdhit_Acaud_trinity.fasta -c 0.8 -T 4
 
-Started: Sat Oct 10 15:04:40 2026
+Started: Tue Oct 27 15:26:47 2026
 ================================================================
                             Output                              
 ----------------------------------------------------------------
+Warning: total number of CPUs in the system is 1
+Actual number of CPUs to be used: 1
+
 total seq: 22
 longest and shortest : 160 and 160
 Total letters: 3520
@@ -126,23 +131,26 @@ Sequences have been sorted
 
 Approximated minimal memory consumption:
 Sequence        : 0M
-Buffer          : 2 X 16M = 32M
-Table           : 2 X 65M = 130M
+Buffer          : 1 X 16M = 16M
+Table           : 1 X 65M = 65M
 Miscellaneous   : 0M
-Total           : 162M
+Total           : 81M
 
 Table limit with the given memory limit:
-Max number of representatives: 2449359
-Max number of word counting entries: 79653198
+Max number of representatives: 2762182
+Max number of word counting entries: 89826181
 
-# comparing sequences from          0  to         22
----------- new table with       19 representatives
+comparing sequences from          0  to         22
 
        22  finished         19  clusters
 
-Approximated maximum memory consumption: 162M
+Approximated maximum memory consumption: 81M
 writing new database
 writing clustering information
 program completed !
 
-Total CPU time 0.18
+Total CPU time 0.08
+cd-hit -i outputs/Pfiji_trinity.fasta -o outputs/cdhit_Pfiji_trinity.fasta -c 0.8 -T 4
+cd-hit -i outputs/Apomp_trinity.fasta -o outputs/cdhit_Apomp_trinity.fasta -c 0.8 -T 4
+cd-hit -i outputs/Amphi_trinity.fasta -o outputs/cdhit_Amphi_trinity.fasta -c 0.8 -T 4
+cd-hit -i outputs/Acaud_trinity.fasta -o outputs/cdhit_Acaud_trinity.fasta -c 0.8 -T 4
