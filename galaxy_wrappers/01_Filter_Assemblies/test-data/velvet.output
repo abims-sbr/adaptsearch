@@ -1,13 +1,15 @@
-cd-hit -i outputs/Pg_transcriptome_90109.fasta -o outputs/cdhit_Pg_transcriptome_90109.fasta -c 0.9 -T 2
 ================================================================
 Program: CD-HIT, V4.8.1 (+OpenMP), Aug 07 2022, 06:48:22
 Command: cd-hit -i outputs/Pg_transcriptome_90109.fasta -o
-         outputs/cdhit_Pg_transcriptome_90109.fasta -c 0.9 -T 2
+         outputs/cdhit_Pg_transcriptome_90109.fasta -c 0.9 -T 4
 
-Started: Sat Oct 10 15:06:49 2026
+Started: Tue Oct 27 15:15:38 2026
 ================================================================
                             Output                              
 ----------------------------------------------------------------
+Warning: total number of CPUs in the system is 1
+Actual number of CPUs to be used: 1
+
 total seq: 199
 longest and shortest : 16288 and 151
 Total letters: 401904
@@ -15,36 +17,37 @@ Sequences have been sorted
 
 Approximated minimal memory consumption:
 Sequence        : 0M
-Buffer          : 2 X 19M = 38M
-Table           : 2 X 65M = 130M
+Buffer          : 1 X 19M = 19M
+Table           : 1 X 65M = 65M
 Miscellaneous   : 0M
-Total           : 170M
+Total           : 85M
 
 Table limit with the given memory limit:
-Max number of representatives: 151158
-Max number of word counting entries: 78740090
+Max number of representatives: 171513
+Max number of word counting entries: 89343100
 
-# comparing sequences from          0  to        199
----------- new table with      107 representatives
+comparing sequences from          0  to        199
 
       199  finished        107  clusters
 
-Approximated maximum memory consumption: 170M
+Approximated maximum memory consumption: 85M
 writing new database
 writing clustering information
 program completed !
 
-Total CPU time 2.81
-cd-hit -i outputs/Ap_transcriptome_35099.fasta -o outputs/cdhit_Ap_transcriptome_35099.fasta -c 0.9 -T 2
+Total CPU time 2.62
 ================================================================
 Program: CD-HIT, V4.8.1 (+OpenMP), Aug 07 2022, 06:48:22
 Command: cd-hit -i outputs/Ap_transcriptome_35099.fasta -o
-         outputs/cdhit_Ap_transcriptome_35099.fasta -c 0.9 -T 2
+         outputs/cdhit_Ap_transcriptome_35099.fasta -c 0.9 -T 4
 
-Started: Sat Oct 10 15:06:52 2026
+Started: Tue Oct 27 15:15:42 2026
 ================================================================
                             Output                              
 ----------------------------------------------------------------
+Warning: total number of CPUs in the system is 1
+Actual number of CPUs to be used: 1
+
 total seq: 199
 longest and shortest : 14065 and 152
 Total letters: 385144
@@ -52,36 +55,37 @@ Sequences have been sorted
 
 Approximated minimal memory consumption:
 Sequence        : 0M
-Buffer          : 2 X 19M = 38M
-Table           : 2 X 65M = 130M
+Buffer          : 1 X 19M = 19M
+Table           : 1 X 65M = 65M
 Miscellaneous   : 0M
-Total           : 169M
+Total           : 84M
 
 Table limit with the given memory limit:
-Max number of representatives: 162638
-Max number of word counting entries: 78860560
+Max number of representatives: 184383
+Max number of word counting entries: 89404383
 
-# comparing sequences from          0  to        199
----------- new table with      108 representatives
+comparing sequences from          0  to        199
 
       199  finished        108  clusters
 
-Approximated maximum memory consumption: 169M
+Approximated maximum memory consumption: 85M
 writing new database
 writing clustering information
 program completed !
 
-Total CPU time 3.96
-cd-hit -i outputs/Ac_transcriptome_25591.fasta -o outputs/cdhit_Ac_transcriptome_25591.fasta -c 0.9 -T 2
+Total CPU time 4.66
 ================================================================
 Program: CD-HIT, V4.8.1 (+OpenMP), Aug 07 2022, 06:48:22
 Command: cd-hit -i outputs/Ac_transcriptome_25591.fasta -o
-         outputs/cdhit_Ac_transcriptome_25591.fasta -c 0.9 -T 2
+         outputs/cdhit_Ac_transcriptome_25591.fasta -c 0.9 -T 4
 
-Started: Sat Oct 10 15:06:56 2026
+Started: Tue Oct 27 15:15:47 2026
 ================================================================
                             Output                              
 ----------------------------------------------------------------
+Warning: total number of CPUs in the system is 1
+Actual number of CPUs to be used: 1
+
 total seq: 199
 longest and shortest : 11466 and 152
 Total letters: 368999
@@ -89,23 +93,25 @@ Sequences have been sorted
 
 Approximated minimal memory consumption:
 Sequence        : 0M
-Buffer          : 2 X 18M = 36M
-Table           : 2 X 65M = 130M
+Buffer          : 1 X 18M = 18M
+Table           : 1 X 65M = 65M
 Miscellaneous   : 0M
-Total           : 167M
+Total           : 84M
 
 Table limit with the given memory limit:
-Max number of representatives: 159700
-Max number of word counting entries: 79000974
+Max number of representatives: 180874
+Max number of word counting entries: 89475599
 
-# comparing sequences from          0  to        199
----------- new table with      118 representatives
+comparing sequences from          0  to        199
 
       199  finished        118  clusters
 
-Approximated maximum memory consumption: 168M
+Approximated maximum memory consumption: 84M
 writing new database
 writing clustering information
 program completed !
 
-Total CPU time 3.15
+Total CPU time 3.01
+cd-hit -i outputs/Pg_transcriptome_90109.fasta -o outputs/cdhit_Pg_transcriptome_90109.fasta -c 0.9 -T 4
+cd-hit -i outputs/Ap_transcriptome_35099.fasta -o outputs/cdhit_Ap_transcriptome_35099.fasta -c 0.9 -T 4
+cd-hit -i outputs/Ac_transcriptome_25591.fasta -o outputs/cdhit_Ac_transcriptome_25591.fasta -c 0.9 -T 4
