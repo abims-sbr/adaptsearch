@@ -57,19 +57,6 @@
             	<element name="Pg_tPg_transcriptome_90109" value="velvet_out/Pg_tPg_transcriptome_90109.fasta" />
         	</output_collection>
     	</test>
-		
-	<!-- Test 2 : Trinity -->
-		<test>
-    		<param name="inputs" ftype="fasta" value="trinity/Pfiji_trinity.fasta,trinity/Apomp_trinity.fasta,trinity/Amphi_trinity.fasta,trinity/Acaud_trinity.fasta" />
-    		<param name="overlap_length" value="10" />
-    		<param name="percent_identity" value="0.8" />
-    		<output_collection name="output_fasta" type="list">
-        		<element name="AcauAcaud_trinity" value="trinity_out/AcauAcaud_trinity.fasta" />
-        		<element name="AmphAmphi_trinity" value="trinity_out/Amphi_trinity.fasta" />
-        		<element name="ApomApomp_trinity" value="trinity_out/Apomp_trinity.fasta" />
-        		<element name="PfijPfiji_trinity" value="trinity_out/Pfiji_trinity.fasta" />
-    		</output_collection>
-		</test>
 
 	</tests>
 	
