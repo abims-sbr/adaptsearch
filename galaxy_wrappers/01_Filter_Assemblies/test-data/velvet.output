@@ -1,21 +1,117 @@
-Number of segment pairs = 4422; number of pairwise comparisons = 1
-'+' means given segment; '-' means reverse complement
+================================================================
+Program: CD-HIT, V4.8.1 (+OpenMP), Aug 07 2022, 06:48:22
+Command: cd-hit -i outputs/Pg_transcriptome_90109.fasta -o
+         outputs/cdhit_Pg_transcriptome_90109.fasta -c 0.9 -T 4
 
-Overlaps            Containments  No. of Constraints Supporting Overlap
+Started: Tue Oct 27 15:15:38 2026
+================================================================
+                            Output                              
+----------------------------------------------------------------
+Warning: total number of CPUs in the system is 1
+Actual number of CPUs to be used: 1
 
+total seq: 199
+longest and shortest : 16288 and 151
+Total letters: 401904
+Sequences have been sorted
 
-DETAILED DISPLAY OF CONTIGS
-Number of segment pairs = 4032; number of pairwise comparisons = 0
-'+' means given segment; '-' means reverse complement
+Approximated minimal memory consumption:
+Sequence        : 0M
+Buffer          : 1 X 19M = 19M
+Table           : 1 X 65M = 65M
+Miscellaneous   : 0M
+Total           : 85M
 
-Overlaps            Containments  No. of Constraints Supporting Overlap
+Table limit with the given memory limit:
+Max number of representatives: 171513
+Max number of word counting entries: 89343100
 
+comparing sequences from          0  to        199
 
-DETAILED DISPLAY OF CONTIGS
-Number of segment pairs = 4160; number of pairwise comparisons = 0
-'+' means given segment; '-' means reverse complement
+      199  finished        107  clusters
 
-Overlaps            Containments  No. of Constraints Supporting Overlap
+Approximated maximum memory consumption: 85M
+writing new database
+writing clustering information
+program completed !
 
+Total CPU time 2.62
+================================================================
+Program: CD-HIT, V4.8.1 (+OpenMP), Aug 07 2022, 06:48:22
+Command: cd-hit -i outputs/Ap_transcriptome_35099.fasta -o
+         outputs/cdhit_Ap_transcriptome_35099.fasta -c 0.9 -T 4
 
-DETAILED DISPLAY OF CONTIGS
+Started: Tue Oct 27 15:15:42 2026
+================================================================
+                            Output                              
+----------------------------------------------------------------
+Warning: total number of CPUs in the system is 1
+Actual number of CPUs to be used: 1
+
+total seq: 199
+longest and shortest : 14065 and 152
+Total letters: 385144
+Sequences have been sorted
+
+Approximated minimal memory consumption:
+Sequence        : 0M
+Buffer          : 1 X 19M = 19M
+Table           : 1 X 65M = 65M
+Miscellaneous   : 0M
+Total           : 84M
+
+Table limit with the given memory limit:
+Max number of representatives: 184383
+Max number of word counting entries: 89404383
+
+comparing sequences from          0  to        199
+
+      199  finished        108  clusters
+
+Approximated maximum memory consumption: 85M
+writing new database
+writing clustering information
+program completed !
+
+Total CPU time 4.66
+================================================================
+Program: CD-HIT, V4.8.1 (+OpenMP), Aug 07 2022, 06:48:22
+Command: cd-hit -i outputs/Ac_transcriptome_25591.fasta -o
+         outputs/cdhit_Ac_transcriptome_25591.fasta -c 0.9 -T 4
+
+Started: Tue Oct 27 15:15:47 2026
+================================================================
+                            Output                              
+----------------------------------------------------------------
+Warning: total number of CPUs in the system is 1
+Actual number of CPUs to be used: 1
+
+total seq: 199
+longest and shortest : 11466 and 152
+Total letters: 368999
+Sequences have been sorted
+
+Approximated minimal memory consumption:
+Sequence        : 0M
+Buffer          : 1 X 18M = 18M
+Table           : 1 X 65M = 65M
+Miscellaneous   : 0M
+Total           : 84M
+
+Table limit with the given memory limit:
+Max number of representatives: 180874
+Max number of word counting entries: 89475599
+
+comparing sequences from          0  to        199
+
+      199  finished        118  clusters
+
+Approximated maximum memory consumption: 84M
+writing new database
+writing clustering information
+program completed !
+
+Total CPU time 3.01
+cd-hit -i outputs/Pg_transcriptome_90109.fasta -o outputs/cdhit_Pg_transcriptome_90109.fasta -c 0.9 -T 4
+cd-hit -i outputs/Ap_transcriptome_35099.fasta -o outputs/cdhit_Ap_transcriptome_35099.fasta -c 0.9 -T 4
+cd-hit -i outputs/Ac_transcriptome_25591.fasta -o outputs/cdhit_Ac_transcriptome_25591.fasta -c 0.9 -T 4

@@ -13,26 +13,21 @@ The program is divided into several modules that allow for RNAseq assembly filtr
 Forked from: [abice-sbr/adaptsearch](https://github.com/abice-sbr/adaptsearch)
 
 **Didier Jollivet** *(Project Lead)*
-[DYDIV / Dynamics of the marine diversity - France - CNRS Sorbonne Université](https://www.sb-roscoff.fr/fr/equipe-dydiv)
+[DiSEEM / Dispersal, Speciation and Evolution of Marine Species - France - CNRS Sorbonne Université](https://www.sb-roscoff.fr/fr/equipe-diseem-dispersion-speciation-et-evolution-des-especes-marines)
 
 Charlotte Berthelier *(Current Contributor)*
-[UMR7144 / Adaptation and Diversity in the Marine Environment and ABiMS - Roscoff Marine Station - France - CNRS Sorbonne Université](https://www.sb-roscoff.fr/fr/umr-adaptation-et-diversite-en-milieu-marin)
+[UMR7144 / Adaptation and Diversity in the Marine Environment and ABiMS - Roscoff Marine Station - France - CNRS Sorbonne Université](https://www.sb-roscoff.fr/en/adaptation-and-diversity-in-the-marine-environment)
 
 Gildas Le Corguillé *(Current Contributor)*
 [ABiMS - Roscoff Marine Station - France - CNRS/UPMC](https://abims.sb-roscoff.fr/)
 
-Eric Fontanillas
-[DYDIV / Dynamics of the marine diversity - France - CNRS Sorbonne Université](https://www.sb-roscoff.fr/fr/equipe-dydiv)
+Eric Fontanillas - DYDIV / Dynamics of the marine diversity - France - CNRS Sorbonne Université
 
-Julie Baffard
-[ABiMS - Roscoff Marine Station - France - CNRS/UPMC](https://abims.sb-roscoff.fr/)
+Julie Baffard - ABiMS - Roscoff Marine Station - France - CNRS/UPMC
 
-Misharl Monsoor
-[ABiMS - Roscoff Marine Station - France - CNRS/UPMC](https://abims.sb-roscoff.fr/)
+Misharl Monsoor - ABiMS - Roscoff Marine Station - France - CNRS/UPMC
 
-Victor Mataigne *(Initial Developer)*
-[ABiMS - Roscoff Marine Station - France - CNRS/UPMC](https://abims.sb-roscoff.fr/)
-[ABICE / Adaptation et Biologie des Invertébrés en Conditions Extrêmes](https://www.sb-roscoff.fr/fr/equipe-dydiv)
+Alice Mataigne *(Initial Developer)* - ABiMS - Roscoff Marine Station - France - CNRS/UPMC - ABICE / Adaptation et Biologie des Invertébrés en Conditions Extrêmes
 
 
 ## Other repositories

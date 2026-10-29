@@ -1,53 +1,259 @@
-20
-Number of segment pairs = 380; number of pairwise comparisons = 3
-'+' means given segment; '-' means reverse complement
+cd-hit -i outputs/Pfiji_trinity.fasta -o outputs/cdhit_Pfiji_trinity.fasta -c 0.9 -T 2
+================================================================
+Program: CD-HIT, V4.8.1 (+OpenMP), Aug 07 2022, 06:48:22
+Command: cd-hit -i outputs/Pfiji_trinity.fasta -o
+         outputs/cdhit_Pfiji_trinity.fasta -c 0.9 -T 2
 
-Overlaps            Containments  No. of Constraints Supporting Overlap
+Started: Sat Oct 10 15:08:20 2026
+================================================================
+                            Output                              
+----------------------------------------------------------------
+total seq: 20
+longest and shortest : 160 and 160
+Total letters: 3200
+Sequences have been sorted
 
+Approximated minimal memory consumption:
+Sequence        : 0M
+Buffer          : 2 X 16M = 32M
+Table           : 2 X 65M = 130M
+Miscellaneous   : 0M
+Total           : 162M
 
-DETAILED DISPLAY OF CONTIGS
-20
-Number of segment pairs = 380; number of pairwise comparisons = 3
-'+' means given segment; '-' means reverse complement
+Table limit with the given memory limit:
+Max number of representatives: 2449363
+Max number of word counting entries: 79653305
 
-Overlaps            Containments  No. of Constraints Supporting Overlap
+# comparing sequences from          0  to         20
+---------- new table with       17 representatives
 
+       20  finished         17  clusters
 
-DETAILED DISPLAY OF CONTIGS
-22
-Number of segment pairs = 342; number of pairwise comparisons = 2
-'+' means given segment; '-' means reverse complement
+Approximated maximum memory consumption: 162M
+writing new database
+writing clustering information
+program completed !
 
-Overlaps            Containments  No. of Constraints Supporting Overlap
+Total CPU time 0.18
+cd-hit -i outputs/Apomp_trinity.fasta -o outputs/cdhit_Apomp_trinity.fasta -c 0.9 -T 2
+================================================================
+Program: CD-HIT, V4.8.1 (+OpenMP), Aug 07 2022, 06:48:22
+Command: cd-hit -i outputs/Apomp_trinity.fasta -o
+         outputs/cdhit_Apomp_trinity.fasta -c 0.9 -T 2
 
+Started: Sat Oct 10 15:08:21 2026
+================================================================
+                            Output                              
+----------------------------------------------------------------
+total seq: 21
+longest and shortest : 160 and 160
+Total letters: 3360
+Sequences have been sorted
 
-DETAILED DISPLAY OF CONTIGS
-Number of segment pairs = 4422; number of pairwise comparisons = 1
-'+' means given segment; '-' means reverse complement
+Approximated minimal memory consumption:
+Sequence        : 0M
+Buffer          : 2 X 16M = 32M
+Table           : 2 X 65M = 130M
+Miscellaneous   : 0M
+Total           : 162M
 
-Overlaps            Containments  No. of Constraints Supporting Overlap
+Table limit with the given memory limit:
+Max number of representatives: 2449361
+Max number of word counting entries: 79653262
 
+# comparing sequences from          0  to         21
+---------- new table with       18 representatives
 
-DETAILED DISPLAY OF CONTIGS
-21
-Number of segment pairs = 380; number of pairwise comparisons = 3
-'+' means given segment; '-' means reverse complement
+       21  finished         18  clusters
 
-Overlaps            Containments  No. of Constraints Supporting Overlap
+Approximated maximum memory consumption: 162M
+writing new database
+writing clustering information
+program completed !
 
+Total CPU time 0.16
+cd-hit -i outputs/Amphi_trinity.fasta -o outputs/cdhit_Amphi_trinity.fasta -c 0.9 -T 2
+================================================================
+Program: CD-HIT, V4.8.1 (+OpenMP), Aug 07 2022, 06:48:22
+Command: cd-hit -i outputs/Amphi_trinity.fasta -o
+         outputs/cdhit_Amphi_trinity.fasta -c 0.9 -T 2
 
-DETAILED DISPLAY OF CONTIGS
-Number of segment pairs = 4160; number of pairwise comparisons = 0
-'+' means given segment; '-' means reverse complement
+Started: Sat Oct 10 15:08:21 2026
+================================================================
+                            Output                              
+----------------------------------------------------------------
+total seq: 20
+longest and shortest : 160 and 160
+Total letters: 3200
+Sequences have been sorted
 
-Overlaps            Containments  No. of Constraints Supporting Overlap
+Approximated minimal memory consumption:
+Sequence        : 0M
+Buffer          : 2 X 16M = 32M
+Table           : 2 X 65M = 130M
+Miscellaneous   : 0M
+Total           : 162M
 
+Table limit with the given memory limit:
+Max number of representatives: 2449363
+Max number of word counting entries: 79653305
 
-DETAILED DISPLAY OF CONTIGS
-Number of segment pairs = 4032; number of pairwise comparisons = 0
-'+' means given segment; '-' means reverse complement
+# comparing sequences from          0  to         20
+---------- new table with       17 representatives
 
-Overlaps            Containments  No. of Constraints Supporting Overlap
+       20  finished         17  clusters
 
+Approximated maximum memory consumption: 162M
+writing new database
+writing clustering information
+program completed !
 
-DETAILED DISPLAY OF CONTIGS
+Total CPU time 0.18
+cd-hit -i outputs/Acaud_trinity.fasta -o outputs/cdhit_Acaud_trinity.fasta -c 0.9 -T 2
+================================================================
+Program: CD-HIT, V4.8.1 (+OpenMP), Aug 07 2022, 06:48:22
+Command: cd-hit -i outputs/Acaud_trinity.fasta -o
+         outputs/cdhit_Acaud_trinity.fasta -c 0.9 -T 2
+
+Started: Sat Oct 10 15:08:21 2026
+================================================================
+                            Output                              
+----------------------------------------------------------------
+total seq: 22
+longest and shortest : 160 and 160
+Total letters: 3520
+Sequences have been sorted
+
+Approximated minimal memory consumption:
+Sequence        : 0M
+Buffer          : 2 X 16M = 32M
+Table           : 2 X 65M = 130M
+Miscellaneous   : 0M
+Total           : 162M
+
+Table limit with the given memory limit:
+Max number of representatives: 2449359
+Max number of word counting entries: 79653198
+
+# comparing sequences from          0  to         22
+---------- new table with       20 representatives
+
+       22  finished         20  clusters
+
+Approximated maximum memory consumption: 162M
+writing new database
+writing clustering information
+program completed !
+
+Total CPU time 0.17
+cd-hit -i outputs/Pg_transcriptome_90109.fasta -o outputs/cdhit_Pg_transcriptome_90109.fasta -c 0.9 -T 2
+================================================================
+Program: CD-HIT, V4.8.1 (+OpenMP), Aug 07 2022, 06:48:22
+Command: cd-hit -i outputs/Pg_transcriptome_90109.fasta -o
+         outputs/cdhit_Pg_transcriptome_90109.fasta -c 0.9 -T 2
+
+Started: Sat Oct 10 15:08:21 2026
+================================================================
+                            Output                              
+----------------------------------------------------------------
+total seq: 199
+longest and shortest : 16288 and 151
+Total letters: 401904
+Sequences have been sorted
+
+Approximated minimal memory consumption:
+Sequence        : 0M
+Buffer          : 2 X 19M = 38M
+Table           : 2 X 65M = 130M
+Miscellaneous   : 0M
+Total           : 170M
+
+Table limit with the given memory limit:
+Max number of representatives: 151158
+Max number of word counting entries: 78740090
+
+# comparing sequences from          0  to        199
+---------- new table with      107 representatives
+
+      199  finished        107  clusters
+
+Approximated maximum memory consumption: 170M
+writing new database
+writing clustering information
+program completed !
+
+Total CPU time 2.84
+cd-hit -i outputs/Ap_transcriptome_35099.fasta -o outputs/cdhit_Ap_transcriptome_35099.fasta -c 0.9 -T 2
+================================================================
+Program: CD-HIT, V4.8.1 (+OpenMP), Aug 07 2022, 06:48:22
+Command: cd-hit -i outputs/Ap_transcriptome_35099.fasta -o
+         outputs/cdhit_Ap_transcriptome_35099.fasta -c 0.9 -T 2
+
+Started: Sat Oct 10 15:08:24 2026
+================================================================
+                            Output                              
+----------------------------------------------------------------
+total seq: 199
+longest and shortest : 14065 and 152
+Total letters: 385144
+Sequences have been sorted
+
+Approximated minimal memory consumption:
+Sequence        : 0M
+Buffer          : 2 X 19M = 38M
+Table           : 2 X 65M = 130M
+Miscellaneous   : 0M
+Total           : 169M
+
+Table limit with the given memory limit:
+Max number of representatives: 162638
+Max number of word counting entries: 78860560
+
+# comparing sequences from          0  to        199
+---------- new table with      108 representatives
+
+      199  finished        108  clusters
+
+Approximated maximum memory consumption: 169M
+writing new database
+writing clustering information
+program completed !
+
+Total CPU time 4.00
+cd-hit -i outputs/Ac_transcriptome_25591.fasta -o outputs/cdhit_Ac_transcriptome_25591.fasta -c 0.9 -T 2
+================================================================
+Program: CD-HIT, V4.8.1 (+OpenMP), Aug 07 2022, 06:48:22
+Command: cd-hit -i outputs/Ac_transcriptome_25591.fasta -o
+         outputs/cdhit_Ac_transcriptome_25591.fasta -c 0.9 -T 2
+
+Started: Sat Oct 10 15:08:29 2026
+================================================================
+                            Output                              
+----------------------------------------------------------------
+total seq: 199
+longest and shortest : 11466 and 152
+Total letters: 368999
+Sequences have been sorted
+
+Approximated minimal memory consumption:
+Sequence        : 0M
+Buffer          : 2 X 18M = 36M
+Table           : 2 X 65M = 130M
+Miscellaneous   : 0M
+Total           : 167M
+
+Table limit with the given memory limit:
+Max number of representatives: 159700
+Max number of word counting entries: 79000974
+
+# comparing sequences from          0  to        199
+---------- new table with      118 representatives
+
+      199  finished        118  clusters
+
+Approximated maximum memory consumption: 168M
+writing new database
+writing clustering information
+program completed !
+
+Total CPU time 3.20

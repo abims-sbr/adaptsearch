@@ -1,32 +1,156 @@
-20
-Number of segment pairs = 380; number of pairwise comparisons = 3
-'+' means given segment; '-' means reverse complement
+================================================================
+Program: CD-HIT, V4.8.1 (+OpenMP), Aug 07 2022, 06:48:22
+Command: cd-hit -i outputs/Pfiji_trinity.fasta -o
+         outputs/cdhit_Pfiji_trinity.fasta -c 0.8 -T 4
 
-Overlaps            Containments  No. of Constraints Supporting Overlap
+Started: Tue Oct 27 15:26:46 2026
+================================================================
+                            Output                              
+----------------------------------------------------------------
+Warning: total number of CPUs in the system is 1
+Actual number of CPUs to be used: 1
 
+total seq: 20
+longest and shortest : 160 and 160
+Total letters: 3200
+Sequences have been sorted
 
-DETAILED DISPLAY OF CONTIGS
-22
-Number of segment pairs = 342; number of pairwise comparisons = 2
-'+' means given segment; '-' means reverse complement
+Approximated minimal memory consumption:
+Sequence        : 0M
+Buffer          : 1 X 16M = 16M
+Table           : 1 X 65M = 65M
+Miscellaneous   : 0M
+Total           : 81M
 
-Overlaps            Containments  No. of Constraints Supporting Overlap
+Table limit with the given memory limit:
+Max number of representatives: 2762185
+Max number of word counting entries: 89826281
 
+comparing sequences from          0  to         20
 
-DETAILED DISPLAY OF CONTIGS
-20
-Number of segment pairs = 380; number of pairwise comparisons = 3
-'+' means given segment; '-' means reverse complement
+       20  finished         17  clusters
 
-Overlaps            Containments  No. of Constraints Supporting Overlap
+Approximated maximum memory consumption: 81M
+writing new database
+writing clustering information
+program completed !
 
+Total CPU time 0.10
+================================================================
+Program: CD-HIT, V4.8.1 (+OpenMP), Aug 07 2022, 06:48:22
+Command: cd-hit -i outputs/Apomp_trinity.fasta -o
+         outputs/cdhit_Apomp_trinity.fasta -c 0.8 -T 4
 
-DETAILED DISPLAY OF CONTIGS
-21
-Number of segment pairs = 380; number of pairwise comparisons = 3
-'+' means given segment; '-' means reverse complement
+Started: Tue Oct 27 15:26:47 2026
+================================================================
+                            Output                              
+----------------------------------------------------------------
+Warning: total number of CPUs in the system is 1
+Actual number of CPUs to be used: 1
 
-Overlaps            Containments  No. of Constraints Supporting Overlap
+total seq: 21
+longest and shortest : 160 and 160
+Total letters: 3360
+Sequences have been sorted
 
+Approximated minimal memory consumption:
+Sequence        : 0M
+Buffer          : 1 X 16M = 16M
+Table           : 1 X 65M = 65M
+Miscellaneous   : 0M
+Total           : 81M
 
-DETAILED DISPLAY OF CONTIGS
+Table limit with the given memory limit:
+Max number of representatives: 2762184
+Max number of word counting entries: 89826242
+
+comparing sequences from          0  to         21
+
+       21  finished         18  clusters
+
+Approximated maximum memory consumption: 81M
+writing new database
+writing clustering information
+program completed !
+
+Total CPU time 0.09
+================================================================
+Program: CD-HIT, V4.8.1 (+OpenMP), Aug 07 2022, 06:48:22
+Command: cd-hit -i outputs/Amphi_trinity.fasta -o
+         outputs/cdhit_Amphi_trinity.fasta -c 0.8 -T 4
+
+Started: Tue Oct 27 15:26:47 2026
+================================================================
+                            Output                              
+----------------------------------------------------------------
+Warning: total number of CPUs in the system is 1
+Actual number of CPUs to be used: 1
+
+total seq: 20
+longest and shortest : 160 and 160
+Total letters: 3200
+Sequences have been sorted
+
+Approximated minimal memory consumption:
+Sequence        : 0M
+Buffer          : 1 X 16M = 16M
+Table           : 1 X 65M = 65M
+Miscellaneous   : 0M
+Total           : 81M
+
+Table limit with the given memory limit:
+Max number of representatives: 2762185
+Max number of word counting entries: 89826281
+
+comparing sequences from          0  to         20
+
+       20  finished         17  clusters
+
+Approximated maximum memory consumption: 81M
+writing new database
+writing clustering information
+program completed !
+
+Total CPU time 0.08
+================================================================
+Program: CD-HIT, V4.8.1 (+OpenMP), Aug 07 2022, 06:48:22
+Command: cd-hit -i outputs/Acaud_trinity.fasta -o
+         outputs/cdhit_Acaud_trinity.fasta -c 0.8 -T 4
+
+Started: Tue Oct 27 15:26:47 2026
+================================================================
+                            Output                              
+----------------------------------------------------------------
+Warning: total number of CPUs in the system is 1
+Actual number of CPUs to be used: 1
+
+total seq: 22
+longest and shortest : 160 and 160
+Total letters: 3520
+Sequences have been sorted
+
+Approximated minimal memory consumption:
+Sequence        : 0M
+Buffer          : 1 X 16M = 16M
+Table           : 1 X 65M = 65M
+Miscellaneous   : 0M
+Total           : 81M
+
+Table limit with the given memory limit:
+Max number of representatives: 2762182
+Max number of word counting entries: 89826181
+
+comparing sequences from          0  to         22
+
+       22  finished         19  clusters
+
+Approximated maximum memory consumption: 81M
+writing new database
+writing clustering information
+program completed !
+
+Total CPU time 0.08
+cd-hit -i outputs/Pfiji_trinity.fasta -o outputs/cdhit_Pfiji_trinity.fasta -c 0.8 -T 4
+cd-hit -i outputs/Apomp_trinity.fasta -o outputs/cdhit_Apomp_trinity.fasta -c 0.8 -T 4
+cd-hit -i outputs/Amphi_trinity.fasta -o outputs/cdhit_Amphi_trinity.fasta -c 0.8 -T 4
+cd-hit -i outputs/Acaud_trinity.fasta -o outputs/cdhit_Acaud_trinity.fasta -c 0.8 -T 4
